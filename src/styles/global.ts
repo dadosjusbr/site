@@ -6,5 +6,8 @@ export default createGlobalStyle`
     padding: 0;
     box-sizing: border-box;
   }
+  body{
+    background: #3e5363;
+  }
 
 `;
