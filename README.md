@@ -23,6 +23,10 @@ Esse projeto foi elaborado com o intuito de praticar a cidadania e tornar os dad
 
 Essa aplicação foi feita utilizando o next js [Next.js](https://nextjs.org/) o arquebouço  [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+### Dependencias
+* [`styled-components`](https://styled-components.com/)
+* [`eslint`](https://eslint.org/)
+
 ## Como rodar localmente
 
 Rodando o servidor de desenvolvimento.
