@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
   /**
    * The getInitialProps function is used in HOC (high order components)
    * to set data before rendering, and this is used here to load the styled
-   * components integration and use SASS editing in next.js
+   * components integration and use SASS editing in Next.js
    * https://github.com/vercel/next.js/tree/master/examples/with-styled-components
    */
   static async getInitialProps(ctx: DocumentContext) {
