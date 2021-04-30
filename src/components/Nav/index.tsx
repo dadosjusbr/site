@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { Container, NavList, NavItem, NavButton } from './styles';
 
-const Nav: React.FC = () => (
+const Nav = () => (
   <Container>
     <div>
       <img src="/img/icon_dadosjusbr.svg" alt="logo" />
