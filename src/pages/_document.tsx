@@ -48,7 +48,7 @@ export default class MyDocument extends Document {
    * engines like handlebars load their templates, defining standards
    * that will be reused on all pages of the application, from the
    * insertion of metadata allowing utf8 as the charset of all pages
-   * even importing external fonts and web scripts
+   * even importing external fonts and web scripts.
    */
   render() {
     return (
