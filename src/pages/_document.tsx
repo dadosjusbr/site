@@ -12,7 +12,7 @@ import { ServerStyleSheet } from 'styled-components';
  */
 export default class MyDocument extends Document {
   /**
-   * the get initial props function is used in HOC (high order components)
+   * The getInitialProps function is used in HOC (high order components)
    * to set data before rendering, and this is used here to load the styled
    * components integration and use SASS editing in next.js
    * https://github.com/vercel/next.js/tree/master/examples/with-styled-components
