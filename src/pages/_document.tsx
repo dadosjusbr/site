@@ -7,7 +7,7 @@ import Document, {
 } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 /**
- * this document is used to create the default layout of the page like others template engines
+ * This document is used to create the default layout of the page like others template engines
  * https://nextjs.org/docs/advanced-features/custom-document
  */
 export default class MyDocument extends Document {
