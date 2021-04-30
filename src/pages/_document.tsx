@@ -7,14 +7,14 @@ import Document, {
 } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
 /**
- * this document is used to create the default layout of the page like others template engines
+ * This document is used to create the default layout of the page like others template engines
  * https://nextjs.org/docs/advanced-features/custom-document
  */
 export default class MyDocument extends Document {
   /**
-   * the get initial props function is used in HOC (high order components)
+   * The getInitialProps function is used in HOC (high order components)
    * to set data before rendering, and this is used here to load the styled
-   * components integration and use SASS editing in next.js
+   * components integration and use SASS editing in Next.js
    * https://github.com/vercel/next.js/tree/master/examples/with-styled-components
    */
   static async getInitialProps(ctx: DocumentContext) {
@@ -44,7 +44,7 @@ export default class MyDocument extends Document {
   }
 
   /**
-   * the render function here is being used similarly to how template
+   * The render function is being used similarly to how template
    * engines like handlebars load their templates, defining standards
    * that will be reused on all pages of the application, from the
    * insertion of metadata allowing utf8 as the charset of all pages
