@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import Nav from '../components/Nav';
+import Nav from '../components/Header';
 
 export default function Index() {
   return (
