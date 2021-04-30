@@ -44,7 +44,7 @@ export default class MyDocument extends Document {
   }
 
   /**
-   * the render function here is being used similarly to how template
+   * The render function is being used similarly to how template
    * engines like handlebars load their templates, defining standards
    * that will be reused on all pages of the application, from the
    * insertion of metadata allowing utf8 as the charset of all pages
