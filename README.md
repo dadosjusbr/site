@@ -42,6 +42,5 @@ Entre no endereço [http://localhost:3000](http://localhost:3000) no seu navegad
 
 Para aprender mais sobre o Next.js veja algumas documentações
 
-- [Documentação do Next.js](https://nextjs.org/docs) - aprenda mais sobre as features que o next proporciona e sua API
+- [Documentação do Next.js](https://nextjs.org/docs): aprenda mais sobre as features que o Next.js proporciona.
 - [Learn Next.js](https://nextjs.org/learn) - um tuturial interativo de Next.js.
-
