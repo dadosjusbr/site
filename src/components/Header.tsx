@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
 
-const Header: React.FC = () => (
+const Header = () => (
   <Container>
     <div>
       <img src="/img/icon_dadosjusbr.svg" alt="logo" />
