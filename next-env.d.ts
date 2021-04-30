@@ -1,6 +1,6 @@
 /*
  Esse arquivo insere a tipagem padrão do next para a integração
- com o typescript tanto para a utilização padrão das tipagens quanto
+ com o TypeScript tanto para a utilização padrão das tipagens quanto
  para plugins
 */
 /// <reference types="next" />
