@@ -1,4 +1,4 @@
-import GlobalStyle from '../styles/global';
+import GlobalStyle from '../styles/global_style';
 
 /*
 o _app.tsx nesse caso está sendo utilizado para conseguirmos
