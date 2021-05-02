@@ -1,0 +1,12 @@
+<svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Email">
+<path id="Oval" d="M28 56C43.464 56 56 43.464 56 28C56 12.536 43.464 0 28 0C12.536 0 0 12.536 0 28C0 43.464 12.536 56 28 56Z" fill="#3E5363"/>
+<path id="shadow_email" opacity="0.25" fill-rule="evenodd" clip-rule="evenodd" d="M22.6211 55.4839L41.9998 36.1053V19.8948L27.9998 33.8948L27.2629 33.1579L40.5261 19.8948H15.4735L14.7366 20.6316L13.9998 19.8948L0.515869 33.3787C2.6853 44.5287 11.4711 53.3145 22.6211 55.4839Z" fill="white"/>
+<g id="email">
+<path id="Rectangle 73" d="M15.4736 19.8948H40.5263L27.9999 32.4211L15.4736 19.8948Z" fill="white"/>
+<path id="Rectangle 79" d="M14 36.1052L14 19.8947L22.1053 28L14 36.1052Z" fill="white"/>
+<path id="Rectangle 80" d="M42 19.8948L42 36.1053L33.8947 28L42 19.8948Z" fill="white"/>
+<path id="Rectangle 77" d="M40.5264 36.1052L15.4737 36.1052L22.8422 28.7368L28.0001 33.8947L33.1579 28.7368L40.5264 36.1052Z" fill="white"/>
+</g>
+</g>
+</svg>
