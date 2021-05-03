@@ -1,5 +1,7 @@
 import Head from 'next/head';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
+import Button from '../components/Button';
+import Footer from '../components/Footer';
 import Nav from '../components/Header';
 
 export default function Index() {
@@ -28,23 +30,18 @@ export default function Index() {
           uma tarefa difícil para uma pessoa.
         </div>
         <div />
-        <div>
-          <h2>VOCÊ JÁ TENTOU ACESSAR DADOS EM SITES DE ÓRGÃOS PÚBLICOS?</h2>
-          <br />A Lei Federal 12.527/2011, ou mais comumente conhecida como Lei
-          de Acesso à Informação (LAI), diz que é “obrigatória a divulgação em
-          sítios oficiais da rede mundial de computadores (internet)” dos dados
-          de gastos públicos.
-          <br />
-          <br /> Porém, a LAI pouco diz sobre a forma como esses dados devem ser
-          disponibilizados. Por isso, nos sites dos órgãos são encontrados
-          arquivos em diversos formatos (pdf, html, planilhas eletrônicas, json
-          e etc), além disso nomenclaturas e formatação são muitas vezes
-          diferentes para cada órgão.
-          <br />
-          <br /> Devido a essas características realizar um controle social e
-          financeiro sobre essa enorme quantidade de dados de gastos públicos é
-          uma tarefa difícil para uma pessoa.
-        </div>
+        <Animation>
+          <img src="img/anim-group-1/esquema.svg" alt="esquema" />
+          <Button
+            backgroundColor="#2FBB96"
+            borderColor="#2FBB96"
+            hoverTextColor="#2FBB96"
+            hoverBackgroundColor="#3e5363"
+          >
+            Acessar os dados libertados
+          </Button>
+        </Animation>
+        <div />
         <div />
       </Container>
       <ExclamativeText>
@@ -59,13 +56,7 @@ export default function Index() {
           encontramos auxílio moradia, despesas com saúde, auxílio transporte,
           gratificações, diárias, entre outros benefícios.
         </div>
-        <div>
-          <h2>VOCÊ JÁ TENTOU ACESSAR DADOS EM SITES DE ÓRGÃOS PÚBLICOS?</h2>
-          <br />A Lei Federal 12.527/2011, ou mais comumente conhecida como Lei
-          de Acesso à Informação (LAI), diz que é “obrigatória a divulgação em
-          sítios oficiais da rede mundial de computadores (internet)” dos dados
-          de gastos públicos.
-        </div>
+        <div />
       </Container>
       <Container>
         <div>
@@ -77,13 +68,7 @@ export default function Index() {
           sobre esses gastos do poder judiciário, ministério público, defensoria
           pública e procuradorias.
         </div>
-        <div>
-          <h1>VOCÊ JÁ TENTOU ACESSAR DADOS EM SITES DE ÓRGÃOS PÚBLICOS?</h1>
-          <br />A Lei Federal 12.527/2011, ou mais comumente conhecida como Lei
-          de Acesso à Informação (LAI), diz que é “obrigatória a divulgação em
-          sítios oficiais da rede mundial de computadores (internet)” dos dados
-          de gastos públicos.
-        </div>
+        <div />
       </Container>
       <Container>
         <div>
@@ -96,14 +81,9 @@ export default function Index() {
           gastou em determinado mês? Todas essas perguntas podem ser respondidas
           através do DadosJusBr.
         </div>
-        <div>
-          <h1>VOCÊ JÁ TENTOU ACESSAR DADOS EM SITES DE ÓRGÃOS PÚBLICOS?</h1>
-          <br />A Lei Federal 12.527/2011, ou mais comumente conhecida como Lei
-          de Acesso à Informação (LAI), diz que é “obrigatória a divulgação em
-          sítios oficiais da rede mundial de computadores (internet)” dos dados
-          de gastos públicos.
-        </div>
+        <div />
       </Container>
+      <Footer />
     </>
   );
 }
@@ -111,18 +91,27 @@ export default function Index() {
 const Container = styled.div`
   display: flex;
   margin: 0px 68px;
+  justify-content: space-between;
   color: #fff;
   padding-top: 14rem;
   padding-bottom: 14rem;
   div {
-    max-width: 50%;
-
-    padding-right: 3rem;
+    max-width: 45%;
     font-size: 2rem;
     * {
       font-size: 2rem;
     }
     font-family: 'Roboto Condensed', sans-serif;
+  }
+`;
+const Animation = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  justify-content: center;
+  button {
+    margin-top: 100px;
   }
 `;
 const ExclamativeText = styled.div`
@@ -133,4 +122,39 @@ const ExclamativeText = styled.div`
   color: #fff;
   text-align: center;
   background-image: url('/img/splash_background.png');
+`;
+const anim1 = keyframes`
+    form {
+        transform: rotate(-43deg);
+    }
+    to {
+        transform: rotate(-10deg);
+    }
+`;
+
+const anim2 = keyframes`
+    form {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.02);
+    }
+`;
+
+const anim3 = keyframes`
+    form {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.02);
+    }
+`;
+
+const anim4 = keyframes`
+    form {
+        transform: scale(1);
+    }
+    to {
+        transform: scale(1.02);
+    }
 `;
