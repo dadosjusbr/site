@@ -29,7 +29,6 @@ export default function Index() {
           financeiro sobre essa enorme quantidade de dados de gastos públicos é
           uma tarefa difícil para uma pessoa.
         </div>
-        <div />
         <Animation>
           <img src="img/anim-group-1/esquema.svg" alt="esquema_anim_group_1" />
           <Button
@@ -41,8 +40,6 @@ export default function Index() {
             Acessar os dados libertados
           </Button>
         </Animation>
-        <div />
-        <div />
       </Container>
       <ExclamativeText>
         <h2>O DADOSJUSBR EXISTE PARA DENUNCIAR E LIBERTAR ESTES DADOS.</h2>
@@ -56,7 +53,9 @@ export default function Index() {
           encontramos auxílio moradia, despesas com saúde, auxílio transporte,
           gratificações, diárias, entre outros benefícios.
         </div>
-        <div />
+        <Animation>
+          <img src="img/anim-group-1/esquema.svg" alt="esquema_anim_group_1" />
+        </Animation>
       </Container>
       <Container>
         <div>
@@ -68,7 +67,9 @@ export default function Index() {
           sobre esses gastos do poder judiciário, ministério público, defensoria
           pública e procuradorias.
         </div>
-        <div />
+        <Animation>
+          <img src="img/anim-group-1/esquema.svg" alt="esquema_anim_group_1" />
+        </Animation>
       </Container>
       <Container>
         <div>
@@ -81,7 +82,9 @@ export default function Index() {
           gastou em determinado mês? Todas essas perguntas podem ser respondidas
           através do DadosJusBr.
         </div>
-        <div />
+        <Animation>
+          <img src="img/anim-group-1/esquema.svg" alt="esquema_anim_group_1" />
+        </Animation>
       </Container>
       <Footer />
     </>
@@ -95,6 +98,9 @@ const Container = styled.div`
   color: #fff;
   padding-top: 14rem;
   padding-bottom: 14rem;
+  @media (max-width: 600px) {
+    padding: 0;
+  }
   div {
     max-width: 45%;
     font-size: 2rem;
@@ -102,6 +108,14 @@ const Container = styled.div`
       font-size: 2rem;
     }
     font-family: 'Roboto Condensed', sans-serif;
+  }
+  @media (max-width: 600px) {
+    div {
+      max-width: 100%;
+      padding-top: 7rem;
+      padding-bottom: 7rem;
+    }
+    flex-direction: column;
   }
 `;
 const Animation = styled.div`
