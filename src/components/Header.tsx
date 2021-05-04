@@ -1,11 +1,13 @@
-import React from 'react';
 import Link from 'next/link';
 import styled from 'styled-components';
+
+// The header partial is used to navigate and brief the application
+// each link is an anchor to a different page, achoring using next/link https://nextjs.org/docs/api-reference/next/link
 
 const Header = () => (
   <Container>
     <div>
-      <img src="/img/icon_dadosjusbr.svg" alt="logo" />
+      <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
       <HeaderButton>
         <img src="/img/nav_responsive_button.svg" alt="nav_responsive" />
       </HeaderButton>
