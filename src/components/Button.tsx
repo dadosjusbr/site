@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { ButtonHTMLAttributes } from 'react';
+import { ButtonHTMLAttributes } from 'react';
 import styled from 'styled-components';
 import { darken } from 'polished';
 
