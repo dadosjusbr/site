@@ -3,7 +3,7 @@ import styled from 'styled-components';
 const Footer = () => (
   <Container>
     <div>
-      <img src="/img/icon_dadosjusbr.svg" alt="logo" />
+      <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
       <span>
         Alguma dica? Tem algum feedback geral? Se você tiver uma ideia que você
         gostaria de ver no DadosJusBr, envie-nos um e-mail{' '}

@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const Header = () => (
   <Container>
     <div>
-      <img src="/img/icon_dadosjusbr.svg" alt="logo" />
+      <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
       <HeaderButton>
         <img src="/img/nav_responsive_button.svg" alt="nav_responsive" />
       </HeaderButton>

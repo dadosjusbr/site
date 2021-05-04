@@ -31,7 +31,7 @@ export default function Index() {
         </div>
         <div />
         <Animation>
-          <img src="img/anim-group-1/esquema.svg" alt="esquema" />
+          <img src="img/anim-group-1/esquema.svg" alt="esquema_anim_group_1" />
           <Button
             backgroundColor="#2FBB96"
             borderColor="#2FBB96"
