@@ -3,25 +3,29 @@ import { ButtonHTMLAttributes } from 'react';
 import styled from 'styled-components';
 import { darken } from 'polished';
 
+// The Button is the partial of the only stylized button within the application
+// The use of it consists only of modifying the background or border colors
+// It receives a children that can be from a text to a div containing a text and an icon
+// As it extends the ButtonHTMLAttributes<HTMLButtonElement> it will have all the properties of a common button.
+
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   borderColor?: string;
   backgroundColor?: string;
-  textColor?: string;
   hoverBackgroundColor?: string;
   hoverTextColor?: string;
 }
+// The component pattern used here uses the arrow function in a react.FC constant implementing a ButtonProps generic
+// To avoid default conflict conflicts in eslint.
 const Button: React.FC<ButtonProps> = ({
   children,
   onClick,
   borderColor = '#000',
   backgroundColor = '#3e5363',
-  textColor = '#FFF',
   ...rest
 }) => (
   <ButtonStyled
     borderColor={borderColor}
     backgroundColor={backgroundColor}
-    textColor={textColor}
     type="button"
     onClick={onClick}
     {...rest}
@@ -41,14 +45,14 @@ const ButtonStyled = styled.button`
   justify-content: center;
   background-color: ${(p: ButtonProps) => p.backgroundColor};
   border-color: ${(p: ButtonProps) => p.borderColor};
-  color: ${(p: ButtonProps) => p.textColor};
+  color: #FFF;
   transition: background 0.2s;
   &:hover {
     background-color: ${(p: ButtonProps) =>
     p.hoverBackgroundColor
       ? p.hoverBackgroundColor
       : darken(0.02, p.backgroundColor)};
-    color: ${(p: ButtonProps) => p.hoverTextColor ? p.hoverTextColor : p.textColor}
+    color: ${(p: ButtonProps) => p.hoverTextColor ? p.hoverTextColor : '#FFF'}
   }
 `;
 
