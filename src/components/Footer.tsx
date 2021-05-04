@@ -1,5 +1,8 @@
 import styled from 'styled-components';
 
+// The footer is a component that appears at various times in the application
+// It consists of DadosJus logo and a message for contact.
+
 const Footer = () => (
   <Container>
     <div>

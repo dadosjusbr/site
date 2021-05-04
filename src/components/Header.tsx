@@ -1,6 +1,9 @@
 import Link from 'next/link';
 import styled from 'styled-components';
 
+// The header partial is used to navigate and brief the application
+// each link is an anchor to a different page, achoring using next/link https://nextjs.org/docs/api-reference/next/link
+
 const Header = () => (
   <Container>
     <div>
