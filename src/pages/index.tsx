@@ -201,6 +201,7 @@ const Container = styled.div`
   padding-bottom: 14rem;
   @media (max-width: 600px) {
     padding: 0;
+    margin: 0px 20px;
   }
   div {
     max-width: 45%;
