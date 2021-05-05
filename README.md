@@ -18,6 +18,12 @@ Esse projeto foi elaborado com o intuito de praticar a cidadania e tornar os dad
  - Sugira novos órgãos para elaboração de robôs, se tiver conhecimento, desenvolva um.
  - Sugerir coisas interessantes que você acha que irão contribuir para o projeto!
 
+
+## O Dados Jus
+
+![](./docs/preview_web.gif)
+![](./docs/preview_mobile.gif)
+
 ## Tecnologia
 
 

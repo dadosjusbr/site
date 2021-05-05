@@ -76,7 +76,10 @@ const HeaderItem = styled.li`
   text-align: center;
   a {
     color: #fff;
-
+    transition: border 0.1s;
+    &:hover {
+      border-bottom: 5px solid #fff;
+    }
     text-decoration: none;
   }
 `;
