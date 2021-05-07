@@ -1,10 +1,12 @@
 import Head from 'next/head';
+import { useRef } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Button from '../components/Button';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 
 export default function Index() {
+  const divRef = useRef<HTMLDivElement>(null);
   return (
     <>
       <Head>
@@ -30,7 +32,7 @@ export default function Index() {
           uma tarefa difícil para uma pessoa.
         </div>
         <Animation>
-          <span className="context">
+          <span ref={divRef} className="context">
             <img
               src="img/anim-group-1/esquema.svg"
               alt="esquema_anim_group_1"
@@ -82,6 +84,18 @@ export default function Index() {
             borderColor="#2FBB96"
             hoverTextColor="#2FBB96"
             hoverBackgroundColor="#3e5363"
+            onMouseEnter={() => {
+              for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
+                const node = divRef.current.childNodes[i] as HTMLImageElement;
+                node.classList.add('active');
+              }
+            }}
+            onMouseLeave={() => {
+              for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
+                const node = divRef.current.childNodes[i] as HTMLImageElement;
+                node.classList.remove('active');
+              }
+            }}
           >
             Acessar os dados libertados
           </Button>
@@ -154,41 +168,126 @@ export default function Index() {
     </>
   );
 }
-const anim1 = keyframes`
+const iconPredioAnimation = keyframes`
   0%{
-    display:block;
-    opacity:0;
+    opacity: 255;
+
   }
   100%{
-    opacity:255;
-  }
-
-`;
-
-const anim2 = keyframes`
-    form {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.02);
+      opacity: 255;
     }
 `;
-
-const anim3 = keyframes`
-    form {
-        transform: scale(1);
+const iconEsquemaAnimation = keyframes`
+    0%{
+      opacity: 0;
     }
-    to {
-        transform: scale(1.02);
+    20%{
+      opacity: 0;
+    }
+    30%{
+      opacity: 255;
+    }
+    90%{
+      opacity: 255;
+    }
+    100%{
+      opacity: 0;
     }
 `;
 
-const anim4 = keyframes`
-    form {
-        transform: scale(1);
+const seta1Animation = keyframes`
+    0%{
+      opacity: 0;
     }
-    to {
-        transform: scale(1.02);
+    10%{
+      opacity: 0;
+    }
+    20%{
+      opacity: 255;
+    }
+    90%{
+      opacity: 255;
+    }
+`;
+
+const topFileAnimation = keyframes`
+    0%{
+      opacity: 0;
+    }
+    30%{
+      opacity: 0;
+    }
+    40%{
+      opacity: 255;
+    }
+    50%{
+      opacity: 255;
+      transform: translateY(0) translateX(0);
+    }
+    60%{
+      transform: translateY(90px) translateX(90px);
+      opacity: 0;
+    }
+`;
+const bottomFileAnimation = keyframes`
+    0%{
+      opacity: 0;
+    }
+    30%{
+      opacity: 0;
+    }
+    40%{
+      opacity: 255;
+    }
+    50%{
+      opacity: 255;
+      transform: translateY(0) translateX(0);
+    }
+    60%{
+      opacity: 0;
+      transform: translateY(-90px) translateX(90px);
+    }
+`;
+const lastFileAnimation = keyframes`
+    0%{
+      opacity: 0;
+    }
+    40%{
+      opacity: 0;
+    }
+    50%{
+      opacity: 255;
+    }
+    90%{
+      opacity: 255;
+    }
+`;
+const seta2Animation = keyframes`
+    0%{
+      opacity: 0;
+    }
+    60%{
+      opacity: 0;
+    }
+    70%{
+      opacity: 255;
+    }
+    90%{
+      opacity: 255;
+    }
+`;
+const graficoAnimation = keyframes`
+    0%{
+      opacity: 0;
+    }
+    70%{
+      opacity: 0;
+    }
+    80%{
+      opacity: 255;
+    }
+    90%{
+      opacity: 255;
     }
 `;
 
@@ -228,14 +327,41 @@ const Animation = styled.div`
     height: 10rem;
     display: flex;
     position: relative;
-    &:hover {
-      animation: ${anim1} 3s linear infinite;
+    @media (min-width: 960px) {
+      #icon_predio_anim_group_1 {
+        left: -220px;
+        top: 10px;
+        transition: opacity 2;
+      }
+      #icon_predio_anim_group_1.active {
+        animation: ${iconPredioAnimation} 10s forwards;
+      }
+      #esquema_anim_group_1.active {
+        animation: ${iconEsquemaAnimation} 10s forwards;
+      }
+      #seta_1_anim_group_1.active {
+        animation: ${seta1Animation} 10s forwards;
+      }
+      #icon_documento_up_anim_group_1.active {
+        animation: ${topFileAnimation} 10s forwards;
+      }
+      #icon_documento_down_anim_group_1.active {
+        animation: ${bottomFileAnimation} 10s forwards;
+      }
+      #icon_documento_right_anim_group_1.active {
+        animation: ${lastFileAnimation} 10s forwards;
+      }
+      #seta_2_anim_group_1.active {
+        animation: ${seta2Animation} 10s forwards;
+      }
+      #grafico_0_anim_group_1.active {
+        animation: ${graficoAnimation} 10s forwards;
+      }
+      #grafico_1_anim_group_1.active {
+        animation: ${graficoAnimation} 10s forwards;
+      }
     }
 
-    #icon_predio_anim_group_1 {
-      left: -220px;
-      top: 10px;
-    }
     #icon_documento_right_anim_group_1 {
       left: 190px;
       top: 30px;
@@ -264,14 +390,14 @@ const Animation = styled.div`
       left: -10px;
     }
     #esquema_anim_group_1 {
-      display: block;
+      opacity: 255;
     }
     img {
       position: absolute;
       margin-left: auto;
       margin-right: auto;
       left: 0;
-      display: none;
+      opacity: 0;
       right: 0;
       text-align: center;
     }
