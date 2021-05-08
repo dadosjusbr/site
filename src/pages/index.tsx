@@ -136,9 +136,24 @@ export default function Index() {
         <Animation>
           <span className="context">
             <img
-              src="img/anim-group-1/esquema.svg"
-              alt="esquema_anim_group_1"
-              id="esquema_anim_group_1"
+              src="img/anim-group-2/seta.svg"
+              alt="seta_anim_group_3"
+              id="seta_anim_group_3"
+            />
+            <img
+              src="img/anim-group-1/grafico_0.svg"
+              alt="grafico_0_anim_group_3"
+              id="grafico_0_anim_group_3"
+            />
+            <img
+              src="img/anim-group-3/icon_membros.svg"
+              alt="icon_membros_anim_group_3"
+              id="icon_membros_anim_group_3"
+            />
+            <img
+              src="img/anim-group-1/grafico_1.svg"
+              alt="grafico_1_anim_group_3"
+              id="grafico_1_anim_group_3"
             />
           </span>
         </Animation>
@@ -157,9 +172,79 @@ export default function Index() {
         <Animation>
           <span className="context">
             <img
-              src="img/anim-group-1/esquema.svg"
-              alt="esquema_anim_group_1"
-              id="esquema_anim_group_1"
+              src="img/anim-group-4/icon_empregados_up.svg"
+              alt="icon_empregado_1_anim_group_4"
+              id="icon_empregado_1_anim_group_4"
+            />
+            <img
+              src="img/anim-group-2/seta.svg"
+              alt="seta_1_anim_group_4"
+              id="seta_1_anim_group_4"
+            />
+            <img
+              src="img/anim-group-4/icon_salario.svg"
+              alt="icon_salario_1_anim_group_4"
+              id="icon_salario_1_anim_group_4"
+            />
+            <img
+              src="img/anim-group-2/plus.svg"
+              alt="plus_1_anim_group_4"
+              id="plus_1_anim_group_4"
+            />
+            <img
+              src="img/anim-group-4/icon_beneficio.svg"
+              alt="icon_beneficio_1_anim_group_4"
+              id="icon_beneficio_1_anim_group_4"
+            />
+            <img
+              src="img/anim-group-4/icon_empregados_up.svg"
+              alt="icon_empregado_2_anim_group_4"
+              id="icon_empregado_2_anim_group_4"
+            />
+            <img
+              src="img/anim-group-2/seta.svg"
+              alt="seta_2_anim_group_4"
+              id="seta_2_anim_group_4"
+            />
+            <img
+              src="img/anim-group-4/icon_salario.svg"
+              alt="icon_salario_2_anim_group_4"
+              id="icon_salario_2_anim_group_4"
+            />
+            <img
+              src="img/anim-group-2/plus.svg"
+              alt="plus_2_anim_group_4"
+              id="plus_2_anim_group_4"
+            />
+            <img
+              src="img/anim-group-4/icon_beneficio.svg"
+              alt="icon_beneficio_2_anim_group_4"
+              id="icon_beneficio_2_anim_group_4"
+            />
+            <img
+              src="img/anim-group-4/icon_empregados_up.svg"
+              alt="icon_empregado_3_anim_group_4"
+              id="icon_empregado_3_anim_group_4"
+            />
+            <img
+              src="img/anim-group-2/seta.svg"
+              alt="seta_3_anim_group_4"
+              id="seta_3_anim_group_4"
+            />
+            <img
+              src="img/anim-group-4/icon_salario.svg"
+              alt="icon_salario_3_anim_group_4"
+              id="icon_salario_3_anim_group_4"
+            />
+            <img
+              src="img/anim-group-2/plus.svg"
+              alt="plus_3_anim_group_4"
+              id="plus_3_anim_group_4"
+            />
+            <img
+              src="img/anim-group-4/icon_beneficio.svg"
+              alt="icon_beneficio_3_anim_group_4"
+              id="icon_beneficio_3_anim_group_4"
             />
           </span>
         </Animation>
@@ -169,7 +254,7 @@ export default function Index() {
   );
 }
 const iconPredioAnimation = keyframes`
-  0%{
+  10%{
     opacity: 255;
 
   }
@@ -290,7 +375,62 @@ const graficoAnimation = keyframes`
       opacity: 255;
     }
 `;
-
+const animSeta = keyframes`
+  0%{
+    opacity: 0;
+  }
+  10%{
+    opacity: 0;
+  }
+  20%{
+    opacity: 255;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+const animSalario = keyframes`
+  0%{
+    opacity: 0;
+  }
+  30%{
+    opacity: 0;
+  }
+  40%{
+    opacity: 255;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+const animPlus = keyframes`
+  0%{
+    opacity: 0;
+  }
+  50%{
+    opacity: 0;
+  }
+  60%{
+    opacity: 255;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+const animBeneficio = keyframes`
+  0%{
+    opacity: 0;
+  }
+  70%{
+    opacity: 0;
+  }
+  80%{
+    opacity: 255;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
 const Container = styled.div`
   display: flex;
   margin: 0px 68px;
@@ -325,14 +465,12 @@ const Animation = styled.div`
     margin: 0;
     width: 100%;
     height: 10rem;
+    & + .context {
+      background-color: red;
+    }
     display: flex;
     position: relative;
     @media (min-width: 960px) {
-      #icon_predio_anim_group_1 {
-        left: -220px;
-        top: 10px;
-        transition: opacity 2;
-      }
       #icon_predio_anim_group_1.active {
         animation: ${iconPredioAnimation} 10s forwards;
       }
@@ -361,48 +499,147 @@ const Animation = styled.div`
         animation: ${graficoAnimation} 10s forwards;
       }
     }
-
+    #icon_predio_anim_group_1 {
+      left: -220px;
+      top: 10px;
+      opacity: 0;
+    }
+    #icon_membros_anim_group_3 {
+      top: -70px;
+    }
     #icon_documento_right_anim_group_1 {
       left: 190px;
       top: 30px;
+      opacity: 0;
     }
     #seta_1_anim_group_1 {
       left: -110px;
       top: 40px;
+      opacity: 0;
     }
     #seta_2_anim_group_1 {
       left: 290px;
       top: 40px;
+      opacity: 0;
     }
     #grafico_0_anim_group_1 {
       left: 400px;
       top: -10px;
+      opacity: 0;
     }
     #grafico_1_anim_group_1 {
       top: 50px;
       left: 400px;
+      opacity: 0;
+    }
+    #grafico_0_anim_group_3 {
+      left: -40px;
+      top: 40px;
+    }
+    #grafico_1_anim_group_3 {
+      left: 40px;
+      top: 40px;
     }
     #icon_documento_up_anim_group_1 {
       top: -60px;
+      opacity: 0;
     }
     #icon_documento_down_anim_group_1 {
       top: 130px;
       left: -10px;
+      opacity: 0;
     }
     #esquema_anim_group_1 {
       opacity: 255;
+    }
+    #icon_empregado_1_anim_group_4 {
+      left: -90%;
+    }
+    #icon_empregado_2_anim_group_4 {
+      left: -20%;
+    }
+    #icon_empregado_3_anim_group_4 {
+      left: 50%;
+    }
+    #seta_1_anim_group_4 {
+      left: -90%;
+      top: 80px;
+    }
+    #seta_2_anim_group_4 {
+      left: -20%;
+      top: 80px;
+    }
+    #seta_3_anim_group_4 {
+      left: 50%;
+      top: 80px;
+    }
+    #icon_salario_1_anim_group_4 {
+      left: -90%;
+      top: 120px;
+    }
+    #icon_salario_2_anim_group_4 {
+      left: -20%;
+      top: 120px;
+    }
+    #icon_salario_3_anim_group_4 {
+      left: 50%;
+      top: 120px;
+    }
+    #plus_1_anim_group_4 {
+      left: -70%;
+      top: 150px;
+    }
+    #plus_2_anim_group_4 {
+      top: 150px;
+    }
+    #plus_3_anim_group_4 {
+      left: 70%;
+      top: 150px;
+    }
+    #icon_beneficio_1_anim_group_4 {
+      left: -50%;
+      top: 120px;
+    }
+    #icon_beneficio_2_anim_group_4 {
+      top: 120px;
+      left: 20%;
+    }
+    #icon_beneficio_3_anim_group_4 {
+      left: 90%;
+      top: 120px;
+    }
+    #icon_empregado_1_anim_group_4,
+    #icon_empregado_2_anim_group_4,
+    #icon_empregado_3_anim_group_4 {
+    }
+    #seta_1_anim_group_4,
+    #seta_2_anim_group_4,
+    #seta_3_anim_group_4 {
+      animation: ${animSeta} forwards 10s infinite;
+    }
+    #icon_salario_1_anim_group_4,
+    #icon_salario_2_anim_group_4,
+    #icon_salario_3_anim_group_4 {
+      animation: ${animSalario} forwards 10s infinite;
+    }
+    #plus_1_anim_group_4,
+    #plus_2_anim_group_4,
+    #plus_3_anim_group_4 {
+      animation: ${animPlus} forwards 10s infinite;
+    }
+    #icon_beneficio_1_anim_group_4,
+    #icon_beneficio_2_anim_group_4,
+    #icon_beneficio_3_anim_group_4 {
+      animation: ${animBeneficio} forwards 10s infinite;
     }
     img {
       position: absolute;
       margin-left: auto;
       margin-right: auto;
       left: 0;
-      opacity: 0;
+      opacity: 255;
       right: 0;
       text-align: center;
-    }
-    button:hover + & {
-      background-color: red;
     }
   }
   @media (max-width: 600px) {
