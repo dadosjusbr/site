@@ -352,6 +352,7 @@ const iconEsquemaAnimation = keyframes`
 
 const seta1Animation = keyframes`
     0%{
+      transform: rotate(0deg);
       opacity: 0;
     }
     10%{
@@ -362,6 +363,10 @@ const seta1Animation = keyframes`
     }
     90%{
       opacity: 255;
+    }
+    100%{
+      transform: rotate(0deg);
+      opacity:0;
     }
 `;
 
@@ -631,28 +636,28 @@ const Animation = styled.div`
         animation: ${iconPredioAnimation} 10s forwards;
       }
       #esquema_anim_group_1.active {
-        animation: ${iconEsquemaAnimation} 10s forwards;
+        animation: ${iconEsquemaAnimation} 10s forwards infinite;
       }
       #seta_1_anim_group_1.active {
-        animation: ${seta1Animation} 10s forwards;
+        animation: ${seta1Animation} 10s forwards infinite;
       }
       #icon_documento_up_anim_group_1.active {
-        animation: ${topFileAnimation} 10s forwards;
+        animation: ${topFileAnimation} 10s forwards infinite;
       }
       #icon_documento_down_anim_group_1.active {
-        animation: ${bottomFileAnimation} 10s forwards;
+        animation: ${bottomFileAnimation} 10s forwards infinite;
       }
       #icon_documento_right_anim_group_1.active {
-        animation: ${lastFileAnimation} 10s forwards;
+        animation: ${lastFileAnimation} 10s forwards infinite;
       }
       #seta_2_anim_group_1.active {
-        animation: ${seta2Animation} 10s forwards;
+        animation: ${seta2Animation} 10s forwards infinite;
       }
       #grafico_0_anim_group_1.active {
-        animation: ${graficoAnimation} 10s forwards;
+        animation: ${graficoAnimation} 10s forwards infinite;
       }
       #grafico_1_anim_group_1.active {
-        animation: ${graficoAnimation} 10s forwards;
+        animation: ${graficoAnimation} 10s forwards infinite;
       }
     }
     @media (max-width: 960px) {
@@ -676,7 +681,7 @@ const Animation = styled.div`
     #seta_1_anim_group_1 {
       left: -110px;
       top: 40px;
-      opacity: 0;
+      transform: rotate(180deg);
     }
     #seta_2_anim_group_1 {
       left: 290px;
