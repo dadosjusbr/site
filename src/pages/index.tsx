@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import { useRef } from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
 import Button from '../components/Button';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
