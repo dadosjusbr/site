@@ -116,9 +116,79 @@ export default function Index() {
         <Animation>
           <span className="context">
             <img
-              src="img/anim-group-1/esquema.svg"
-              alt="esquema_anim_group_1"
-              id="esquema_anim_group_1"
+              src="img/anim-group-2/icon_carrinho.svg"
+              alt="icon_carrinho_anim_group_2"
+              id="icon_carrinho_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/icon_plus_large.svg"
+              alt="icon_plus_large_anim_group_2"
+              id="icon_plus_large_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/inativos.svg"
+              alt="inativos_anim_group_2"
+              id="inativos_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/remuneracao.svg"
+              alt="remuneracao_anim_group_2"
+              id="remuneracao_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/icon_empregados_up.svg"
+              alt="icon_empregados_up_anim_group_2"
+              id="icon_empregados_up_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/membros.svg"
+              alt="membros_anim_group_2"
+              id="membros_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/seta.svg"
+              alt="seta_1_anim_group_2"
+              id="seta_1_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/seta.svg"
+              alt="seta_2_anim_group_2"
+              id="seta_2_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/plus.svg"
+              alt="plus_1_anim_group_2"
+              id="plus_1_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/plus.svg"
+              alt="plus_2_anim_group_2"
+              id="plus_2_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/plus.svg"
+              alt="plus_3_anim_group_2"
+              id="plus_3_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/plus.svg"
+              alt="plus_4_anim_group_2"
+              id="plus_4_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/plus.svg"
+              alt="plus_5_anim_group_2"
+              id="plus_5_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/icon_beneficio.svg"
+              alt="icon_beneficio_2_anim_group_2"
+              id="icon_beneficio_2_anim_group_2"
+            />
+            <img
+              src="img/anim-group-2/icon_salario.svg"
+              alt="icon_salario_anim_group_2"
+              id="icon_salario_anim_group_2"
             />
           </span>
         </Animation>
@@ -431,6 +501,92 @@ const animBeneficio = keyframes`
     opacity: 255;
   }
 `;
+
+const animTwoArrowOne = keyframes`
+  0%{
+    opacity: 0;
+  }
+  10%{
+    opacity: 0;
+  }
+  20%{
+    opacity: 255;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+const animTwoGiftBox = keyframes`
+  0%{
+    opacity: 0;
+  }
+  20%{
+    opacity: 0;
+  }
+  30%{
+    opacity: 255;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+const animTwoPlusOne = keyframes`
+  0%{
+    opacity: 0;
+  }
+  30%{
+    opacity: 0;
+  }
+  40%{
+    opacity: 255;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+const animTwoPocket = keyframes`
+  0%{
+    opacity: 0;
+  }
+  40%{
+    opacity: 0;
+  }
+  50%{
+    opacity: 255;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+const animTwoArrowTwo = keyframes`
+  0%{
+    opacity: 0;
+  }
+  50%{
+    opacity: 0;
+  }
+  60%{
+    opacity: 25;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+const animTwoLastAnim = keyframes`
+  0%{
+    opacity: 0;
+  }
+  60%{
+    opacity: 0;
+  }
+  70%{
+    opacity: 25;
+  }
+  90%{
+    opacity: 255;
+  }
+`;
+
 const Container = styled.div`
   display: flex;
   margin: 0px 68px;
@@ -499,13 +655,18 @@ const Animation = styled.div`
         animation: ${graficoAnimation} 10s forwards;
       }
     }
+    @media (max-width: 960px) {
+      img {
+        transform: scale(0.8);
+      }
+    }
     #icon_predio_anim_group_1 {
       left: -220px;
       top: 10px;
       opacity: 0;
     }
     #icon_membros_anim_group_3 {
-      top: -70px;
+      top: -30%;
     }
     #icon_documento_right_anim_group_1 {
       left: 190px;
@@ -522,6 +683,9 @@ const Animation = styled.div`
       top: 40px;
       opacity: 0;
     }
+    #seta_anim_group_3 {
+      top: 40%;
+    }
     #grafico_0_anim_group_1 {
       left: 400px;
       top: -10px;
@@ -534,11 +698,11 @@ const Animation = styled.div`
     }
     #grafico_0_anim_group_3 {
       left: -40px;
-      top: 40px;
+      top: 80%;
     }
     #grafico_1_anim_group_3 {
       left: 40px;
-      top: 40px;
+      top: 80%;
     }
     #icon_documento_up_anim_group_1 {
       top: -60px;
@@ -631,6 +795,80 @@ const Animation = styled.div`
     #icon_beneficio_2_anim_group_4,
     #icon_beneficio_3_anim_group_4 {
       animation: ${animBeneficio} forwards 10s infinite;
+    }
+    #icon_carrinho_anim_group_2 {
+      top: 140%;
+      animation: ${animTwoLastAnim} 10s forwards infinite;
+    }
+    #icon_plus_large_anim_group_2 {
+      top: 140%;
+      left: -40%;
+      animation: ${animTwoLastAnim} 10s forwards infinite;
+    }
+    #inativos_anim_group_2 {
+      top: 140%;
+      left: -80%;
+      animation: ${animTwoLastAnim} 10s forwards infinite;
+    }
+    #remuneracao_anim_group_2 {
+      top: 140%;
+      left: 40%;
+      animation: ${animTwoLastAnim} 10s forwards infinite;
+    }
+    #icon_empregados_up_anim_group_2 {
+      left: -40%;
+      top: -80%;
+    }
+    #membros_anim_group_2 {
+      top: 140%;
+      left: 80%;
+      animation: ${animTwoLastAnim} 10s forwards infinite;
+    }
+    #seta_1_anim_group_2 {
+      animation: ${animTwoArrowOne} 10s forwards infinite;
+      left: -40%;
+    }
+    #seta_2_anim_group_2 {
+      animation: ${animTwoArrowTwo} 10s forwards infinite;
+      top: 100%;
+    }
+    #icon_beneficio_2_anim_group_2 {
+      animation: ${animTwoGiftBox} 10s forwards infinite;
+      top: 20%;
+      left: -40%;
+    }
+    #icon_salario_anim_group_2 {
+      animation: ${animTwoPocket} 10s forwards infinite;
+      top: 20%;
+    }
+    #plus_1_anim_group_2 {
+      top: 40%;
+      left: -20%;
+    }
+    #plus_1_anim_group_2 {
+      animation: ${animTwoPlusOne} 10s forwards infinite;
+
+      top: 40%;
+      left: -20%;
+    }
+    #plus_2_anim_group_2,
+    #plus_3_anim_group_2,
+    #plus_4_anim_group_2,
+    #plus_5_anim_group_2 {
+      top: 150%;
+      animation: ${animTwoLastAnim} 10s forwards infinite;
+    }
+    #plus_2_anim_group_2 {
+      left: -60%;
+    }
+    #plus_3_anim_group_2 {
+      left: -20%;
+    }
+    #plus_4_anim_group_2 {
+      left: 20%;
+    }
+    #plus_5_anim_group_2 {
+      left: 60%;
     }
     img {
       position: absolute;
