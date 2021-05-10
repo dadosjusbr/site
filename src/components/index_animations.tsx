@@ -239,11 +239,6 @@ const Context = styled.span`
   height: 10rem;
   display: flex;
   position: relative;
-  @media (max-width: 960px) {
-    img {
-      transform: scale(0.8);
-    }
-  }
   img {
     position: absolute;
     margin-left: auto;
@@ -253,9 +248,14 @@ const Context = styled.span`
     right: 0;
     text-align: center;
   }
+  @media (max-width: 960px) {
+    img {
+      transform: scale(0.8);
+    }
+  }
 `;
 
-const iconPredioAnimation = keyframes`
+const animOneBuilding = keyframes`
   10%{
     opacity: 255;
 
@@ -264,7 +264,7 @@ const iconPredioAnimation = keyframes`
       opacity: 255;
     }
 `;
-const iconEsquemaAnimation = keyframes`
+const animOneMainScheme = keyframes`
     0%{
       opacity: 0;
     }
@@ -282,9 +282,12 @@ const iconEsquemaAnimation = keyframes`
     }
 `;
 
-const seta1Animation = keyframes`
+const animOneArrowOne = keyframes`
     0%{
       transform: rotate(0deg);
+      @media(max-width: 960px){
+        transform: rotate(0deg) scale(0.8);
+      }
       opacity: 0;
     }
     10%{
@@ -302,7 +305,7 @@ const seta1Animation = keyframes`
     }
 `;
 
-const topFileAnimation = keyframes`
+const animOneTopFile = keyframes`
     0%{
       opacity: 0;
     }
@@ -321,7 +324,7 @@ const topFileAnimation = keyframes`
       opacity: 0;
     }
 `;
-const bottomFileAnimation = keyframes`
+const animOneBottomFile = keyframes`
     0%{
       opacity: 0;
     }
@@ -340,7 +343,7 @@ const bottomFileAnimation = keyframes`
       transform: translateY(-90px) translateX(90px);
     }
 `;
-const lastFileAnimation = keyframes`
+const animOneRightFile = keyframes`
     0%{
       opacity: 0;
     }
@@ -354,7 +357,7 @@ const lastFileAnimation = keyframes`
       opacity: 255;
     }
 `;
-const seta2Animation = keyframes`
+const animOneArrowTwo = keyframes`
     0%{
       opacity: 0;
     }
@@ -368,7 +371,7 @@ const seta2Animation = keyframes`
       opacity: 255;
     }
 `;
-const graficoAnimation = keyframes`
+const animOneGraphsAnimation = keyframes`
     0%{
       opacity: 0;
     }
@@ -382,7 +385,7 @@ const graficoAnimation = keyframes`
       opacity: 255;
     }
 `;
-const animSeta = keyframes`
+const animFourArrow = keyframes`
   0%{
     opacity: 0;
   }
@@ -396,7 +399,7 @@ const animSeta = keyframes`
     opacity: 255;
   }
 `;
-const animSalario = keyframes`
+const animFourSalary = keyframes`
   0%{
     opacity: 0;
   }
@@ -410,7 +413,7 @@ const animSalario = keyframes`
     opacity: 255;
   }
 `;
-const animPlus = keyframes`
+const animFourPlus = keyframes`
   0%{
     opacity: 0;
   }
@@ -424,7 +427,7 @@ const animPlus = keyframes`
     opacity: 255;
   }
 `;
-const animBeneficio = keyframes`
+const animFourBenefits = keyframes`
   0%{
     opacity: 0;
   }
@@ -527,31 +530,31 @@ const animTwoLastAnim = keyframes`
 const Animation1Context = styled(Context)`
   @media (min-width: 960px) {
     #icon_predio_anim_group_1.active {
-      animation: ${iconPredioAnimation} 10s forwards;
+      animation: ${animOneBuilding} 10s forwards;
     }
     #esquema_anim_group_1.active {
-      animation: ${iconEsquemaAnimation} 10s forwards infinite;
+      animation: ${animOneMainScheme} 10s forwards infinite;
     }
     #seta_1_anim_group_1.active {
-      animation: ${seta1Animation} 10s forwards infinite;
+      animation: ${animOneArrowOne} 10s forwards infinite;
     }
     #icon_documento_up_anim_group_1.active {
-      animation: ${topFileAnimation} 10s forwards infinite;
+      animation: ${animOneTopFile} 10s forwards infinite;
     }
     #icon_documento_down_anim_group_1.active {
-      animation: ${bottomFileAnimation} 10s forwards infinite;
+      animation: ${animOneBottomFile} 10s forwards infinite;
     }
     #icon_documento_right_anim_group_1.active {
-      animation: ${lastFileAnimation} 10s forwards infinite;
+      animation: ${animOneRightFile} 10s forwards infinite;
     }
     #seta_2_anim_group_1.active {
-      animation: ${seta2Animation} 10s forwards infinite;
+      animation: ${animOneArrowTwo} 10s forwards infinite;
     }
     #grafico_0_anim_group_1.active {
-      animation: ${graficoAnimation} 10s forwards infinite;
+      animation: ${animOneGraphsAnimation} 10s forwards infinite;
     }
     #grafico_1_anim_group_1.active {
-      animation: ${graficoAnimation} 10s forwards infinite;
+      animation: ${animOneGraphsAnimation} 10s forwards infinite;
     }
   }
   #icon_predio_anim_group_1 {
@@ -568,6 +571,10 @@ const Animation1Context = styled(Context)`
     left: -110px;
     top: 40px;
     transform: rotate(180deg);
+    @media (max-width: 960px) {
+      transform: rotate(180deg) scale(0.8);
+      left: -90px;
+    }
   }
   #seta_2_anim_group_1 {
     left: 290px;
@@ -753,21 +760,21 @@ const Animation4Context = styled(Context)`
   #seta_1_anim_group_4,
   #seta_2_anim_group_4,
   #seta_3_anim_group_4 {
-    animation: ${animSeta} forwards 10s infinite;
+    animation: ${animFourArrow} forwards 10s infinite;
   }
   #icon_salario_1_anim_group_4,
   #icon_salario_2_anim_group_4,
   #icon_salario_3_anim_group_4 {
-    animation: ${animSalario} forwards 10s infinite;
+    animation: ${animFourSalary} forwards 10s infinite;
   }
   #plus_1_anim_group_4,
   #plus_2_anim_group_4,
   #plus_3_anim_group_4 {
-    animation: ${animPlus} forwards 10s infinite;
+    animation: ${animFourPlus} forwards 10s infinite;
   }
   #icon_beneficio_1_anim_group_4,
   #icon_beneficio_2_anim_group_4,
   #icon_beneficio_3_anim_group_4 {
-    animation: ${animBeneficio} forwards 10s infinite;
+    animation: ${animFourBenefits} forwards 10s infinite;
   }
 `;
