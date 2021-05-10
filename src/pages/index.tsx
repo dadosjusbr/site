@@ -1,10 +1,18 @@
 import Head from 'next/head';
-import styled, { keyframes } from 'styled-components';
+import { useRef } from 'react';
+import styled from 'styled-components';
 import Button from '../components/Button';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
+import {
+  Animation1,
+  Animation2,
+  Animation3,
+  Animation4,
+} from '../components/index_animations';
 
 export default function Index() {
+  const divRef = useRef<HTMLSpanElement>(null);
   return (
     <>
       <Head>
@@ -30,58 +38,29 @@ export default function Index() {
           uma tarefa difícil para uma pessoa.
         </div>
         <Animation>
-          <span className="context">
-            <img
-              src="img/anim-group-1/esquema.svg"
-              alt="esquema_anim_group_1"
-              id="esquema_anim_group_1"
-            />
-            <img
-              src="img/anim-group-1/grafico_0.svg"
-              alt="grafico_0_anim_group_1"
-              id="grafico_0_anim_group_1"
-            />
-            <img
-              src="img/anim-group-1/grafico_1.svg"
-              alt="grafico_1_anim_group_1"
-              id="grafico_1_anim_group_1"
-            />
-            <img
-              src="img/anim-group-1/icon_documento.svg"
-              alt="icon_documento_anim_group_1"
-              id="icon_documento_up_anim_group_1"
-            />
-            <img
-              src="img/anim-group-1/icon_documento.svg"
-              alt="icon_documento_anim_group_1"
-              id="icon_documento_down_anim_group_1"
-            />
-            <img
-              src="img/anim-group-1/icon_documento.svg"
-              alt="icon_documento_anim_group_1"
-              id="icon_documento_right_anim_group_1"
-            />
-            <img
-              src="img/anim-group-1/icon_predio.svg"
-              alt="icon_predio_anim_group_1"
-              id="icon_predio_anim_group_1"
-            />
-            <img
-              src="img/anim-group-1/seta.svg"
-              alt="seta_anim_group_1"
-              id="seta_1_anim_group_1"
-            />
-            <img
-              src="img/anim-group-1/seta.svg"
-              alt="seta_anim_group_1"
-              id="seta_2_anim_group_1"
-            />
-          </span>
+          {/*
+            the ref prop is used to get the reference of a component and store into a variable
+            the use is similar to document.getElementById function in javascript
+            we need the reference of the animation here to activate the start when the button bellow is hovered
+          */}
+          <Animation1 ref={divRef} />
           <Button
             backgroundColor="#2FBB96"
             borderColor="#2FBB96"
             hoverTextColor="#2FBB96"
             hoverBackgroundColor="#3e5363"
+            onMouseEnter={() => {
+              for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
+                const node = divRef.current.childNodes[i] as HTMLImageElement;
+                node.classList.add('active');
+              }
+            }}
+            onMouseLeave={() => {
+              for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
+                const node = divRef.current.childNodes[i] as HTMLImageElement;
+                node.classList.remove('active');
+              }
+            }}
           >
             Acessar os dados libertados
           </Button>
@@ -100,13 +79,7 @@ export default function Index() {
           gratificações, diárias, entre outros benefícios.
         </div>
         <Animation>
-          <span className="context">
-            <img
-              src="img/anim-group-1/esquema.svg"
-              alt="esquema_anim_group_1"
-              id="esquema_anim_group_1"
-            />
-          </span>
+          <Animation2 />
         </Animation>
       </Container>
       <Container>
@@ -120,13 +93,7 @@ export default function Index() {
           pública e procuradorias.
         </div>
         <Animation>
-          <span className="context">
-            <img
-              src="img/anim-group-1/esquema.svg"
-              alt="esquema_anim_group_1"
-              id="esquema_anim_group_1"
-            />
-          </span>
+          <Animation3 />
         </Animation>
       </Container>
       <Container>
@@ -141,56 +108,13 @@ export default function Index() {
           através do DadosJusBr.
         </div>
         <Animation>
-          <span className="context">
-            <img
-              src="img/anim-group-1/esquema.svg"
-              alt="esquema_anim_group_1"
-              id="esquema_anim_group_1"
-            />
-          </span>
+          <Animation4 />
         </Animation>
       </Container>
       <Footer />
     </>
   );
 }
-const anim1 = keyframes`
-  0%{
-    display:block;
-    opacity:0;
-  }
-  100%{
-    opacity:255;
-  }
-
-`;
-
-const anim2 = keyframes`
-    form {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.02);
-    }
-`;
-
-const anim3 = keyframes`
-    form {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.02);
-    }
-`;
-
-const anim4 = keyframes`
-    form {
-        transform: scale(1);
-    }
-    to {
-        transform: scale(1.02);
-    }
-`;
 
 const Container = styled.div`
   display: flex;
@@ -222,63 +146,6 @@ const Container = styled.div`
 `;
 const Animation = styled.div`
   display: flex;
-  .context {
-    margin: 0;
-    width: 100%;
-    height: 10rem;
-    display: flex;
-    position: relative;
-    &:hover {
-      animation: ${anim1} 3s linear infinite;
-    }
-
-    #icon_predio_anim_group_1 {
-      left: -220px;
-      top: 10px;
-    }
-    #icon_documento_right_anim_group_1 {
-      left: 190px;
-      top: 30px;
-    }
-    #seta_1_anim_group_1 {
-      left: -110px;
-      top: 40px;
-    }
-    #seta_2_anim_group_1 {
-      left: 290px;
-      top: 40px;
-    }
-    #grafico_0_anim_group_1 {
-      left: 400px;
-      top: -10px;
-    }
-    #grafico_1_anim_group_1 {
-      top: 50px;
-      left: 400px;
-    }
-    #icon_documento_up_anim_group_1 {
-      top: -60px;
-    }
-    #icon_documento_down_anim_group_1 {
-      top: 130px;
-      left: -10px;
-    }
-    #esquema_anim_group_1 {
-      display: block;
-    }
-    img {
-      position: absolute;
-      margin-left: auto;
-      margin-right: auto;
-      left: 0;
-      display: none;
-      right: 0;
-      text-align: center;
-    }
-    button:hover + & {
-      background-color: red;
-    }
-  }
   @media (max-width: 600px) {
     .context {
       margin: 0;
