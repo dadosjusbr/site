@@ -1,24 +1,26 @@
 import Link from 'next/link';
-import { MouseEvent as M, useRef } from 'react';
-import styled from 'styled-components';
+import { useRef, useState } from 'react';
+import styled, { keyframes } from 'styled-components';
 
 // The header partial is used to navigate and brief the application
 // each link is an anchor to a different page, achoring using next/link https://nextjs.org/docs/api-reference/next/link
 const Header = () => {
   const listRef = useRef<HTMLUListElement>(null);
-  function handleClick(e: M<HTMLButtonElement, MouseEvent>) {
-    const button = e.target as HTMLButtonElement;
-    listRef.current.classList.toggle('active');
-    button.classList.toggle('active');
+  // this method is used to chage the application state to modify the context of multples elements
+  function handleClick() {
+    setOpen(!open);
   }
+  // here i register in application state a new state prop called open
+  // this prop is used to modify the the header
+  const [open, setOpen] = useState(false);
   return (
     <Container>
       <div>
         <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
-        <HeaderButton onClick={handleClick}>
+        <HeaderButton open={open} onClick={handleClick}>
           <img src="/img/nav_responsive_button.svg" alt="nav_responsive" />
         </HeaderButton>
-        <HeaderList ref={listRef}>
+        <HeaderList open={open} ref={listRef}>
           <HeaderItem>
             <Link href="/">Notícias</Link>
           </HeaderItem>
@@ -55,7 +57,17 @@ const Container = styled.div`
     }
   }
 `;
-const HeaderList = styled.ul`
+
+const opening = keyframes`
+  from{
+    left: 200px;
+  }
+  to{
+    left:0;
+  }
+`;
+
+const HeaderList = styled.ul<{ open: boolean }>`
   display: flex;
   width: 50%;
   align-items: center;
@@ -64,38 +76,29 @@ const HeaderList = styled.ul`
   padding: 3.5rem;
 
   @media (max-width: 600px) {
-    display: none;
+    display: ${props => (props.open ? 'flex' : 'none')};
     z-index: 10;
     position: fixed;
     overflow: hidden;
-    left: -200%;
+    animation: ${opening} 0.3s forwards;
     transition: 0.5s;
     width: 100%;
-    &.active {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      height: 100vh;
-      background-color: #3e5363;
-      top: 0;
-      left: 0;
-    }
+    top: 0;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #3e5363;
   }
 `;
-const HeaderButton = styled.button`
+const HeaderButton = styled.button<{ open: boolean }>`
   display: none;
   background: none;
   border: none;
   z-index: 100;
   padding: 3.5rem;
-
-  @media (max-width: 600px) {
-    &.active {
-      right: 20px;
-      position: fixed;
-    }
-  }
+  right: ${props => props.open && '20px'};
+  position: ${props => props.open && 'fixed'};
 `;
 const HeaderItem = styled.li`
   padding: 5px;
