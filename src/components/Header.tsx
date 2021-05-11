@@ -28,7 +28,7 @@ const Header = () => {
             <Link href="/">Glossário</Link>
           </HeaderItem>
           <HeaderItem>
-            <Link href="/">Equipe</Link>
+            <Link href="/team">Equipe</Link>
           </HeaderItem>
           <HeaderItem>
             <Link href="/">Dados</Link>
