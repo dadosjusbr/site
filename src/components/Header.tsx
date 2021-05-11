@@ -10,8 +10,9 @@ const Header = () => {
   function handleClick() {
     setOpen(!open);
   }
-  // here i register in application state a new state prop called open
-  // this prop is used to modify the the header
+  // Registering a new application state property called open.
+  // This prop is used to modify the the header based on the mouse
+  // click.
   const [open, setOpen] = useState(false);
   return (
     <Container>
