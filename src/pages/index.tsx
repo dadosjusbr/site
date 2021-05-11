@@ -9,7 +9,7 @@ import {
   Animation2,
   Animation3,
   Animation4,
-} from '../components/index_animations';
+} from '../components/index-animations';
 
 export default function Index() {
   const divRef = useRef<HTMLSpanElement>(null);
