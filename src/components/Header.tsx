@@ -1,11 +1,10 @@
 import Link from 'next/link';
-import { useRef, useState } from 'react';
+import { useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 // The header partial is used to navigate and brief the application
 // each link is an anchor to a different page, achoring using next/link https://nextjs.org/docs/api-reference/next/link
 const Header = () => {
-  const listRef = useRef<HTMLUListElement>(null);
   // this method is used to chage the application state to modify the context of multples elements
   function handleClick() {
     setOpen(!open);
@@ -20,7 +19,7 @@ const Header = () => {
         <HeaderButton open={open} onClick={handleClick}>
           <img src="/img/nav_responsive_button.svg" alt="nav_responsive" />
         </HeaderButton>
-        <HeaderList open={open} ref={listRef}>
+        <HeaderList open={open}>
           <HeaderItem>
             <Link href="/">Notícias</Link>
           </HeaderItem>
