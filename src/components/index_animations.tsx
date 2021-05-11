@@ -528,6 +528,9 @@ const animTwoLastAnim = keyframes`
 `;
 
 const Animation1Context = styled(Context)`
+  img {
+    opacity: 0;
+  }
   @media (min-width: 960px) {
     #icon_predio_anim_group_1.active {
       animation: ${animOneBuilding} 10s forwards;
@@ -558,47 +561,41 @@ const Animation1Context = styled(Context)`
     }
   }
   #icon_predio_anim_group_1 {
-    left: -220px;
-    top: 10px;
-    opacity: 0;
+    left: -40%;
+    top: 10%;
   }
   #icon_documento_right_anim_group_1 {
-    left: 190px;
-    top: 30px;
-    opacity: 0;
+    left: 30%;
+    top: 30%;
   }
   #seta_1_anim_group_1 {
-    left: -110px;
+    left: -100px;
     top: 40px;
     transform: rotate(180deg);
+    opacity: 255;
     @media (max-width: 960px) {
       transform: rotate(180deg) scale(0.8);
       left: -90px;
     }
   }
   #seta_2_anim_group_1 {
-    left: 290px;
+    left: 50%;
     top: 40px;
-    opacity: 0;
   }
   #grafico_0_anim_group_1 {
-    left: 400px;
-    top: -10px;
-    opacity: 0;
+    left: 70%;
+    top: 3%;
   }
   #grafico_1_anim_group_1 {
     top: 50px;
-    left: 400px;
-    opacity: 0;
+    left: 70%;
   }
   #icon_documento_up_anim_group_1 {
-    top: -60px;
-    opacity: 0;
+    top: -60%;
   }
   #icon_documento_down_anim_group_1 {
-    top: 130px;
+    bottom: -70%;
     left: -10px;
-    opacity: 0;
   }
   #esquema_anim_group_1 {
     opacity: 255;
