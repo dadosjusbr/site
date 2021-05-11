@@ -6,7 +6,7 @@ import styled, { keyframes } from 'styled-components';
 // each link is an anchor to a different page, achoring using next/link https://nextjs.org/docs/api-reference/next/link
 const Header = () => {
   const listRef = useRef<HTMLUListElement>(null);
-  // this method is used to chage the application state to modify the context of multples elements
+  // this method is used to change the application state to modify the context of multiples elements
   function handleClick() {
     setOpen(!open);
   }
