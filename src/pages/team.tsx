@@ -62,14 +62,32 @@ export default function Team() {
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
   ]);
+  const [partners] = useState([
+    {
+      name: 'APBMP',
+      img: '/img/partners/APBMP.svg',
+    },
+    {
+      name: 'analytics',
+      img: '/img/partners/analytics.svg',
+    },
+    {
+      name: 'MPPB',
+      img: '/img/partners/MPPB.svg',
+    },
+    {
+      name: 'shuttleworth',
+      img: '/img/partners/shuttleworth.svg',
+    },
+  ]);
   return (
     <Page>
       <Head>
         <title>Equipe</title>
       </Head>
       <Header />
-      <TeamList>
-        <h1>Time</h1>
+      <ResizableListWrapper>
+        <h1>TIME</h1>
         <ul>
           {teamMates.map(teamMate => (
             <TeamMateProfile key={teamMate.name}>
@@ -79,7 +97,7 @@ export default function Team() {
             </TeamMateProfile>
           ))}
         </ul>
-      </TeamList>
+      </ResizableListWrapper>
       <WantHelp>
         <div>
           <h2> SE INTERESSOU, QUER AJUDAR?</h2>
@@ -101,6 +119,16 @@ export default function Team() {
           </Button>
         </div>
       </WantHelp>
+      <ResizableListWrapper className="for-partners">
+        <h1>PARCEIROS</h1>
+        <ul>
+          {partners.map(partner => (
+            <Partner key={partner.name}>
+              <img src={partner.img} alt={partner.name} />
+            </Partner>
+          ))}
+        </ul>
+      </ResizableListWrapper>
       <Footer />
     </Page>
   );
@@ -108,7 +136,7 @@ export default function Team() {
 const Page = styled.div`
   background: #2fbb96;
 `;
-const TeamList = styled.div`
+const ResizableListWrapper = styled.div`
   margin: 10% 68px 0%;
 
   @media (max-width: 600px) {
@@ -129,6 +157,9 @@ const TeamList = styled.div`
     justify-content: space-between;
     flex-wrap: wrap;
     margin-top: 6%;
+  }
+  &.for-partners {
+    margin-bottom: 10rem;
   }
 `;
 const WantHelp = styled.div`
@@ -151,8 +182,14 @@ const WantHelp = styled.div`
     }
     font-family: 'Roboto Condensed', sans-serif;
   }
-  @media (max-width: 600px) {
+  @media (max-width: 640px) {
     flex-direction: column;
+    div {
+      & + div {
+        margin-left: 0;
+        margin-top: 5rem;
+      }
+    }
   }
   background-color: #3e5363;
 `;
@@ -160,8 +197,8 @@ const TeamMateProfile = styled.li`
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 0 7%;
   margin-bottom: 10rem;
+  min-width: 30%;
 
   @media (max-width: 600px) {
     padding: 0;
@@ -178,4 +215,15 @@ const TeamMateProfile = styled.li`
   font-size: 2.5rem;
   font-family: 'Roboto Condensed', sans-serif;
   color: #3e5363;
+`;
+const Partner = styled.li`
+  width: 30rem;
+  display: flex;
+  justify-content: center;
+  img {
+    width: 100%;
+  }
+  @media (max-width: 760px) {
+    width: 15rem;
+  }
 `;
