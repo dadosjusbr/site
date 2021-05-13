@@ -195,6 +195,7 @@ const WantHelp = styled.div`
   }
   @media (max-width: 640px) {
     flex-direction: column;
+    padding: 10% 3%;
     div {
       & + div {
         margin-left: 0;
