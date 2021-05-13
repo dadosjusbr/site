@@ -10,54 +10,63 @@ export default function Team() {
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
       name: 'Manuel Eduardo',
       tag: 'Developer',
+      githubUrl: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
@@ -91,9 +100,11 @@ export default function Team() {
         <ul>
           {teamMates.map(teamMate => (
             <TeamMateProfile key={teamMate.name}>
-              <img src={teamMate.photoURL} alt={teamMate.name} />
-              <span>{teamMate.name}</span>
-              <p>{teamMate.tag}</p>
+              <a href={teamMate.githubUrl}>
+                <img src={teamMate.photoURL} alt={teamMate.name} />
+                <span>{teamMate.name}</span>
+                <p>{teamMate.tag}</p>
+              </a>
             </TeamMateProfile>
           ))}
         </ul>
@@ -194,27 +205,29 @@ const WantHelp = styled.div`
   background-color: #3e5363;
 `;
 const TeamMateProfile = styled.li`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 10rem;
   min-width: 30%;
+  a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 10rem;
 
-  @media (max-width: 600px) {
-    padding: 0;
+    @media (max-width: 600px) {
+      padding: 0;
+    }
+    img {
+      border-radius: 50%;
+      width: 150px;
+    }
+    span {
+      font-size: 1.7rem;
+      font-weight: bold;
+    }
+    font-style: normal;
+    font-size: 2.5rem;
+    font-family: 'Roboto Condensed', sans-serif;
+    color: #3e5363;
   }
-  img {
-    border-radius: 50%;
-    width: 150px;
-  }
-  span {
-    font-size: 1.7rem;
-    font-weight: bold;
-  }
-  font-style: normal;
-  font-size: 2.5rem;
-  font-family: 'Roboto Condensed', sans-serif;
-  color: #3e5363;
 `;
 const Partner = styled.li`
   width: 30rem;
