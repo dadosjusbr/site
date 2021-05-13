@@ -114,7 +114,6 @@ const HeaderItem = styled.li`
     &:hover {
       border-bottom: 5px solid #fff;
     }
-    text-decoration: none;
   }
 `;
 export default Header;

@@ -10,7 +10,9 @@ export default createGlobalStyle`
   body{
     -webkit-font-smoothing: antialiased;
   }
-
+  a{
+    text-decoration: none;
+  }
   button{
     cursor: pointer;
   }
