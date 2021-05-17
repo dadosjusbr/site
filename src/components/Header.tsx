@@ -28,7 +28,7 @@ const Header = () => {
             <Link href="/">Glossário</Link>
           </HeaderItem>
           <HeaderItem>
-            <Link href="/">Equipe</Link>
+            <Link href="/team">Equipe</Link>
           </HeaderItem>
           <HeaderItem>
             <Link href="/">Dados</Link>
@@ -114,7 +114,6 @@ const HeaderItem = styled.li`
     &:hover {
       border-bottom: 5px solid #fff;
     }
-    text-decoration: none;
   }
 `;
 export default Header;

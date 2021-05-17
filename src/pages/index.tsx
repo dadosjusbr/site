@@ -14,7 +14,7 @@ import {
 export default function Index() {
   const divRef = useRef<HTMLSpanElement>(null);
   return (
-    <>
+    <Page>
       <Head>
         <title>DadosJusBr</title>
       </Head>
@@ -112,9 +112,13 @@ export default function Index() {
         </Animation>
       </Container>
       <Footer />
-    </>
+    </Page>
   );
 }
+
+const Page = styled.div`
+  background: #3e5363;
+`;
 
 const Container = styled.div`
   display: flex;
