@@ -9,66 +9,31 @@ export default function Team() {
   const [teamMates] = useState([
     {
       name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
+      role: 'Developer',
+      profileURL: 'https://github.com/Manuel-Antunes',
       photoURL:
         'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
     },
     {
-      name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
+      name: 'Daniel Fireman',
+      role: 'Professor',
+      profileURL: 'https://github.com/danielfireman',
       photoURL:
-        'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
+        'https://avatars2.githubusercontent.com/u/8951363?s=400&u=acdedbbd00a15d2f913e3e1bde6b14f2c7451f90&v=4',
     },
     {
-      name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
+      name: 'Nazareno Andrade',
+      role: 'Professor',
+      profileURL: 'https://github.com/nazareno',
       photoURL:
-        'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
+        'https://avatars0.githubusercontent.com/u/1053850?s=460&u=e1cbfe4f7cba06cf5908f8967c2db24e142ff7c7&v=4',
     },
     {
-      name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
+      name: 'Mariana Solto',
+      role: 'UI/UX',
+      profileURL: 'https://github.com/soutoam',
       photoURL:
-        'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
-    },
-    {
-      name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
-      photoURL:
-        'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
-    },
-    {
-      name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
-      photoURL:
-        'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
-    },
-    {
-      name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
-      photoURL:
-        'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
-    },
-    {
-      name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
-      photoURL:
-        'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
-    },
-    {
-      name: 'Manuel Eduardo',
-      tag: 'Developer',
-      githubUrl: 'https://github.com/Manuel-Antunes',
-      photoURL:
-        'https://avatars.githubusercontent.com/u/57446204?s=400&u=119738df168b0617e080d17c17e543ba573aa5cb&v=4',
+        'https://avatars3.githubusercontent.com/u/15800324?s=400&u=11b49d52de39d773024ad1894cdbf33c1637532a&v=4',
     },
   ]);
   const [partners] = useState([
@@ -96,14 +61,14 @@ export default function Team() {
       </Head>
       <Header />
       <ResizableListWrapper>
-        <h1>TIME</h1>
+        <h1>EQUIPE</h1>
         <ul>
           {teamMates.map(teamMate => (
             <TeamMateProfile key={teamMate.name}>
-              <a href={teamMate.githubUrl}>
+              <a href={teamMate.profileURL}>
                 <img src={teamMate.photoURL} alt={teamMate.name} />
                 <span>{teamMate.name}</span>
-                <p>{teamMate.tag}</p>
+                <p>{teamMate.role}</p>
               </a>
             </TeamMateProfile>
           ))}
