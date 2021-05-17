@@ -178,21 +178,28 @@ const TeamMateProfile = styled.li`
     align-items: center;
     margin-bottom: 10rem;
 
-    @media (max-width: 600px) {
-      padding: 0;
-    }
     img {
       border-radius: 50%;
-      width: 150px;
+      width: 20rem;
     }
     span {
-      font-size: 1.7rem;
+      font-size: 2.3rem;
       font-weight: bold;
     }
     font-style: normal;
-    font-size: 2.5rem;
+    font-size: 3.5rem;
     font-family: 'Roboto Condensed', sans-serif;
     color: #3e5363;
+    @media (max-width: 600px) {
+      padding: 0;
+      font-size: 2.5rem;
+      span {
+        font-size: 1.7rem;
+      }
+      img {
+        width: 15rem;
+      }
+    }
   }
 `;
 const Partner = styled.li`
