@@ -123,7 +123,7 @@ const ResizableListWrapper = styled.div`
   h1 {
     font-style: normal;
     font-weight: bold;
-    font-size: 2rem;
+    font-size: 2.5rem;
     font-family: 'Roboto Condensed', sans-serif;
     color: #3e5363;
   }
