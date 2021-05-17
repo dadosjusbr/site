@@ -8,6 +8,13 @@ import Header from '../components/Header';
 export default function Team() {
   const [teamMates] = useState([
     {
+      name: 'Juliana Sakai',
+      role: 'Lider',
+      profileURL: 'https://www.linkedin.com/in/julianasakai/',
+      photoURL:
+        'https://media-exp1.licdn.com/dms/image/C4D03AQH8PE3U5Mmksw/profile-displayphoto-shrink_800_800/0/1569015373841?e=1626912000&v=beta&t=YmMN6QtKCAEFBAbUhGE6tWaEdLO1nHQLo_51JCyUE28',
+    },
+    {
       name: 'Manuel Eduardo',
       role: 'Developer',
       profileURL: 'https://github.com/Manuel-Antunes',
@@ -34,6 +41,13 @@ export default function Team() {
       profileURL: 'https://github.com/soutoam',
       photoURL:
         'https://avatars3.githubusercontent.com/u/15800324?s=400&u=11b49d52de39d773024ad1894cdbf33c1637532a&v=4',
+    },
+    {
+      name: 'Samara Sonale',
+      role: 'Developer',
+      profileURL: 'https://www.linkedin.com/in/samara-sonale-4b805b194/',
+      photoURL:
+        'https://media-exp1.licdn.com/dms/image/C4D03AQERefFVyFb_-w/profile-displayphoto-shrink_200_200/0/1568855571075?e=1626912000&v=beta&t=jmXyUIBZmBlnPlT2YiNJ73TTJt9uz4aJrAcOVg1_heo',
     },
   ]);
   const [partners] = useState([
