@@ -149,7 +149,11 @@ const ResizableListWrapper = styled.div`
     margin-top: 6%;
   }
   &.for-partners {
-    margin-bottom: 10rem;
+    margin-bottom: 5rem;
+    padding: 0;
+    @media (max-width: 600px) {
+      margin: 10% 20px 0 20px;
+    }
   }
 `;
 const WantHelp = styled.div`
