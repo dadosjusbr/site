@@ -39,15 +39,13 @@ export default function Team() {
       name: 'Mariana Solto',
       role: 'UI/UX',
       profileURL: 'https://github.com/soutoam',
-      photoURL:
-        'https://avatars3.githubusercontent.com/u/15800324?s=400&u=11b49d52de39d773024ad1894cdbf33c1637532a&v=4',
+      photoURL: '/img/team/ju_sakai.jpg',
     },
     {
       name: 'Samara Sonale',
       role: 'Developer',
       profileURL: 'https://www.linkedin.com/in/samara-sonale-4b805b194/',
-      photoURL:
-        'https://media-exp1.licdn.com/dms/image/C4D03AQERefFVyFb_-w/profile-displayphoto-shrink_200_200/0/1568855571075?e=1626912000&v=beta&t=jmXyUIBZmBlnPlT2YiNJ73TTJt9uz4aJrAcOVg1_heo',
+      photoURL: '/img/team/samara_sonale.jpg',
     },
   ]);
   const [partners] = useState([
