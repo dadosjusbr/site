@@ -68,6 +68,16 @@ export default function Team() {
       img: '/img/partners/shuttleworth.svg',
     },
   ]);
+  const [contribuitors] = useState([
+    {
+      name: 'TB',
+      img: '/img/team/logo_transparencia_brasil.svg',
+    },
+    {
+      name: 'UFCG',
+      img: '/img/team/logo_ufcg.svg',
+    },
+  ]);
   return (
     <Page>
       <Head>
@@ -109,6 +119,16 @@ export default function Team() {
           </Button>
         </div>
       </WantHelp>
+      <ResizableListWrapper className="for-partners contribuitors">
+        <h1>REALIZAÇÃO</h1>
+        <ul>
+          {contribuitors.map(contribuitor => (
+            <Partner key={contribuitor.name}>
+              <img src={contribuitor.img} alt={contribuitor.name} />
+            </Partner>
+          ))}
+        </ul>
+      </ResizableListWrapper>
       <ResizableListWrapper className="for-partners">
         <h1>PARCEIROS</h1>
         <ul>
@@ -153,6 +173,12 @@ const ResizableListWrapper = styled.div`
     padding: 0;
     @media (max-width: 600px) {
       margin: 10% 20px 0 20px;
+    }
+  }
+  &.contribuitors {
+    margin-bottom: 0;
+    ul {
+      justify-content: flex-start;
     }
   }
 `;
