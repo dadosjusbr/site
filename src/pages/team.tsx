@@ -108,13 +108,15 @@ export default function Team() {
           para alimentar nossa base de dados.
         </div>
         <div>
-          <Button
-            hoverBackgroundColor="#FFF"
-            hoverTextColor="#3e5363"
-            borderColor="#FFF"
-          >
-            SAIBA MAIS AQUI
-          </Button>
+          <a href="https://github.com/dadosjusbr/coletores">
+            <Button
+              hoverBackgroundColor="#FFF"
+              hoverTextColor="#3e5363"
+              borderColor="#FFF"
+            >
+              SAIBA MAIS AQUI
+            </Button>
+          </a>
         </div>
       </WantHelp>
       <ResizableListWrapper className="for-partners contribuitors">
