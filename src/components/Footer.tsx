@@ -38,13 +38,13 @@ const Container = styled.div`
       width: 70%;
     }
     display: flex;
-    padding: 60px 40px 80px;
+    padding: 60px 40px 5rem;
     width: 90%;
     justify-content: space-between;
   }
   @media (max-width: 600px) {
     width: 100%;
-    padding: 60px 0px 80px;
+    padding: 60px 0px 0px;
     img {
       display: none;
     }
