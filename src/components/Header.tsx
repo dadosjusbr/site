@@ -16,16 +16,17 @@ const Header = () => {
   return (
     <Container>
       <div>
-        <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
+        <Link href="/">
+          <button type="button" id="back-to-start">
+            <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
+          </button>
+        </Link>
         <HeaderButton open={open} onClick={handleClick}>
           <img src="/img/nav_responsive_button.svg" alt="nav_responsive" />
         </HeaderButton>
         <HeaderList open={open}>
           <HeaderItem>
-            <Link href="/">Notícias</Link>
-          </HeaderItem>
-          <HeaderItem>
-            <Link href="/">Glossário</Link>
+            <Link href="/">Inicio</Link>
           </HeaderItem>
           <HeaderItem>
             <Link href="/team">Equipe</Link>
@@ -45,6 +46,10 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   div {
+    #back-to-start {
+      background: none;
+      border: none;
+    }
     display: flex;
     padding: 51px 10px 34px;
     border-bottom: 2px solid #fff;

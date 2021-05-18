@@ -39,15 +39,13 @@ export default function Team() {
       name: 'Mariana Solto',
       role: 'UI/UX',
       profileURL: 'https://github.com/soutoam',
-      photoURL:
-        'https://avatars3.githubusercontent.com/u/15800324?s=400&u=11b49d52de39d773024ad1894cdbf33c1637532a&v=4',
+      photoURL: '/img/team/ju_sakai.jpg',
     },
     {
       name: 'Samara Sonale',
       role: 'Developer',
       profileURL: 'https://www.linkedin.com/in/samara-sonale-4b805b194/',
-      photoURL:
-        'https://media-exp1.licdn.com/dms/image/C4D03AQERefFVyFb_-w/profile-displayphoto-shrink_200_200/0/1568855571075?e=1626912000&v=beta&t=jmXyUIBZmBlnPlT2YiNJ73TTJt9uz4aJrAcOVg1_heo',
+      photoURL: '/img/team/samara_sonale.jpg',
     },
   ]);
   const [partners] = useState([
@@ -66,6 +64,16 @@ export default function Team() {
     {
       name: 'shuttleworth',
       img: '/img/partners/shuttleworth.svg',
+    },
+  ]);
+  const [contribuitors] = useState([
+    {
+      name: 'TB',
+      img: '/img/team/logo_transparencia_brasil.svg',
+    },
+    {
+      name: 'UFCG',
+      img: '/img/team/logo_ufcg.svg',
     },
   ]);
   return (
@@ -100,15 +108,27 @@ export default function Team() {
           para alimentar nossa base de dados.
         </div>
         <div>
-          <Button
-            hoverBackgroundColor="#FFF"
-            hoverTextColor="#3e5363"
-            borderColor="#FFF"
-          >
-            SAIBA MAIS AQUI
-          </Button>
+          <a href="https://github.com/dadosjusbr/coletores">
+            <Button
+              hoverBackgroundColor="#FFF"
+              hoverTextColor="#3e5363"
+              borderColor="#FFF"
+            >
+              SAIBA MAIS AQUI
+            </Button>
+          </a>
         </div>
       </WantHelp>
+      <ResizableListWrapper className="for-partners contribuitors">
+        <h1>REALIZAÇÃO</h1>
+        <ul>
+          {contribuitors.map(contribuitor => (
+            <Partner key={contribuitor.name}>
+              <img src={contribuitor.img} alt={contribuitor.name} />
+            </Partner>
+          ))}
+        </ul>
+      </ResizableListWrapper>
       <ResizableListWrapper className="for-partners">
         <h1>PARCEIROS</h1>
         <ul>
@@ -149,7 +169,17 @@ const ResizableListWrapper = styled.div`
     margin-top: 6%;
   }
   &.for-partners {
-    margin-bottom: 10rem;
+    margin-bottom: 5rem;
+    padding: 0;
+    @media (max-width: 600px) {
+      margin: 10% 20px 0 20px;
+    }
+  }
+  &.contribuitors {
+    margin-bottom: 0;
+    ul {
+      justify-content: flex-start;
+    }
   }
 `;
 const WantHelp = styled.div`
