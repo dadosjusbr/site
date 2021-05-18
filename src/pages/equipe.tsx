@@ -11,8 +11,7 @@ export default function Team() {
       name: 'Juliana Sakai',
       role: 'Lider',
       profileURL: 'https://www.linkedin.com/in/julianasakai/',
-      photoURL:
-        'https://media-exp1.licdn.com/dms/image/C4D03AQH8PE3U5Mmksw/profile-displayphoto-shrink_800_800/0/1569015373841?e=1626912000&v=beta&t=YmMN6QtKCAEFBAbUhGE6tWaEdLO1nHQLo_51JCyUE28',
+      photoURL: '/img/team/ju_sakai.jpg',
     },
     {
       name: 'Manuel Eduardo',
@@ -36,10 +35,11 @@ export default function Team() {
         'https://avatars0.githubusercontent.com/u/1053850?s=460&u=e1cbfe4f7cba06cf5908f8967c2db24e142ff7c7&v=4',
     },
     {
-      name: 'Mariana Solto',
+      name: 'Mariana Souto',
       role: 'UI/UX',
       profileURL: 'https://github.com/soutoam',
-      photoURL: '/img/team/ju_sakai.jpg',
+      photoURL:
+        'https://avatars3.githubusercontent.com/u/15800324?s=400&u=11b49d52de39d773024ad1894cdbf33c1637532a&v=4',
     },
     {
       name: 'Samara Sonale',
