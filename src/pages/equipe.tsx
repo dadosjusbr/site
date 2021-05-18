@@ -35,7 +35,7 @@ export default function Team() {
         'https://avatars0.githubusercontent.com/u/1053850?s=460&u=e1cbfe4f7cba06cf5908f8967c2db24e142ff7c7&v=4',
     },
     {
-      name: 'Mariana Solto',
+      name: 'Mariana Souto',
       role: 'UI/UX',
       profileURL: 'https://github.com/soutoam',
       photoURL:

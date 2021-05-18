@@ -29,7 +29,7 @@ const Header = () => {
             <Link href="/">Inicio</Link>
           </HeaderItem>
           <HeaderItem>
-            <Link href="/team">Equipe</Link>
+            <Link href="/equipe">Equipe</Link>
           </HeaderItem>
           <HeaderItem>
             <Link href="/">Dados</Link>
