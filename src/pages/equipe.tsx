@@ -167,7 +167,7 @@ const ResizableListWrapper = styled.div`
     font-weight: bold;
     font-size: 2.5rem;
     font-family: 'Roboto Condensed', sans-serif;
-    color: #3e5363;
+    color: #fff;
   }
   ul {
     list-style: none;
@@ -179,6 +179,9 @@ const ResizableListWrapper = styled.div`
   &.for-partners {
     margin-bottom: 5rem;
     padding: 0;
+    img {
+      filter: brightness(0) invert(1);
+    }
     @media (max-width: 600px) {
       margin: 10% 20px 0 20px;
     }
