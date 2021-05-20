@@ -118,8 +118,9 @@ export default function Team() {
           <a href="https://github.com/dadosjusbr/coletores">
             <Button
               hoverBackgroundColor="#FFF"
-              hoverTextColor="#3e5363"
+              hoverTextColor="#7f3d8b"
               borderColor="#FFF"
+              backgroundColor="#7f3d8b"
             >
               SAIBA MAIS AQUI
             </Button>
@@ -151,7 +152,7 @@ export default function Team() {
   );
 }
 const Page = styled.div`
-  background: #2fbb96;
+  background: #3e5363;
 `;
 const ResizableListWrapper = styled.div`
   margin: 10% 68px 0%;
@@ -166,7 +167,7 @@ const ResizableListWrapper = styled.div`
     font-weight: bold;
     font-size: 2.5rem;
     font-family: 'Roboto Condensed', sans-serif;
-    color: #3e5363;
+    color: #fff;
   }
   ul {
     list-style: none;
@@ -178,6 +179,9 @@ const ResizableListWrapper = styled.div`
   &.for-partners {
     margin-bottom: 5rem;
     padding: 0;
+    img {
+      filter: brightness(0) invert(1);
+    }
     @media (max-width: 600px) {
       margin: 10% 20px 0 20px;
     }
@@ -219,7 +223,7 @@ const WantHelp = styled.div`
       }
     }
   }
-  background-color: #3e5363;
+  background-color: #7f3d8b;
 `;
 const TeamMateProfile = styled.li`
   min-width: 30%;
@@ -240,7 +244,7 @@ const TeamMateProfile = styled.li`
     font-style: normal;
     font-size: 3.5rem;
     font-family: 'Roboto Condensed', sans-serif;
-    color: #3e5363;
+    color: #fff;
     @media (max-width: 600px) {
       padding: 0;
       font-size: 2.5rem;
