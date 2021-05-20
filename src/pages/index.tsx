@@ -17,6 +17,12 @@ export default function Index() {
     <Page>
       <Head>
         <title>DadosJusBr</title>
+        <meta property="og:image" content="/img/icon_dadosjus_background.png" />
+        <meta property="og:title" content="DadosJusBr" />
+        <meta
+          property="og:description"
+          content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
+        />
       </Head>
       <Nav />
       <Container>
