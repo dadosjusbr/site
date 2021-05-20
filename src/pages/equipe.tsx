@@ -118,8 +118,9 @@ export default function Team() {
           <a href="https://github.com/dadosjusbr/coletores">
             <Button
               hoverBackgroundColor="#FFF"
-              hoverTextColor="#3e5363"
+              hoverTextColor="#7f3d8b"
               borderColor="#FFF"
+              backgroundColor="#7f3d8b"
             >
               SAIBA MAIS AQUI
             </Button>
@@ -151,7 +152,7 @@ export default function Team() {
   );
 }
 const Page = styled.div`
-  background: #2fbb96;
+  background: #3e5363;
 `;
 const ResizableListWrapper = styled.div`
   margin: 10% 68px 0%;
@@ -219,7 +220,7 @@ const WantHelp = styled.div`
       }
     }
   }
-  background-color: #3e5363;
+  background-color: #7f3d8b;
 `;
 const TeamMateProfile = styled.li`
   min-width: 30%;
