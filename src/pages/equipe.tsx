@@ -85,7 +85,7 @@ export default function Team() {
         <meta property="og:title" content="Equipe - DadosJusBr" />
         <meta
           property="og:description"
-          content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro"
+          content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
         />
       </Head>
       <Header />
