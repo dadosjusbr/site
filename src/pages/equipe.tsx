@@ -244,7 +244,7 @@ const TeamMateProfile = styled.li`
     font-style: normal;
     font-size: 3.5rem;
     font-family: 'Roboto Condensed', sans-serif;
-    color: #3e5363;
+    color: #fff;
     @media (max-width: 600px) {
       padding: 0;
       font-size: 2.5rem;
