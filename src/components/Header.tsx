@@ -32,7 +32,7 @@ const Header = () => {
             <Link href="/equipe">Equipe</Link>
           </HeaderItem>
           <HeaderItem>
-            <Link href="/">Dados</Link>
+            <Link href="/dados/paraiba">Dados</Link>
           </HeaderItem>
         </HeaderList>
       </div>
