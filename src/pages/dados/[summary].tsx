@@ -111,7 +111,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           <span>Dados capturados em 2 de Janeiro de {year}</span>
         </MainGraphSectionHeader>
         <Captions>
-          <h3>{title}</h3>
+          <h3>Total de remunerações em {year}: 21M</h3>
           <ul>
             <CaptionItems>
               <img
