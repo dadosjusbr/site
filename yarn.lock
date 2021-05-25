@@ -2687,6 +2687,11 @@ raw-body@2.4.1:
     iconv-lite "0.4.24"
     unpipe "1.0.0"
 
+react-activity@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/react-activity/-/react-activity-2.0.1.tgz#8288eb0383d9a163e23b1f271683b298a78fec71"
+  integrity sha512-dSJU9BF9a0UGI0h7p3mAjW2VVdSLlhBqa1lawx5OCaj/YBqdHvBo+UvMOks+5yqvRCDgWDrRIj9mChXbsI+FGQ==
+
 react-dom@17.0.2:
   version "17.0.2"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-17.0.2.tgz#ecffb6845e3ad8dbfcdc498f0d0a939736502c23"
