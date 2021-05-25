@@ -13,6 +13,7 @@ interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
   backgroundColor?: string;
   hoverBackgroundColor?: string;
   hoverTextColor?: string;
+  textColor?: string;
 }
 // The component pattern used here uses the arrow function in a react.FC constant implementing a ButtonProps generic
 // To avoid default conflict conflicts in eslint.
@@ -45,7 +46,7 @@ const ButtonStyled = styled.button`
   justify-content: center;
   background-color: ${(p: ButtonProps) => p.backgroundColor};
   border-color: ${(p: ButtonProps) => p.borderColor};
-  color: #FFF;
+  color: ${(p: ButtonProps) => p.textColor ? p.textColor : '#FFF'};
   transition: background 0.2s;
   &:hover {
     background-color: ${(p: ButtonProps) =>
