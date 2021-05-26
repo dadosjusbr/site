@@ -1,4 +1,4 @@
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useState } from 'react';
@@ -16,10 +16,12 @@ export default function DataFromEstate({ summary }) {
   const [summaryLoading, setSummaryLoading] = useState(true);
   const [dataList, setDataList] = useState<any[]>([1, 2, 3]);
   useEffect(() => {
+    setSummaryLoading(true);
     setTimeout(() => {
       setSummaryLoading(false);
+      setDataList([1, 2, 3]);
     }, 2000);
-  }, []);
+  }, [summary]);
   return (
     <Page>
       <Head>
@@ -104,9 +106,17 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         <MainGraphSectionHeader>
           <h2>{data.name}</h2>
           <div>
-            <button type="button">Oi</button>
+            <button
+              className="left"
+              onClick={() => setYear(year - 1)}
+              type="button"
+            >
+              <img src="/img/arrow.svg" alt="arrow" />
+            </button>
             <span>{year}</span>
-            <button type="button">Oi</button>
+            <button onClick={() => setYear(year + 1)} type="button">
+              <img src="/img/arrow.svg" alt="arrow" />
+            </button>
           </div>
           <span>Dados capturados em 2 de Janeiro de {year}</span>
         </MainGraphSectionHeader>
@@ -157,6 +167,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           hoverBackgroundColor="#B361C6"
         >
           Explorar Meses
+          <img src="/img/icon_calendario.svg" alt="calendario" />
         </Button>
       </MainGraphSection>
     );
@@ -164,23 +175,21 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   return generateGraphWithNavigation();
 };
 
-export const getStaticPaths: GetStaticPaths = async () => ({
-  paths: ['/dados/Paraná', '/dados/Paraíba'],
-  fallback: false,
-});
-export const getStaticProps: GetStaticProps = async ({ params }) => ({
-  props: {
-    summary: params.summary,
-  },
-});
+export const getServerSideProps: GetServerSideProps = async context => {
+  const summary = context.params;
+  return {
+    props: summary,
+  };
+};
+
 const MainGraphSection = styled.section`
   padding: 5rem;
   @media (max-width: 600px) {
     padding: 1rem;
   }
   @media (min-width: 600px) {
-    margin-left: 1rem;
-    margin-right: 1rem;
+    margin-left: 10rem;
+    margin-right: 10rem;
   }
   & + section {
     margin-top: 4rem;
@@ -197,6 +206,11 @@ const MainGraphSection = styled.section`
     align-self: flex-end;
     @media (max-width: 600px) {
       align-self: center;
+    }
+    position: relative;
+    img {
+      right: 3rem;
+      position: absolute;
     }
   }
 `;
@@ -262,9 +276,18 @@ const MainGraphSectionHeader = styled.div`
     align-items: center;
     width: 80%;
     button {
+      &.left {
+        transform: rotate(180deg);
+      }
+      img {
+        position: initial;
+      }
       width: 30px;
       color: #3e5363;
       height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
       border: none;
       background-color: #3e5363;
