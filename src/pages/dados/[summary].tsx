@@ -188,12 +188,10 @@ const MainGraphSection = styled.section`
     padding: 1rem;
   }
   @media (min-width: 600px) {
-    margin-left: 10rem;
-    margin-right: 10rem;
+    margin-left: 8rem;
+    margin-right: 8rem;
   }
-  & + section {
-    margin-top: 4rem;
-  }
+  margin-bottom: 4rem;
   text-align: center;
   background-color: #fff;
   font-size: 4rem;
