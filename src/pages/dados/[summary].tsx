@@ -1,8 +1,9 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import ReactFrappeChart from 'react-frappe-charts';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
@@ -79,7 +80,13 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     dados: [1, 2, 3, 4],
     name: 'Orgão Top',
   });
+  // const chartRef = useRef<any>(null);
   const [year, setYear] = useState(new Date().getFullYear());
+  // const exportChart = () => {
+  //   if (chartRef && chartRef.current) {
+  //     chartRef.current?.export();
+  //   }
+  // };
 
   const [dataLoading, setDataLoading] = useState(true);
   useEffect(() => {
@@ -156,8 +163,48 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         </Captions>
         <GraphDivWithPagination>
           <h3>{title}</h3>
-          <div>
-            <span>nada ainda</span>
+          <div className="main-chart-wrapper">
+            <ReactFrappeChart
+              // ref={chartRef}
+              {...{
+                // or DOM element
+                data: {
+                  labels: [
+                    '12am-3am',
+                    '3am-6am',
+                    '6am-9am',
+                    '9am-12pm',
+                    '12pm-3pm',
+                    '3pm-6pm',
+                    '6pm-9pm',
+                    '9pm-12am',
+                  ],
+
+                  datasets: [
+                    {
+                      name: 'Some Data',
+                      chartType: 'bar',
+                      values: [25, 40, 30, 35, 8, 52, 17, -4],
+                    },
+                    {
+                      name: 'Another Set',
+                      chartType: 'bar',
+                      values: [25, 50, -10, 15, 18, 32, 27, 14],
+                    },
+                  ],
+                },
+
+                title: 'My Awesome Chart',
+                type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
+                height: 300,
+                colors: ['purple', '#ffa3ef', 'light-blue'],
+                stacked: 1,
+                tooltipOptions: {
+                  formatTooltipX: d => `${d}`.toUpperCase(),
+                  formatTooltipY: d => `${d} pts`,
+                },
+              }}
+            />
           </div>
         </GraphDivWithPagination>
         <Button
@@ -221,17 +268,22 @@ const GraphDivWithPagination = styled.div`
   flex-direction: column;
   width: 100%;
   background: #3e5363;
-  div {
-    display: flex;
-    margin-top: 3rem;
+  .main-chart-wrapper {
+    background-color: #fff;
+    margin-top: 2rem;
     width: 100%;
-    justify-content: center;
-    flex-direction: column;
-    border-top: 1px solid #fff;
-    padding: 1rem 1rem;
-    font-size: 4rem;
-    color: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    div {
+      & > * {
+        font-size: 130%;
+      }
+      text {
+        font-size: 260%;
+        color: #fff;
+        &.title {
+          font-size: 120%;
+        }
+      }
+    }
   }
   margin-bottom: 3rem;
 `;
