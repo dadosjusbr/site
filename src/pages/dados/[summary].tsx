@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import ReactFrappeChart from 'react-frappe-charts';
 import ActivityIndicator from '../../components/ActivityIndicator';
@@ -251,6 +251,7 @@ const MainGraphSection = styled.section`
     align-self: flex-end;
     @media (max-width: 600px) {
       align-self: center;
+      margin-bottom: 2rem;
     }
     position: relative;
     img {
@@ -260,7 +261,6 @@ const MainGraphSection = styled.section`
   }
 `;
 const GraphDivWithPagination = styled.div`
-  padding: 3rem;
   margin-top: 3rem;
   display: flex;
   align-self: center;
@@ -268,9 +268,11 @@ const GraphDivWithPagination = styled.div`
   flex-direction: column;
   width: 100%;
   background: #3e5363;
+  h3 {
+    padding: 1.5rem;
+  }
   .main-chart-wrapper {
     background-color: #fff;
-    margin-top: 2rem;
     width: 100%;
     div {
       & > * {
@@ -284,6 +286,8 @@ const GraphDivWithPagination = styled.div`
         }
       }
     }
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #3e5363;
   }
   margin-bottom: 3rem;
 `;
