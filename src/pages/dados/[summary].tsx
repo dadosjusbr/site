@@ -400,13 +400,16 @@ const SumarySelectorComboBox = styled.select`
   width: 30%;
   min-width: 25rem;
   border: solid 2px #fff;
+  background: #3e5363
+    url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='5'><path fill='white' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>")
+    no-repeat right 3rem center/8px 10px;
   font-size: 2rem;
   font-family: 'Roboto Condensed', sans-serif;
   display: flex;
-  background-color: #3e5363;
   color: #fff;
   font-weight: bold;
   transition: border 0.2 ease;
+  appearance: none;
   option {
     font-size: 2rem;
   }
