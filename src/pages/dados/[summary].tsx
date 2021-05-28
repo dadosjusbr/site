@@ -8,21 +8,30 @@ import ActivityIndicator from '../../components/ActivityIndicator';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
+import api from '../../services/api';
 
 export default function DataFromEstate({ summary }) {
   const router = useRouter();
   function handleNavigateBetweenSummaryOptions(option: string) {
     router.push(`/dados/${option}`);
   }
-  const [summaryLoading, setSummaryLoading] = useState(true);
-  const [dataList, setDataList] = useState<any[]>([1, 2, 3]);
-  useEffect(() => {
-    setSummaryLoading(true);
-    setTimeout(() => {
+  async function fetchSummaryData() {
+    try {
+      console.log('oi');
+
+      const { data } = await api.get('/orgao/PB');
+      setDataList(data);
       setSummaryLoading(false);
-      setDataList([1, 2, 3]);
-    }, 2000);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const [summaryLoading, setSummaryLoading] = useState(true);
+  const [dataList, setDataList] = useState<any[]>([]);
+  useEffect(() => {
+    fetchSummaryData();
   }, [summary]);
+
   return (
     <Page>
       <Head>
