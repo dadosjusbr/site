@@ -205,7 +205,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           </ul>
         </Captions>
         <GraphDivWithPagination>
-          <h3>Total de Remunerações de Membros por Mês em {year}: 21M</h3>
+          <h3>Total de Remunerações de Membros por Mês em {year}</h3>
           {dataLoading ? (
             <ActivityIndicatorPlaceholder fontColor="#3e5363">
               <ActivityIndicator spinnerColor="#3e5363" />
