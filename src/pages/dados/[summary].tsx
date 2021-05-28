@@ -9,6 +9,7 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
+import STATE_AGENCIES from '../../@types/STATE_AGENCIES';
 
 export default function SummaryPage({ summary }) {
   const router = useRouter();
@@ -52,8 +53,18 @@ export default function SummaryPage({ summary }) {
             handleNavigateBetweenSummaryOptions(a.target.value);
           }}
         >
-          <option value="PB">Paraíba</option>
-          <option value="PR">Paraná</option>
+          <optgroup label="Órgãos Federais" />
+          <optgroup label="Órgãos Estaduais">
+            {(() => {
+              const list = [];
+              for (const i in STATE_AGENCIES) {
+                list.push(i);
+              }
+              return list.map(i => (
+                <option value={STATE_AGENCIES[i]}>{i}</option>
+              ));
+            })()}
+          </optgroup>
         </SumarySelectorComboBox>
       </SelectContainer>
       <div>
@@ -525,6 +536,9 @@ const SumarySelectorComboBox = styled.select`
   transition: border 0.2 ease;
   appearance: none;
   option {
+    font-size: 2rem;
+  }
+  optgroup {
     font-size: 2rem;
   }
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
