@@ -17,7 +17,7 @@ export default function SummaryPage({ summary }) {
   }
   async function fetchSummaryData() {
     try {
-      const { data } = await api.get('/orgao/PB');
+      const { data } = await api.get(`/orgao/${summary}`);
       setDataList(data.Agency);
       setSummaryLoading(false);
     } catch (err) {
@@ -52,8 +52,8 @@ export default function SummaryPage({ summary }) {
             handleNavigateBetweenSummaryOptions(a.target.value);
           }}
         >
-          <option>Paraíba</option>
-          <option>Paraná</option>
+          <option value="PB">Paraíba</option>
+          <option value="PR">Paraná</option>
         </SumarySelectorComboBox>
       </SelectContainer>
       <div>
@@ -102,8 +102,8 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   async function fetchAgencyData() {
     try {
       const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
-      setDataLoading(false);
       setData(agency.MonthTotals ? agency.MonthTotals : []);
+      setDataLoading(false);
     } catch (err) {
       console.log(err);
     }
@@ -138,7 +138,18 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           <span>Dados capturados em 2 de Janeiro de {year}</span>
         </MainGraphSectionHeader>
         <Captions>
-          <h3>Total de Remunerações de Membros em {year}: 21M</h3>
+          <h3>
+            Total de Remunerações de Membros em {year}: R${' '}
+            {(() => {
+              let cont = 0;
+              const benefits = data.map(d => d.Perks + d.Others + d.Wage);
+              benefits.forEach(w => {
+                cont += w;
+              });
+              return (cont / 1000000).toFixed(2);
+            })()}
+            M
+          </h3>
           <ul>
             <CaptionItems>
               <img
@@ -148,7 +159,18 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               <span>
                 Salário:
                 <br />
-                <b>10M</b>
+                <b>
+                  R${' '}
+                  {(() => {
+                    let cont = 0;
+                    const wages = data.map(d => d.Wage);
+                    wages.forEach(w => {
+                      cont += w;
+                    });
+                    return (cont / 1000000).toFixed(2);
+                  })()}
+                  M
+                </b>
               </span>
             </CaptionItems>
             <CaptionItems>
@@ -159,7 +181,18 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               <span>
                 Benefícios:
                 <br />
-                <b>10M</b>
+                <b>
+                  R${' '}
+                  {(() => {
+                    let cont = 0;
+                    const benefits = data.map(d => d.Perks + d.Others);
+                    benefits.forEach(w => {
+                      cont += w;
+                    });
+                    return (cont / 1000000).toFixed(2);
+                  })()}
+                  M
+                </b>
               </span>
             </CaptionItems>
             <CaptionItems>
@@ -174,8 +207,8 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         <GraphDivWithPagination>
           <h3>Total de Remunerações de Membros por Mês em {year}: 21M</h3>
           {dataLoading ? (
-            <ActivityIndicatorPlaceholder fontColor="#FFF">
-              <ActivityIndicator spinnerColor="#FFF" />
+            <ActivityIndicatorPlaceholder fontColor="#3e5363">
+              <ActivityIndicator spinnerColor="#3e5363" />
               <span>Aguarde...</span>
             </ActivityIndicatorPlaceholder>
           ) : (
@@ -202,7 +235,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                         ],
                         datasets: [
                           {
-                            name: 'Benefício',
+                            name: 'Benefícios',
                             chartType: 'bar',
                             values: createArrayFilledWithValue(
                               12,
@@ -228,7 +261,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             ),
                           },
                           {
-                            name: 'Sem Valor',
+                            name: 'Sem Dados',
                             chartType: 'bar',
                             values: createArrayFilledWithValue(
                               12,
@@ -252,15 +285,13 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                       },
                       tooltipOptions: {
                         formatTooltipX: d => `${d}`.toUpperCase(),
-                        formatTooltipY: d => `${d.toFixed(2)} M`,
-                        formatTooltipLabelY: d =>
-                          `${`${d}`.substring(0, 10)}...`,
+                        formatTooltipY: d => `R$ ${d.toFixed(2)} M`,
                       },
                     }}
                   />
                 </div>
               ) : (
-                <ActivityIndicatorPlaceholder fontColor="#FFF">
+                <ActivityIndicatorPlaceholder fontColor="#3e5363">
                   Não há dados para esse ano
                 </ActivityIndicatorPlaceholder>
               )}
