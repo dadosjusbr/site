@@ -17,10 +17,8 @@ export default function SummaryPage({ summary }) {
   }
   async function fetchSummaryData() {
     try {
-      console.log('oi');
-
       const { data } = await api.get('/orgao/PB');
-      setDataList(data);
+      setDataList(data.Agency);
       setSummaryLoading(false);
     } catch (err) {
       console.log(err);
@@ -71,8 +69,12 @@ export default function SummaryPage({ summary }) {
           if (dataList.length === 0) {
             return 'dados não existem para essa data';
           }
-          return dataList.map(() => (
-            <GraphWithNavigation title="Total de Remunerações" id={summary} />
+          return dataList.map(agency => (
+            <GraphWithNavigation
+              key={agency.Name}
+              title={agency.FullName}
+              id={agency.Name}
+            />
           ));
         })()}
       </div>
@@ -90,18 +92,22 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   title,
 }) => {
   // this state is used to store the api fetched data after fetch it
-  const [data, setData] = useState<any>({
-    dados: [1, 2, 3, 4],
-    name: 'Orgão Top',
-  });
+  const [data, setData] = useState<any[]>([]);
   const [year, setYear] = useState(new Date().getFullYear());
-
   const [dataLoading, setDataLoading] = useState(true);
   useEffect(() => {
-    setTimeout(() => {
+    setDataLoading(true);
+    fetchAgencyData();
+  }, [year]);
+  async function fetchAgencyData() {
+    try {
+      const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
       setDataLoading(false);
-    }, 2000);
-  }, []);
+      setData(agency.MonthTotals ? agency.MonthTotals : []);
+    } catch (err) {
+      console.log(err);
+    }
+  }
   const chartRef = useRef<{ export: () => void }>(null);
 
   const exportChart = () => {
@@ -110,23 +116,12 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     }
   };
   function generateGraphWithNavigation() {
-    if (dataLoading) {
-      return (
-        <MainGraphSection>
-          <ActivityIndicatorPlaceholder fontColor="#3e5363">
-            <ActivityIndicator spinnerColor="#3e5363" />
-            <span>Aguarde...</span>
-          </ActivityIndicatorPlaceholder>
-        </MainGraphSection>
-      );
-    }
-    if (data.dados.length === 0) {
-      return <>não há dados para esse ano</>;
-    }
     return (
       <MainGraphSection>
         <MainGraphSectionHeader>
-          <h2>{data.name}</h2>
+          <h2>
+            {title} ({id.toLocaleUpperCase('pt')})
+          </h2>
           <div>
             <button
               className="left"
@@ -143,7 +138,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           <span>Dados capturados em 2 de Janeiro de {year}</span>
         </MainGraphSectionHeader>
         <Captions>
-          <h3>Total de remunerações em {year}: 21M</h3>
+          <h3>Total de Remunerações de Membros em {year}: 21M</h3>
           <ul>
             <CaptionItems>
               <img
@@ -177,58 +172,100 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           </ul>
         </Captions>
         <GraphDivWithPagination>
-          <h3>{title}</h3>
+          <h3>Total de Remunerações de Membros por Mês em {year}: 21M</h3>
+          {dataLoading ? (
+            <ActivityIndicatorPlaceholder fontColor="#FFF">
+              <ActivityIndicator spinnerColor="#FFF" />
+              <span>Aguarde...</span>
+            </ActivityIndicatorPlaceholder>
+          ) : (
+            <>
+              {data.length > 0 ? (
+                <div className="main-chart-wrapper">
+                  <ReactFrappeChart
+                    ref={chartRef}
+                    {...{
+                      data: {
+                        labels: [
+                          'Jan',
+                          'Fev',
+                          'Mar',
+                          'Abr',
+                          'Mai',
+                          'Jun',
+                          'Jul',
+                          'Ago',
+                          'Set',
+                          'Out',
+                          'Nov',
+                          'Dez',
+                        ],
+                        datasets: [
+                          {
+                            name: 'Benefício',
+                            chartType: 'bar',
+                            values: createArrayFilledWithValue(
+                              12,
+                              0,
+                            ).map((v, i) =>
+                              fixYearDataArray(data)[i]
+                                ? (fixYearDataArray(data)[i].Perks +
+                                  fixYearDataArray(data)[i].Others) /
+                                1000000
+                                : v,
+                            ),
+                          },
+                          {
+                            name: 'Salário',
+                            chartType: 'bar',
+                            values: createArrayFilledWithValue(
+                              12,
+                              0,
+                            ).map((v, i) =>
+                              fixYearDataArray(data)[i]
+                                ? fixYearDataArray(data)[i].Wage / 1000000
+                                : v,
+                            ),
+                          },
+                          {
+                            name: 'Sem Valor',
+                            chartType: 'bar',
+                            values: createArrayFilledWithValue(
+                              12,
+                              0,
+                            ).map((v, i) =>
+                              fixYearDataArray(data)[i] ? v : 20,
+                            ),
+                          },
+                        ],
+                      },
 
-          <div className="main-chart-wrapper">
-            <ReactFrappeChart
-              ref={chartRef}
-              {...{
-                data: {
-                  labels: [
-                    'Jan',
-                    'Fev',
-                    'Mar',
-                    'Abr',
-                    'Mai',
-                    'Jun',
-                    'Jul',
-                    'Ago',
-                    'Set',
-                    'Out',
-                    'Nov',
-                    'Dez',
-                  ],
-                  datasets: [
-                    {
-                      name: 'Salário',
-                      chartType: 'bar',
-                      values: [10, 40, 5, 10, 8, 22, 17, 7, 1, 0, 0, 0],
-                    },
-                    {
-                      name: 'Benefício',
-                      chartType: 'bar',
-                      values: [25, 50, 10, 15, 18, 32, 27, 14, 2, 0, 0, 0],
-                    },
-                    {
-                      name: 'Sem Valor',
-                      chartType: 'bar',
-                      values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 100],
-                    },
-                  ],
-                },
-                type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
-                height: 300,
-                colors: ['#97BB2F', '#3EDBB1', '#000'],
-                barOptions: {
-                  stacked: 1,
-                },
-                tooltipOptions: {
-                  formatTooltipX: d => `${d}`.toUpperCase(),
-                  formatTooltipY: d => `${d} M`,
-                },
-              }}
-            />
-          </div>
+                      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
+                      height: 300,
+                      axisOptions: {
+                        xAxisMode: 'tick',
+                      },
+                      colors: ['#97BB2F', '#3EDBB1', '#2c3236'],
+                      barOptions: {
+                        stacked: 1,
+                        spaceRatio: 0.6,
+                      },
+                      tooltipOptions: {
+                        formatTooltipX: d => `${d}`.toUpperCase(),
+                        formatTooltipY: d => `${d.toFixed(2)} M`,
+                        formatTooltipLabelY: d =>
+                          `${`${d}`.substring(0, 10)}...`,
+                      },
+                    }}
+                  />
+                </div>
+              ) : (
+                <ActivityIndicatorPlaceholder fontColor="#FFF">
+                  Não há dados para esse ano
+                </ActivityIndicatorPlaceholder>
+              )}
+            </>
+          )}
         </GraphDivWithPagination>
         <div className="buttons">
           <Button
@@ -308,12 +345,12 @@ const GraphDivWithPagination = styled.div`
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  background: #3e5363;
+  color: #3e5363;
+  background: rgba(62, 83, 99, 0.05);
   h3 {
     padding: 1.5rem;
   }
   .main-chart-wrapper {
-    background-color: #fff;
     width: 100%;
     div {
       & > * {
@@ -339,11 +376,12 @@ const Captions = styled.div`
   width: 50%;
   min-width: 34rem;
   justify-content: center;
-  background: #3e5363;
+  color: #3e5363;
+  background: rgba(62, 83, 99, 0.05);
   ul {
     list-style: none;
     margin-top: 3rem;
-    border-top: 1px solid #fff;
+    border-top: 1px solid #3e5363;
     padding: 1rem 1rem;
     padding-top: 2rem;
     display: flex;
@@ -402,12 +440,14 @@ const CaptionItems = styled.li`
   align-items: center;
   width: 15%;
   img {
+    background: #2c3236;
+    border: solid 2px #3e5363;
     width: 75%;
   }
   span {
     margin-top: 1rem;
     font-size: 1.5rem;
-    color: #fff;
+    color: #3e5363;
     & > * {
       font-size: 1.5rem;
     }
@@ -464,3 +504,17 @@ const SumarySelectorComboBox = styled.select`
     border: 2px solid #3f51b5;
   }
 `;
+function createArrayFilledWithValue<T>(size: number, value: T): T[] {
+  const array = [];
+  for (let i = 0; i < size; i += 1) {
+    array.push(value);
+  }
+  return array;
+}
+function fixYearDataArray(array: any[]) {
+  const a = createArrayFilledWithValue(12, undefined);
+  array.forEach(v => {
+    a[v.Month - 1] = v;
+  });
+  return a;
+}
