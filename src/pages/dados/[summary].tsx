@@ -1,7 +1,7 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ReactFrappeChart from 'react-frappe-charts';
 import ActivityIndicator from '../../components/ActivityIndicator';
@@ -80,13 +80,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     dados: [1, 2, 3, 4],
     name: 'Orgão Top',
   });
-  // const chartRef = useRef<any>(null);
   const [year, setYear] = useState(new Date().getFullYear());
-  // const exportChart = () => {
-  //   if (chartRef && chartRef.current) {
-  //     chartRef.current?.export();
-  //   }
-  // };
 
   const [dataLoading, setDataLoading] = useState(true);
   useEffect(() => {
@@ -94,6 +88,13 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       setDataLoading(false);
     }, 2000);
   }, []);
+  const chartRef = useRef<{ export: () => void }>(null);
+
+  const exportChart = () => {
+    if (chartRef && chartRef.current) {
+      chartRef.current?.export();
+    }
+  };
   function generateGraphWithNavigation() {
     if (dataLoading) {
       return (
@@ -163,27 +164,26 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         </Captions>
         <GraphDivWithPagination>
           <h3>{title}</h3>
+
           <div className="main-chart-wrapper">
             <ReactFrappeChart
-              // ref={chartRef}
+              ref={chartRef}
               {...{
-                // or DOM element
                 data: {
                   labels: [
-                    'Janeiro',
-                    'Fevereiro',
-                    'Março',
-                    'Abril',
-                    'Maio',
-                    'Junho',
-                    'Julho',
-                    'Agosto',
-                    'Setembro',
-                    'Outubro',
-                    'Novembro',
-                    'Dezembro',
+                    'Jan',
+                    'Fev',
+                    'Mar',
+                    'Abr',
+                    'Mai',
+                    'Jun',
+                    'Jul',
+                    'Ago',
+                    'Set',
+                    'Out',
+                    'Nov',
+                    'Dez',
                   ],
-
                   datasets: [
                     {
                       name: 'Salário',
@@ -216,15 +216,27 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             />
           </div>
         </GraphDivWithPagination>
-        <Button
-          textColor="#B361C6"
-          borderColor="#B361C6"
-          backgroundColor="#fff"
-          hoverBackgroundColor="#B361C6"
-        >
-          Explorar Meses
-          <img src="/img/icon_calendario.svg" alt="calendario" />
-        </Button>
+        <div className="buttons">
+          <Button
+            textColor="#3E5363"
+            borderColor="#3E5363"
+            backgroundColor="#fff"
+            hoverBackgroundColor="#3E5363"
+            onClick={() => exportChart()}
+          >
+            Compartilhar
+            <img src="/img/icon_download_share.svg" alt="calendario" />
+          </Button>
+          <Button
+            textColor="#B361C6"
+            borderColor="#B361C6"
+            backgroundColor="#fff"
+            hoverBackgroundColor="#B361C6"
+          >
+            Explorar Meses
+            <img src="/img/icon_calendario.svg" alt="calendario" />
+          </Button>
+        </div>
       </MainGraphSection>
     );
   }
@@ -255,17 +267,23 @@ const MainGraphSection = styled.section`
   display: flex;
   flex-direction: column;
   font-family: 'Roboto Condensed', sans-serif;
-  button {
-    font-size: 2rem;
-    align-self: flex-end;
+  .buttons {
+    justify-content: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
     @media (max-width: 600px) {
-      align-self: center;
+      justify-content: center;
       margin-bottom: 2rem;
     }
-    position: relative;
-    img {
-      right: 3rem;
-      position: absolute;
+    button {
+      font-size: 2rem;
+      margin: 1rem;
+      position: relative;
+      img {
+        right: 3rem;
+        position: absolute;
+      }
     }
   }
 `;
@@ -285,11 +303,13 @@ const GraphDivWithPagination = styled.div`
     width: 100%;
     div {
       & > * {
-        font-size: 130%;
+        font-size: 125%;
       }
       text {
-        font-size: 260%;
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 290%;
         color: #fff;
+        font-weight: bold;
         &.title {
           font-size: 120%;
         }
