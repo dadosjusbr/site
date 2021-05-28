@@ -9,7 +9,7 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 
-export default function DataFromEstate({ summary }) {
+export default function SummaryPage({ summary }) {
   const router = useRouter();
   function handleNavigateBetweenSummaryOptions(option: string) {
     router.push(`/dados/${option}`);
@@ -71,11 +71,16 @@ export default function DataFromEstate({ summary }) {
     </Page>
   );
 }
+// this component is used to to build the main section, with charts and pagination.
+// his load some agency so, it needs params to load it.
+// the id is the main identifier.
+// the title is the vocative from the componenet.
 
 const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   id,
   title,
 }) => {
+  // this state is used to store the api fetched data after fetch it
   const [data, setData] = useState<any>({
     dados: [1, 2, 3, 4],
     name: 'Orgão Top',
