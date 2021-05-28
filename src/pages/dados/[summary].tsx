@@ -170,38 +170,47 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                 // or DOM element
                 data: {
                   labels: [
-                    '12am-3am',
-                    '3am-6am',
-                    '6am-9am',
-                    '9am-12pm',
-                    '12pm-3pm',
-                    '3pm-6pm',
-                    '6pm-9pm',
-                    '9pm-12am',
+                    'Janeiro',
+                    'Fevereiro',
+                    'Março',
+                    'Abril',
+                    'Maio',
+                    'Junho',
+                    'Julho',
+                    'Agosto',
+                    'Setembro',
+                    'Outubro',
+                    'Novembro',
+                    'Dezembro',
                   ],
 
                   datasets: [
                     {
-                      name: 'Some Data',
+                      name: 'Salário',
                       chartType: 'bar',
-                      values: [25, 40, 30, 35, 8, 52, 17, -4],
+                      values: [10, 40, 5, 10, 8, 22, 17, 7, 1, 0, 0, 0],
                     },
                     {
-                      name: 'Another Set',
+                      name: 'Benefício',
                       chartType: 'bar',
-                      values: [25, 50, -10, 15, 18, 32, 27, 14],
+                      values: [25, 50, 10, 15, 18, 32, 27, 14, 2, 0, 0, 0],
+                    },
+                    {
+                      name: 'Sem Valor',
+                      chartType: 'bar',
+                      values: [0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 100, 100],
                     },
                   ],
                 },
-
-                title: 'My Awesome Chart',
                 type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
                 height: 300,
-                colors: ['purple', '#ffa3ef', 'light-blue'],
-                stacked: 1,
+                colors: ['#97BB2F', '#3EDBB1', '#000'],
+                barOptions: {
+                  stacked: 1,
+                },
                 tooltipOptions: {
                   formatTooltipX: d => `${d}`.toUpperCase(),
-                  formatTooltipY: d => `${d} pts`,
+                  formatTooltipY: d => `${d} M`,
                 },
               }}
             />
