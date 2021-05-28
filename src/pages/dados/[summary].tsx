@@ -380,7 +380,7 @@ const MainGraphSectionHeader = styled.div`
       font-weight: bold;
     }
   }
-  margin-bottom: 10rem;
+  margin-bottom: 4.5rem;
 `;
 const CaptionItems = styled.li`
   display: flex;
