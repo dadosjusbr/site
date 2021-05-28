@@ -61,7 +61,9 @@ export default function SummaryPage({ summary }) {
                 list.push(i);
               }
               return list.map(i => (
-                <option value={STATE_AGENCIES[i]}>{i}</option>
+                <option key={STATE_AGENCIES[i]} value={STATE_AGENCIES[i]}>
+                  {formatToAgency(i)}
+                </option>
               ));
             })()}
           </optgroup>
@@ -561,5 +563,16 @@ function fixYearDataArray(array: any[]) {
   array.forEach(v => {
     a[v.Month - 1] = v;
   });
+  return a;
+}
+function formatToAgency(agency: string) {
+  const sub = agency.split('_');
+  const formatedSubs = sub.map(s => {
+    const a = s.toLowerCase();
+    const newString = a.split('');
+    newString[0] = a[0].toLocaleUpperCase();
+    return newString.join('');
+  });
+  const a = formatedSubs.join(' ');
   return a;
 }
