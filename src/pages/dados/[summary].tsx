@@ -38,7 +38,7 @@ export default function SummaryPage({ summary }) {
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
-          content={`Veja os dados do estado: ${summary}`}
+          content={`Veja os dados do estado: ${STATE_AGENCIES[summary]}`}
         />
         <meta
           property="og:description"
