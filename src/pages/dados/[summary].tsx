@@ -108,6 +108,9 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [data, setData] = useState<any[]>([]);
   const [year, setYear] = useState(new Date().getFullYear());
   const [dataLoading, setDataLoading] = useState(true);
+  const [hidingWage, setHidingWage] = useState(false);
+  const [hidingBenefits, setHidingBenefits] = useState(false);
+  const [hidingNoData, setHidingNoData] = useState(false);
   useEffect(() => {
     setDataLoading(true);
     fetchAgencyData();
@@ -165,10 +168,23 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           </h3>
           <ul>
             <CaptionItems>
-              <img
-                src="/img/data-graph-captions/icon_salario.svg"
-                alt="sallary"
-              />
+              <button
+                type="button"
+                onClick={e => {
+                  if (hidingWage) {
+                    e.currentTarget.classList.remove('active');
+                    setHidingWage(false);
+                  } else {
+                    e.currentTarget.classList.add('active');
+                    setHidingWage(true);
+                  }
+                }}
+              >
+                <img
+                  src="/img/data-graph-captions/icon_salario.svg"
+                  alt="sallary"
+                />
+              </button>
               <span>
                 Salário:
                 <br />
@@ -187,10 +203,23 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               </span>
             </CaptionItems>
             <CaptionItems>
-              <img
-                src="/img/data-graph-captions/icon_beneficio.svg"
-                alt="benefits"
-              />
+              <button
+                type="button"
+                onClick={e => {
+                  if (hidingBenefits) {
+                    e.currentTarget.classList.remove('active');
+                    setHidingBenefits(false);
+                  } else {
+                    e.currentTarget.classList.add('active');
+                    setHidingBenefits(true);
+                  }
+                }}
+              >
+                <img
+                  src="/img/data-graph-captions/icon_beneficio.svg"
+                  alt="benefits"
+                />
+              </button>
               <span>
                 Benefícios:
                 <br />
@@ -209,10 +238,23 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               </span>
             </CaptionItems>
             <CaptionItems>
-              <img
-                src="/img/data-graph-captions/icon_semdados.svg"
-                alt="no-data"
-              />
+              <button
+                onClick={e => {
+                  if (hidingNoData) {
+                    e.currentTarget.classList.remove('active');
+                    setHidingNoData(false);
+                  } else {
+                    e.currentTarget.classList.add('active');
+                    setHidingNoData(true);
+                  }
+                }}
+                type="button"
+              >
+                <img
+                  src="/img/data-graph-captions/icon_semdados.svg"
+                  alt="no-data"
+                />
+              </button>
               <span>Sem dados</span>
             </CaptionItems>
           </ul>
@@ -250,38 +292,35 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                           {
                             name: 'Benefícios',
                             chartType: 'bar',
-                            values: createArrayFilledWithValue(
-                              12,
-                              0,
-                            ).map((v, i) =>
-                              fixYearDataArray(data)[i]
-                                ? (fixYearDataArray(data)[i].Perks +
-                                  fixYearDataArray(data)[i].Others) /
-                                1000000
-                                : v,
-                            ),
+                            values:
+                              !hidingBenefits &&
+                              createArrayFilledWithValue(12, 0).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? (fixYearDataArray(data)[i].Perks +
+                                    fixYearDataArray(data)[i].Others) /
+                                  1000000
+                                  : v,
+                              ),
                           },
                           {
                             name: 'Salário',
                             chartType: 'bar',
-                            values: createArrayFilledWithValue(
-                              12,
-                              0,
-                            ).map((v, i) =>
-                              fixYearDataArray(data)[i]
-                                ? fixYearDataArray(data)[i].Wage / 1000000
-                                : v,
-                            ),
+                            values:
+                              !hidingWage &&
+                              createArrayFilledWithValue(12, 0).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? fixYearDataArray(data)[i].Wage / 1000000
+                                  : v,
+                              ),
                           },
                           {
                             name: 'Sem Dados',
                             chartType: 'bar',
-                            values: createArrayFilledWithValue(
-                              12,
-                              0,
-                            ).map((v, i) =>
-                              fixYearDataArray(data)[i] ? v : 20,
-                            ),
+                            values:
+                              !hidingNoData &&
+                              createArrayFilledWithValue(12, 0).map((v, i) =>
+                                fixYearDataArray(data)[i] ? v : 20,
+                              ),
                           },
                         ],
                       },
@@ -429,6 +468,7 @@ const Captions = styled.div`
     padding: 1rem 1rem;
     padding-top: 2rem;
     display: flex;
+    transition: all 1s ease;
     justify-content: space-between;
   }
 `;
@@ -482,11 +522,20 @@ const CaptionItems = styled.li`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 15%;
+  width: 20%;
+  button {
+    border: none;
+    width: 65%;
+    background: none;
+  }
+  button.active {
+    opacity: 0.4;
+    width: 65%;
+  }
   img {
+    width: 100%;
     background: #2c3236;
     border: solid 2px #3e5363;
-    width: 75%;
   }
   span {
     margin-top: 1rem;
