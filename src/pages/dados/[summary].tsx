@@ -151,7 +151,6 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               <img src="/img/arrow.svg" alt="arrow" />
             </button>
           </div>
-          <span>Dados capturados em 2 de Janeiro de {year}</span>
         </MainGraphSectionHeader>
         <Captions>
           <h3>
