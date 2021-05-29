@@ -19,7 +19,7 @@ export default function SummaryPage({ summary }) {
   async function fetchSummaryData() {
     try {
       const { data } = await api.get(`/orgao/${summary}`);
-      setDataList(data.Agency);
+      setDataList(data.Agency ? data.Agency : []);
       setSummaryLoading(false);
     } catch (err) {
       console.log(err);
