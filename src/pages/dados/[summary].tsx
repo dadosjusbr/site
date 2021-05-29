@@ -80,7 +80,11 @@ export default function SummaryPage({ summary }) {
             );
           }
           if (dataList.length === 0) {
-            return 'dados não existem para essa data';
+            return (
+              <ActivityIndicatorPlaceholder>
+                Ocorreu um erro.
+              </ActivityIndicatorPlaceholder>
+            );
           }
           return dataList.map(agency => (
             <GraphWithNavigation
