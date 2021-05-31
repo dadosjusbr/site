@@ -9,6 +9,6 @@ module.exports = {
   }),
   //the env variables are set here to access in browser
   env: {
-    FRONT_URL: process.env.FRONT_URL,
+    API_BASE_URL: process.env.API_BASE_URL,
   },
 }
