@@ -1,27 +1,36 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
+import ReactFrappeChart from 'react-frappe-charts';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
+import api from '../../services/api';
+import STATE_AGENCIES from '../../@types/STATE_AGENCIES';
 
 export default function SummaryPage({ summary }) {
   const router = useRouter();
   function handleNavigateBetweenSummaryOptions(option: string) {
     router.push(`/dados/${option}`);
   }
-  const [summaryLoading, setSummaryLoading] = useState(true);
-  const [dataList, setDataList] = useState<any[]>([1, 2, 3]);
-  useEffect(() => {
-    setSummaryLoading(true);
-    setTimeout(() => {
+  async function fetchSummaryData() {
+    try {
+      const { data } = await api.get(`/orgao/${summary}`);
+      setDataList(data.Agency ? data.Agency : []);
       setSummaryLoading(false);
-      setDataList([1, 2, 3]);
-    }, 2000);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const [summaryLoading, setSummaryLoading] = useState(true);
+  const [dataList, setDataList] = useState<any[]>([]);
+  useEffect(() => {
+    fetchSummaryData();
   }, [summary]);
+
   return (
     <Page>
       <Head>
@@ -44,8 +53,20 @@ export default function SummaryPage({ summary }) {
             handleNavigateBetweenSummaryOptions(a.target.value);
           }}
         >
-          <option>Paraíba</option>
-          <option>Paraná</option>
+          <optgroup label="Órgãos Federais" />
+          <optgroup label="Órgãos Estaduais">
+            {(() => {
+              const list = [];
+              for (const i in STATE_AGENCIES) {
+                list.push(i);
+              }
+              return list.map(i => (
+                <option key={STATE_AGENCIES[i]} value={STATE_AGENCIES[i]}>
+                  {formatToAgency(i)}
+                </option>
+              ));
+            })()}
+          </optgroup>
         </SumarySelectorComboBox>
       </SelectContainer>
       <div>
@@ -59,10 +80,18 @@ export default function SummaryPage({ summary }) {
             );
           }
           if (dataList.length === 0) {
-            return 'dados não existem para essa data';
+            return (
+              <ActivityIndicatorPlaceholder>
+                Ocorreu um erro.
+              </ActivityIndicatorPlaceholder>
+            );
           }
-          return dataList.map(() => (
-            <GraphWithNavigation title="Total de Remunerações" id={summary} />
+          return dataList.map(agency => (
+            <GraphWithNavigation
+              key={agency.Name}
+              title={agency.FullName}
+              id={agency.Name}
+            />
           ));
         })()}
       </div>
@@ -80,36 +109,39 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   title,
 }) => {
   // this state is used to store the api fetched data after fetch it
-  const [data, setData] = useState<any>({
-    dados: [1, 2, 3, 4],
-    name: 'Orgão Top',
-  });
+  const [data, setData] = useState<any[]>([]);
   const [year, setYear] = useState(new Date().getFullYear());
-
   const [dataLoading, setDataLoading] = useState(true);
+  const [hidingWage, setHidingWage] = useState(false);
+  const [hidingBenefits, setHidingBenefits] = useState(false);
+  const [hidingNoData, setHidingNoData] = useState(false);
   useEffect(() => {
-    setTimeout(() => {
+    setDataLoading(true);
+    fetchAgencyData();
+  }, [year]);
+  async function fetchAgencyData() {
+    try {
+      const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
+      setData(agency.MonthTotals ? agency.MonthTotals : []);
       setDataLoading(false);
-    }, 2000);
-  }, []);
+    } catch (err) {
+      console.log(err);
+    }
+  }
+  const chartRef = useRef<{ export: () => void }>(null);
+
+  const exportChart = () => {
+    if (chartRef && chartRef.current) {
+      chartRef.current?.export();
+    }
+  };
   function generateGraphWithNavigation() {
-    if (dataLoading) {
-      return (
-        <MainGraphSection>
-          <ActivityIndicatorPlaceholder fontColor="#3e5363">
-            <ActivityIndicator spinnerColor="#3e5363" />
-            <span>Aguarde...</span>
-          </ActivityIndicatorPlaceholder>
-        </MainGraphSection>
-      );
-    }
-    if (data.dados.length === 0) {
-      return <>não há dados para esse ano</>;
-    }
     return (
       <MainGraphSection>
         <MainGraphSectionHeader>
-          <h2>{data.name}</h2>
+          <h2>
+            {title} ({id.toLocaleUpperCase('pt')})
+          </h2>
           <div>
             <button
               className="left"
@@ -123,57 +155,225 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               <img src="/img/arrow.svg" alt="arrow" />
             </button>
           </div>
-          <span>Dados capturados em 2 de Janeiro de {year}</span>
         </MainGraphSectionHeader>
         <Captions>
-          <h3>Total de remunerações em {year}: 21M</h3>
+          <h3>
+            Total de Remunerações de Membros em {year}: R${' '}
+            {(() => {
+              let cont = 0;
+              const benefits = data.map(d => d.Perks + d.Others + d.Wage);
+              benefits.forEach(w => {
+                cont += w;
+              });
+              return (cont / 1000000).toFixed(2);
+            })()}
+            M
+          </h3>
           <ul>
             <CaptionItems>
-              <img
-                src="/img/data-graph-captions/icon_salario.svg"
-                alt="sallary"
-              />
+              <button
+                type="button"
+                onClick={e => {
+                  if (hidingWage) {
+                    e.currentTarget.classList.remove('active');
+                    setHidingWage(false);
+                  } else {
+                    e.currentTarget.classList.add('active');
+                    setHidingWage(true);
+                  }
+                }}
+              >
+                <img
+                  src="/img/data-graph-captions/icon_salario.svg"
+                  alt="sallary"
+                />
+              </button>
               <span>
                 Salário:
                 <br />
-                <b>10M</b>
+                <b>
+                  R${' '}
+                  {(() => {
+                    let cont = 0;
+                    const wages = data.map(d => d.Wage);
+                    wages.forEach(w => {
+                      cont += w;
+                    });
+                    return (cont / 1000000).toFixed(2);
+                  })()}
+                  M
+                </b>
               </span>
             </CaptionItems>
             <CaptionItems>
-              <img
-                src="/img/data-graph-captions/icon_beneficio.svg"
-                alt="benefits"
-              />
+              <button
+                type="button"
+                onClick={e => {
+                  if (hidingBenefits) {
+                    e.currentTarget.classList.remove('active');
+                    setHidingBenefits(false);
+                  } else {
+                    e.currentTarget.classList.add('active');
+                    setHidingBenefits(true);
+                  }
+                }}
+              >
+                <img
+                  src="/img/data-graph-captions/icon_beneficio.svg"
+                  alt="benefits"
+                />
+              </button>
               <span>
                 Benefícios:
                 <br />
-                <b>10M</b>
+                <b>
+                  R${' '}
+                  {(() => {
+                    let cont = 0;
+                    const benefits = data.map(d => d.Perks + d.Others);
+                    benefits.forEach(w => {
+                      cont += w;
+                    });
+                    return (cont / 1000000).toFixed(2);
+                  })()}
+                  M
+                </b>
               </span>
             </CaptionItems>
             <CaptionItems>
-              <img
-                src="/img/data-graph-captions/icon_semdados.svg"
-                alt="no-data"
-              />
+              <button
+                onClick={e => {
+                  if (hidingNoData) {
+                    e.currentTarget.classList.remove('active');
+                    setHidingNoData(false);
+                  } else {
+                    e.currentTarget.classList.add('active');
+                    setHidingNoData(true);
+                  }
+                }}
+                type="button"
+              >
+                <img
+                  src="/img/data-graph-captions/icon_semdados.svg"
+                  alt="no-data"
+                />
+              </button>
               <span>Sem dados</span>
             </CaptionItems>
           </ul>
         </Captions>
         <GraphDivWithPagination>
-          <h3>{title}</h3>
-          <div>
-            <span>nada ainda</span>
-          </div>
+          <h3>Total de Remunerações de Membros por Mês em {year}</h3>
+          {dataLoading ? (
+            <ActivityIndicatorPlaceholder fontColor="#3e5363">
+              <ActivityIndicator spinnerColor="#3e5363" />
+              <span>Aguarde...</span>
+            </ActivityIndicatorPlaceholder>
+          ) : (
+            <>
+              {data.length > 0 ? (
+                <div className="main-chart-wrapper">
+                  <ReactFrappeChart
+                    ref={chartRef}
+                    {...{
+                      data: {
+                        labels: [
+                          'Jan',
+                          'Fev',
+                          'Mar',
+                          'Abr',
+                          'Mai',
+                          'Jun',
+                          'Jul',
+                          'Ago',
+                          'Set',
+                          'Out',
+                          'Nov',
+                          'Dez',
+                        ],
+                        datasets: [
+                          {
+                            name: 'Benefícios',
+                            chartType: 'bar',
+                            values:
+                              !hidingBenefits &&
+                              createArrayFilledWithValue(12, 0).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? (fixYearDataArray(data)[i].Perks +
+                                    fixYearDataArray(data)[i].Others) /
+                                  1000000
+                                  : v,
+                              ),
+                          },
+                          {
+                            name: 'Salário',
+                            chartType: 'bar',
+                            values:
+                              !hidingWage &&
+                              createArrayFilledWithValue(12, 0).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? fixYearDataArray(data)[i].Wage / 1000000
+                                  : v,
+                              ),
+                          },
+                          {
+                            name: 'Sem Dados',
+                            chartType: 'bar',
+                            values:
+                              !hidingNoData &&
+                              createArrayFilledWithValue(12, 0).map((v, i) =>
+                                fixYearDataArray(data)[i] ? v : 20,
+                              ),
+                          },
+                        ],
+                      },
+
+                      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
+                      height: 300,
+                      axisOptions: {
+                        xAxisMode: 'tick',
+                      },
+                      colors: ['#97BB2F', '#3EDBB1', '#2c3236'],
+                      barOptions: {
+                        stacked: 1,
+                        spaceRatio: 0.6,
+                      },
+                      tooltipOptions: {
+                        formatTooltipX: d => `${d}`.toUpperCase(),
+                        formatTooltipY: d => `R$ ${d.toFixed(2)} M`,
+                      },
+                    }}
+                  />
+                </div>
+              ) : (
+                <ActivityIndicatorPlaceholder fontColor="#3e5363">
+                  Não há dados para esse ano
+                </ActivityIndicatorPlaceholder>
+              )}
+            </>
+          )}
         </GraphDivWithPagination>
-        <Button
-          textColor="#B361C6"
-          borderColor="#B361C6"
-          backgroundColor="#fff"
-          hoverBackgroundColor="#B361C6"
-        >
-          Explorar Meses
-          <img src="/img/icon_calendario.svg" alt="calendario" />
-        </Button>
+        <div className="buttons">
+          <Button
+            textColor="#3E5363"
+            borderColor="#3E5363"
+            backgroundColor="#fff"
+            hoverBackgroundColor="#3E5363"
+            onClick={() => exportChart()}
+          >
+            Compartilhar
+            <img src="/img/icon_download_share.svg" alt="calendario" />
+          </Button>
+          <Button
+            textColor="#B361C6"
+            borderColor="#B361C6"
+            backgroundColor="#fff"
+            hoverBackgroundColor="#B361C6"
+          >
+            Explorar Meses
+            <img src="/img/icon_calendario.svg" alt="calendario" />
+          </Button>
+        </div>
       </MainGraphSection>
     );
   }
@@ -204,39 +404,56 @@ const MainGraphSection = styled.section`
   display: flex;
   flex-direction: column;
   font-family: 'Roboto Condensed', sans-serif;
-  button {
-    font-size: 2rem;
-    align-self: flex-end;
+  .buttons {
+    justify-content: flex-end;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
     @media (max-width: 600px) {
-      align-self: center;
+      justify-content: center;
+      margin-bottom: 2rem;
     }
-    position: relative;
-    img {
-      right: 3rem;
-      position: absolute;
+    button {
+      font-size: 2rem;
+      margin: 1rem;
+      position: relative;
+      img {
+        right: 3rem;
+        position: absolute;
+      }
     }
   }
 `;
 const GraphDivWithPagination = styled.div`
-  padding: 3rem;
   margin-top: 3rem;
   display: flex;
   align-self: center;
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  background: #3e5363;
-  div {
-    display: flex;
-    margin-top: 3rem;
+  color: #3e5363;
+  background: rgba(62, 83, 99, 0.05);
+  h3 {
+    padding: 1.5rem;
+  }
+  .main-chart-wrapper {
     width: 100%;
-    justify-content: center;
-    flex-direction: column;
-    border-top: 1px solid #fff;
-    padding: 1rem 1rem;
-    font-size: 4rem;
-    color: #fff;
-    font-family: 'Roboto Condensed', sans-serif;
+    div {
+      & > * {
+        font-size: 125%;
+      }
+      text {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 290%;
+        color: #fff;
+        font-weight: bold;
+        &.title {
+          font-size: 120%;
+        }
+      }
+    }
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #3e5363;
   }
   margin-bottom: 3rem;
 `;
@@ -245,14 +462,16 @@ const Captions = styled.div`
   width: 50%;
   min-width: 34rem;
   justify-content: center;
-  background: #3e5363;
+  color: #3e5363;
+  background: rgba(62, 83, 99, 0.05);
   ul {
     list-style: none;
     margin-top: 3rem;
-    border-top: 1px solid #fff;
+    border-top: 1px solid #3e5363;
     padding: 1rem 1rem;
     padding-top: 2rem;
     display: flex;
+    transition: all 1s ease;
     justify-content: space-between;
   }
 `;
@@ -306,14 +525,25 @@ const CaptionItems = styled.li`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 15%;
+  width: 20%;
+  button {
+    border: none;
+    width: 65%;
+    background: none;
+  }
+  button.active {
+    opacity: 0.4;
+    width: 65%;
+  }
   img {
-    width: 75%;
+    width: 100%;
+    background: #2c3236;
+    border: solid 2px #3e5363;
   }
   span {
     margin-top: 1rem;
     font-size: 1.5rem;
-    color: #fff;
+    color: #3e5363;
     & > * {
       font-size: 1.5rem;
     }
@@ -362,6 +592,9 @@ const SumarySelectorComboBox = styled.select`
   option {
     font-size: 2rem;
   }
+  optgroup {
+    font-size: 2rem;
+  }
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   &:focus {
     border: 2px solid #3f51b5;
@@ -370,3 +603,28 @@ const SumarySelectorComboBox = styled.select`
     border: 2px solid #3f51b5;
   }
 `;
+function createArrayFilledWithValue<T>(size: number, value: T): T[] {
+  const array = [];
+  for (let i = 0; i < size; i += 1) {
+    array.push(value);
+  }
+  return array;
+}
+function fixYearDataArray(array: any[]) {
+  const a = createArrayFilledWithValue(12, undefined);
+  array.forEach(v => {
+    a[v.Month - 1] = v;
+  });
+  return a;
+}
+function formatToAgency(agency: string) {
+  const sub = agency.split('_');
+  const formatedSubs = sub.map(s => {
+    const a = s.toLowerCase();
+    const newString = a.split('');
+    newString[0] = a[0].toLocaleUpperCase();
+    return newString.join('');
+  });
+  const a = formatedSubs.join(' ');
+  return a;
+}
