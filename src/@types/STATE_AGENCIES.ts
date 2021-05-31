@@ -1,0 +1,21 @@
+// eslint-disable-next-line no-shadow
+enum STATE_AGENCIES {
+  ALAGOAS = 'AL',
+  BAHIA = 'BA',
+  CEARÁ = 'CE',
+  ESPÍRITO_SANTO = 'ES',
+  GOIÁS = 'GO',
+  MARANHÃO = 'MA',
+  MINAS_GERAIS = 'MG',
+  PARAÍBA = 'PB',
+  PARANÁ = 'PR',
+  PERNAMBUCO = 'PE',
+  PIAUÍ = 'PI',
+  RIO_GRANDE_DO_NORTE = 'RN',
+  RIO_GRANDE_DO_SUL = 'RS',
+  RIO_DE_JANEIRO = 'RJ',
+  SÃO_PAULO = 'SP',
+  SERGIPE = 'SE',
+  TOCANTINS = 'TO',
+}
+export default STATE_AGENCIES;
