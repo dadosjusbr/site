@@ -8,6 +8,8 @@
     "start": "next start -p $PORT"
   },
   "dependencies": {
+    "axios": "^0.21.1",
+    "dotenv": "^10.0.0",
     "frappe-charts": "^1.6.1",
     "next": "10.1.3",
     "next-transpile-modules": "^7.2.0",
