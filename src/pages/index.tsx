@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import { useRef } from 'react';
 import styled from 'styled-components';
 import Button from '../components/Button';
@@ -50,26 +51,28 @@ export default function Index() {
             we need the reference of the animation here to activate the start when the button bellow is hovered
           */}
           <Animation1 ref={divRef} />
-          <Button
-            backgroundColor="#2FBB96"
-            borderColor="#2FBB96"
-            hoverTextColor="#2FBB96"
-            hoverBackgroundColor="#3e5363"
-            onMouseEnter={() => {
-              for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
-                const node = divRef.current.childNodes[i] as HTMLImageElement;
-                node.classList.add('active');
-              }
-            }}
-            onMouseLeave={() => {
-              for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
-                const node = divRef.current.childNodes[i] as HTMLImageElement;
-                node.classList.remove('active');
-              }
-            }}
-          >
-            Acessar os dados libertados
-          </Button>
+          <Link href="/dados/PB">
+            <Button
+              backgroundColor="#2FBB96"
+              borderColor="#2FBB96"
+              hoverTextColor="#2FBB96"
+              hoverBackgroundColor="#3e5363"
+              onMouseEnter={() => {
+                for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
+                  const node = divRef.current.childNodes[i] as HTMLImageElement;
+                  node.classList.add('active');
+                }
+              }}
+              onMouseLeave={() => {
+                for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
+                  const node = divRef.current.childNodes[i] as HTMLImageElement;
+                  node.classList.remove('active');
+                }
+              }}
+            >
+              Acessar os dados libertados
+            </Button>
+          </Link>
         </Animation>
       </Container>
       <ExclamativeText>
