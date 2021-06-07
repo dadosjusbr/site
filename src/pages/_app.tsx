@@ -1,5 +1,5 @@
+import Tracker from '../components/Tracker';
 import GlobalStyle from '../styles/global_style';
-import { TrackingProvider } from '../contexts/trackers';
 
 /*
 o _app.tsx nesse caso está sendo utilizado para conseguirmos
@@ -10,10 +10,10 @@ https://nextjs.org/docs/advanced-features/custom-app
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <TrackingProvider>
+      <Tracker>
         <Component {...pageProps} />
         <GlobalStyle />
-      </TrackingProvider>
+      </Tracker>
     </>
   );
 }
