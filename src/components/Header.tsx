@@ -1,10 +1,14 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { HTMLAttributes, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 // The header partial is used to navigate and brief the application
 // each link is an anchor to a different page, achoring using next/link https://nextjs.org/docs/api-reference/next/link
-const Header = () => {
+export interface HeaderPropos extends HTMLAttributes<HTMLDivElement> {
+  theme?: 'DEFAULT' | 'LIGHT';
+}
+
+const Header: React.FC<HeaderPropos> = ({ theme = 'DEFAULT', ...rest }) => {
   // this method is used to change the application state to modify the context of multiples elements
   function handleClick() {
     setOpen(!open);
@@ -14,11 +18,18 @@ const Header = () => {
   // click.
   const [open, setOpen] = useState(false);
   return (
-    <Container>
+    <Container {...rest}>
       <div>
         <Link href="/">
           <button type="button" id="back-to-start">
-            <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
+            <img
+              src={
+                theme === 'DEFAULT'
+                  ? '/img/header/icon_dadosjusbr_default.svg'
+                  : '/img/header/icon_dadosjusbr_light.svg'
+              }
+              alt="dados_jus_logo"
+            />
           </button>
         </Link>
         <HeaderButton open={open} onClick={handleClick}>

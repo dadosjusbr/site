@@ -1,12 +1,23 @@
+import { HTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 // The footer is a component that appears at various times in the application
 // It consists of DadosJus logo and a message for contact.
+export interface FooterPropos extends HTMLAttributes<HTMLDivElement> {
+  theme?: 'DEFAULT' | 'LIGHT';
+}
 
-const Footer = () => (
-  <Container>
+const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT', ...rest }) => (
+  <Container {...rest}>
     <div>
-      <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
+      <img
+        src={
+          theme === 'DEFAULT'
+            ? '/img/footer/icon_dadosjusbr_dafault.svg'
+            : '/img/footer/icon_dadosjusbr_light.svg'
+        }
+        alt="dados_jus_logo"
+      />
       <span>
         Alguma dica? Tem algum feedback geral? Se você tiver uma ideia que você
         gostaria de ver no DadosJusBr, envie-nos um e-mail{' '}
