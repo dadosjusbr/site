@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ReactFrappeChart from 'react-frappe-charts';
+import Link from 'next/link';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
@@ -364,15 +365,17 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             Compartilhar
             <img src="/img/icon_download_share.svg" alt="calendario" />
           </Button>
-          <Button
-            textColor="#B361C6"
-            borderColor="#B361C6"
-            backgroundColor="#fff"
-            hoverBackgroundColor="#B361C6"
-          >
-            Explorar Meses
-            <img src="/img/icon_calendario.svg" alt="calendario" />
-          </Button>
+          <Link href={`/orgao/${id}/${year}/1`}>
+            <Button
+              textColor="#B361C6"
+              borderColor="#B361C6"
+              backgroundColor="#fff"
+              hoverBackgroundColor="#B361C6"
+            >
+              Explorar Meses
+              <img src="/img/icon_calendario.svg" alt="calendario" />
+            </Button>
+          </Link>
         </div>
       </MainGraphSection>
     );
