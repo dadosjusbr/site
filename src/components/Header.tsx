@@ -33,7 +33,14 @@ const Header: React.FC<HeaderPropos> = ({ theme = 'DEFAULT', ...rest }) => {
           </button>
         </Link>
         <HeaderButton open={open} onClick={handleClick}>
-          <img src="/img/nav_responsive_button.svg" alt="nav_responsive" />
+          <img
+            src={
+              theme === 'DEFAULT'
+                ? '/img/nav_responsive_button.svg'
+                : '/img/nav_responsive_button_light.svg'
+            }
+            alt="nav_responsive"
+          />
         </HeaderButton>
         <HeaderList open={open}>
           <HeaderItem>
