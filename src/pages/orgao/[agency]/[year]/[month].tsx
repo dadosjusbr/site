@@ -19,14 +19,14 @@ export default function OmaPage({
   b,
   fullName,
   totalMembers,
+  maxWage,
+  totalWage,
+  maxPerk,
+  totalPerks,
+  crawlingTime,
 }) {
   useEffect(() => {
-    console.log(agency);
-    console.log(year);
-    console.log(month);
     console.log(b);
-    console.log(fullName);
-    console.log(totalMembers);
   });
   const [previousButtonActive, setPreviousButtonActive] = useState(true);
   const [nextButtonActive, setNextButtonActive] = useState(true);
@@ -85,14 +85,17 @@ export default function OmaPage({
     fetchChartData();
   }, [year, month]);
   async function fetchChartData() {
-    const response = await api.get(`/orgao/salario/${agency}/${year}/${month}`);
-    if (response) {
-      setChartData(response.data);
-      setFileLink(response.data.PackageURL);
+    try {
+      const { data } = await api.get(
+        `/orgao/salario/${agency}/${year}/${month}`,
+      );
+      setChartData(data);
+      setFileLink(data.PackageURL);
+      setLoading(false);
+      console.log(data.Members['-1']);
+    } catch (error) {
+      console.log(error);
     }
-    setLoading(false);
-
-    console.log('oi');
   }
   function handleNavigateToNextSummaryOption() {
     const { m, y } = getNextDate();
@@ -161,8 +164,8 @@ export default function OmaPage({
                 <CaptionItems>
                   <img src="/img/anim-group-2/icon_salario.svg" alt="sallary" />
                   <div>
-                    <span>Maior salário: R$ 35.462,22</span>
-                    <span>askdnaskld</span>
+                    <span>Maior salário: R$ {maxWage.toFixed(2)}</span>
+                    <span>Total Salários: R$ {totalWage.toFixed(2)}</span>
                   </div>
                 </CaptionItems>
                 <CaptionItems>
@@ -171,8 +174,8 @@ export default function OmaPage({
                     alt="benefits"
                   />
                   <div>
-                    <span>Maior salário: R$ 35.462,22</span>
-                    <span>askdnaskld</span>
+                    <span>Maior Benefício: R$ {maxPerk.toFixed(2)}</span>
+                    <span>Total benefícios: R$ {totalPerks.toFixed(2)}</span>
                   </div>
                 </CaptionItems>
               </ul>
@@ -180,45 +183,58 @@ export default function OmaPage({
             <GraphDivWithPagination>
               <h3>Total de Remunerações de Membros por Mês em {year}</h3>
               <div className="main-chart-wrapper">
-                <ReactFrappeChart
-                  {...{
-                    data: {
-                      labels: [
-                        '-1',
-                        '50000',
-                        '40000',
-                        '30000',
-                        '20000',
-                        '10000',
-                      ],
-                      datasets: [
-                        {
-                          name: 'Benefícios',
-                          chartType: 'bar',
-                          values: [1, 2, 2, 2, 2, 4],
-                        },
-                      ],
-                    },
-                    type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
-                    height: 300,
-                    axisOptions: {
-                      xAxisMode: 'tick',
-                    },
-                    colors: ['#B361C6'],
-                    barOptions: {
-                      stacked: 1,
-                      spaceRatio: 0.6,
-                    },
-                    tooltipOptions: {
-                      formatTooltipX: d => `${d}`.toUpperCase(),
-                      // formatTooltipY: d => `R$ ${d.toFixed(2)} M`,
-                    },
-                  }}
-                />
+                {!chartData.Members ? (
+                  <ActivityIndicatorPlaceholder fontColor="#3e5363">
+                    <span>Não há dados de mebros para esse mês</span>
+                  </ActivityIndicatorPlaceholder>
+                ) : (
+                  <ReactFrappeChart
+                    {...{
+                      data: {
+                        labels: [
+                          '-1',
+                          '50000',
+                          '40000',
+                          '30000',
+                          '20000',
+                          '10000',
+                        ],
+                        datasets: [
+                          {
+                            name: 'Benefícios',
+                            chartType: 'bar',
+                            values: [
+                              chartData.Members['-1'],
+                              chartData.Members['50000'],
+                              chartData.Members['40000'],
+                              chartData.Members['30000'],
+                              chartData.Members['20000'],
+                              chartData.Members['10000'],
+                            ],
+                          },
+                        ],
+                      },
+                      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
+                      height: 300,
+                      axisOptions: {
+                        xAxisMode: 'tick',
+                      },
+                      colors: ['#B361C6'],
+                      barOptions: {
+                        stacked: 1,
+                        spaceRatio: 0.6,
+                      },
+                      tooltipOptions: {
+                        formatTooltipX: d => `${d}`.toUpperCase(),
+                        // formatTooltipY: d => `R$ ${d.toFixed(2)} M`,
+                      },
+                    }}
+                  />
+                )}
               </div>
               <div className="buttons">
                 <div>
-                  <Link href="/dados/PB">
+                  <a href="/dados/PB">
                     <Button
                       textColor="#2FBB96"
                       borderColor="#2FBB96"
@@ -232,7 +248,7 @@ export default function OmaPage({
                         alt="calendario"
                       />
                     </Button>
-                  </Link>
+                  </a>
                 </div>
                 <div>
                   <Button
@@ -284,6 +300,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
         b: d2,
         fullName: d2.FullName,
         totalMembers: d2.TotalMembers,
+        maxWage: d2.MaxWage,
+        totalWage: d2.TotalWage,
+        maxPerk: d2.MaxPerk,
+        totalPerks: d2.TotalPerks,
+        crawlingTime: d2.CrawlingTime,
       },
     };
   } catch (err) {
@@ -326,16 +347,18 @@ const MainGraphSection = styled.section`
       display: flex;
       flex-wrap: wrap;
       flex-direction: row;
+      & + div {
+        button:hover {
+          img {
+            filter: brightness(0) invert(1);
+          }
+        }
+      }
     }
     @media (max-width: 600px) {
       justify-content: center;
     }
     button {
-      &:hover {
-        img {
-          filter: brightness(0) invert(1);
-        }
-      }
       font-size: 2rem;
       margin: 1rem;
       position: relative;
