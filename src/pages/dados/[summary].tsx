@@ -365,7 +365,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             Compartilhar
             <img src="/img/icon_download_share.svg" alt="calendario" />
           </Button>
-          <Link href={`/orgao/${id}/${year}/1`}>
+          <a href={`/orgao/${id}/${year}/1`}>
             <Button
               textColor="#B361C6"
               borderColor="#B361C6"
@@ -375,7 +375,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               Explorar Meses
               <img src="/img/icon_calendario.svg" alt="calendario" />
             </Button>
-          </Link>
+          </a>
         </div>
       </MainGraphSection>
     );
