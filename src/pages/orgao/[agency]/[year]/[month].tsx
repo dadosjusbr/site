@@ -150,6 +150,16 @@ export default function OmaPage({
               <img src="/img/arrow.svg" alt="arrow" />
             </button>
           </div>
+          {loading || (
+            <span>
+              Dados capturados em{' '}
+              {(() => {
+                const d = new Date(crawlingTime);
+                // eslint-disable-next-line prettier/prettier
+                return `${d.getDay()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
+              })()}
+            </span>
+          )}
         </MainGraphSectionHeader>
         {loading ? (
           <ActivityIndicatorPlaceholder fontColor="#3e5363">
@@ -320,7 +330,7 @@ const Page = styled.div`
 `;
 
 const MainGraphSection = styled.section`
-  margin-top: 10rem;
+  margin-top: 3rem;
   @media (max-width: 600px) {
     padding: 1rem;
   }
