@@ -1,0 +1,526 @@
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import { useEffect, useState } from 'react';
+import ReactFrappeChart from 'react-frappe-charts';
+import styled from 'styled-components';
+import MONTHS from '../../../../@types/MONTHS';
+import ActivityIndicator from '../../../../components/ActivityIndicator';
+import Button from '../../../../components/Button';
+import F from '../../../../components/Footer';
+import H from '../../../../components/Header';
+import api from '../../../../services/api';
+
+export default function OmaPage({
+  agency,
+  year,
+  month,
+  b,
+  fullName,
+  totalMembers,
+}) {
+  useEffect(() => {
+    console.log(agency);
+    console.log(year);
+    console.log(month);
+    console.log(b);
+    console.log(fullName);
+    console.log(totalMembers);
+  });
+  const [previousButtonActive, setPreviousButtonActive] = useState(true);
+  const [nextButtonActive, setNextButtonActive] = useState(true);
+  const [chartData, setChartData] = useState<any>();
+  const [loading, setLoading] = useState(true);
+  const [fileLink, setFileLink] = useState('');
+  function getNextDate() {
+    let m = parseInt(month, 10);
+    let y = parseInt(year, 10);
+    if (m === 12) {
+      m = 1;
+      y += 1;
+    } else {
+      m += 1;
+    }
+    return { m, y };
+  }
+  function getPreviousDate() {
+    let m = parseInt(month, 10);
+    let y = parseInt(year, 10);
+    if (m === 1) {
+      m = 12;
+      y -= 1;
+    } else {
+      m -= 1;
+    }
+    return { m, y };
+  }
+  const router = useRouter();
+
+  async function checkNextYear() {
+    let activateButtonNext = true;
+    const { m, y } = getNextDate();
+    if (y !== undefined) {
+      await api.get(`/orgao/salario/${agency}/${y}/${m}`).catch(_err => {
+        activateButtonNext = false;
+      });
+      setNextButtonActive(activateButtonNext);
+    }
+  }
+  async function checkPreviousYear() {
+    let activateButtonPrevious = true;
+    const { m, y } = getPreviousDate();
+    if (y !== undefined) {
+      await api.get(`/orgao/salario/${agency}/${y}/${m}`).catch(_err => {
+        activateButtonPrevious = false;
+      });
+      setPreviousButtonActive(activateButtonPrevious);
+    }
+  }
+
+  useEffect(() => {
+    setLoading(true);
+    checkNextYear();
+    checkPreviousYear();
+    fetchChartData();
+  }, [year, month]);
+  async function fetchChartData() {
+    const response = await api.get(`/orgao/salario/${agency}/${year}/${month}`);
+    if (response) {
+      setChartData(response.data);
+      setFileLink(response.data.PackageURL);
+    }
+    setLoading(false);
+
+    console.log('oi');
+  }
+  function handleNavigateToNextSummaryOption() {
+    const { m, y } = getNextDate();
+    setLoading(true);
+    router.push(`/orgao/${agency}/${y}/${m}`);
+  }
+  function handleNavigateToPreviousSummaryOption() {
+    const { m, y } = getPreviousDate();
+    setLoading(true);
+    router.push(`/orgao/${agency}/${y}/${m}`);
+  }
+  function handleNavigateBetweenSummaryOptions(value: number) {
+    router.push(`/orgao/${agency}/${year}/${value}`);
+  }
+  return (
+    <Page>
+      <Head>
+        <title>OMA/{agency}</title>
+        <meta property="og:image" content="/img/icon_dadosjus_background.png" />
+        <meta
+          property="og:title"
+          content={`Veja os dados do estado: ${agency}`}
+        />
+        <meta
+          property="og:description"
+          content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro"
+        />
+      </Head>
+      <Header theme="LIGHT" />
+      <MainGraphSection>
+        <MainGraphSectionHeader>
+          <h2>
+            {fullName} ({agency.toLocaleUpperCase('pt')})
+          </h2>
+          <div>
+            <button
+              className="left"
+              onClick={() => handleNavigateToPreviousSummaryOption()}
+              type="button"
+              disabled={!previousButtonActive}
+            >
+              <img src="/img/arrow.svg" alt="arrow" />
+            </button>
+            <span>
+              {MONTHS[month]}, {year}
+            </span>
+            <button
+              onClick={() => handleNavigateToNextSummaryOption()}
+              type="button"
+              disabled={!nextButtonActive}
+            >
+              <img src="/img/arrow.svg" alt="arrow" />
+            </button>
+          </div>
+        </MainGraphSectionHeader>
+        {loading ? (
+          <ActivityIndicatorPlaceholder fontColor="#3e5363">
+            <ActivityIndicator spinnerColor="#3e5363" />
+            <span>Carregando dados...</span>
+          </ActivityIndicatorPlaceholder>
+        ) : (
+          <>
+            <Captions>
+              <h3>{totalMembers} Membros</h3>
+              <ul>
+                <CaptionItems>
+                  <img src="/img/anim-group-2/icon_salario.svg" alt="sallary" />
+                  <div>
+                    <span>Maior salário: R$ 35.462,22</span>
+                    <span>askdnaskld</span>
+                  </div>
+                </CaptionItems>
+                <CaptionItems>
+                  <img
+                    src="/img/anim-group-2/icon_beneficio.svg"
+                    alt="benefits"
+                  />
+                  <div>
+                    <span>Maior salário: R$ 35.462,22</span>
+                    <span>askdnaskld</span>
+                  </div>
+                </CaptionItems>
+              </ul>
+            </Captions>
+            <GraphDivWithPagination>
+              <h3>Total de Remunerações de Membros por Mês em {year}</h3>
+              <div className="main-chart-wrapper">
+                <ReactFrappeChart
+                  {...{
+                    data: {
+                      labels: [
+                        '-1',
+                        '50000',
+                        '40000',
+                        '30000',
+                        '20000',
+                        '10000',
+                      ],
+                      datasets: [
+                        {
+                          name: 'Benefícios',
+                          chartType: 'bar',
+                          values: [1, 2, 2, 2, 2, 4],
+                        },
+                      ],
+                    },
+                    type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
+                    height: 300,
+                    axisOptions: {
+                      xAxisMode: 'tick',
+                    },
+                    colors: ['#B361C6'],
+                    barOptions: {
+                      stacked: 1,
+                      spaceRatio: 0.6,
+                    },
+                    tooltipOptions: {
+                      formatTooltipX: d => `${d}`.toUpperCase(),
+                      // formatTooltipY: d => `R$ ${d.toFixed(2)} M`,
+                    },
+                  }}
+                />
+              </div>
+              <div className="buttons">
+                <div>
+                  <Link href="/dados/PB">
+                    <Button
+                      textColor="#2FBB96"
+                      borderColor="#2FBB96"
+                      backgroundColor="#fff"
+                      hoverBackgroundColor="#2FBB96"
+                      className="left"
+                    >
+                      Voltar par anos
+                      <img
+                        src="/img/icon_calendario_green.svg"
+                        alt="calendario"
+                      />
+                    </Button>
+                  </Link>
+                </div>
+                <div>
+                  <Button
+                    textColor="#3e5363"
+                    borderColor="#3e5363"
+                    backgroundColor="#fff"
+                    hoverBackgroundColor="#3e5363"
+                  >
+                    Compartilhar
+                    <img src="/img/icon_share.svg" alt="calendario" />
+                  </Button>
+                  <a href={fileLink}>
+                    <Button
+                      textColor="#3e5363"
+                      borderColor="#3e5363"
+                      backgroundColor="#fff"
+                      hoverBackgroundColor="#3e5363"
+                    >
+                      Baixar
+                      <img
+                        src="/img/icon_download_share.svg"
+                        alt="calendario"
+                      />
+                    </Button>
+                  </a>
+                </div>
+              </div>
+            </GraphDivWithPagination>
+          </>
+        )}
+      </MainGraphSection>
+      <Footer theme="LIGHT" />
+    </Page>
+  );
+}
+export const getServerSideProps: GetServerSideProps = async context => {
+  const { agency, year, month } = context.params;
+  try {
+    // const { data: d1 } = await api.get(`/orgao/totais/${agency}/${year}`);
+
+    const { data: d2 } = await api.get(
+      `/orgao/resumo/${agency}/${year}/${month}`,
+    );
+    return {
+      props: {
+        agency,
+        year,
+        month,
+        b: d2,
+        fullName: d2.FullName,
+        totalMembers: d2.TotalMembers,
+      },
+    };
+  } catch (err) {
+    // context.res.writeHead(301, {
+    //   Location: `/`,
+    // });
+    // context.res.end();
+    return { props: {} };
+  }
+};
+const Page = styled.div`
+  background: #fff;
+`;
+
+const MainGraphSection = styled.section`
+  margin-top: 10rem;
+  @media (max-width: 600px) {
+    padding: 1rem;
+  }
+  @media (min-width: 600px) {
+    margin-bottom: 4rem;
+    margin-left: 8rem;
+    margin-right: 8rem;
+  }
+  text-align: center;
+  font-size: 4rem;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Roboto Condensed', sans-serif;
+  .buttons {
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    div {
+      @media (max-width: 600px) {
+        justify-content: center;
+      }
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+    }
+    @media (max-width: 600px) {
+      justify-content: center;
+    }
+    button {
+      &:hover {
+        img {
+          filter: brightness(0) invert(1);
+        }
+      }
+      font-size: 2rem;
+      margin: 1rem;
+      position: relative;
+      img {
+        right: 3rem;
+        position: absolute;
+      }
+    }
+  }
+`;
+const MainGraphSectionHeader = styled.div`
+  font-size: 4rem;
+  color: #3e5363;
+  display: flex;
+  width: 35rem;
+  flex-direction: column;
+  align-items: center;
+  align-self: center;
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 3rem;
+  }
+  span {
+    margin-top: 2rem;
+    font-size: 2rem;
+    font-weight: 400;
+  }
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+    button {
+      &.left {
+        transform: rotate(180deg);
+      }
+      img {
+        position: initial;
+      }
+      width: 30px;
+      color: #3e5363;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: none;
+      background-color: #3e5363;
+      &:disabled,
+      &[disabled] {
+        border: 2px solid #3e5363;
+        img {
+          filter: invert(75%) sepia(56%) saturate(285%) hue-rotate(163deg)
+            brightness(87%) contrast(84%);
+        }
+        background-color: #fff;
+      }
+    }
+    span {
+      img {
+        position: initial;
+      }
+      font-size: 2rem;
+      font-weight: bold;
+    }
+  }
+  margin-bottom: 4.5rem;
+`;
+const Captions = styled.div`
+  padding: 2rem;
+  width: 100%;
+  min-width: 34rem;
+  justify-content: center;
+  color: #3e5363;
+  background: rgba(62, 83, 99, 0.05);
+  ul {
+    list-style: none;
+    margin-top: 3rem;
+    border-top: 1px solid #3e5363;
+    padding: 1rem 1rem;
+    padding-top: 2rem;
+    display: flex;
+    transition: all 1s ease;
+    justify-content: space-between;
+  }
+`;
+const CaptionItems = styled.li`
+  display: flex;
+  align-items: center;
+  width: 50%;
+  div {
+    display: flex;
+    text-align: left;
+    flex-direction: column;
+    margin-left: 1.5rem;
+  }
+  button.active {
+    opacity: 0.4;
+    width: 65%;
+  }
+  img {
+    width: 4rem;
+    background: #3e5363;
+    border-radius: 50%;
+  }
+  span {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #3e5363;
+    margin: 10px 0;
+    font-family: 'Roboto Condensed', sans-serif;
+  }
+`;
+const Header = styled(H)`
+  div {
+    ul {
+      @media (max-width: 600px) {
+        background: #f5f6f7;
+      }
+      li {
+        a {
+          color: #3e5363;
+          &:hover {
+            border-color: #3e5363;
+          }
+        }
+      }
+    }
+    border-bottom: 2px solid #3e5363;
+  }
+`;
+const Footer = styled(F)`
+  div {
+    border-top: 2px solid #3e5363;
+    span {
+      color: #3e5363;
+      * {
+        color: #3e5363;
+      }
+    }
+  }
+`;
+const GraphDivWithPagination = styled.div`
+  margin-top: 3rem;
+  display: flex;
+  align-self: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 100%;
+  color: #3e5363;
+  background: rgba(62, 83, 99, 0.06);
+  h3 {
+    padding: 1.5rem;
+  }
+  .main-chart-wrapper {
+    width: 100%;
+    div {
+      & > * {
+        font-size: 125%;
+      }
+      text {
+        font-family: 'Roboto Condensed', sans-serif;
+        font-size: 290%;
+        color: #fff;
+        font-weight: bold;
+        &.title {
+          font-size: 120%;
+        }
+      }
+    }
+    padding-bottom: 1rem;
+    border-bottom: 2px solid #3e5363;
+  }
+  margin-bottom: 3rem;
+`;
+const ActivityIndicatorPlaceholder = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20rem 0;
+  span {
+    margin-top: 3rem;
+  }
+  font-family: 'Roboto Condensed', sans-serif;
+  color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
+  font-size: 3rem;
+  align-items: center;
+`;
