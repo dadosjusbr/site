@@ -126,7 +126,9 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
       setData(agency.MonthTotals ? agency.MonthTotals : []);
       setNavigableMonth(
-        agency.MonthTotals[agency.MonthTotals.length - 1].Month,
+        agency.MonthTotals
+          ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
+          : 1,
       );
       setDataLoading(false);
     } catch (err) {
