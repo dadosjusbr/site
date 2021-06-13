@@ -1,3 +1,4 @@
+import GATracker from '../components/GATracker';
 import GlobalStyle from '../styles/global_style';
 
 /*
@@ -9,8 +10,10 @@ https://nextjs.org/docs/advanced-features/custom-app
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <Component {...pageProps} />
-      <GlobalStyle />
+      <GATracker>
+        <Component {...pageProps} />
+        <GlobalStyle />
+      </GATracker>
     </>
   );
 }
