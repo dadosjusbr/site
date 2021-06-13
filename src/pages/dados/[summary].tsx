@@ -6,7 +6,6 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ReactFrappeChart from 'react-frappe-charts';
-import Link from 'next/link';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
