@@ -128,10 +128,6 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       setNavigableMonth(
         agency.MonthTotals[agency.MonthTotals.length - 1].Month,
       );
-      console.log(
-        'mes',
-        agency.MonthTotals[agency.MonthTotals.length - 1].Month,
-      );
       setDataLoading(false);
     } catch (err) {
       console.log(err);

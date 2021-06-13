@@ -371,8 +371,6 @@ export default function OmaPage({
 export const getServerSideProps: GetServerSideProps = async context => {
   const { agency, year, month } = context.params;
   try {
-    // const { data: d1 } = await api.get(`/orgao/totais/${agency}/${year}`);
-
     const { data: d2 } = await api.get(
       `/orgao/resumo/${agency}/${year}/${month}`,
     );
@@ -391,11 +389,21 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   } catch (err) {
-    // context.res.writeHead(301, {
-    //   Location: `/`,
-    // });
-    // context.res.end();
-    return { props: {} };
+    try {
+      const { data } = await api.get(`/orgao/totais/${agency}/${year}`);
+      const nMonth = data.MonthTotals[data.MonthTotals.length - 1].Month;
+      context.res.writeHead(301, {
+        Location: `/orgao/${agency}/${year}/${nMonth}`,
+      });
+      context.res.end();
+      return { props: {} };
+    } catch (error) {
+      context.res.writeHead(301, {
+        Location: `/404`,
+      });
+      context.res.end();
+      return { props: {} };
+    }
   }
 };
 const Page = styled.div`
