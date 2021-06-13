@@ -113,11 +113,11 @@ export default function OmaPage({
   return (
     <Page>
       <Head>
-        <title>OMA/{agency}</title>
+        <title>OMA/{agency.toUpperCase()}</title>
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
-          content={`Veja os dados do estado: ${agency}`}
+          content={`Veja os dados do mês ${month} no ano ${year} na agência ${fullName}`}
         />
         <meta
           property="og:description"
@@ -195,19 +195,19 @@ export default function OmaPage({
               <div className="main-chart-wrapper">
                 {!chartData.Members ? (
                   <ActivityIndicatorPlaceholder fontColor="#3e5363">
-                    <span>Não há dados de mebros para esse mês</span>
+                    <span>Não há dados de membros para esse mês</span>
                   </ActivityIndicatorPlaceholder>
                 ) : (
                   <ReactFrappeChart
                     {...{
                       data: {
                         labels: [
-                          '-1',
-                          '50000',
-                          '40000',
-                          '30000',
-                          '20000',
-                          '10000',
+                          '> R$ 50 mil',
+                          'R$ 40~50 mil',
+                          'R$ 30~40 mil',
+                          'R$ 20~30 mil',
+                          'R$ 10~20 mil',
+                          'R$ 10 mil',
                         ],
                         datasets: [
                           {
@@ -235,8 +235,8 @@ export default function OmaPage({
                         spaceRatio: 0.6,
                       },
                       tooltipOptions: {
-                        formatTooltipX: d => `${d}`.toUpperCase(),
-                        // formatTooltipY: d => `R$ ${d.toFixed(2)} M`,
+                        formatTooltipX: d => '',
+                        formatTooltipY: d => `${d} Membros`,
                       },
                     }}
                   />
