@@ -158,18 +158,38 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           </div>
         </MainGraphSectionHeader>
         <Captions>
-          <h3>
-            Total de Remunerações de Membros em {year}: R${' '}
-            {(() => {
-              let cont = 0;
-              const benefits = data.map(d => d.Perks + d.Others + d.Wage);
-              benefits.forEach(w => {
-                cont += w;
-              });
-              return (cont / 1000000).toFixed(2);
-            })()}
-            M
-          </h3>
+          <div>
+            <span>
+              <h3>
+                Total de Remunerações de Membros em {year}: R${' '}
+                {(() => {
+                  let cont = 0;
+                  const benefits = data.map(d => d.Perks + d.Others + d.Wage);
+                  benefits.forEach(w => {
+                    cont += w;
+                  });
+                  return (cont / 1000000).toFixed(2);
+                })()}
+                M
+              </h3>
+            </span>
+            <span className="info">
+              <img src="/img/icon_info.svg" alt="info" />
+              <div>
+                <span>
+                  <b>Salário:</b> valor recebido de acordo com a prestação de
+                  serviços, em decorrência do contrato de trabalho.
+                  <br />
+                  <br />
+                  <b>Benefícios:</b> Qualquer remuneração recebida por um
+                  funcionário que não seja proveniente de salário. Exemplos de
+                  benefícios são: diárias, gratificações, remuneração por função
+                  de confiança, benefícios pessoais ou eventuais, auxílios
+                  alimentação, saúde, escolar...
+                </span>
+              </div>
+            </span>
+          </div>
           <ul>
             <CaptionItems>
               <button
@@ -467,6 +487,48 @@ const Captions = styled.div`
   justify-content: center;
   color: #3e5363;
   background: rgba(62, 83, 99, 0.05);
+  div {
+    padding: 0 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    span {
+      &.info {
+        position: relative;
+        div {
+          background-color: #ced9e1;
+          color: #3e5363;
+          width: 600%;
+          z-index: 100;
+          padding: 2rem;
+          font-size: 2rem;
+          right: 0%;
+          text-align: left;
+          b {
+            font-size: 1.5rem;
+          }
+          display: none;
+          position: absolute;
+        }
+        &:hover {
+          div {
+            display: block;
+          }
+        }
+      }
+      h3 {
+        text-align: center;
+        font-size: 2rem;
+      }
+    }
+    img {
+      background-color: #3e5363;
+      border-radius: 50%;
+      width: 3rem;
+      margin: 0 1rem;
+    }
+    align-items: center;
+  }
   ul {
     list-style: none;
     margin-top: 3rem;

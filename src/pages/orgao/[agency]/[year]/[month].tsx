@@ -1,6 +1,6 @@
+/* eslint-disable react/no-unescaped-entities */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import ReactFrappeChart from 'react-frappe-charts';
@@ -16,7 +16,6 @@ export default function OmaPage({
   agency,
   year,
   month,
-  b,
   fullName,
   totalMembers,
   maxWage,
@@ -25,9 +24,6 @@ export default function OmaPage({
   totalPerks,
   crawlingTime,
 }) {
-  useEffect(() => {
-    console.log(b);
-  });
   const [previousButtonActive, setPreviousButtonActive] = useState(true);
   const [nextButtonActive, setNextButtonActive] = useState(true);
   const [chartData, setChartData] = useState<any>();
@@ -92,7 +88,6 @@ export default function OmaPage({
       setChartData(data);
       setFileLink(data.PackageURL);
       setLoading(false);
-      console.log(data.Members['-1']);
     } catch (error) {
       console.log(error);
     }
@@ -107,9 +102,7 @@ export default function OmaPage({
     setLoading(true);
     router.push(`/orgao/${agency}/${y}/${m}`);
   }
-  function handleNavigateBetweenSummaryOptions(value: number) {
-    router.push(`/orgao/${agency}/${year}/${value}`);
-  }
+
   return (
     <Page>
       <Head>
@@ -169,7 +162,33 @@ export default function OmaPage({
         ) : (
           <>
             <Captions>
-              <h3>{totalMembers} Membros</h3>
+              <div>
+                <span className="info">
+                  <img src="/img/icon_info.svg" alt="info" />
+                  <div>
+                    <span>
+                      <b>Salário:</b> valor recebido de acordo com a prestação
+                      de serviços, em decorrência do contrato de trabalho.
+                      <br />
+                      <br />
+                      <b>Remuneração:</b> é a soma do salário mais outras
+                      vantagens (indenizações e benefícios). - Benefício:
+                      valores eventuais, por exemplo, auxílios alimentação,
+                      saúde, escolar... - Membro: é o integrante da carreira
+                      'principal' do órgão do sistema de justiça. Por exemplo,
+                      juízes, desembargadores, ministros, defensores,
+                      procuradores públicos, promotores de justiça, procuradores
+                      de justiça, etc...
+                    </span>
+                  </div>
+                </span>
+                <span>
+                  <h3>{totalMembers} Membros</h3>
+                </span>
+                <span>
+                  <img src="/img/anim-group-2/icon_salario.svg" alt="sallary" />
+                </span>
+              </div>
               <ul>
                 <CaptionItems>
                   <img src="/img/anim-group-2/icon_salario.svg" alt="sallary" />
@@ -307,7 +326,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
         agency,
         year,
         month,
-        b: d2,
         fullName: d2.FullName,
         totalMembers: d2.TotalMembers,
         maxWage: d2.MaxWage,
@@ -444,6 +462,46 @@ const Captions = styled.div`
   justify-content: center;
   color: #3e5363;
   background: rgba(62, 83, 99, 0.05);
+  div {
+    padding: 0 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    span {
+      &.info {
+        position: relative;
+        div {
+          background-color: #ced9e1;
+          color: #3e5363;
+          width: 800%;
+          z-index: 100;
+          padding: 2rem;
+          font-size: 2rem;
+          text-align: left;
+          b {
+            font-size: 1.5rem;
+          }
+          display: none;
+          position: absolute;
+        }
+        &:hover {
+          div {
+            display: block;
+          }
+        }
+      }
+      h3 {
+        text-align: center;
+        font-size: 2rem;
+      }
+    }
+    img {
+      background-color: #3e5363;
+      border-radius: 50%;
+      width: 4rem;
+    }
+    align-items: center;
+  }
   ul {
     list-style: none;
     margin-top: 3rem;
