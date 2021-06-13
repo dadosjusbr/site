@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -146,9 +148,11 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     return (
       <MainGraphSection>
         <MainGraphSectionHeader>
-          <h2>
-            {title} ({id.toLocaleUpperCase('pt')})
-          </h2>
+          <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
+            <h2>
+              {title} ({id.toLocaleUpperCase('pt')})
+            </h2>
+          </a>
           <div>
             <button
               className="left"
@@ -324,13 +328,16 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             chartType: 'bar',
                             values:
                               !hidingBenefits &&
-                              createArrayFilledWithValue(12, 0).map((v, i) =>
-                                fixYearDataArray(data)[i]
-                                  ? (fixYearDataArray(data)[i].Perks +
-                                    fixYearDataArray(data)[i].Others) /
-                                  1000000
-                                  : v,
-                              ),
+                              createArrayFilledWithValue(12, 0).map((v, i) => {
+                                if (fixYearDataArray(data)[i]) {
+                                  return (
+                                    (fixYearDataArray(data)[i].Perks +
+                                      fixYearDataArray(data)[i].Others) /
+                                    1000000
+                                  );
+                                }
+                                return v;
+                              }),
                           },
                           {
                             name: 'Salário',
@@ -348,13 +355,15 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             chartType: 'bar',
                             values:
                               !hidingNoData &&
-                              createArrayFilledWithValue(12, 0).map((v, i) =>
-                                fixYearDataArray(data)[i]
-                                  ? v
-                                  : i < data.length
-                                    ? 20
-                                    : 0,
-                              ),
+                              createArrayFilledWithValue(12, 0).map((v, i) => {
+                                if (fixYearDataArray(data)[i]) {
+                                  return v;
+                                }
+                                if (i < data.length) {
+                                  return 20;
+                                }
+                                return 0;
+                              }),
                           },
                         ],
                       },
@@ -553,6 +562,15 @@ const MainGraphSectionHeader = styled.div`
   font-size: 4rem;
   color: #3e5363;
   display: flex;
+  a {
+    color: #3e5363;
+    text-decoration: none;
+    &:hover {
+      h2 {
+        text-decoration: underline #3e5363;
+      }
+    }
+  }
   width: 35rem;
   flex-direction: column;
   align-items: center;
