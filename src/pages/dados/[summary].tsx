@@ -116,6 +116,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
+  const [navigableMonth, setNavigableMonth] = useState<any>();
   useEffect(() => {
     setDataLoading(true);
     fetchAgencyData();
@@ -124,6 +125,13 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     try {
       const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
       setData(agency.MonthTotals ? agency.MonthTotals : []);
+      setNavigableMonth(
+        agency.MonthTotals[agency.MonthTotals.length - 1].Month,
+      );
+      console.log(
+        'mes',
+        agency.MonthTotals[agency.MonthTotals.length - 1].Month,
+      );
       setDataLoading(false);
     } catch (err) {
       console.log(err);
@@ -385,7 +393,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             Compartilhar
             <img src="/img/icon_download_share.svg" alt="calendario" />
           </Button>
-          <a href={`/orgao/${id}/${year}/1`}>
+          <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
             <Button
               textColor="#B361C6"
               borderColor="#B361C6"
