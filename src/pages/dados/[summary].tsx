@@ -349,12 +349,15 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             values:
                               !hidingNoData &&
                               createArrayFilledWithValue(12, 0).map((v, i) =>
-                                fixYearDataArray(data)[i] ? v : 20,
+                                fixYearDataArray(data)[i]
+                                  ? v
+                                  : i < data.length
+                                    ? 20
+                                    : 0,
                               ),
                           },
                         ],
                       },
-
                       type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
                       height: 300,
                       axisOptions: {
