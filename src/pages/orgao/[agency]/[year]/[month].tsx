@@ -3,8 +3,19 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
+import Modal from 'react-modal';
 import ReactFrappeChart from 'react-frappe-charts';
 import styled from 'styled-components';
+import {
+  EmailShareButton,
+  TwitterShareButton,
+  WhatsappShareButton,
+  FacebookShareButton,
+  EmailIcon,
+  TwitterIcon,
+  WhatsappIcon,
+  FacebookIcon,
+} from 'react-share';
 import MONTHS from '../../../../@types/MONTHS';
 import ActivityIndicator from '../../../../components/ActivityIndicator';
 import Button from '../../../../components/Button';
@@ -29,6 +40,7 @@ export default function OmaPage({
   const [chartData, setChartData] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [fileLink, setFileLink] = useState('');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   function getNextDate() {
     let m = parseInt(month, 10);
     let y = parseInt(year, 10);
@@ -209,6 +221,51 @@ export default function OmaPage({
                 </CaptionItems>
               </ul>
             </Captions>
+            <Modal
+              isOpen={modalIsOpen}
+              onAfterOpen={() => {
+                console.log('abriu');
+              }}
+              onRequestClose={() => {
+                setModalIsOpen(false);
+              }}
+              style={{
+                content: {
+                  top: '50%',
+                  left: '50%',
+                  right: 'auto',
+                  bottom: 'auto',
+                  width: '40rem',
+                  height: '20rem',
+                  marginRight: '-50%',
+                  borderRadius: '0',
+                  backgroundColor: '#CED9E1',
+                  transform: 'translate(-50%, -50%)',
+                },
+              }}
+              contentLabel="Example Modal"
+            >
+              <ModalDiv>
+                <span>
+                  <h2>Compartilhar</h2>
+                  <img src="/img/icon_share.svg" alt="share" />
+                </span>
+                <div>
+                  <EmailShareButton url={window.location.href}>
+                    <EmailIcon />
+                  </EmailShareButton>
+                  <TwitterShareButton url={window.location.href}>
+                    <TwitterIcon />
+                  </TwitterShareButton>
+                  <WhatsappShareButton url={window.location.href}>
+                    <WhatsappIcon />
+                  </WhatsappShareButton>
+                  <FacebookShareButton url={window.location.href}>
+                    <FacebookIcon />
+                  </FacebookShareButton>
+                </div>
+              </ModalDiv>
+            </Modal>
             <GraphDivWithPagination>
               <h3>Total de Remunerações de Membros por Mês em {year}</h3>
               <div className="main-chart-wrapper">
@@ -274,7 +331,7 @@ export default function OmaPage({
                       Voltar par anos
                       <img
                         src="/img/icon_calendario_green.svg"
-                        alt="calendario"
+                        alt="callendar"
                       />
                     </Button>
                   </a>
@@ -285,9 +342,10 @@ export default function OmaPage({
                     borderColor="#3e5363"
                     backgroundColor="#fff"
                     hoverBackgroundColor="#3e5363"
+                    onClick={() => setModalIsOpen(true)}
                   >
                     Compartilhar
-                    <img src="/img/icon_share.svg" alt="calendario" />
+                    <img src="/img/icon_share.svg" alt="share" />
                   </Button>
                   <a href={fileLink}>
                     <Button
@@ -297,10 +355,7 @@ export default function OmaPage({
                       hoverBackgroundColor="#3e5363"
                     >
                       Baixar
-                      <img
-                        src="/img/icon_download_share.svg"
-                        alt="calendario"
-                      />
+                      <img src="/img/icon_download_share.svg" alt="download" />
                     </Button>
                   </a>
                 </div>
@@ -614,4 +669,30 @@ const ActivityIndicatorPlaceholder = styled.div`
   color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
   font-size: 3rem;
   align-items: center;
+`;
+const ModalDiv = styled.div`
+  width: 100%;
+  color: #3e5363;
+  span {
+    font-size: 3rem;
+    display: flex;
+    position: relative;
+    justify-content: center;
+    img {
+      position: absolute;
+      left: 120%;
+      bottom: 0%;
+    }
+  }
+  div {
+    width: 80%;
+    justify-content: space-between;
+    margin-top: 3rem;
+    display: flex;
+  }
+  align-items: center;
+  justify-content: center;
+  font-family: 'Roboto Condensed', sans-serif;
+  display: flex;
+  flex-direction: column;
 `;
