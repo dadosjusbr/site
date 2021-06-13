@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import ReactGA from 'react-ga';
 
 // this component is a wrapper used to inject the google analytics in all children components, it connects with google analytics using the React-GA LIB https://github.com/react-ga/react-ga
-const Tracker: React.FC = ({ children }) => {
+const GATracker: React.FC = ({ children }) => {
   useEffect(() => {
     ReactGA.initialize(process.env.ID_ANALYTICS);
     ReactGA.pageview(window.location.pathname);
@@ -10,4 +10,4 @@ const Tracker: React.FC = ({ children }) => {
   return <>{children}</>;
 };
 
-export default Tracker;
+export default GATracker;
