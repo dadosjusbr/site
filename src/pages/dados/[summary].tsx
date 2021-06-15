@@ -163,6 +163,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               <h3>
                 Total de Remunerações de Membros em {year}: R${' '}
                 {(() => {
+                  // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
                   const monthlyTotals = data.map(
                     d => d.Perks + d.Others + d.Wage,
@@ -170,6 +171,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                   monthlyTotals.forEach(w => {
                     total += w;
                   });
+                  // here we return the final value to millions showing 2 decimal places
                   return (total / 1000000).toFixed(2);
                 })()}
                 M
