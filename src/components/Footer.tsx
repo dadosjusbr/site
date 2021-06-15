@@ -8,7 +8,7 @@ export interface FooterPropos extends HTMLAttributes<HTMLDivElement> {
 }
 
 const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT', ...rest }) => (
-  <Container {...rest}>
+  <Container theme={theme} {...rest}>
     <div>
       <img
         src={
