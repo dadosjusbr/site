@@ -118,6 +118,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [navigableMonth, setNavigableMonth] = useState<any>();
+  // this state is used to determine the last month navigable in the given year, to allows to use th "see months" button to navigate to it
   useEffect(() => {
     setDataLoading(true);
     fetchAgencyData();
@@ -126,6 +127,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     try {
       const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
       setData(agency.MonthTotals ? agency.MonthTotals : []);
+      // sets the navigable month in the application state to the last navigable month for the given year
       setNavigableMonth(
         agency.MonthTotals
           ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
@@ -326,6 +328,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             name: 'Benefícios',
                             chartType: 'bar',
                             values:
+                              // this function is used to create an array filled with the zero value, to set all chart entries to 0 after fix the array based in order the entries based in the month, then, if theres a value to set in the month it will done
                               !hidingBenefits &&
                               createArrayFilledWithValue(12, 0).map((v, i) => {
                                 if (fixYearDataArray(data)[i]) {
@@ -353,6 +356,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             name: 'Sem Dados',
                             chartType: 'bar',
                             values:
+                              // this function is used to fill all the values of the NoDataArray with zero value and if a past month is not filled with values it fills the chart entry to shows the error
                               !hidingNoData &&
                               createArrayFilledWithValue(12, 0).map((v, i) => {
                                 if (fixYearDataArray(data)[i]) {
