@@ -105,6 +105,7 @@ export default function OmaPage({
       const { data } = await api.get(
         `/orgao/salario/${agency}/${year}/${month}`,
       );
+      // after get the data from api the state is updated with the chart data
       setChartData(data);
       setFileLink(data.PackageURL);
       setLoading(false);
