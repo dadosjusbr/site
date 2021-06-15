@@ -36,13 +36,13 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   div {
-    border-top: 2px solid #fff;
+    border-top: 2px solid ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
     span {
-      color: #fff;
+      color: ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
       font-family: 'Roboto Condensed', sans-serif;
       font-size: 2rem;
       * {
-        color: #fff;
+        color: ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
         font-family: 'Roboto Condensed', sans-serif;
         font-size: 2rem;
       }

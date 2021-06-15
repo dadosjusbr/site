@@ -18,7 +18,7 @@ const Header: React.FC<HeaderPropos> = ({ theme = 'DEFAULT', ...rest }) => {
   // click.
   const [open, setOpen] = useState(false);
   return (
-    <Container {...rest}>
+    <Container theme={theme} {...rest}>
       <div>
         <Link href="/">
           <button type="button" id="back-to-start">
@@ -42,8 +42,8 @@ const Header: React.FC<HeaderPropos> = ({ theme = 'DEFAULT', ...rest }) => {
             alt="nav_responsive"
           />
         </HeaderButton>
-        <HeaderList open={open}>
-          <HeaderItem>
+        <HeaderList theme={theme} open={open}>
+          <HeaderItem theme={theme}>
             <Link href="/">Inicio</Link>
           </HeaderItem>
           <HeaderItem>
@@ -70,7 +70,8 @@ const Container = styled.div`
     }
     display: flex;
     padding: 51px 10px 34px;
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid
+      ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
     width: 90%;
     justify-content: space-between;
   }
@@ -111,7 +112,7 @@ const HeaderList = styled.ul<{ open: boolean }>`
     justify-content: center;
     flex-direction: column;
     height: 100vh;
-    background-color: #3e5363;
+    background-color: ${p => (p.theme === 'DEFAULT' ? '#3e5363' : '#f5f6f7')};
   }
 `;
 const HeaderButton = styled.button<{ open: boolean }>`
@@ -132,10 +133,11 @@ const HeaderItem = styled.li`
   line-height: 21px;
   text-align: center;
   a {
-    color: #fff;
+    color: ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
     transition: border 0.1s;
     &:hover {
-      border-bottom: 5px solid #fff;
+      border-bottom: 5px solid
+        ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
     }
   }
 `;
