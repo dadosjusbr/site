@@ -1,4 +1,10 @@
-const withTM = require("next-transpile-modules")(["frappe-charts", "react-frappe-charts", "react-modal", "react-share"]);
+const withTM = require("next-transpile-modules")
+  ([
+    "frappe-charts",
+    "react-frappe-charts",
+    "react-modal",
+    "react-share"
+  ]);
 require('dotenv');
 module.exports = {
   // this line is used to allow nextjs to use this esModule in ssr

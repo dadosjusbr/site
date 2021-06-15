@@ -19,8 +19,8 @@ import {
 import MONTHS from '../../../../@types/MONTHS';
 import ActivityIndicator from '../../../../components/ActivityIndicator';
 import Button from '../../../../components/Button';
-import F from '../../../../components/Footer';
-import H from '../../../../components/Header';
+import Footer from '../../../../components/Footer';
+import Header from '../../../../components/Header';
 import api from '../../../../services/api';
 
 export default function OmaPage({
@@ -41,6 +41,7 @@ export default function OmaPage({
   const [loading, setLoading] = useState(true);
   const [fileLink, setFileLink] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
   function getNextDate() {
     let m = parseInt(month, 10);
     let y = parseInt(year, 10);
@@ -52,6 +53,7 @@ export default function OmaPage({
     }
     return { m, y };
   }
+
   function getPreviousDate() {
     let m = parseInt(month, 10);
     let y = parseInt(year, 10);
@@ -63,6 +65,7 @@ export default function OmaPage({
     }
     return { m, y };
   }
+
   const router = useRouter();
 
   async function checkNextYear() {
@@ -75,6 +78,7 @@ export default function OmaPage({
       setNextButtonActive(activateButtonNext);
     }
   }
+
   async function checkPreviousYear() {
     let activateButtonPrevious = true;
     const { m, y } = getPreviousDate();
@@ -86,10 +90,14 @@ export default function OmaPage({
     }
   }
 
+  // this effect is using the page changing as a hook to fetch the data from api
   useEffect(() => {
+    // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
     setLoading(true);
+    // then it checks the next and the previous year to block the navigation buttons or to help to choose the right year
     checkNextYear();
     checkPreviousYear();
+    // finally it fetchs the data from the api to fill the chart with the agency/month/year data
     fetchChartData();
   }, [year, month]);
   async function fetchChartData() {
@@ -601,35 +609,6 @@ const CaptionItems = styled.li`
     color: #3e5363;
     margin: 10px 0;
     font-family: 'Roboto Condensed', sans-serif;
-  }
-`;
-const Header = styled(H)`
-  div {
-    ul {
-      @media (max-width: 600px) {
-        background: #f5f6f7;
-      }
-      li {
-        a {
-          color: #3e5363;
-          &:hover {
-            border-color: #3e5363;
-          }
-        }
-      }
-    }
-    border-bottom: 2px solid #3e5363;
-  }
-`;
-const Footer = styled(F)`
-  div {
-    border-top: 2px solid #3e5363;
-    span {
-      color: #3e5363;
-      * {
-        color: #3e5363;
-      }
-    }
   }
 `;
 const GraphDivWithPagination = styled.div`

@@ -174,12 +174,14 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               <h3>
                 Total de Remunerações de Membros em {year}: R${' '}
                 {(() => {
-                  let cont = 0;
-                  const benefits = data.map(d => d.Perks + d.Others + d.Wage);
-                  benefits.forEach(w => {
-                    cont += w;
+                  let total = 0;
+                  const monthlyTotals = data.map(
+                    d => d.Perks + d.Others + d.Wage,
+                  );
+                  monthlyTotals.forEach(w => {
+                    total += w;
                   });
-                  return (cont / 1000000).toFixed(2);
+                  return (total / 1000000).toFixed(2);
                 })()}
                 M
               </h3>
@@ -226,12 +228,12 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                 <b>
                   R${' '}
                   {(() => {
-                    let cont = 0;
+                    let total = 0;
                     const wages = data.map(d => d.Wage);
                     wages.forEach(w => {
-                      cont += w;
+                      total += w;
                     });
-                    return (cont / 1000000).toFixed(2);
+                    return (total / 1000000).toFixed(2);
                   })()}
                   M
                 </b>
@@ -261,12 +263,12 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                 <b>
                   R${' '}
                   {(() => {
-                    let cont = 0;
-                    const benefits = data.map(d => d.Perks + d.Others);
-                    benefits.forEach(w => {
-                      cont += w;
+                    let total = 0;
+                    const monthlyTotals = data.map(d => d.Perks + d.Others);
+                    monthlyTotals.forEach(w => {
+                      total += w;
                     });
-                    return (cont / 1000000).toFixed(2);
+                    return (total / 1000000).toFixed(2);
                   })()}
                   M
                 </b>
