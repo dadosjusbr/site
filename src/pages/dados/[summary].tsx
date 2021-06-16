@@ -5,7 +5,6 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import ReactFrappeChart from 'react-frappe-charts';
 import dynamic from 'next/dynamic';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Button from '../../components/Button';
