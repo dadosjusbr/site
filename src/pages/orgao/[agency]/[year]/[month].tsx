@@ -4,7 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import Modal from 'react-modal';
-import ReactFrappeChart from 'react-frappe-charts';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import {
   EmailShareButton,
@@ -22,6 +22,8 @@ import Button from '../../../../components/Button';
 import Footer from '../../../../components/Footer';
 import Header from '../../../../components/Header';
 import api from '../../../../services/api';
+
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 export default function OmaPage({
   agency,
@@ -283,47 +285,89 @@ export default function OmaPage({
                     <span>Não há dados de membros para esse mês</span>
                   </ActivityIndicatorPlaceholder>
                 ) : (
-                  <ReactFrappeChart
-                    {...{
-                      data: {
-                        labels: [
+                  <Chart
+                    options={{
+                      legend: {
+                        show: false,
+                      },
+                      colors: ['#c9a0d0', '#513658'],
+                      chart: {
+                        stacked: true,
+                        toolbar: {
+                          show: false,
+                        },
+                        zoom: {
+                          enabled: true,
+                        },
+                      },
+                      responsive: [
+                        {
+                          breakpoint: 500,
+                          options: {
+                            chart: {
+                              width: '95%',
+                            },
+                          },
+                        },
+                      ],
+                      plotOptions: {
+                        bar: {
+                          horizontal: true,
+                          barHeight: '70%',
+                        },
+                      },
+                      yaxis: {
+                        decimalsInFloat: 2,
+                        labels: {
+                          show: true,
+                          minWidth: 0,
+                          maxWidth: 160,
+                          style: {
+                            colors: [],
+                            fontSize: '14px',
+                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontWeight: 600,
+                            cssClass: 'apexcharts-yaxis-label',
+                          },
+                        },
+                      },
+                      xaxis: {
+                        categories: [
                           '> R$ 50 mil',
                           'R$ 40~50 mil',
                           'R$ 30~40 mil',
                           'R$ 20~30 mil',
                           'R$ 10~20 mil',
-                          'R$ 10 mil',
+                          '< R$ 10 mil',
                         ],
-                        datasets: [
-                          {
-                            name: 'Benefícios',
-                            chartType: 'bar',
-                            values: [
-                              chartData.Members['-1'],
-                              chartData.Members['50000'],
-                              chartData.Members['40000'],
-                              chartData.Members['30000'],
-                              chartData.Members['20000'],
-                              chartData.Members['10000'],
-                            ],
-                          },
-                        ],
+                        title: {
+                          text: 'Quantidade',
+                          offsetY: 30,
+                        },
                       },
-                      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
-                      height: 300,
-                      axisOptions: {
-                        xAxisMode: 'tick',
+                      fill: {
+                        opacity: 1,
                       },
-                      colors: ['#B361C6'],
-                      barOptions: {
-                        stacked: 1,
-                        spaceRatio: 0.6,
-                      },
-                      tooltipOptions: {
-                        formatTooltipX: d => '',
-                        formatTooltipY: d => `${d} Membros`,
+                      dataLabels: {
+                        enabled: false,
                       },
                     }}
+                    series={[
+                      {
+                        name: 'Membros',
+                        data: [
+                          chartData.Members['-1'],
+                          chartData.Members['50000'],
+                          chartData.Members['40000'],
+                          chartData.Members['30000'],
+                          chartData.Members['20000'],
+                          chartData.Members['10000'],
+                        ],
+                      },
+                    ]}
+                    width="100%"
+                    height="500"
+                    type="bar"
                   />
                 )}
               </div>
@@ -632,7 +676,10 @@ const GraphDivWithPagination = styled.div`
       }
       text {
         font-family: 'Roboto Condensed', sans-serif;
-        font-size: 290%;
+        font-size: 2.5rem;
+        @media (max-width: 600px) {
+          font-size: 2rem;
+        }
         color: #fff;
         font-weight: bold;
         &.title {

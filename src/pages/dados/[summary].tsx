@@ -12,6 +12,7 @@ import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
 import STATE_AGENCIES from '../../@types/STATE_AGENCIES';
+import MONTHS from '../../@types/MONTHS';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -343,13 +344,13 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                                 maxWidth: 50,
                                 style: {
                                   colors: [],
-                                  fontSize: '12px',
-                                  fontFamily: 'Helvetica, Arial, sans-serif',
+                                  fontSize: '20px',
+                                  fontFamily: 'Roboto Condensed, sans-serif',
                                   fontWeight: 600,
                                   cssClass: 'apexcharts-yaxis-label',
                                 },
                                 formatter(value) {
-                                  return `R$ ${(value / 1000000).toFixed(1)}M`;
+                                  return `R$ ${(value / 1000000).toFixed(2)}M`;
                                 },
                               },
                             },
@@ -387,25 +388,20 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                           formatter(value) {
                             if (value === 29000321)
                               return 'Não existem dados para esse mês';
-                            return `R$ ${(value / 1000000).toFixed(1)}M`;
+                            return `R$ ${(value / 1000000).toFixed(2)}M`;
                           },
                         },
                       },
                       xaxis: {
-                        categories: [
-                          'JAN',
-                          'FEV',
-                          'MAR',
-                          'ABR',
-                          'MAI',
-                          'JUN',
-                          'JUL',
-                          'AGO',
-                          'SET',
-                          'OUT',
-                          'NOV',
-                          'DEZ',
-                        ],
+                        categories: (() => {
+                          const list = [];
+                          for (const i in MONTHS) {
+                            if (Number.isNaN(Number(i))) {
+                              list.push(i);
+                            }
+                          }
+                          return list;
+                        })(),
                         title: {
                           text: 'Meses',
                           offsetX: 6,
@@ -472,6 +468,8 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                         }),
                       },
                     ]}
+                    width="100%"
+                    height="500"
                     type="bar"
                   />
                 </div>
