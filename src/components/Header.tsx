@@ -1,10 +1,14 @@
 import Link from 'next/link';
-import { useState } from 'react';
+import { HTMLAttributes, useState } from 'react';
 import styled, { keyframes } from 'styled-components';
 
 // The header partial is used to navigate and brief the application
 // each link is an anchor to a different page, achoring using next/link https://nextjs.org/docs/api-reference/next/link
-const Header = () => {
+export interface HeaderPropos extends HTMLAttributes<HTMLDivElement> {
+  theme?: 'DEFAULT' | 'LIGHT';
+}
+
+const Header: React.FC<HeaderPropos> = ({ theme = 'DEFAULT', ...rest }) => {
   // this method is used to change the application state to modify the context of multiples elements
   function handleClick() {
     setOpen(!open);
@@ -14,24 +18,38 @@ const Header = () => {
   // click.
   const [open, setOpen] = useState(false);
   return (
-    <Container>
+    <Container theme={theme} {...rest}>
       <div>
         <Link href="/">
           <button type="button" id="back-to-start">
-            <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
+            <img
+              src={
+                theme === 'DEFAULT'
+                  ? '/img/header/icon_dadosjusbr_default.svg'
+                  : '/img/header/icon_dadosjusbr_light.svg'
+              }
+              alt="dados_jus_logo"
+            />
           </button>
         </Link>
         <HeaderButton open={open} onClick={handleClick}>
-          <img src="/img/nav_responsive_button.svg" alt="nav_responsive" />
+          <img
+            src={
+              theme === 'DEFAULT'
+                ? '/img/nav_responsive_button.svg'
+                : '/img/nav_responsive_button_light.svg'
+            }
+            alt="nav_responsive"
+          />
         </HeaderButton>
-        <HeaderList open={open}>
-          <HeaderItem>
+        <HeaderList theme={theme} open={open}>
+          <HeaderItem theme={theme}>
             <Link href="/">Inicio</Link>
           </HeaderItem>
-          <HeaderItem>
+          <HeaderItem theme={theme}>
             <Link href="/equipe">Equipe</Link>
           </HeaderItem>
-          <HeaderItem>
+          <HeaderItem theme={theme}>
             <Link href="/dados/PB">Dados</Link>
           </HeaderItem>
         </HeaderList>
@@ -52,7 +70,8 @@ const Container = styled.div`
     }
     display: flex;
     padding: 51px 10px 34px;
-    border-bottom: 2px solid #fff;
+    border-bottom: 2px solid
+      ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
     width: 90%;
     justify-content: space-between;
   }
@@ -93,7 +112,7 @@ const HeaderList = styled.ul<{ open: boolean }>`
     justify-content: center;
     flex-direction: column;
     height: 100vh;
-    background-color: #3e5363;
+    background-color: ${p => (p.theme === 'DEFAULT' ? '#3e5363' : '#f5f6f7')};
   }
 `;
 const HeaderButton = styled.button<{ open: boolean }>`
@@ -114,10 +133,11 @@ const HeaderItem = styled.li`
   line-height: 21px;
   text-align: center;
   a {
-    color: #fff;
+    color: ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
     transition: border 0.1s;
     &:hover {
-      border-bottom: 5px solid #fff;
+      border-bottom: 5px solid
+        ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
     }
   }
 `;

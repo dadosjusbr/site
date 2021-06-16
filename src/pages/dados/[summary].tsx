@@ -1,3 +1,5 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
@@ -115,6 +117,8 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
+  const [navigableMonth, setNavigableMonth] = useState<any>();
+  // this state is used to determine the last month navigable in the given year, to allows to use th "see months" button to navigate to it
   useEffect(() => {
     setDataLoading(true);
     fetchAgencyData();
@@ -123,6 +127,12 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     try {
       const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
       setData(agency.MonthTotals ? agency.MonthTotals : []);
+      // sets the navigable month in the application state to the last navigable month for the given year
+      setNavigableMonth(
+        agency.MonthTotals
+          ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
+          : 1,
+      );
       setDataLoading(false);
     } catch (err) {
       console.log(err);
@@ -139,9 +149,11 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     return (
       <MainGraphSection>
         <MainGraphSectionHeader>
-          <h2>
-            {title} ({id.toLocaleUpperCase('pt')})
-          </h2>
+          <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
+            <h2>
+              {title} ({id.toLocaleUpperCase('pt')})
+            </h2>
+          </a>
           <div>
             <button
               className="left"
@@ -157,18 +169,42 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           </div>
         </MainGraphSectionHeader>
         <Captions>
-          <h3>
-            Total de Remunerações de Membros em {year}: R${' '}
-            {(() => {
-              let cont = 0;
-              const benefits = data.map(d => d.Perks + d.Others + d.Wage);
-              benefits.forEach(w => {
-                cont += w;
-              });
-              return (cont / 1000000).toFixed(2);
-            })()}
-            M
-          </h3>
+          <div>
+            <span>
+              <h3>
+                Total de Remunerações de Membros em {year}: R${' '}
+                {(() => {
+                  // this function is used to sum the data from all money arrays and generate the last remuneration value
+                  let total = 0;
+                  const monthlyTotals = data.map(
+                    d => d.Perks + d.Others + d.Wage,
+                  );
+                  monthlyTotals.forEach(w => {
+                    total += w;
+                  });
+                  // here we return the final value to millions showing 2 decimal places
+                  return (total / 1000000).toFixed(2);
+                })()}
+                M
+              </h3>
+            </span>
+            <span className="info">
+              <img src="/img/icon_info.svg" alt="info" />
+              <div>
+                <span>
+                  <b>Salário:</b> valor recebido de acordo com a prestação de
+                  serviços, em decorrência do contrato de trabalho.
+                  <br />
+                  <br />
+                  <b>Benefícios:</b> Qualquer remuneração recebida por um
+                  funcionário que não seja proveniente de salário. Exemplos de
+                  benefícios são: diárias, gratificações, remuneração por função
+                  de confiança, benefícios pessoais ou eventuais, auxílios
+                  alimentação, saúde, escolar...
+                </span>
+              </div>
+            </span>
+          </div>
           <ul>
             <CaptionItems>
               <button
@@ -194,12 +230,12 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                 <b>
                   R${' '}
                   {(() => {
-                    let cont = 0;
+                    let total = 0;
                     const wages = data.map(d => d.Wage);
                     wages.forEach(w => {
-                      cont += w;
+                      total += w;
                     });
-                    return (cont / 1000000).toFixed(2);
+                    return (total / 1000000).toFixed(2);
                   })()}
                   M
                 </b>
@@ -229,12 +265,12 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                 <b>
                   R${' '}
                   {(() => {
-                    let cont = 0;
-                    const benefits = data.map(d => d.Perks + d.Others);
-                    benefits.forEach(w => {
-                      cont += w;
+                    let total = 0;
+                    const monthlyTotals = data.map(d => d.Perks + d.Others);
+                    monthlyTotals.forEach(w => {
+                      total += w;
                     });
-                    return (cont / 1000000).toFixed(2);
+                    return (total / 1000000).toFixed(2);
                   })()}
                   M
                 </b>
@@ -296,14 +332,18 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             name: 'Benefícios',
                             chartType: 'bar',
                             values:
+                              // this function is used to create an array filled with the zero value, to set all chart entries to 0 after fix the array based in order the entries based in the month, then, if theres a value to set in the month it will done
                               !hidingBenefits &&
-                              createArrayFilledWithValue(12, 0).map((v, i) =>
-                                fixYearDataArray(data)[i]
-                                  ? (fixYearDataArray(data)[i].Perks +
-                                    fixYearDataArray(data)[i].Others) /
-                                  1000000
-                                  : v,
-                              ),
+                              createArrayFilledWithValue(12, 0).map((v, i) => {
+                                if (fixYearDataArray(data)[i]) {
+                                  return (
+                                    (fixYearDataArray(data)[i].Perks +
+                                      fixYearDataArray(data)[i].Others) /
+                                    1000000
+                                  );
+                                }
+                                return v;
+                              }),
                           },
                           {
                             name: 'Salário',
@@ -320,14 +360,20 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             name: 'Sem Dados',
                             chartType: 'bar',
                             values:
+                              // this function is used to fill all the values of the NoDataArray with zero value and if a past month is not filled with values it fills the chart entry to shows the error
                               !hidingNoData &&
-                              createArrayFilledWithValue(12, 0).map((v, i) =>
-                                fixYearDataArray(data)[i] ? v : 20,
-                              ),
+                              createArrayFilledWithValue(12, 0).map((v, i) => {
+                                if (fixYearDataArray(data)[i]) {
+                                  return v;
+                                }
+                                if (i < data.length) {
+                                  return 20;
+                                }
+                                return 0;
+                              }),
                           },
                         ],
                       },
-
                       type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
                       height: 300,
                       axisOptions: {
@@ -364,15 +410,17 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             Compartilhar
             <img src="/img/icon_download_share.svg" alt="calendario" />
           </Button>
-          <Button
-            textColor="#B361C6"
-            borderColor="#B361C6"
-            backgroundColor="#fff"
-            hoverBackgroundColor="#B361C6"
-          >
-            Explorar Meses
-            <img src="/img/icon_calendario.svg" alt="calendario" />
-          </Button>
+          <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
+            <Button
+              textColor="#B361C6"
+              borderColor="#B361C6"
+              backgroundColor="#fff"
+              hoverBackgroundColor="#B361C6"
+            >
+              Explorar Meses
+              <img src="/img/icon_calendario.svg" alt="calendario" />
+            </Button>
+          </a>
         </div>
       </MainGraphSection>
     );
@@ -464,6 +512,48 @@ const Captions = styled.div`
   justify-content: center;
   color: #3e5363;
   background: rgba(62, 83, 99, 0.05);
+  div {
+    padding: 0 1rem;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    span {
+      &.info {
+        position: relative;
+        div {
+          background-color: #ced9e1;
+          color: #3e5363;
+          width: 600%;
+          z-index: 100;
+          padding: 2rem;
+          font-size: 2rem;
+          right: 0%;
+          text-align: left;
+          b {
+            font-size: 1.5rem;
+          }
+          display: none;
+          position: absolute;
+        }
+        &:hover {
+          div {
+            display: block;
+          }
+        }
+      }
+      h3 {
+        text-align: center;
+        font-size: 2rem;
+      }
+    }
+    img {
+      background-color: #3e5363;
+      border-radius: 50%;
+      width: 3rem;
+      margin: 0 1rem;
+    }
+    align-items: center;
+  }
   ul {
     list-style: none;
     margin-top: 3rem;
@@ -479,6 +569,15 @@ const MainGraphSectionHeader = styled.div`
   font-size: 4rem;
   color: #3e5363;
   display: flex;
+  a {
+    color: #3e5363;
+    text-decoration: none;
+    &:hover {
+      h2 {
+        text-decoration: underline #3e5363;
+      }
+    }
+  }
   width: 35rem;
   flex-direction: column;
   align-items: center;

@@ -238,6 +238,7 @@ const TeamMateProfile = styled.li`
       width: 20rem;
     }
     span {
+      margin-top: 3rem;
       font-size: 2.3rem;
       font-weight: bold;
     }
@@ -247,6 +248,7 @@ const TeamMateProfile = styled.li`
     color: #fff;
     @media (max-width: 600px) {
       padding: 0;
+      margin-bottom: 3rem;
       font-size: 2.5rem;
       span {
         font-size: 1.7rem;

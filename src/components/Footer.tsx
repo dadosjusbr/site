@@ -1,17 +1,34 @@
+import { HTMLAttributes } from 'react';
 import styled from 'styled-components';
 
 // The footer is a component that appears at various times in the application
 // It consists of DadosJus logo and a message for contact.
+export interface FooterPropos extends HTMLAttributes<HTMLDivElement> {
+  theme?: 'DEFAULT' | 'LIGHT';
+}
 
-const Footer = () => (
-  <Container>
+const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT', ...rest }) => (
+  <Container theme={theme} {...rest}>
     <div>
-      <img src="/img/icon_dadosjusbr.svg" alt="dados_jus_logo" />
+      <img
+        src={
+          theme === 'DEFAULT'
+            ? '/img/footer/icon_dadosjusbr_dafault.svg'
+            : '/img/footer/icon_dadosjusbr_light.svg'
+        }
+        alt="dados_jus_logo"
+      />
       <span>
         Alguma dica? Tem algum feedback geral? Se você tiver uma ideia que você
         gostaria de ver no DadosJusBr, envie-nos um e-mail{' '}
-        <a href="/">dadosjusbr@gmail.com</a> ou visite nosso{' '}
-        <a href="/">github</a> .
+        <b>
+          <a href="/">dadosjusbr@gmail.com</a>
+        </b>{' '}
+        ou visite nosso{' '}
+        <b>
+          <a href="https://github.com/dadosjusbr/">github</a>
+        </b>
+        .
       </span>
     </div>
   </Container>
@@ -25,13 +42,13 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   div {
-    border-top: 2px solid #fff;
+    border-top: 2px solid ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
     span {
-      color: #fff;
+      color: ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
       font-family: 'Roboto Condensed', sans-serif;
       font-size: 2rem;
       * {
-        color: #fff;
+        color: ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
         font-family: 'Roboto Condensed', sans-serif;
         font-size: 2rem;
       }
