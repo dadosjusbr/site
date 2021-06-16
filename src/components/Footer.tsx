@@ -21,8 +21,14 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT', ...rest }) => (
       <span>
         Alguma dica? Tem algum feedback geral? Se você tiver uma ideia que você
         gostaria de ver no DadosJusBr, envie-nos um e-mail{' '}
-        <a href="/">dadosjusbr@gmail.com</a> ou visite nosso{' '}
-        <a href="/">github</a> .
+        <b>
+          <a href="/">dadosjusbr@gmail.com</a>
+        </b>{' '}
+        ou visite nosso{' '}
+        <b>
+          <a href="https://github.com/dadosjusbr/">github</a>
+        </b>
+        .
       </span>
     </div>
   </Container>

@@ -1,10 +1,11 @@
+/* eslint-disable guard-for-in */
+/* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import ReactFrappeChart from 'react-frappe-charts';
-import Link from 'next/link';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
@@ -116,6 +117,8 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
+  const [navigableMonth, setNavigableMonth] = useState<any>();
+  // this state is used to determine the last month navigable in the given year, to allows to use th "see months" button to navigate to it
   useEffect(() => {
     setDataLoading(true);
     fetchAgencyData();
@@ -124,6 +127,12 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     try {
       const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
       setData(agency.MonthTotals ? agency.MonthTotals : []);
+      // sets the navigable month in the application state to the last navigable month for the given year
+      setNavigableMonth(
+        agency.MonthTotals
+          ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
+          : 1,
+      );
       setDataLoading(false);
     } catch (err) {
       console.log(err);
@@ -140,9 +149,11 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     return (
       <MainGraphSection>
         <MainGraphSectionHeader>
-          <h2>
-            {title} ({id.toLocaleUpperCase('pt')})
-          </h2>
+          <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
+            <h2>
+              {title} ({id.toLocaleUpperCase('pt')})
+            </h2>
+          </a>
           <div>
             <button
               className="left"
@@ -321,14 +332,18 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             name: 'Benefícios',
                             chartType: 'bar',
                             values:
+                              // this function is used to create an array filled with the zero value, to set all chart entries to 0 after fix the array based in order the entries based in the month, then, if theres a value to set in the month it will done
                               !hidingBenefits &&
-                              createArrayFilledWithValue(12, 0).map((v, i) =>
-                                fixYearDataArray(data)[i]
-                                  ? (fixYearDataArray(data)[i].Perks +
-                                    fixYearDataArray(data)[i].Others) /
-                                  1000000
-                                  : v,
-                              ),
+                              createArrayFilledWithValue(12, 0).map((v, i) => {
+                                if (fixYearDataArray(data)[i]) {
+                                  return (
+                                    (fixYearDataArray(data)[i].Perks +
+                                      fixYearDataArray(data)[i].Others) /
+                                    1000000
+                                  );
+                                }
+                                return v;
+                              }),
                           },
                           {
                             name: 'Salário',
@@ -345,14 +360,20 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                             name: 'Sem Dados',
                             chartType: 'bar',
                             values:
+                              // this function is used to fill all the values of the NoDataArray with zero value and if a past month is not filled with values it fills the chart entry to shows the error
                               !hidingNoData &&
-                              createArrayFilledWithValue(12, 0).map((v, i) =>
-                                fixYearDataArray(data)[i] ? v : 20,
-                              ),
+                              createArrayFilledWithValue(12, 0).map((v, i) => {
+                                if (fixYearDataArray(data)[i]) {
+                                  return v;
+                                }
+                                if (i < data.length) {
+                                  return 20;
+                                }
+                                return 0;
+                              }),
                           },
                         ],
                       },
-
                       type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
                       height: 300,
                       axisOptions: {
@@ -389,7 +410,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             Compartilhar
             <img src="/img/icon_download_share.svg" alt="calendario" />
           </Button>
-          <a href={`/orgao/${id}/${year}/1`}>
+          <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
             <Button
               textColor="#B361C6"
               borderColor="#B361C6"
@@ -548,6 +569,15 @@ const MainGraphSectionHeader = styled.div`
   font-size: 4rem;
   color: #3e5363;
   display: flex;
+  a {
+    color: #3e5363;
+    text-decoration: none;
+    &:hover {
+      h2 {
+        text-decoration: underline #3e5363;
+      }
+    }
+  }
   width: 35rem;
   flex-direction: column;
   align-items: center;
