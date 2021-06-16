@@ -344,7 +344,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                                 maxWidth: 50,
                                 style: {
                                   colors: [],
-                                  fontSize: '20px',
+                                  fontSize: '10rem',
                                   fontFamily: 'Roboto Condensed, sans-serif',
                                   fontWeight: 600,
                                   cssClass: 'apexcharts-yaxis-label',
@@ -381,7 +381,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                           style: {
                             colors: [],
                             fontSize: '16px',
-                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontFamily: 'Roboto Condensed, sans-serif',
                             fontWeight: 600,
                             cssClass: 'apexcharts-yaxis-label',
                           },
@@ -433,39 +433,57 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                     series={[
                       {
                         name: 'Benefícios',
-                        data:
-                          !hidingBenefits &&
-                          createArrayFilledWithValue(12, 0).map((v, i) => {
-                            if (fixYearDataArray(data)[i]) {
-                              return (
-                                fixYearDataArray(data)[i].Perks +
-                                fixYearDataArray(data)[i].Others
-                              );
-                            }
-                            return v;
-                          }),
+                        data: (() => {
+                          if (!hidingBenefits) {
+                            return createArrayFilledWithValue(12, 0).map(
+                              (v, i) => {
+                                if (fixYearDataArray(data)[i]) {
+                                  return (
+                                    fixYearDataArray(data)[i].Perks +
+                                    fixYearDataArray(data)[i].Others
+                                  );
+                                }
+                                return v;
+                              },
+                            );
+                          }
+                          return createArrayFilledWithValue(12, 0);
+                        })(),
                       },
                       {
                         name: 'Salário',
-                        data:
-                          !hidingWage &&
-                          createArrayFilledWithValue(12, 0).map((v, i) =>
-                            fixYearDataArray(data)[i]
-                              ? fixYearDataArray(data)[i].Wage
-                              : v,
-                          ),
+                        data: (() => {
+                          if (!hidingWage) {
+                            return createArrayFilledWithValue(
+                              12,
+                              0,
+                            ).map((v, i) =>
+                              fixYearDataArray(data)[i]
+                                ? fixYearDataArray(data)[i].Wage
+                                : v,
+                            );
+                          }
+                          return createArrayFilledWithValue(12, 0);
+                        })(),
                       },
                       {
                         name: 'Sem Dados',
-                        data: createArrayFilledWithValue(12, 0).map((v, i) => {
-                          if (fixYearDataArray(data)[i]) {
-                            return v;
+                        data: (() => {
+                          if (!hidingNoData) {
+                            return createArrayFilledWithValue(12, 0).map(
+                              (v, i) => {
+                                if (fixYearDataArray(data)[i]) {
+                                  return v;
+                                }
+                                if (i < data.length) {
+                                  return 29000321;
+                                }
+                                return 0;
+                              },
+                            );
                           }
-                          if (i < data.length) {
-                            return 29000321;
-                          }
-                          return 0;
-                        }),
+                          return createArrayFilledWithValue(12, 0);
+                        })(),
                       },
                     ]}
                     width="100%"
@@ -574,8 +592,12 @@ const GraphDivWithPagination = styled.div`
       }
       text {
         font-family: 'Roboto Condensed', sans-serif;
-        font-size: 290%;
+        font-size: 400%;
         color: #fff;
+        font-size: 2rem;
+        @media (max-width: 600px) {
+          font-size: 1.5rem;
+        }
         font-weight: bold;
         &.title {
           font-size: 120%;

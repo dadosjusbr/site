@@ -3,19 +3,9 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Modal from 'react-modal';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
-import {
-  EmailShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  FacebookShareButton,
-  EmailIcon,
-  TwitterIcon,
-  WhatsappIcon,
-  FacebookIcon,
-} from 'react-share';
+import ShareModal from '../../../../components/ShareModal';
 import MONTHS from '../../../../@types/MONTHS';
 import ActivityIndicator from '../../../../components/ActivityIndicator';
 import Button from '../../../../components/Button';
@@ -232,51 +222,10 @@ export default function OmaPage({
                 </CaptionItems>
               </ul>
             </Captions>
-            <Modal
+            <ShareModal
               isOpen={modalIsOpen}
-              onAfterOpen={() => {
-                console.log('abriu');
-              }}
-              onRequestClose={() => {
-                setModalIsOpen(false);
-              }}
-              style={{
-                content: {
-                  top: '50%',
-                  left: '50%',
-                  right: 'auto',
-                  bottom: 'auto',
-                  width: '40rem',
-                  height: '20rem',
-                  marginRight: '-50%',
-                  borderRadius: '0',
-                  backgroundColor: '#CED9E1',
-                  transform: 'translate(-50%, -50%)',
-                },
-              }}
-              contentLabel="Example Modal"
-            >
-              <ModalDiv>
-                <span>
-                  <h2>Compartilhar</h2>
-                  <img src="/img/icon_share.svg" alt="share" />
-                </span>
-                <div>
-                  <EmailShareButton url={window.location.href}>
-                    <EmailIcon />
-                  </EmailShareButton>
-                  <TwitterShareButton url={window.location.href}>
-                    <TwitterIcon />
-                  </TwitterShareButton>
-                  <WhatsappShareButton url={window.location.href}>
-                    <WhatsappIcon />
-                  </WhatsappShareButton>
-                  <FacebookShareButton url={window.location.href}>
-                    <FacebookIcon />
-                  </FacebookShareButton>
-                </div>
-              </ModalDiv>
-            </Modal>
+              onRequestClose={() => setModalIsOpen(false)}
+            />
             <GraphDivWithPagination>
               <h3>Total de Remunerações de Membros por Mês em {year}</h3>
               <div className="main-chart-wrapper">
@@ -325,7 +274,7 @@ export default function OmaPage({
                           style: {
                             colors: [],
                             fontSize: '14px',
-                            fontFamily: 'Helvetica, Arial, sans-serif',
+                            fontFamily: 'Roboto Condensed, sans-serif',
                             fontWeight: 600,
                             cssClass: 'apexcharts-yaxis-label',
                           },
@@ -704,30 +653,4 @@ const ActivityIndicatorPlaceholder = styled.div`
   color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
   font-size: 3rem;
   align-items: center;
-`;
-const ModalDiv = styled.div`
-  width: 100%;
-  color: #3e5363;
-  span {
-    font-size: 3rem;
-    display: flex;
-    position: relative;
-    justify-content: center;
-    img {
-      position: absolute;
-      left: 120%;
-      bottom: 0%;
-    }
-  }
-  div {
-    width: 80%;
-    justify-content: space-between;
-    margin-top: 3rem;
-    display: flex;
-  }
-  align-items: center;
-  justify-content: center;
-  font-family: 'Roboto Condensed', sans-serif;
-  display: flex;
-  flex-direction: column;
 `;
