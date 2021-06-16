@@ -26,7 +26,7 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT', ...rest }) => (
         </b>{' '}
         ou visite nosso{' '}
         <b>
-          <a href="/">github</a>
+          <a href="https://github.com/dadosjusbr/">github</a>
         </b>
         .
       </span>
