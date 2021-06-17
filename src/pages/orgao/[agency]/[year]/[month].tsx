@@ -208,8 +208,12 @@ export default function OmaPage({
                 <CaptionItems>
                   <img src="/img/anim-group-2/icon_salario.svg" alt="sallary" />
                   <div>
-                    <span>Maior salário: R$ {maxWage.toFixed(2)}</span>
-                    <span>Total Salários: R$ {totalWage.toFixed(2)}</span>
+                    <span>
+                      Maior salário: R$ {(maxWage / 1000).toFixed(2)} mil
+                    </span>
+                    <span>
+                      Total Salários: R$ {(totalWage / 100000).toFixed(2)}M
+                    </span>
                   </div>
                 </CaptionItems>
                 <CaptionItems>
@@ -218,8 +222,12 @@ export default function OmaPage({
                     alt="benefits"
                   />
                   <div>
-                    <span>Maior Benefício: R$ {maxPerk.toFixed(2)}</span>
-                    <span>Total benefícios: R$ {totalPerks.toFixed(2)}</span>
+                    <span>
+                      Maior Benefício: R$ {(maxPerk / 1000).toFixed(2)} mil
+                    </span>
+                    <span>
+                      Total benefícios: R$ {(totalPerks / 1000000).toFixed(2)}M
+                    </span>
                   </div>
                 </CaptionItems>
               </ul>
