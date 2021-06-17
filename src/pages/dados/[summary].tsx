@@ -315,7 +315,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                 <div className="main-chart-wrapper">
                   <Chart
                     options={{
-                      colors: ['#97BB2F', '#364958', '#000000'],
+                      colors: ['##97BB2F', '##2FBB96', '#000000'],
                       chart: {
                         stacked: true,
                         toolbar: {
