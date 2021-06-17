@@ -292,12 +292,12 @@ export default function OmaPage({
                       },
                       xaxis: {
                         categories: [
-                          '< R$ 10 mil',
-                          'R$ 10-20 mil',
-                          'R$ 20-30 mil',
-                          'R$ 30-40 mil',
-                          'R$ 40-50 mil',
                           '> R$ 50 mil',
+                          'R$ 40-50 mil',
+                          'R$ 30-40 mil',
+                          'R$ 20-30 mil',
+                          'R$ 10-20 mil',
+                          '< R$ 10 mil',
                         ],
                         title: {
                           text: 'Quantidade',
@@ -315,12 +315,12 @@ export default function OmaPage({
                       {
                         name: 'Membros',
                         data: [
-                          chartData.Members['10000'],
-                          chartData.Members['20000'],
-                          chartData.Members['30000'],
-                          chartData.Members['40000'],
-                          chartData.Members['50000'],
                           chartData.Members['-1'],
+                          chartData.Members['50000'],
+                          chartData.Members['40000'],
+                          chartData.Members['30000'],
+                          chartData.Members['20000'],
+                          chartData.Members['10000'],
                         ],
                       },
                     ]}
