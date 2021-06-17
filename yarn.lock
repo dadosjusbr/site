@@ -1571,11 +1571,6 @@ foreach@^2.0.5:
   resolved "https://registry.yarnpkg.com/foreach/-/foreach-2.0.5.tgz#0bee005018aeb260d0a3af3ae658dd0136ec1b99"
   integrity sha1-C+4AUBiusmDQo6865ljdATbsG5k=
 
-frappe-charts@^1.6.1:
-  version "1.6.1"
-  resolved "https://registry.yarnpkg.com/frappe-charts/-/frappe-charts-1.6.1.tgz#2162cec05f4524b10cf232df8787a3ac20218384"
-  integrity sha512-Fteae/oqv4XdxP4ALoqTmUBBvXt8ECtghziqabp1ZA4yLqY8a3haafNqluwUCxnBOvrV+EdpvhZu0H+VEebX1Q==
-
 fs.realpath@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
@@ -2769,11 +2764,6 @@ react-dom@17.0.2:
     loose-envify "^1.1.0"
     object-assign "^4.1.1"
     scheduler "^0.20.2"
-
-react-frappe-charts@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/react-frappe-charts/-/react-frappe-charts-4.0.0.tgz#5a9958641ac0e74ce4c44a23788a5e879ac716a7"
-  integrity sha512-QmYY1ExlPidE8DK3jtjGWakP0YptHOlFMoYF4/Qxsbrw5hYMCwocPoco4b3e2qk6mI0trdpzILzpjmFWutO/MA==
 
 react-ga@^3.3.0:
   version "3.3.0"
