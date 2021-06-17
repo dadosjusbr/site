@@ -15,7 +15,8 @@ import STATE_AGENCIES from '../../@types/STATE_AGENCIES';
 import MONTHS from '../../@types/MONTHS';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
+// this constant is used to placehold the max value of a chart data
+const MaxMonthPlaceholder = 29000321;
 export default function SummaryPage({ summary }) {
   const router = useRouter();
   function handleNavigateBetweenSummaryOptions(option: string) {
@@ -475,8 +476,9 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                                 if (fixYearDataArray(data)[i]) {
                                   return v;
                                 }
-                                if (i < data.length) {
-                                  return 29000321;
+                                // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
+                                if (i < data[data.length - 1].Month) {
+                                  return MaxMonthPlaceholder;
                                 }
                                 return 0;
                               },
