@@ -281,7 +281,6 @@ export default function OmaPage({
                         },
                       },
                       xaxis: {
-                        max: 1000,
                         categories: [
                           '> R$ 50 mil',
                           'R$ 40~50 mil',
