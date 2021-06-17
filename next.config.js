@@ -1,9 +1,9 @@
 const withTM = require("next-transpile-modules")
   ([
-    "frappe-charts",
-    "react-frappe-charts",
     "react-modal",
-    "react-share"
+    "react-share",
+    "react-apexcharts",
+    "apexcharts",
   ]);
 require('dotenv');
 module.exports = {

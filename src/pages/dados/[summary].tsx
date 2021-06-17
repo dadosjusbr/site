@@ -5,13 +5,16 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
-import ReactFrappeChart from 'react-frappe-charts';
+import dynamic from 'next/dynamic';
 import ActivityIndicator from '../../components/ActivityIndicator';
 import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
 import STATE_AGENCIES from '../../@types/STATE_AGENCIES';
+import MONTHS from '../../@types/MONTHS';
+
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 export default function SummaryPage({ summary }) {
   const router = useRouter();
@@ -309,86 +312,183 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             <>
               {data.length > 0 ? (
                 <div className="main-chart-wrapper">
-                  <ReactFrappeChart
-                    ref={chartRef}
-                    {...{
-                      data: {
-                        labels: [
-                          'Jan',
-                          'Fev',
-                          'Mar',
-                          'Abr',
-                          'Mai',
-                          'Jun',
-                          'Jul',
-                          'Ago',
-                          'Set',
-                          'Out',
-                          'Nov',
-                          'Dez',
-                        ],
-                        datasets: [
-                          {
-                            name: 'Benefícios',
-                            chartType: 'bar',
-                            values:
-                              // this function is used to create an array filled with the zero value, to set all chart entries to 0 after fix the array based in order the entries based in the month, then, if theres a value to set in the month it will done
-                              !hidingBenefits &&
-                              createArrayFilledWithValue(12, 0).map((v, i) => {
+                  <Chart
+                    options={{
+                      colors: ['#97BB2F', '#364958', '#000000'],
+                      chart: {
+                        stacked: true,
+                        toolbar: {
+                          show: false,
+                        },
+                        zoom: {
+                          enabled: true,
+                        },
+                      },
+                      responsive: [
+                        {
+                          breakpoint: 500,
+                          options: {
+                            legend: {
+                              position: 'bottom',
+                              offsetX: -10,
+                              offsetY: 0,
+                            },
+                            chart: {
+                              width: '100%',
+                            },
+                            yaxis: {
+                              decimalsInFloat: 2,
+                              labels: {
+                                show: true,
+                                minWidth: 0,
+                                maxWidth: 50,
+                                style: {
+                                  colors: [],
+                                  fontSize: '10rem',
+                                  fontFamily: 'Roboto Condensed, sans-serif',
+                                  fontWeight: 600,
+                                  cssClass: 'apexcharts-yaxis-label',
+                                },
+                                formatter(value) {
+                                  return `R$ ${(value / 1000000).toFixed(2)}M`;
+                                },
+                              },
+                            },
+                          },
+                        },
+                      ],
+                      plotOptions: {
+                        bar: {
+                          horizontal: false,
+                        },
+                      },
+                      yaxis: {
+                        decimalsInFloat: 2,
+                        title: {
+                          text: 'Total de Remunerações',
+                          offsetY: 10,
+                          style: {
+                            fontSize: '14px',
+                            fontWeight: 'bold',
+                            fontFamily: undefined,
+                            color: '#263238',
+                          },
+                        },
+                        labels: {
+                          show: true,
+                          minWidth: 0,
+                          maxWidth: 160,
+                          style: {
+                            colors: [],
+                            fontSize: '16px',
+                            fontFamily: 'Roboto Condensed, sans-serif',
+                            fontWeight: 600,
+                            cssClass: 'apexcharts-yaxis-label',
+                          },
+                          formatter(value) {
+                            if (value === 29000321)
+                              return 'Não existem dados para esse mês';
+                            return `R$ ${(value / 1000000).toFixed(2)}M`;
+                          },
+                        },
+                      },
+                      xaxis: {
+                        categories: (() => {
+                          const list = [];
+                          for (const i in MONTHS) {
+                            if (Number.isNaN(Number(i))) {
+                              list.push(i);
+                            }
+                          }
+                          return list;
+                        })(),
+                        title: {
+                          text: 'Meses',
+                          offsetX: 6,
+                          style: {
+                            fontSize: '15px',
+                            fontWeight: 'bold',
+                            fontFamily: undefined,
+                            color: '#263238',
+                          },
+                        },
+                      },
+                      legend: {
+                        show: false,
+                        position: 'right',
+                        offsetY: 120,
+                      },
+                      fill: {
+                        opacity: 1,
+                        image: {
+                          src: [
+                            'https://catalogue.accasoftware.com/img/Prodotti/2920/PREVIEW/hachura-30.1.750x527-1_1563779607.PNG',
+                          ],
+                        },
+                      },
+                      dataLabels: {
+                        enabled: false,
+                      },
+                    }}
+                    series={[
+                      {
+                        name: 'Benefícios',
+                        data: (() => {
+                          if (!hidingBenefits) {
+                            return createArrayFilledWithValue(12, 0).map(
+                              (v, i) => {
                                 if (fixYearDataArray(data)[i]) {
                                   return (
-                                    (fixYearDataArray(data)[i].Perks +
-                                      fixYearDataArray(data)[i].Others) /
-                                    1000000
+                                    fixYearDataArray(data)[i].Perks +
+                                    fixYearDataArray(data)[i].Others
                                   );
                                 }
                                 return v;
-                              }),
-                          },
-                          {
-                            name: 'Salário',
-                            chartType: 'bar',
-                            values:
-                              !hidingWage &&
-                              createArrayFilledWithValue(12, 0).map((v, i) =>
-                                fixYearDataArray(data)[i]
-                                  ? fixYearDataArray(data)[i].Wage / 1000000
-                                  : v,
-                              ),
-                          },
-                          {
-                            name: 'Sem Dados',
-                            chartType: 'bar',
-                            values:
-                              // this function is used to fill all the values of the NoDataArray with zero value and if a past month is not filled with values it fills the chart entry to shows the error
-                              !hidingNoData &&
-                              createArrayFilledWithValue(12, 0).map((v, i) => {
+                              },
+                            );
+                          }
+                          return createArrayFilledWithValue(12, 0);
+                        })(),
+                      },
+                      {
+                        name: 'Salário',
+                        data: (() => {
+                          if (!hidingWage) {
+                            return createArrayFilledWithValue(
+                              12,
+                              0,
+                            ).map((v, i) =>
+                              fixYearDataArray(data)[i]
+                                ? fixYearDataArray(data)[i].Wage
+                                : v,
+                            );
+                          }
+                          return createArrayFilledWithValue(12, 0);
+                        })(),
+                      },
+                      {
+                        name: 'Sem Dados',
+                        data: (() => {
+                          if (!hidingNoData) {
+                            return createArrayFilledWithValue(12, 0).map(
+                              (v, i) => {
                                 if (fixYearDataArray(data)[i]) {
                                   return v;
                                 }
                                 if (i < data.length) {
-                                  return 20;
+                                  return 29000321;
                                 }
                                 return 0;
-                              }),
-                          },
-                        ],
+                              },
+                            );
+                          }
+                          return createArrayFilledWithValue(12, 0);
+                        })(),
                       },
-                      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
-                      height: 300,
-                      axisOptions: {
-                        xAxisMode: 'tick',
-                      },
-                      colors: ['#97BB2F', '#3EDBB1', '#2c3236'],
-                      barOptions: {
-                        stacked: 1,
-                        spaceRatio: 0.6,
-                      },
-                      tooltipOptions: {
-                        formatTooltipX: d => `${d}`.toUpperCase(),
-                        formatTooltipY: d => `R$ ${d.toFixed(2)} M`,
-                      },
-                    }}
+                    ]}
+                    width="100%"
+                    height="500"
+                    type="bar"
                   />
                 </div>
               ) : (
@@ -492,8 +592,12 @@ const GraphDivWithPagination = styled.div`
       }
       text {
         font-family: 'Roboto Condensed', sans-serif;
-        font-size: 290%;
+        font-size: 400%;
         color: #fff;
+        font-size: 2rem;
+        @media (max-width: 600px) {
+          font-size: 1.5rem;
+        }
         font-weight: bold;
         &.title {
           font-size: 120%;

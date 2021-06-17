@@ -3,25 +3,17 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import Modal from 'react-modal';
-import ReactFrappeChart from 'react-frappe-charts';
+import dynamic from 'next/dynamic';
 import styled from 'styled-components';
-import {
-  EmailShareButton,
-  TwitterShareButton,
-  WhatsappShareButton,
-  FacebookShareButton,
-  EmailIcon,
-  TwitterIcon,
-  WhatsappIcon,
-  FacebookIcon,
-} from 'react-share';
+import ShareModal from '../../../../components/ShareModal';
 import MONTHS from '../../../../@types/MONTHS';
 import ActivityIndicator from '../../../../components/ActivityIndicator';
 import Button from '../../../../components/Button';
 import Footer from '../../../../components/Footer';
 import Header from '../../../../components/Header';
 import api from '../../../../services/api';
+
+const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 export default function OmaPage({
   agency,
@@ -230,51 +222,10 @@ export default function OmaPage({
                 </CaptionItems>
               </ul>
             </Captions>
-            <Modal
+            <ShareModal
               isOpen={modalIsOpen}
-              onAfterOpen={() => {
-                console.log('abriu');
-              }}
-              onRequestClose={() => {
-                setModalIsOpen(false);
-              }}
-              style={{
-                content: {
-                  top: '50%',
-                  left: '50%',
-                  right: 'auto',
-                  bottom: 'auto',
-                  width: '40rem',
-                  height: '20rem',
-                  marginRight: '-50%',
-                  borderRadius: '0',
-                  backgroundColor: '#CED9E1',
-                  transform: 'translate(-50%, -50%)',
-                },
-              }}
-              contentLabel="Example Modal"
-            >
-              <ModalDiv>
-                <span>
-                  <h2>Compartilhar</h2>
-                  <img src="/img/icon_share.svg" alt="share" />
-                </span>
-                <div>
-                  <EmailShareButton url={window.location.href}>
-                    <EmailIcon />
-                  </EmailShareButton>
-                  <TwitterShareButton url={window.location.href}>
-                    <TwitterIcon />
-                  </TwitterShareButton>
-                  <WhatsappShareButton url={window.location.href}>
-                    <WhatsappIcon />
-                  </WhatsappShareButton>
-                  <FacebookShareButton url={window.location.href}>
-                    <FacebookIcon />
-                  </FacebookShareButton>
-                </div>
-              </ModalDiv>
-            </Modal>
+              onRequestClose={() => setModalIsOpen(false)}
+            />
             <GraphDivWithPagination>
               <h3>Total de Remunerações de Membros por Mês em {year}</h3>
               <div className="main-chart-wrapper">
@@ -283,47 +234,89 @@ export default function OmaPage({
                     <span>Não há dados de membros para esse mês</span>
                   </ActivityIndicatorPlaceholder>
                 ) : (
-                  <ReactFrappeChart
-                    {...{
-                      data: {
-                        labels: [
+                  <Chart
+                    options={{
+                      legend: {
+                        show: false,
+                      },
+                      colors: ['#c9a0d0', '#513658'],
+                      chart: {
+                        stacked: true,
+                        toolbar: {
+                          show: false,
+                        },
+                        zoom: {
+                          enabled: true,
+                        },
+                      },
+                      responsive: [
+                        {
+                          breakpoint: 500,
+                          options: {
+                            chart: {
+                              width: '95%',
+                            },
+                          },
+                        },
+                      ],
+                      plotOptions: {
+                        bar: {
+                          horizontal: true,
+                          barHeight: '70%',
+                        },
+                      },
+                      yaxis: {
+                        decimalsInFloat: 2,
+                        labels: {
+                          show: true,
+                          minWidth: 0,
+                          maxWidth: 160,
+                          style: {
+                            colors: [],
+                            fontSize: '14px',
+                            fontFamily: 'Roboto Condensed, sans-serif',
+                            fontWeight: 600,
+                            cssClass: 'apexcharts-yaxis-label',
+                          },
+                        },
+                      },
+                      xaxis: {
+                        categories: [
                           '> R$ 50 mil',
                           'R$ 40~50 mil',
                           'R$ 30~40 mil',
                           'R$ 20~30 mil',
                           'R$ 10~20 mil',
-                          'R$ 10 mil',
+                          '< R$ 10 mil',
                         ],
-                        datasets: [
-                          {
-                            name: 'Benefícios',
-                            chartType: 'bar',
-                            values: [
-                              chartData.Members['-1'],
-                              chartData.Members['50000'],
-                              chartData.Members['40000'],
-                              chartData.Members['30000'],
-                              chartData.Members['20000'],
-                              chartData.Members['10000'],
-                            ],
-                          },
-                        ],
+                        title: {
+                          text: 'Quantidade',
+                          offsetY: 30,
+                        },
                       },
-                      type: 'bar', // or 'bar', 'line', 'pie', 'percentage'
-                      height: 300,
-                      axisOptions: {
-                        xAxisMode: 'tick',
+                      fill: {
+                        opacity: 1,
                       },
-                      colors: ['#B361C6'],
-                      barOptions: {
-                        stacked: 1,
-                        spaceRatio: 0.6,
-                      },
-                      tooltipOptions: {
-                        formatTooltipX: d => '',
-                        formatTooltipY: d => `${d} Membros`,
+                      dataLabels: {
+                        enabled: false,
                       },
                     }}
+                    series={[
+                      {
+                        name: 'Membros',
+                        data: [
+                          chartData.Members['-1'],
+                          chartData.Members['50000'],
+                          chartData.Members['40000'],
+                          chartData.Members['30000'],
+                          chartData.Members['20000'],
+                          chartData.Members['10000'],
+                        ],
+                      },
+                    ]}
+                    width="100%"
+                    height="500"
+                    type="bar"
                   />
                 )}
               </div>
@@ -632,7 +625,10 @@ const GraphDivWithPagination = styled.div`
       }
       text {
         font-family: 'Roboto Condensed', sans-serif;
-        font-size: 290%;
+        font-size: 2.5rem;
+        @media (max-width: 600px) {
+          font-size: 2rem;
+        }
         color: #fff;
         font-weight: bold;
         &.title {
@@ -657,30 +653,4 @@ const ActivityIndicatorPlaceholder = styled.div`
   color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
   font-size: 3rem;
   align-items: center;
-`;
-const ModalDiv = styled.div`
-  width: 100%;
-  color: #3e5363;
-  span {
-    font-size: 3rem;
-    display: flex;
-    position: relative;
-    justify-content: center;
-    img {
-      position: absolute;
-      left: 120%;
-      bottom: 0%;
-    }
-  }
-  div {
-    width: 80%;
-    justify-content: space-between;
-    margin-top: 3rem;
-    display: flex;
-  }
-  align-items: center;
-  justify-content: center;
-  font-family: 'Roboto Condensed', sans-serif;
-  display: flex;
-  flex-direction: column;
 `;
