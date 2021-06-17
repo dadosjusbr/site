@@ -119,7 +119,9 @@ export default function OmaPage({
   return (
     <Page>
       <Head>
-        <title>OMA/{agency.toUpperCase()}</title>
+        <title>
+          [{agency.toUpperCase()}] Folha de Pagameto {month}/{year}
+        </title>
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
