@@ -119,7 +119,9 @@ export default function OmaPage({
   return (
     <Page>
       <Head>
-        <title>OMA/{agency.toUpperCase()}</title>
+        <title>
+          [{agency.toUpperCase()}] Folha de Pagameto {month}/{year}
+        </title>
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
@@ -206,8 +208,12 @@ export default function OmaPage({
                 <CaptionItems>
                   <img src="/img/anim-group-2/icon_salario.svg" alt="sallary" />
                   <div>
-                    <span>Maior salário: R$ {maxWage.toFixed(2)}</span>
-                    <span>Total Salários: R$ {totalWage.toFixed(2)}</span>
+                    <span>
+                      Maior salário: R$ {(maxWage / 1000).toFixed(2)} mil
+                    </span>
+                    <span>
+                      Total Salários: R$ {(totalWage / 100000).toFixed(2)}M
+                    </span>
                   </div>
                 </CaptionItems>
                 <CaptionItems>
@@ -216,8 +222,12 @@ export default function OmaPage({
                     alt="benefits"
                   />
                   <div>
-                    <span>Maior Benefício: R$ {maxPerk.toFixed(2)}</span>
-                    <span>Total benefícios: R$ {totalPerks.toFixed(2)}</span>
+                    <span>
+                      Maior Benefício: R$ {(maxPerk / 1000).toFixed(2)} mil
+                    </span>
+                    <span>
+                      Total benefícios: R$ {(totalPerks / 1000000).toFixed(2)}M
+                    </span>
                   </div>
                 </CaptionItems>
               </ul>
@@ -282,12 +292,12 @@ export default function OmaPage({
                       },
                       xaxis: {
                         categories: [
-                          '> R$ 50 mil',
-                          'R$ 40~50 mil',
-                          'R$ 30~40 mil',
-                          'R$ 20~30 mil',
-                          'R$ 10~20 mil',
                           '< R$ 10 mil',
+                          'R$ 10-20 mil',
+                          'R$ 20-30 mil',
+                          'R$ 30-40 mil',
+                          'R$ 40-50 mil',
+                          '> R$ 50 mil',
                         ],
                         title: {
                           text: 'Quantidade',
@@ -305,12 +315,12 @@ export default function OmaPage({
                       {
                         name: 'Membros',
                         data: [
-                          chartData.Members['-1'],
-                          chartData.Members['50000'],
-                          chartData.Members['40000'],
-                          chartData.Members['30000'],
-                          chartData.Members['20000'],
                           chartData.Members['10000'],
+                          chartData.Members['20000'],
+                          chartData.Members['30000'],
+                          chartData.Members['40000'],
+                          chartData.Members['50000'],
+                          chartData.Members['-1'],
                         ],
                       },
                     ]}
@@ -575,18 +585,27 @@ const Captions = styled.div`
     padding-top: 2rem;
     display: flex;
     transition: all 1s ease;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    @media (max-width: 600px) {
+      justify-content: flex-start;
+    }
   }
 `;
 const CaptionItems = styled.li`
   display: flex;
   align-items: center;
-  width: 50%;
+  & + li {
+    @media (max-width: 765px) {
+      margin-top: 5rem;
+    }
+  }
   div {
     display: flex;
-    text-align: left;
     flex-direction: column;
+    align-items: flex-start;
     margin-left: 1.5rem;
+    width: fit-content;
   }
   button.active {
     opacity: 0.4;
@@ -602,6 +621,7 @@ const CaptionItems = styled.li`
     font-weight: bold;
     color: #3e5363;
     margin: 10px 0;
+    text-align: left;
     font-family: 'Roboto Condensed', sans-serif;
   }
 `;
