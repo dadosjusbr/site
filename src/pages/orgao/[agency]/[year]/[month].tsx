@@ -575,18 +575,27 @@ const Captions = styled.div`
     padding-top: 2rem;
     display: flex;
     transition: all 1s ease;
-    justify-content: space-between;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    @media (max-width: 600px) {
+      justify-content: flex-start;
+    }
   }
 `;
 const CaptionItems = styled.li`
   display: flex;
   align-items: center;
-  width: 50%;
+  & + li {
+    @media (max-width: 765px) {
+      margin-top: 5rem;
+    }
+  }
   div {
     display: flex;
-    text-align: left;
     flex-direction: column;
+    align-items: flex-start;
     margin-left: 1.5rem;
+    width: fit-content;
   }
   button.active {
     opacity: 0.4;
@@ -602,6 +611,7 @@ const CaptionItems = styled.li`
     font-weight: bold;
     color: #3e5363;
     margin: 10px 0;
+    text-align: left;
     font-family: 'Roboto Condensed', sans-serif;
   }
 `;
