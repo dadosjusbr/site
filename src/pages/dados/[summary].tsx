@@ -475,7 +475,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                                 if (fixYearDataArray(data)[i]) {
                                   return v;
                                 }
-                                if (i < data.length) {
+                                if (i < data[data.length - 1].Month) {
                                   return 29000321;
                                 }
                                 return 0;
