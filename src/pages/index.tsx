@@ -1,8 +1,6 @@
 import Head from 'next/head';
-import Link from 'next/link';
-import { useRef } from 'react';
 import styled from 'styled-components';
-import Button from '../components/Button';
+import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import {
@@ -11,9 +9,13 @@ import {
   Animation3,
   Animation4,
 } from '../components/index-animations';
+import DropDownGroupSelector from '../components/DropDownGroupSelector';
 
 export default function Index() {
-  const divRef = useRef<HTMLSpanElement>(null);
+  const router = useRouter();
+  function handleNavigateBetweenSummaryOptions(option: string) {
+    router.push(`/dados/${option}`);
+  }
   return (
     <Page>
       <Head>
@@ -26,7 +28,12 @@ export default function Index() {
         />
       </Head>
       <Nav />
-      <Container>
+      <GreenDropDownSelector
+        onChange={a => {
+          handleNavigateBetweenSummaryOptions(a.currentTarget.value);
+        }}
+      />
+      <Container className="first">
         <div>
           <h2>VOCÊ JÁ TENTOU ACESSAR DADOS EM SITES DE ÓRGÃOS PÚBLICOS?</h2>
           <br />A Lei Federal 12.527/2011, ou mais comumente conhecida como Lei
@@ -45,34 +52,7 @@ export default function Index() {
           uma tarefa difícil para uma pessoa.
         </div>
         <Animation>
-          {/*
-            the ref prop is used to get the reference of a component and store into a variable
-            the use is similar to document.getElementById function in javascript
-            we need the reference of the animation here to activate the start when the button bellow is hovered
-          */}
-          <Animation1 ref={divRef} />
-          <Link href="/dados/PB">
-            <Button
-              backgroundColor="#2FBB96"
-              borderColor="#2FBB96"
-              hoverTextColor="#2FBB96"
-              hoverBackgroundColor="#3e5363"
-              onMouseEnter={() => {
-                for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
-                  const node = divRef.current.childNodes[i] as HTMLImageElement;
-                  node.classList.add('active');
-                }
-              }}
-              onMouseLeave={() => {
-                for (let i = 0; i < divRef.current.childNodes.length; i += 1) {
-                  const node = divRef.current.childNodes[i] as HTMLImageElement;
-                  node.classList.remove('active');
-                }
-              }}
-            >
-              Acessar os dados libertados
-            </Button>
-          </Link>
+          <Animation1 />
         </Animation>
       </Container>
       <ExclamativeText>
@@ -156,6 +136,15 @@ const Container = styled.div`
     }
     flex-direction: column;
   }
+  &.first {
+    padding-top: 4rem;
+    @media (max-width: 600px) {
+      padding-top: 3rem;
+      div {
+        padding-top: 0rem;
+      }
+    }
+  }
 `;
 const Animation = styled.div`
   display: flex;
@@ -180,4 +169,8 @@ const ExclamativeText = styled.div`
   color: #fff;
   text-align: center;
   background-image: url('/img/splash_background.png');
+`;
+const GreenDropDownSelector = styled(DropDownGroupSelector)`
+  background-color: #2fbb96;
+  border: #3e5363;
 `;
