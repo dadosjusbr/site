@@ -61,9 +61,13 @@ const SumarySelectorComboBox = styled.select`
   appearance: none;
   option {
     font-size: 2rem;
+    font-weight: bold;
   }
   optgroup {
     font-size: 2rem;
+    option {
+      font-weight: 400;
+    }
   }
   box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
   &:focus {
