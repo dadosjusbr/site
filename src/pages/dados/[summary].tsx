@@ -493,7 +493,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const { summary } = context.params;
   try {
     const { data } = await api.get(`/orgao/${summary}`);
-    console.log(data);
     if (!data.Agency) {
       context.res.writeHead(301, {
         Location: `/404`,
