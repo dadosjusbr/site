@@ -13,9 +13,10 @@ export interface DropDownGroupSelectorProps
 const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   value,
   onChange,
+  ...rest
 }) => (
   <SelectContainer>
-    <SumarySelectorComboBox value={value} onChange={onChange}>
+    <SumarySelectorComboBox value={value} onChange={onChange} {...rest}>
       <option value="" disabled selected hidden>
         Acessar os dados libertados
       </option>
