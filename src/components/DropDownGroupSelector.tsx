@@ -17,7 +17,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
 }) => {
   const router = useRouter();
   function handleNavigateBetweenSummaryOptions(option: string) {
-    router.push(`/dados/${option}`);
+    router.push(`/grupo/${option}`);
   }
   return (
     <SelectContainer>
