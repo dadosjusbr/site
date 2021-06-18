@@ -28,6 +28,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         }}
         {...rest}
       >
+        {/* this option is used as a placeholder */}
         <option value="" disabled selected hidden>
           Acessar os dados libertados
         </option>
