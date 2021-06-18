@@ -7,7 +7,7 @@ import STATE_AGENCIES from '../@types/STATE_AGENCIES';
 // import { Container } from './styles';
 export interface DropDownGroupSelectorProps
   extends HTMLAttributes<HTMLSelectElement> {
-  value: STATE_AGENCIES;
+  value?: STATE_AGENCIES;
 }
 
 const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
@@ -16,6 +16,9 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
 }) => (
   <SelectContainer>
     <SumarySelectorComboBox value={value} onChange={onChange}>
+      <option value="" disabled selected hidden>
+        Acessar os dados libertados
+      </option>
       <option value="Federal">Órgãos Federais</option>
       <optgroup label="Órgãos Estaduais">
         {(() => {
