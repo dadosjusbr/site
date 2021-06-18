@@ -1,6 +1,5 @@
 import Head from 'next/head';
 import styled from 'styled-components';
-import { useRouter } from 'next/router';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import {
@@ -12,10 +11,6 @@ import {
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
 
 export default function Index() {
-  const router = useRouter();
-  function handleNavigateBetweenSummaryOptions(option: string) {
-    router.push(`/dados/${option}`);
-  }
   return (
     <Page>
       <Head>
@@ -28,11 +23,7 @@ export default function Index() {
         />
       </Head>
       <Nav />
-      <GreenDropDownSelector
-        onChange={a => {
-          handleNavigateBetweenSummaryOptions(a.currentTarget.value);
-        }}
-      />
+      <GreenDropDownSelector />
       <Container className="first">
         <div>
           <h2>VOCÊ JÁ TENTOU ACESSAR DADOS EM SITES DE ÓRGÃOS PÚBLICOS?</h2>
