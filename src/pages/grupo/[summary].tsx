@@ -1,8 +1,6 @@
-/* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
@@ -11,32 +9,13 @@ import Button from '../../components/Button';
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
-import STATE_AGENCIES from '../../@types/STATE_AGENCIES';
 import MONTHS from '../../@types/MONTHS';
+import DropDownGroupSelector from '../../components/DropDownGroupSelector';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 // this constant is used to placehold the max value of a chart data
 const MaxMonthPlaceholder = 29000321;
-export default function SummaryPage({ summary }) {
-  const router = useRouter();
-  function handleNavigateBetweenSummaryOptions(option: string) {
-    router.push(`/dados/${option}`);
-  }
-  async function fetchSummaryData() {
-    try {
-      const { data } = await api.get(`/orgao/${summary}`);
-      setDataList(data.Agency ? data.Agency : []);
-      setSummaryLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  const [summaryLoading, setSummaryLoading] = useState(true);
-  const [dataList, setDataList] = useState<any[]>([]);
-  useEffect(() => {
-    fetchSummaryData();
-  }, [summary]);
-
+export default function SummaryPage({ dataList, summary }) {
   return (
     <Page>
       <Head>
@@ -52,39 +31,9 @@ export default function SummaryPage({ summary }) {
         />
       </Head>
       <Header />
-      <SelectContainer>
-        <SumarySelectorComboBox
-          value={summary}
-          onChange={a => {
-            handleNavigateBetweenSummaryOptions(a.target.value);
-          }}
-        >
-          <optgroup label="Órgãos Federais" />
-          <optgroup label="Órgãos Estaduais">
-            {(() => {
-              const list = [];
-              for (const i in STATE_AGENCIES) {
-                list.push(i);
-              }
-              return list.map(i => (
-                <option key={STATE_AGENCIES[i]} value={STATE_AGENCIES[i]}>
-                  {formatToAgency(i)}
-                </option>
-              ));
-            })()}
-          </optgroup>
-        </SumarySelectorComboBox>
-      </SelectContainer>
+      <DropDownGroupSelector value={summary} />
       <div>
         {(() => {
-          if (summaryLoading) {
-            return (
-              <ActivityIndicatorPlaceholder>
-                <ActivityIndicator spinnerColor="#FFF" />
-                <span>Carregando dados...</span>
-              </ActivityIndicatorPlaceholder>
-            );
-          }
           if (dataList.length === 0) {
             return (
               <ActivityIndicatorPlaceholder>
@@ -531,10 +480,29 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const summary = context.params;
-  return {
-    props: summary,
-  };
+  const { summary } = context.params;
+  try {
+    const { data } = await api.get(`/orgao/${summary}`);
+    if (!data.Agency) {
+      context.res.writeHead(301, {
+        Location: `/404`,
+      });
+      context.res.end();
+      return { props: {} };
+    }
+    return {
+      props: {
+        dataList: data.Agency,
+        summary: data.Name,
+      },
+    };
+  } catch (error) {
+    context.res.writeHead(301, {
+      Location: `/404`,
+    });
+    context.res.end();
+    return { props: {} };
+  }
 };
 
 const MainGraphSection = styled.section`
@@ -758,13 +726,6 @@ const CaptionItems = styled.li`
 const Page = styled.div`
   background: #3e5363;
 `;
-const SelectContainer = styled.div`
-  display: flex;
-  align-items: center;
-  padding: 3rem 0;
-  width: 100%;
-  justify-content: center;
-`;
 const ActivityIndicatorPlaceholder = styled.div`
   width: 100%;
   display: flex;
@@ -778,36 +739,6 @@ const ActivityIndicatorPlaceholder = styled.div`
   font-size: 3rem;
   align-items: center;
 `;
-const SumarySelectorComboBox = styled.select`
-  padding: 3rem 2rem;
-  border-radius: 5px;
-  width: 30%;
-  min-width: 25rem;
-  border: solid 2px #fff;
-  background: #3e5363
-    url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='5'><path fill='white' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>")
-    no-repeat right 3rem center/8px 10px;
-  font-size: 2rem;
-  font-family: 'Roboto Condensed', sans-serif;
-  display: flex;
-  color: #fff;
-  font-weight: bold;
-  transition: border 0.2 ease;
-  appearance: none;
-  option {
-    font-size: 2rem;
-  }
-  optgroup {
-    font-size: 2rem;
-  }
-  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
-  &:focus {
-    border: 2px solid #3f51b5;
-  }
-  &:focus-visible {
-    border: 2px solid #3f51b5;
-  }
-`;
 function createArrayFilledWithValue<T>(size: number, value: T): T[] {
   const array = [];
   for (let i = 0; i < size; i += 1) {
@@ -820,16 +751,5 @@ function fixYearDataArray(array: any[]) {
   array.forEach(v => {
     a[v.Month - 1] = v;
   });
-  return a;
-}
-function formatToAgency(agency: string) {
-  const sub = agency.split('_');
-  const formatedSubs = sub.map(s => {
-    const a = s.toLowerCase();
-    const newString = a.split('');
-    newString[0] = a[0].toLocaleUpperCase();
-    return newString.join('');
-  });
-  const a = formatedSubs.join(' ');
   return a;
 }
