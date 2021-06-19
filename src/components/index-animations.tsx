@@ -532,31 +532,31 @@ const Animation1Context = styled(Context)`
     opacity: 0;
   }
   @media (min-width: 960px) {
-    #icon_predio_anim_group_1.active {
-      animation: ${animOneBuilding} 10s forwards;
+    #icon_predio_anim_group_1 {
+      animation: ${animOneBuilding} 10s forwards infinite;
     }
-    #esquema_anim_group_1.active {
+    #esquema_anim_group_1 {
       animation: ${animOneMainScheme} 10s forwards infinite;
     }
-    #seta_1_anim_group_1.active {
+    #seta_1_anim_group_1 {
       animation: ${animOneArrowOne} 10s forwards infinite;
     }
-    #icon_documento_up_anim_group_1.active {
+    #icon_documento_up_anim_group_1 {
       animation: ${animOneTopFile} 10s forwards infinite;
     }
-    #icon_documento_down_anim_group_1.active {
+    #icon_documento_down_anim_group_1 {
       animation: ${animOneBottomFile} 10s forwards infinite;
     }
-    #icon_documento_right_anim_group_1.active {
+    #icon_documento_right_anim_group_1 {
       animation: ${animOneRightFile} 10s forwards infinite;
     }
-    #seta_2_anim_group_1.active {
+    #seta_2_anim_group_1 {
       animation: ${animOneArrowTwo} 10s forwards infinite;
     }
-    #grafico_0_anim_group_1.active {
+    #grafico_0_anim_group_1 {
       animation: ${animOneGraphsAnimation} 10s forwards infinite;
     }
-    #grafico_1_anim_group_1.active {
+    #grafico_1_anim_group_1 {
       animation: ${animOneGraphsAnimation} 10s forwards infinite;
     }
   }

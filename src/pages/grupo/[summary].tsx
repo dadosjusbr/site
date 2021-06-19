@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
@@ -16,26 +15,7 @@ import DropDownGroupSelector from '../../components/DropDownGroupSelector';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 // this constant is used to placehold the max value of a chart data
 const MaxMonthPlaceholder = 29000321;
-export default function SummaryPage({ summary }) {
-  const router = useRouter();
-  function handleNavigateBetweenSummaryOptions(option: string) {
-    router.push(`/dados/${option}`);
-  }
-  async function fetchSummaryData() {
-    try {
-      const { data } = await api.get(`/orgao/${summary}`);
-      setDataList(data.Agency ? data.Agency : []);
-      setSummaryLoading(false);
-    } catch (err) {
-      console.log(err);
-    }
-  }
-  const [summaryLoading, setSummaryLoading] = useState(true);
-  const [dataList, setDataList] = useState<any[]>([]);
-  useEffect(() => {
-    fetchSummaryData();
-  }, [summary]);
-
+export default function SummaryPage({ dataList, summary }) {
   return (
     <Page>
       <Head>
@@ -51,22 +31,9 @@ export default function SummaryPage({ summary }) {
         />
       </Head>
       <Header />
-      <DropDownGroupSelector
-        value={summary}
-        onChange={a => {
-          handleNavigateBetweenSummaryOptions(a.currentTarget.value);
-        }}
-      />
+      <DropDownGroupSelector value={summary} />
       <div>
         {(() => {
-          if (summaryLoading) {
-            return (
-              <ActivityIndicatorPlaceholder>
-                <ActivityIndicator spinnerColor="#FFF" />
-                <span>Carregando dados...</span>
-              </ActivityIndicatorPlaceholder>
-            );
-          }
           if (dataList.length === 0) {
             return (
               <ActivityIndicatorPlaceholder>
@@ -513,10 +480,29 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
 };
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const summary = context.params;
-  return {
-    props: summary,
-  };
+  const { summary } = context.params;
+  try {
+    const { data } = await api.get(`/orgao/${summary}`);
+    if (!data.Agency) {
+      context.res.writeHead(301, {
+        Location: `/404`,
+      });
+      context.res.end();
+      return { props: {} };
+    }
+    return {
+      props: {
+        dataList: data.Agency,
+        summary: data.Name,
+      },
+    };
+  } catch (error) {
+    context.res.writeHead(301, {
+      Location: `/404`,
+    });
+    context.res.end();
+    return { props: {} };
+  }
 };
 
 const MainGraphSection = styled.section`

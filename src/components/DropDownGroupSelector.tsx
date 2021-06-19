@@ -1,38 +1,55 @@
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
+import { useRouter } from 'next/router';
 import React, { HTMLAttributes } from 'react';
 import styled from 'styled-components';
 import STATE_AGENCIES from '../@types/STATE_AGENCIES';
 
 // import { Container } from './styles';
 export interface DropDownGroupSelectorProps
-  extends HTMLAttributes<HTMLSelectElement> {
-  value: STATE_AGENCIES;
+  extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange'> {
+  value?: STATE_AGENCIES;
 }
 
 const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   value,
-  onChange,
-}) => (
-  <SelectContainer>
-    <SumarySelectorComboBox value={value} onChange={onChange}>
-      <option value="Federal">Órgãos Federais</option>
-      <optgroup label="Órgãos Estaduais">
-        {(() => {
-          const list = [];
-          for (const i in STATE_AGENCIES) {
-            list.push(i);
-          }
-          return list.map(i => (
-            <option key={STATE_AGENCIES[i]} value={STATE_AGENCIES[i]}>
-              {formatToAgency(i)}
-            </option>
-          ));
-        })()}
-      </optgroup>
-    </SumarySelectorComboBox>
-  </SelectContainer>
-);
+  ...rest
+}) => {
+  const router = useRouter();
+  function handleNavigateBetweenSummaryOptions(option: string) {
+    router.push(`/grupo/${option}`);
+  }
+  return (
+    <SelectContainer>
+      <SumarySelectorComboBox
+        value={value}
+        onChange={a => {
+          handleNavigateBetweenSummaryOptions(a.currentTarget.value);
+        }}
+        {...rest}
+      >
+        {/* this option is used as a placeholder */}
+        <option value="" disabled selected hidden>
+          Acessar os dados libertados
+        </option>
+        <option value="Federal">Órgãos Federais</option>
+        <optgroup label="Órgãos Estaduais">
+          {(() => {
+            const list = [];
+            for (const i in STATE_AGENCIES) {
+              list.push(i);
+            }
+            return list.map(i => (
+              <option key={STATE_AGENCIES[i]} value={STATE_AGENCIES[i]}>
+                {formatToAgency(i)}
+              </option>
+            ));
+          })()}
+        </optgroup>
+      </SumarySelectorComboBox>
+    </SelectContainer>
+  );
+};
 
 export default DropDownGroupSelector;
 
