@@ -1,7 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import React, { useEffect, useRef, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
@@ -17,10 +16,6 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 // this constant is used to placehold the max value of a chart data
 const MaxMonthPlaceholder = 29000321;
 export default function SummaryPage({ dataList, summary }) {
-  const router = useRouter();
-  function handleNavigateBetweenSummaryOptions(option: string) {
-    router.push(`/dados/${option}`);
-  }
   return (
     <Page>
       <Head>
@@ -36,12 +31,7 @@ export default function SummaryPage({ dataList, summary }) {
         />
       </Head>
       <Header />
-      <DropDownGroupSelector
-        value={summary}
-        onChange={a => {
-          handleNavigateBetweenSummaryOptions(a.currentTarget.value);
-        }}
-      />
+      <DropDownGroupSelector value={summary} />
       <div>
         {(() => {
           if (dataList.length === 0) {
