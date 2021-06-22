@@ -1,6 +1,7 @@
 // eslint-disable-next-line no-shadow
 enum STATE_AGENCIES {
   ALAGOAS = 'AL',
+  AMAZONAS = 'AM',
   BAHIA = 'BA',
   CEARÁ = 'CE',
   ESPÍRITO_SANTO = 'ES',
