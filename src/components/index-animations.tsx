@@ -285,9 +285,6 @@ const animOneMainScheme = keyframes`
 const animOneArrowOne = keyframes`
     0%{
       transform: rotate(0deg);
-      @media(max-width: 960px){
-        transform: rotate(0deg) scale(0.8);
-      }
       opacity: 0;
     }
     10%{
@@ -301,6 +298,25 @@ const animOneArrowOne = keyframes`
     }
     100%{
       transform: rotate(0deg);
+      opacity:0;
+    }
+`;
+const animOneArrowOneMedia = keyframes`
+    0%{
+      transform: rotate(0deg) scale(0.8);
+      opacity: 0;
+    }
+    10%{
+      opacity: 0;
+    }
+    20%{
+      opacity: 255;
+    }
+    90%{
+      opacity: 255;
+    }
+    100%{
+      transform: rotate(0deg) scale(0.8);
       opacity:0;
     }
 `;
@@ -323,6 +339,9 @@ const animOneTopFile = keyframes`
       transform: translateY(90px) translateX(90px);
       opacity: 0;
     }
+    100%{
+      opacity:0;
+    }
 `;
 const animOneBottomFile = keyframes`
     0%{
@@ -341,6 +360,9 @@ const animOneBottomFile = keyframes`
     60%{
       opacity: 0;
       transform: translateY(-90px) translateX(90px);
+    }
+    100%{
+      opacity:0;
     }
 `;
 const animOneRightFile = keyframes`
@@ -531,37 +553,39 @@ const Animation1Context = styled(Context)`
   img {
     opacity: 0;
   }
-  @media (min-width: 960px) {
-    #icon_predio_anim_group_1 {
-      animation: ${animOneBuilding} 10s forwards infinite;
-    }
-    #esquema_anim_group_1 {
-      animation: ${animOneMainScheme} 10s forwards infinite;
-    }
-    #seta_1_anim_group_1 {
-      animation: ${animOneArrowOne} 10s forwards infinite;
-    }
-    #icon_documento_up_anim_group_1 {
-      animation: ${animOneTopFile} 10s forwards infinite;
-    }
-    #icon_documento_down_anim_group_1 {
-      animation: ${animOneBottomFile} 10s forwards infinite;
-    }
-    #icon_documento_right_anim_group_1 {
-      animation: ${animOneRightFile} 10s forwards infinite;
-    }
-    #seta_2_anim_group_1 {
-      animation: ${animOneArrowTwo} 10s forwards infinite;
-    }
-    #grafico_0_anim_group_1 {
-      animation: ${animOneGraphsAnimation} 10s forwards infinite;
-    }
-    #grafico_1_anim_group_1 {
-      animation: ${animOneGraphsAnimation} 10s forwards infinite;
+  #icon_predio_anim_group_1 {
+    animation: ${animOneBuilding} 10s forwards infinite;
+  }
+  #esquema_anim_group_1 {
+    animation: ${animOneMainScheme} 10s forwards infinite;
+  }
+  #seta_1_anim_group_1 {
+    animation: ${animOneArrowOne} 10s forwards infinite;
+    @media (max-width: 960px) {
+      animation: ${animOneArrowOneMedia} 10s forwards infinite;
     }
   }
+  #icon_documento_up_anim_group_1 {
+    animation: ${animOneTopFile} 10s forwards infinite;
+  }
+  #icon_documento_down_anim_group_1 {
+    animation: ${animOneBottomFile} 10s forwards infinite;
+  }
+  #icon_documento_right_anim_group_1 {
+    animation: ${animOneRightFile} 10s forwards infinite;
+  }
+  #seta_2_anim_group_1 {
+    animation: ${animOneArrowTwo} 10s forwards infinite;
+  }
+  #grafico_0_anim_group_1 {
+    animation: ${animOneGraphsAnimation} 10s forwards infinite;
+  }
+  #grafico_1_anim_group_1 {
+    animation: ${animOneGraphsAnimation} 10s forwards infinite;
+  }
+
   #icon_predio_anim_group_1 {
-    left: -40%;
+    left: -63%;
     top: 10%;
   }
   #icon_documento_right_anim_group_1 {
@@ -569,13 +593,13 @@ const Animation1Context = styled(Context)`
     top: 30%;
   }
   #seta_1_anim_group_1 {
-    left: -100px;
+    left: -180px;
     top: 40px;
     transform: rotate(180deg);
     opacity: 255;
     @media (max-width: 960px) {
       transform: rotate(180deg) scale(0.8);
-      left: -90px;
+      left: -130px;
     }
   }
   #seta_2_anim_group_1 {
@@ -592,12 +616,14 @@ const Animation1Context = styled(Context)`
   }
   #icon_documento_up_anim_group_1 {
     top: -60%;
+    left: -17%;
   }
   #icon_documento_down_anim_group_1 {
     bottom: -70%;
-    left: -10px;
+    left: -17%;
   }
   #esquema_anim_group_1 {
+    left: -15%;
     opacity: 255;
   }
 `;

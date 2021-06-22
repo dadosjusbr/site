@@ -23,8 +23,7 @@ export default function Index() {
         />
       </Head>
       <Nav />
-      <GreenDropDownSelector />
-      <Container className="first">
+      <Container>
         <div>
           <h2>VOCÊ JÁ TENTOU ACESSAR DADOS EM SITES DE ÓRGÃOS PÚBLICOS?</h2>
           <br />A Lei Federal 12.527/2011, ou mais comumente conhecida como Lei
@@ -44,6 +43,7 @@ export default function Index() {
         </div>
         <Animation>
           <Animation1 />
+          <GreenDropDownSelector />
         </Animation>
       </Container>
       <ExclamativeText>
@@ -147,10 +147,10 @@ const Animation = styled.div`
   flex-direction: column;
   align-items: center;
   width: 100%;
-  justify-content: center;
-  button {
-    margin-top: 120px;
+  div {
+    padding: 0;
   }
+  justify-content: center;
 `;
 const ExclamativeText = styled.div`
   background-color: #7f3d8b;
@@ -164,4 +164,7 @@ const ExclamativeText = styled.div`
 const GreenDropDownSelector = styled(DropDownGroupSelector)`
   background-color: #2fbb96;
   border: #3e5363;
+  margin-top: 120px;
+  padding: 3rem 2rem;
+  width: 100%;
 `;
