@@ -90,7 +90,7 @@ const opening = keyframes`
 
 const HeaderList = styled.ul<{ open: boolean }>`
   display: flex;
-  width: 50%;
+  width: 30%;
   align-items: center;
   justify-content: space-between;
   list-style: none;
@@ -123,6 +123,9 @@ const HeaderButton = styled.button<{ open: boolean }>`
 `;
 const HeaderItem = styled.li`
   padding: 5px;
+  & + li {
+    margin-left: 3rem;
+  }
   font-style: normal;
   font-weight: bold;
   font-size: 3rem;
