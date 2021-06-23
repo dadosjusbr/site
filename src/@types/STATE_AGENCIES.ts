@@ -1,9 +1,12 @@
 // eslint-disable-next-line no-shadow
 enum STATE_AGENCIES {
+  ACRE = 'AC',
   ALAGOAS = 'AL',
+  AMAPÁ = 'AP',
   AMAZONAS = 'AM',
   BAHIA = 'BA',
   CEARÁ = 'CE',
+  DISTRITO_FEDERAL = 'DF',
   ESPÍRITO_SANTO = 'ES',
   GOIÁS = 'GO',
   MARANHÃO = 'MA',
