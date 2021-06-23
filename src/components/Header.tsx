@@ -124,7 +124,9 @@ const HeaderButton = styled.button<{ open: boolean }>`
 const HeaderItem = styled.li`
   padding: 5px;
   & + li {
-    margin-left: 3rem;
+    @media (min-width: 600px) {
+      margin-left: 3rem;
+    }
   }
   font-style: normal;
   font-weight: bold;
