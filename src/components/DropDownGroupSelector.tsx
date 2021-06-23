@@ -30,7 +30,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
       >
         {/* this option is used as a placeholder */}
         <option value="" disabled selected hidden>
-          Acessar os dados libertados
+          Acessar dados
         </option>
         <option value="Federal">Órgãos Federais</option>
         <optgroup label="Órgãos Estaduais">

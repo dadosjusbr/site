@@ -28,7 +28,7 @@ const Header: React.FC<HeaderPropos> = ({ theme = 'DEFAULT', ...rest }) => {
                   ? '/img/header/icon_dadosjusbr_default.svg'
                   : '/img/header/icon_dadosjusbr_light.svg'
               }
-              alt="dados_jus_logo"
+              alt="logo do DadosJus"
             />
           </button>
         </Link>
@@ -39,7 +39,7 @@ const Header: React.FC<HeaderPropos> = ({ theme = 'DEFAULT', ...rest }) => {
                 ? '/img/nav_responsive_button.svg'
                 : '/img/nav_responsive_button_light.svg'
             }
-            alt="nav_responsive"
+            alt="Botão de navegação"
           />
         </HeaderButton>
         <HeaderList theme={theme} open={open}>

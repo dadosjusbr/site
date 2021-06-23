@@ -145,7 +145,7 @@ export default function OmaPage({
               type="button"
               disabled={!previousButtonActive}
             >
-              <img src="/img/arrow.svg" alt="arrow" />
+              <img src="/img/arrow.svg" alt="seta esquerda" />
             </button>
             <span>
               {MONTHS[month]}, {year}
@@ -155,7 +155,7 @@ export default function OmaPage({
               type="button"
               disabled={!nextButtonActive}
             >
-              <img src="/img/arrow.svg" alt="arrow" />
+              <img src="/img/arrow.svg" alt="seta direita" />
             </button>
           </div>
           {loading || (
@@ -179,7 +179,7 @@ export default function OmaPage({
             <Captions>
               <div>
                 <span className="info">
-                  <img src="/img/icon_info.svg" alt="info" />
+                  <img src="/img/icon_info.svg" alt="informações" />
                   <div>
                     <span>
                       <b>Salário:</b> valor recebido de acordo com a prestação
@@ -201,12 +201,12 @@ export default function OmaPage({
                   <h3>{totalMembers} Membros</h3>
                 </span>
                 <span>
-                  <img src="/img/anim-group-2/icon_salario.svg" alt="sallary" />
+                  <img src="/img/anim-group-2/icon_salario.svg" alt="salário" />
                 </span>
               </div>
               <ul>
                 <CaptionItems>
-                  <img src="/img/anim-group-2/icon_salario.svg" alt="sallary" />
+                  <img src="/img/anim-group-2/icon_salario.svg" alt="salário" />
                   <div>
                     <span>
                       Maior salário: R$ {(maxWage / 1000).toFixed(2)} mil
@@ -219,7 +219,7 @@ export default function OmaPage({
                 <CaptionItems>
                   <img
                     src="/img/anim-group-2/icon_beneficio.svg"
-                    alt="benefits"
+                    alt="beneficios"
                   />
                   <div>
                     <span>
@@ -343,7 +343,7 @@ export default function OmaPage({
                       Voltar par anos
                       <img
                         src="/img/icon_calendario_green.svg"
-                        alt="callendar"
+                        alt="calendário"
                       />
                     </Button>
                   </a>
@@ -357,7 +357,7 @@ export default function OmaPage({
                     onClick={() => setModalIsOpen(true)}
                   >
                     Compartilhar
-                    <img src="/img/icon_share.svg" alt="share" />
+                    <img src="/img/icon_share.svg" alt="compartilhar" />
                   </Button>
                   <a href={fileLink}>
                     <Button

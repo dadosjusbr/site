@@ -113,11 +113,11 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               onClick={() => setYear(year - 1)}
               type="button"
             >
-              <img src="/img/arrow.svg" alt="arrow" />
+              <img src="/img/arrow.svg" alt="seta esquerda" />
             </button>
             <span>{year}</span>
             <button onClick={() => setYear(year + 1)} type="button">
-              <img src="/img/arrow.svg" alt="arrow" />
+              <img src="/img/arrow.svg" alt="seta direita" />
             </button>
           </div>
         </MainGraphSectionHeader>
@@ -142,7 +142,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               </h3>
             </span>
             <span className="info">
-              <img src="/img/icon_info.svg" alt="info" />
+              <img src="/img/icon_info.svg" alt="informações" />
               <div>
                 <span>
                   <b>Salário:</b> valor recebido de acordo com a prestação de
@@ -174,7 +174,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               >
                 <img
                   src="/img/data-graph-captions/icon_salario.svg"
-                  alt="sallary"
+                  alt="salário"
                 />
               </button>
               <span>
@@ -209,7 +209,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               >
                 <img
                   src="/img/data-graph-captions/icon_beneficio.svg"
-                  alt="benefits"
+                  alt="benefícios"
                 />
               </button>
               <span>
@@ -244,7 +244,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
               >
                 <img
                   src="/img/data-graph-captions/icon_semdados.svg"
-                  alt="no-data"
+                  alt="sem dados"
                 />
               </button>
               <span>Sem dados</span>
