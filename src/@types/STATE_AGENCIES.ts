@@ -2,6 +2,7 @@
 enum STATE_AGENCIES {
   ACRE = 'AC',
   ALAGOAS = 'AL',
+  AMAPÁ = 'AP',
   AMAZONAS = 'AM',
   BAHIA = 'BA',
   CEARÁ = 'CE',
