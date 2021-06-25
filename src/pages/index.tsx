@@ -31,9 +31,8 @@ export default function Index() {
           dados de gastos públicos.
           <br />
           <br /> Porém, a LAI pouco diz sobre a forma como esses dados devem ser
-          disponibilizados. E isso acaba trazendo uma falta de padronização,
-          tanto para quanto a maneira que os dados são arquivados ou quanto
-          exibidos.
+          disponibilizados. Isso acaba trazendo uma falta de padronização
+          com relação a forma que os dados são organizados e publicados.
           <br />
           <br /> Devido a essas características realizar um controle social e
           financeiro sobre essa enorme quantidade de dados de gastos públicos é
