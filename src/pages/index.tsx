@@ -27,15 +27,13 @@ export default function Index() {
         <div>
           <h2>VOCÊ JÁ TENTOU ACESSAR DADOS EM SITES DE ÓRGÃOS PÚBLICOS?</h2>
           <br />A Lei Federal 12.527/2011, ou mais comumente conhecida como Lei
-          de Acesso à Informação (LAI), diz que é “obrigatória a divulgação em
-          sítios oficiais da rede mundial de computadores (internet)” dos dados
-          de gastos públicos.
+          de Acesso à Informação (LAI), afirma obrigatória a divulgação dos
+          dados de gastos públicos.
           <br />
           <br /> Porém, a LAI pouco diz sobre a forma como esses dados devem ser
-          disponibilizados. Por isso, nos sites dos órgãos são encontrados
-          arquivos em diversos formatos (pdf, html, planilhas eletrônicas, json
-          e etc), além disso nomenclaturas e formatação são muitas vezes
-          diferentes para cada órgão.
+          disponibilizados. e isso acaba trazendo uma falta de padronização
+          tanto para quanto a maneira que os dados são arquivados ou quanto
+          exibidos.
           <br />
           <br /> Devido a essas características realizar um controle social e
           financeiro sobre essa enorme quantidade de dados de gastos públicos é
