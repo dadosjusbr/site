@@ -31,7 +31,7 @@ export default function Index() {
           dados de gastos públicos.
           <br />
           <br /> Porém, a LAI pouco diz sobre a forma como esses dados devem ser
-          disponibilizados. e isso acaba trazendo uma falta de padronização
+          disponibilizados. E isso acaba trazendo uma falta de padronização,
           tanto para quanto a maneira que os dados são arquivados ou quanto
           exibidos.
           <br />
@@ -147,6 +147,7 @@ const Animation = styled.div`
   width: 100%;
   div {
     padding: 0;
+    max-width: 100%;
   }
   justify-content: center;
 `;
@@ -164,5 +165,8 @@ const GreenDropDownSelector = styled(DropDownGroupSelector)`
   border: #3e5363;
   margin-top: 120px;
   padding: 3rem 2rem;
-  width: 100%;
+  width: 80%;
+  @media (max-width: 600px) {
+    width: 100%;
+  }
 `;
