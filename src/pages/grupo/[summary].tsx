@@ -136,7 +136,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                     total += w;
                   });
                   // here we return the final value to millions showing 2 decimal places
-                  return (total / 1000000).toFixed(2);
+                  return (total / 1000000).toFixed(1);
                 })()}
                 M
               </h3>
@@ -609,7 +609,7 @@ const Captions = styled.div`
       }
       h3 {
         text-align: center;
-        font-size: 2rem;
+        font-size: 1.7rem;
       }
     }
     img {
