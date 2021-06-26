@@ -136,7 +136,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                     total += w;
                   });
                   // here we return the final value to millions showing 2 decimal places
-                  return (total / 1000000).toFixed(2);
+                  return (total / 1000000).toFixed(1);
                 })()}
                 M
               </h3>
@@ -264,7 +264,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                 <div className="main-chart-wrapper">
                   <Chart
                     options={{
-                      colors: ['#97BB2F', '#2FBB96', '#000000'],
+                      colors: ['#97BB2F', '#2FBB96', '#2c3236'],
                       chart: {
                         stacked: true,
                         toolbar: {
@@ -367,14 +367,6 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                         show: false,
                         position: 'right',
                         offsetY: 120,
-                      },
-                      fill: {
-                        opacity: 1,
-                        image: {
-                          src: [
-                            'https://catalogue.accasoftware.com/img/Prodotti/2920/PREVIEW/hachura-30.1.750x527-1_1563779607.PNG',
-                          ],
-                        },
                       },
                       dataLabels: {
                         enabled: false,
@@ -617,7 +609,7 @@ const Captions = styled.div`
       }
       h3 {
         text-align: center;
-        font-size: 2rem;
+        font-size: 1.7rem;
       }
     }
     img {
