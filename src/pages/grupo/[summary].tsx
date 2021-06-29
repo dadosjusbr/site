@@ -188,7 +188,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                     wages.forEach(w => {
                       total += w;
                     });
-                    return (total / 1000000).toFixed(2);
+                    return (total / 1000000).toFixed(1);
                   })()}
                   M
                 </b>
@@ -223,7 +223,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                     monthlyTotals.forEach(w => {
                       total += w;
                     });
-                    return (total / 1000000).toFixed(2);
+                    return (total / 1000000).toFixed(1);
                   })()}
                   M
                 </b>
