@@ -300,7 +300,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                                   cssClass: 'apexcharts-yaxis-label',
                                 },
                                 formatter(value) {
-                                  return `R$ ${(value / 1000000).toFixed(1)}M`;
+                                  return `R$ ${(value / 1000000).toFixed(2)}M`;
                                 },
                               },
                             },
