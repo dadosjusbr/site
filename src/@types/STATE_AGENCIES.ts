@@ -20,6 +20,7 @@ enum STATE_AGENCIES {
   RIO_DE_JANEIRO = 'RJ',
   RONDÔNIA = 'RO',
   RORAIMA = 'RR',
+  SANTA_CATARINA = 'SC',
   SÃO_PAULO = 'SP',
   SERGIPE = 'SE',
   TOCANTINS = 'TO',
