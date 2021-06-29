@@ -709,6 +709,7 @@ const CaptionItems = styled.li`
     margin-top: 1rem;
     font-size: 1.5rem;
     color: #3e5363;
+    white-space: nowrap;
     & > * {
       font-size: 1.5rem;
     }
