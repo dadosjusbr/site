@@ -93,11 +93,6 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   }
   const chartRef = useRef<{ export: () => void }>(null);
 
-  const exportChart = () => {
-    if (chartRef && chartRef.current) {
-      chartRef.current?.export();
-    }
-  };
   function generateGraphWithNavigation() {
     return (
       <MainGraphSection>
@@ -443,16 +438,6 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           )}
         </GraphDivWithPagination>
         <div className="buttons">
-          <Button
-            textColor="#3E5363"
-            borderColor="#3E5363"
-            backgroundColor="#fff"
-            hoverBackgroundColor="#3E5363"
-            onClick={() => exportChart()}
-          >
-            Compartilhar
-            <img src="/img/icon_download_share.svg" alt="calendario" />
-          </Button>
           <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
             <Button
               textColor="#B361C6"
