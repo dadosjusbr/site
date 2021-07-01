@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import ActivityIndicator from '../../components/ActivityIndicator';
@@ -70,6 +70,12 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
+  // the useMemo hook is used to create an memoization (https://en.wikipedia.org/wiki/Memoization) with a state, it's used to avoid the need to recalculate values in screen rederization, here it's used to check if the date is valid to active the nextDate and the previousDate button using dates between 2018-2021 (https://pt-br.reactjs.org/docs/hooks-reference.html#usememo)
+  const nextDateIsNavigable = useMemo<boolean>(
+    () => year !== new Date().getFullYear(),
+    [year],
+  );
+  const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   const [navigableMonth, setNavigableMonth] = useState<any>();
   // this state is used to determine the last month navigable in the given year, to allows to use th "see months" button to navigate to it
   useEffect(() => {
@@ -111,12 +117,17 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             <button
               className="left"
               onClick={() => setYear(year - 1)}
+              disabled={!previousDateIsNavigable}
               type="button"
             >
               <img src="/img/arrow.svg" alt="seta esquerda" />
             </button>
             <span>{year}</span>
-            <button onClick={() => setYear(year + 1)} type="button">
+            <button
+              disabled={!nextDateIsNavigable}
+              onClick={() => setYear(year + 1)}
+              type="button"
+            >
               <img src="/img/arrow.svg" alt="seta direita" />
             </button>
           </div>
@@ -663,6 +674,15 @@ const MainGraphSectionHeader = styled.div`
     align-items: center;
     width: 80%;
     button {
+      &:disabled,
+      &[disabled] {
+        border: 2px solid #3e5363;
+        img {
+          filter: invert(75%) sepia(56%) saturate(285%) hue-rotate(163deg)
+            brightness(87%) contrast(84%);
+        }
+        background-color: #fff;
+      }
       &.left {
         transform: rotate(180deg);
       }
