@@ -374,8 +374,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
         maxPerk: d2.MaxPerk,
         totalPerks: d2.TotalPerks,
         crawlingTime: d2.CrawlingTime,
-        previousButtonActive: d2.PreviousOmaExists,
-        nextButtonActive: d2.NextOmaExists,
+        previousButtonActive: d2.HasNext,
+        nextButtonActive: d2.HasPrevious,
       },
     };
   } catch (err) {
