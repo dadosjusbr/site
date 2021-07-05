@@ -429,7 +429,11 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
                                   return v;
                                 }
                                 // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
-                                if (i < data[data.length - 1].Month) {
+                                if (year === new Date().getFullYear()) {
+                                  if (i < data[data.length - 1].Month) {
+                                    return MaxMonthPlaceholder;
+                                  }
+                                } else {
                                   return MaxMonthPlaceholder;
                                 }
                                 return 0;
