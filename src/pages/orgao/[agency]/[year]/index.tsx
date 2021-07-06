@@ -22,13 +22,13 @@ export default function AgencyPage() {
           content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro"
         />
       </Head>
-      <Header theme="LIGHT" />
+      <Header />
       <Footer />
     </Page>
   );
 }
 const Page = styled.div`
-  background: #fff;
+  background: #3e5363;
 `;
 export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id, year, month } = context.params;
