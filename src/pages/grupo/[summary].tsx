@@ -108,7 +108,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     return (
       <MainGraphSection>
         <MainGraphSectionHeader>
-          <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
+          <a href={`/orgao/${id}/${year}`}>
             <h2>
               {title} ({id.toLocaleUpperCase('pt')})
             </h2>
