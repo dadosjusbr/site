@@ -5,6 +5,7 @@ import dynamic from 'next/dynamic';
 import MONTHS from '../@types/MONTHS';
 import Button from './Button';
 import ActivityIndicator from './ActivityIndicator';
+import ShareModal from './ShareModal';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -34,6 +35,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -393,6 +395,16 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           )}
         </GraphDivWithPagination>
         <div className="buttons">
+          <Button
+            textColor="#3e5363"
+            borderColor="#3e5363"
+            backgroundColor="#fff"
+            hoverBackgroundColor="#3e5363"
+            onClick={() => setModalIsOpen(true)}
+          >
+            Compartilhar
+            <img src="/img/icon_share.svg" alt="compartilhar" />
+          </Button>
           <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
             <Button
               textColor="#B361C6"
@@ -405,6 +417,11 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             </Button>
           </a>
         </div>
+        <ShareModal
+          isOpen={modalIsOpen}
+          url={`https://dadosjusbr.org/orgao/${id}/${year}`}
+          onRequestClose={() => setModalIsOpen(false)}
+        />
       </MainGraphSection>
     </>
   );
