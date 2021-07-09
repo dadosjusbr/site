@@ -15,8 +15,13 @@ import styled from 'styled-components';
 interface ShareModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
+  url?: string;
 }
-const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onRequestClose }) => {
+const ShareModal: React.FC<ShareModalProps> = ({
+  isOpen,
+  onRequestClose,
+  url,
+}) => {
   const a = 0;
   return (
     <Modal
@@ -47,16 +52,16 @@ const ShareModal: React.FC<ShareModalProps> = ({ isOpen, onRequestClose }) => {
           <img src="/img/icon_share.svg" alt="share" />
         </span>
         <div>
-          <EmailShareButton url={window.location.href}>
+          <EmailShareButton url={url || window.location.href}>
             <EmailIcon />
           </EmailShareButton>
-          <TwitterShareButton url={window.location.href}>
+          <TwitterShareButton url={url || window.location.href}>
             <TwitterIcon />
           </TwitterShareButton>
-          <WhatsappShareButton url={window.location.href}>
+          <WhatsappShareButton url={url || window.location.href}>
             <WhatsappIcon />
           </WhatsappShareButton>
-          <FacebookShareButton url={window.location.href}>
+          <FacebookShareButton url={url || window.location.href}>
             <FacebookIcon />
           </FacebookShareButton>
         </div>
