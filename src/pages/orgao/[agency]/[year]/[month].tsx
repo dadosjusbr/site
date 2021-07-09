@@ -316,7 +316,7 @@ export default function OmaPage({
                       hoverBackgroundColor="#2FBB96"
                       className="left"
                     >
-                      Voltar par anos
+                      Voltar para anos
                       <img
                         src="/img/icon_calendario_green.svg"
                         alt="calendário"
