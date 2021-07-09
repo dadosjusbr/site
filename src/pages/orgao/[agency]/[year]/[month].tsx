@@ -26,9 +26,9 @@ export default function OmaPage({
   maxPerk,
   totalPerks,
   crawlingTime,
+  previousButtonActive,
+  nextButtonActive,
 }) {
-  const [previousButtonActive, setPreviousButtonActive] = useState(true);
-  const [nextButtonActive, setNextButtonActive] = useState(true);
   const [chartData, setChartData] = useState<any>();
   const [loading, setLoading] = useState(true);
   const [fileLink, setFileLink] = useState('');
@@ -60,35 +60,11 @@ export default function OmaPage({
 
   const router = useRouter();
 
-  async function checkNextYear() {
-    let activateButtonNext = true;
-    const { m, y } = getNextDate();
-    if (y !== undefined) {
-      await api.get(`/orgao/salario/${agency}/${y}/${m}`).catch(_err => {
-        activateButtonNext = false;
-      });
-      setNextButtonActive(activateButtonNext);
-    }
-  }
-
-  async function checkPreviousYear() {
-    let activateButtonPrevious = true;
-    const { m, y } = getPreviousDate();
-    if (y !== undefined) {
-      await api.get(`/orgao/salario/${agency}/${y}/${m}`).catch(_err => {
-        activateButtonPrevious = false;
-      });
-      setPreviousButtonActive(activateButtonPrevious);
-    }
-  }
-
   // this effect is using the page changing as a hook to fetch the data from api
   useEffect(() => {
     // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
     setLoading(true);
     // then it checks the next and the previous year to block the navigation buttons or to help to choose the right year
-    checkNextYear();
-    checkPreviousYear();
     // finally it fetchs the data from the api to fill the chart with the agency/month/year data
     fetchChartData();
   }, [year, month]);
@@ -398,6 +374,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
         maxPerk: d2.MaxPerk,
         totalPerks: d2.TotalPerks,
         crawlingTime: d2.CrawlingTime,
+        previousButtonActive: d2.HasPrevious,
+        nextButtonActive: d2.HasNext,
       },
     };
   } catch (err) {
