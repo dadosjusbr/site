@@ -1,17 +1,23 @@
 import Link from 'next/link';
 import React from 'react';
 import styled from 'styled-components';
+import { usePrivacityPolicy } from '../contexts/privacity-policy-context';
 
-const PrivacityPolicePopUp: React.FC = () => (
-  <Container>
-    <span>
-      O DadosJusBr utiliza Cookies para melhorar a experiencia do usuário dentro
-      do nosso sistema, ao aceitar os cookies você concorda com a nossa{' '}
-      <Link href="/politica-de-privacidade">política de privacidade</Link>.
-    </span>
-    <button type="button">Aceitar Cookies</button>
-  </Container>
-);
+const PrivacityPolicyPopUp: React.FC = () => {
+  const { acceptCookies } = usePrivacityPolicy();
+  return (
+    <Container>
+      <span>
+        O DadosJusBr utiliza Cookies para melhorar a experiencia do usuário
+        dentro do nosso sistema, ao aceitar os cookies você concorda com a nossa{' '}
+        <Link href="/politica-de-privacidade">política de privacidade</Link>.
+      </span>
+      <button type="button" onClick={acceptCookies}>
+        Aceitar Cookies
+      </button>
+    </Container>
+  );
+};
 export const Container = styled.div`
   position: fixed;
   background-color: #3e5363;
@@ -56,4 +62,4 @@ export const Container = styled.div`
   }
 `;
 
-export default PrivacityPolicePopUp;
+export default PrivacityPolicyPopUp;
