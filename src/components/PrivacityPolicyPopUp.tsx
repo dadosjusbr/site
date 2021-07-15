@@ -28,7 +28,7 @@ export const Container = styled.div`
   padding: 2.5rem;
   color: #fff;
   font-size: 2rem;
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19), 0 -5px 20px rgba(0, 0, 0, 0.23);
   font-family: 'Roboto Condensed', sans-serif;
   margin-left: auto;
   margin-right: auto;
@@ -42,6 +42,8 @@ export const Container = styled.div`
   }
   @media (max-width: 600px) {
     bottom: 0;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.19),
+      0px -6px 6px rgba(0, 0, 0, 0.23);
     width: 100%;
   }
 
