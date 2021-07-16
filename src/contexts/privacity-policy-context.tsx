@@ -15,7 +15,7 @@ interface PrivacityPolicyData {
 const PrivacityPolicyContext = createContext<PrivacityPolicyData>(
   {} as PrivacityPolicyData,
 );
-
+// this context is used to inject the privacity policy checking in all aplication, this structure uses the react use context pattern https://pt-br.reactjs.org/docs/context.html
 export const PrivacityPolicyProvider: React.FC = ({ children }) => {
   const [accepted, setAccepted] = useState(false);
   const [checked, setChecked] = useState(true);
@@ -40,6 +40,8 @@ export const PrivacityPolicyProvider: React.FC = ({ children }) => {
     </PrivacityPolicyContext.Provider>
   );
 };
+
+// this custom hook is used to use the privacity policy props in child react components
 export function usePrivacityPolicy(): PrivacityPolicyData {
   const context = useContext(PrivacityPolicyContext);
 

@@ -12,6 +12,7 @@ const PrivacityPolicyPopUp: React.FC = () => {
         dentro do nosso sistema, ao aceitar os cookies você concorda com a nossa{' '}
         <Link href="/politica-de-privacidade">política de privacidade</Link>.
       </span>
+      {/* here we send the information to PrivacityPolicyContext to allow the cookie storing */}
       <button type="button" onClick={acceptCookies}>
         Aceitar Cookies
       </button>

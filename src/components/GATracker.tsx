@@ -5,6 +5,7 @@ import { usePrivacityPolicy } from '../contexts/privacity-policy-context';
 const GATracker: React.FC = ({ children }) => {
   const { accepted } = usePrivacityPolicy();
   useEffect(() => {
+    // here we avoid the Google Analitycs until the user accept the privacity policy.
     if (accepted) {
       ReactGA.initialize(process.env.ID_ANALYTICS);
       ReactGA.pageview(window.location.pathname);
