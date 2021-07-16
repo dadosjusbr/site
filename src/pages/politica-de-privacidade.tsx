@@ -148,7 +148,7 @@ export default function PrivacityPolicy() {
             após a coleta dos dados.
           </p>
 
-          <h4>5. COMO SOLICITAR ACESSO E EXCLUSÃO DE DADOS?</h4>
+          <h4>5. SOLICITAR ACESSO E EXCLUSÃO DE DADOS</h4>
 
           <p>
             Os cookies de navegação podem ser apagados diretamente no seu
