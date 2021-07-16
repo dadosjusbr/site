@@ -63,33 +63,38 @@ export default function PrivacityPolicy() {
               </p>
 
               <p>
-                Esses dados são coletados por meio de cookies. Você pode ajustar
-                suas configurações de navegador para desabilitar os cookies ou
-                deletá-los. Caso estejam habilitados, nós (e os terceiros
-                previamente mencionados) emitiremos cookies quando você
-                interagir com o nosso site. Somente coletamos, via cookies,
-                dados essenciais para o funcionamento do nosso site e para as
-                métricas de acesso. Não compartilhamos esses dados com
+                Esses dados são coletados por meio de{' '}
+                <a href="https://www.techtudo.com.br/noticias/2018/10/o-que-sao-cookies-entenda-os-dados-que-os-sites-guardam-sobre-voce.ghtml">
+                  cookies
+                </a>
+                . Você pode ajustar suas configurações de navegador para
+                desabilitar os cookies ou deletá-los. Caso estejam habilitados,
+                nós (e os terceiros previamente mencionados) emitiremos cookies
+                quando você interagir com o nosso site. Somente coletamos, via
+                cookies, dados essenciais para o funcionamento do nosso site e
+                para as métricas de acesso. Não compartilhamos esses dados com
                 terceiros, além daqueles responsáveis pelos próprios cookies.
               </p>
 
               <p>
                 Não serão automaticamente coletados dados pessoais; informações
-                dessa natureza serão registradas em nossos bancos de dados apenas
-                quando um formulário for preenchido voluntariamente pelo
+                dessa natureza serão registradas em nossos bancos de dados
+                apenas quando um formulário for preenchido voluntariamente pelo
                 usuário.
               </p>
 
               <p>
                 Além disso, o site do DadosJusBr usa a ferramenta{' '}
-                <strong>Google Analytics</strong> que analisa suas interações e
-                como você usa o site. O Google Analytics é um serviço de web
-                analytics que identifica os seus padrões de navegação no nosso
-                site e gera relatórios sobre essas atividades, para que possamos
-                melhorar o site do DadosJusBr. Para fazer isso, são
-                coletados/compartilhados dados pessoais para contato, como você
-                usa o site e dados que o identificam. O tratamento desses dados
-                é regido pela{' '}
+                <a href="https://analytics.google.com/analytics/web/">
+                  Google Analytics
+                </a>{' '}
+                que analisa suas interações e como você usa o site. O Google
+                Analytics é um serviço de web analytics que identifica os seus
+                padrões de navegação no nosso site e gera relatórios sobre essas
+                atividades, para que possamos melhorar o site do DadosJusBr.
+                Para fazer isso, são coletados/compartilhados dados pessoais
+                para contato, como você usa o site e dados que o identificam. O
+                tratamento desses dados é regido pela{' '}
                 <a
                   href="https://policies.google.com/privacy"
                   target="_blank"
@@ -119,8 +124,8 @@ export default function PrivacityPolicy() {
 
           <p>
             O DadosjusBR utliza os dados para: (i) nos comunicar com as pessoas
-            interessadas; (ii) divulgar as nossas atividades; (iii) promover a associação
-            de interessados à entidade; e (iv) identificar as
+            interessadas; (ii) divulgar as nossas atividades; (iii) promover a
+            associação de interessados à entidade; e (iv) identificar as
             características de acesso e navegação em nosso site.
           </p>
 
@@ -141,11 +146,11 @@ export default function PrivacityPolicy() {
           <h4>4. TEMPO DE ARMAZENAMENTO DOS DADOS</h4>
 
           <p>
-            O DadosJusBr apenas manterá os seus dados armazenados pelo tempo necessário
-            para o cumprimento das finalidades para as quais foram coletados. A
-            fim de manter o histórico de solicitações recebidas, os dados
-            pessoais fornecidos serão anonimizados no prazo máximo de 3 meses
-            após a coleta dos dados.
+            O DadosJusBr apenas manterá os seus dados armazenados pelo tempo
+            necessário para o cumprimento das finalidades para as quais foram
+            coletados. A fim de manter o histórico de solicitações recebidas, os
+            dados pessoais fornecidos serão anonimizados no prazo máximo de 3
+            meses após a coleta dos dados.
           </p>
 
           <h4>5. SOLICITAR ACESSO E EXCLUSÃO DE DADOS</h4>
