@@ -118,11 +118,9 @@ export default function PrivacityPolicy() {
           <h4>2. FORMA DE UTILIZAÇÃO DOS DADOS COLETADOS</h4>
 
           <p>
-            Os dados coletados serão apenas utilizados para as finalidades
-            institucionais do DadosJusBr. Em linhas gerais, utilizamos os dados
-            para: (i) nos comunicar com as pessoas interessadas; (ii) divulgar
-            as nossas atividades; (iii) promover a associação de interessados à
-            entidade, nos termos do nosso Estatuto Social; e (iv) identificar as
+            O DadosjusBR utliza os dados para: (i) nos comunicar com as pessoas
+            interessadas; (ii) divulgar as nossas atividades; (iii) promover a associação
+            de interessados à entidade; e (iv) identificar as
             características de acesso e navegação em nosso site.
           </p>
 
