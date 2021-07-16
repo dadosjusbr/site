@@ -115,7 +115,7 @@ export default function PrivacityPolicy() {
             conforme indicado no Item 5 abaixo.
           </p>
 
-          <h4>2. COMO UTILIZAMOS OS DADOS COLETADOS?</h4>
+          <h4>2. FORMA DE UTILIZAÇÃO DOS DADOS COLETADOS</h4>
 
           <p>
             Os dados coletados serão apenas utilizados para as finalidades
