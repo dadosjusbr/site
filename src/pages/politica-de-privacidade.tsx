@@ -124,7 +124,7 @@ export default function PrivacityPolicy() {
             características de acesso e navegação em nosso site.
           </p>
 
-          <h4>3. COM QUEM COMPARTILHAMOS SEUS DADOS?</h4>
+          <h4>3. COMPARTILHAMENTO DOS DADOS</h4>
 
           <p>
             De forma geral, o DadosJusBr não venderá, compartilhará, cederá ou
