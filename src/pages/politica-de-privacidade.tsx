@@ -141,7 +141,7 @@ export default function PrivacityPolicy() {
           <h4>4. POR QUANTO TEMPO GUARDAMOS ESSES DADOS?</h4>
 
           <p>
-            O DadosJusBr apenas guardará os seus dados pelo tempo necessário
+            O DadosJusBr apenas manterá os seus dados armazenados pelo tempo necessário
             para o cumprimento das finalidades para as quais foram coletados. A
             fim de manter o histórico de solicitações recebidas, os dados
             pessoais fornecidos serão anonimizados no prazo máximo de 3 meses
