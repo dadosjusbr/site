@@ -51,7 +51,7 @@ export default function PrivacityPolicy() {
             esta Política de Privacidade.
           </p>
 
-          <h4>1. QUAIS DADOS O DADOSJUSBR PODE COLETAR?</h4>
+          <h4>1. DADOS POSSIVELMENTE COLETADOS PELO DADOSJUSBR</h4>
 
           <CollectList>
             <li>
