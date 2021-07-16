@@ -74,9 +74,8 @@ export default function PrivacityPolicy() {
               </p>
 
               <p>
-                Com exceção dos dados de <strong>cookies</strong>, não serão
-                automaticamente coletados dados pessoais; informações dessa
-                natureza serão registradas em nossos bancos de dados apenas
+                Não serão automaticamente coletados dados pessoais; informações
+                dessa natureza serão registradas em nossos bancos de dados apenas
                 quando um formulário for preenchido voluntariamente pelo
                 usuário.
               </p>
