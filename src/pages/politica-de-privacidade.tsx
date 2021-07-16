@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
-export default function PrivacityPolitics() {
+export default function PrivacityPolicy() {
   return (
     <Page>
       <Head>
