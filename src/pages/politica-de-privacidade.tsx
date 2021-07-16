@@ -138,7 +138,7 @@ export default function PrivacityPolicy() {
             cláusula de confidencialidade para proteção desses dados.
           </p>
 
-          <h4>4. POR QUANTO TEMPO GUARDAMOS ESSES DADOS?</h4>
+          <h4>4. TEMPO DE ARMAZENAMENTO DOS DADOS</h4>
 
           <p>
             O DadosJusBr apenas manterá os seus dados armazenados pelo tempo necessário
