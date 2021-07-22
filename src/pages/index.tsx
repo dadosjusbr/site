@@ -38,26 +38,32 @@ export default function Index({
       <Nav />
       <Container>
         <section>
-          <div>
-            QTD ORGÃOS: {agencyAmount}
-            <br />
-            QTD MESES: {monthAmount}
-          </div>
-          <div>
-            Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
-            {recordAmount} registros de pagamentos de salários, indenizações,
-            gratificações e diárias, somando R$ {finalValue / 1000000} milhões
-            de reais
-          </div>
+          <h2>O DadosJus liberta os dados!</h2>
+          <br />
+          <GeneralInfoList>
+            <li>
+              <img src="/img/anim-group-2/icon_salario.svg" alt="salário" />
+              <span>Orgãos libertados: {agencyAmount}</span>
+            </li>
+            <li>
+              <img
+                src="/img/anim-group-2/icon_beneficio.svg"
+                alt="beneficios"
+              />
+              <span>Meses libertados: {monthAmount}</span>
+            </li>
+          </GeneralInfoList>
         </section>
         <DropDownWrapper>
-          <h2>Dados Por Grupo</h2>
+          <h3>Dados Por Grupo</h3>
           <GreenDropDownSelector />
         </DropDownWrapper>
       </Container>
       <GraphWrapper>
         <section>
-          <h2>Grafico Geral de remunerações</h2>
+          <h2>
+            Grafico Geral de remunerações do ano {new Date().getFullYear()}
+          </h2>
           <RemunerationBarGraph
             year={new Date().getFullYear()}
             data={completeChartData}
@@ -65,6 +71,14 @@ export default function Index({
           />
         </section>
       </GraphWrapper>
+      <Container className="released-data">
+        <section>
+          Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
+          {recordAmount} registros de pagamentos de salários, indenizações,
+          gratificações e diárias, somando R$ {finalValue / 1000000} milhões de
+          reais
+        </section>
+      </Container>
       <Footer />
     </Page>
   );
@@ -79,7 +93,20 @@ export const getServerSideProps: GetServerSideProps = async context => {
         endDate: JSON.stringify(new Date()),
         recordAmount: `${9984372}`,
         finalValue: `${58000000}`,
-        completeChartData: [],
+        completeChartData: [
+          {
+            Month: 1,
+            Wage: 18776344.089999877,
+            Perks: 1235640.4699999972,
+            Others: 42348121.77999976,
+          },
+          {
+            Month: 2,
+            Wage: 18749246.019999877,
+            Perks: 1422332.8599999961,
+            Others: 23539751.029999867,
+          },
+        ],
       },
     };
   } catch (err) {
@@ -94,13 +121,15 @@ const Page = styled.div`
   background: #3e5363;
 `;
 const GraphWrapper = styled.div`
-  margin: 2rem 6rem;
+  margin: 2rem 7.8rem;
   font-family: 'Roboto Condensed', sans-serif;
   h2,
   h3 {
     text-align: center;
+    font-size: 1.5rem;
   }
   h2 {
+    font-size: 2rem;
     margin-bottom: 4rem;
   }
   @media (max-width: 600px) {
@@ -108,11 +137,7 @@ const GraphWrapper = styled.div`
     margin: 0px;
   }
   section {
-    * {
-      font-size: 2rem;
-    }
     padding-top: 6rem;
-    padding-bottom: 6rem;
     background-color: #fff;
     color: #3e5363;
     width: 100%;
@@ -124,25 +149,31 @@ const GraphWrapper = styled.div`
 const Container = styled.div`
   display: flex;
   margin: 0px 68px;
-  justify-content: space-between;
   color: #fff;
   padding-top: 8rem;
-  padding-bottom: 8rem;
+  h2,
+  h3 {
+    font-size: 3rem !important;
+  }
+  padding-bottom: 4rem;
   @media (max-width: 600px) {
     padding: 0;
     margin: 0px 20px;
   }
   section {
-    max-width: 45%;
     font-size: 1rem;
     * {
       font-size: 2rem;
     }
+    flex-direction: column;
+    font-size: 2rem;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0px 1rem;
     div {
       display: flex;
       flex-direction: column;
       justify-content: center;
-      width: 100%;
     }
     display: flex;
     font-family: 'Roboto Condensed', sans-serif;
@@ -151,6 +182,7 @@ const Container = styled.div`
     section {
       max-width: 100%;
       padding-top: 4rem;
+      margin: 0;
       padding-bottom: 4rem;
     }
     flex-direction: column;
@@ -163,6 +195,12 @@ const Container = styled.div`
         padding-top: 0rem;
       }
     }
+  }
+  &.released-data {
+    margin: 4rem 0;
+    padding: 68px;
+    background-color: #7f3d8b;
+    background-image: url('/img/splash_background.png');
   }
 `;
 const DropDownWrapper = styled.section`
@@ -181,9 +219,29 @@ const GreenDropDownSelector = styled(DropDownGroupSelector)`
   background-color: #2fbb96;
   border: #3e5363;
   margin-top: 120px;
-  padding: 3rem 2rem;
+  padding: 5rem 2rem;
+  font-size: 2.5rem !important;
   width: 80%;
   @media (max-width: 600px) {
     width: 100%;
+  }
+`;
+const GeneralInfoList = styled.ul`
+  list-style: none;
+  background-color: #f5f6f7;
+  padding: 2rem;
+  color: #3e5363;
+  li {
+    & + li {
+      margin-top: 1rem;
+    }
+    display: flex;
+    align-items: center;
+    img {
+      border-radius: 50%;
+      margin-right: 1rem;
+      width: 4rem;
+      background: #3e5363;
+    }
   }
 `;
