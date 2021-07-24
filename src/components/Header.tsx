@@ -49,6 +49,9 @@ const Header: React.FC<HeaderPropos> = ({ theme = 'DEFAULT', ...rest }) => {
           <HeaderItem theme={theme}>
             <Link href="/equipe">Equipe</Link>
           </HeaderItem>
+          <HeaderItem theme={theme}>
+            <Link href="/sobre">Sobre</Link>
+          </HeaderItem>
         </HeaderList>
       </div>
     </Container>
