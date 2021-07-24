@@ -18,6 +18,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   data,
   dataLoading,
 }) => {
+  // this constant is used as an alx value to determine the max graph height
   const MaxMonthPlaceholder = 29000321;
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
