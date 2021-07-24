@@ -59,6 +59,14 @@ export default function Index({
           <GreenDropDownSelector />
         </DropDownWrapper>
       </Container>
+      <Container className="released-data">
+        <section>
+          Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
+          {recordAmount} registros de pagamentos de salários, indenizações,
+          gratificações e diárias, somando R$ {finalValue / 1000000} milhões de
+          reais
+        </section>
+      </Container>
       <GraphWrapper>
         <section>
           <h2>
@@ -71,14 +79,6 @@ export default function Index({
           />
         </section>
       </GraphWrapper>
-      <Container className="released-data">
-        <section>
-          Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
-          {recordAmount} registros de pagamentos de salários, indenizações,
-          gratificações e diárias, somando R$ {finalValue / 1000000} milhões de
-          reais
-        </section>
-      </Container>
       <Footer />
     </Page>
   );
