@@ -10,6 +10,7 @@ enum STATE_AGENCIES {
   GOIÁS = 'GO',
   MARANHÃO = 'MA',
   MATO_GROSSO = 'MT',
+  MATO_GROSSO_DO_SUL = 'MS',
   MINAS_GERAIS = 'MG',
   PARÁ = 'PA',
   PARAÍBA = 'PB',
