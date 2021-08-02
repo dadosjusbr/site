@@ -308,7 +308,7 @@ export default function OmaPage({
               </div>
               <div className="buttons">
                 <div>
-                  <a href="/grupo/PB">
+                  <a href={`/orgao/${agency}/${year}`}>
                     <Button
                       textColor="#2FBB96"
                       borderColor="#2FBB96"
