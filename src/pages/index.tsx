@@ -118,7 +118,7 @@ export default function Index({
             </div>
           </MainGraphSectionHeader>
           <RemunerationBarGraph
-            year={new Date().getFullYear()}
+            year={year}
             data={completeChartData}
             dataLoading={loading}
             billion
