@@ -95,7 +95,7 @@ export default function Index({
       <GraphWrapper>
         <section>
           <h2>
-            Grafico Geral de remunerações do ano {new Date().getFullYear()}
+            Remunerações {new Date().getFullYear()}
           </h2>
           <MainGraphSectionHeader>
             <div>
