@@ -94,9 +94,7 @@ export default function Index({
       </Container>
       <GraphWrapper>
         <section>
-          <h2>
-            Remunerações {new Date().getFullYear()}
-          </h2>
+          <h2>Remunerações {year}</h2>
           <MainGraphSectionHeader>
             <div>
               <button
