@@ -101,7 +101,7 @@ export default function OmaPage({
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
-          content={`Veja os dados do mês ${month} no ano ${year} na agência ${fullName}`}
+          content={`Veja os dados de ${month}/${year} do ${fullName} (${agency})`}
         />
         <meta
           property="og:description"
