@@ -1,11 +1,12 @@
 import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
 import RemunerationBarGraph from '../components/RemunerationBarGraph';
+import api from '../services/api';
 
 export default function Index({
   agencyAmount,
@@ -14,16 +15,45 @@ export default function Index({
   endDate,
   recordAmount,
   finalValue,
-  completeChartData,
 }) {
   const formatedStartDate = useMemo<string>(() => {
-    const d = new Date(JSON.parse(startDate));
+    const d = new Date(startDate);
+    d.setMonth(d.getMonth() + 1);
     return `${d.getMonth()}/${d.getFullYear()}`;
   }, [startDate]);
   const formatedEndDate = useMemo<string>(() => {
-    const d = new Date(JSON.parse(endDate));
+    const d = new Date(endDate);
+    d.setMonth(d.getMonth() + 1);
     return `${d.getMonth()}/${d.getFullYear()}`;
   }, [endDate]);
+  const [completeChartData, setCompleteChartData] = useState<any[]>([]);
+  const [year, setYear] = useState(new Date().getFullYear());
+  const [loading, setLoading] = useState(true);
+  const nextDateIsNavigable = useMemo<boolean>(
+    () => year !== new Date().getFullYear(),
+    [year],
+  );
+  const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
+  useEffect(() => {
+    fetchGeneralChartData();
+  }, [year]);
+  async function fetchGeneralChartData() {
+    try {
+      const { data } = await api.get(`/geral/remuneracao/${year}`);
+      setCompleteChartData(
+        data.map(d => ({
+          Wage: d.wage,
+          Perks: d.perks,
+          Others: d.others,
+          // eslint-disable-next-line no-underscore-dangle
+          Month: d._id,
+        })),
+      );
+    } catch (error) {
+      setCompleteChartData([]);
+    }
+    setLoading(false);
+  }
   return (
     <Page>
       <Head>
@@ -42,14 +72,9 @@ export default function Index({
           <br />
           <GeneralInfoList>
             <li>
-              <img src="/img/anim-group-2/icon_salario.svg" alt="salário" />
               <span>Orgãos libertados: {agencyAmount}</span>
             </li>
             <li>
-              <img
-                src="/img/anim-group-2/icon_beneficio.svg"
-                alt="beneficios"
-              />
               <span>Meses libertados: {monthAmount}</span>
             </li>
           </GeneralInfoList>
@@ -63,8 +88,8 @@ export default function Index({
         <section>
           Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
           {recordAmount} registros de pagamentos de salários, indenizações,
-          gratificações e diárias, somando R$ {finalValue / 1000000} milhões de
-          reais
+          gratificações e diárias, somando R${' '}
+          {(finalValue / 1000000000).toFixed(2)} bilhões de reais
         </section>
       </Container>
       <GraphWrapper>
@@ -72,10 +97,31 @@ export default function Index({
           <h2>
             Grafico Geral de remunerações do ano {new Date().getFullYear()}
           </h2>
+          <MainGraphSectionHeader>
+            <div>
+              <button
+                className="left"
+                onClick={() => setYear(year - 1)}
+                disabled={!previousDateIsNavigable}
+                type="button"
+              >
+                <img src="/img/arrow.svg" alt="seta esquerda" />
+              </button>
+              <span>{year}</span>
+              <button
+                disabled={!nextDateIsNavigable}
+                onClick={() => setYear(year + 1)}
+                type="button"
+              >
+                <img src="/img/arrow.svg" alt="seta direita" />
+              </button>
+            </div>
+          </MainGraphSectionHeader>
           <RemunerationBarGraph
             year={new Date().getFullYear()}
             data={completeChartData}
-            dataLoading={false}
+            dataLoading={loading}
+            billion
           />
         </section>
       </GraphWrapper>
@@ -85,28 +131,15 @@ export default function Index({
 }
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
+    const { data } = await api.get('/geral/resumo');
     return {
       props: {
-        agencyAmount: 1000,
-        monthAmount: 1000,
-        startDate: JSON.stringify(new Date()),
-        endDate: JSON.stringify(new Date()),
-        recordAmount: `${9984372}`,
-        finalValue: `${58000000}`,
-        completeChartData: [
-          {
-            Month: 1,
-            Wage: 18776344.089999877,
-            Perks: 1235640.4699999972,
-            Others: 42348121.77999976,
-          },
-          {
-            Month: 2,
-            Wage: 18749246.019999877,
-            Perks: 1422332.8599999961,
-            Others: 23539751.029999867,
-          },
-        ],
+        agencyAmount: data.AgencyAmount,
+        monthAmount: data.MonthlyTotalsAmount,
+        startDate: data.StartDate,
+        endDate: data.EndDate,
+        recordAmount: `${data.RemunerationRecordsCount}`,
+        finalValue: `${data.GeneralRemunerationValue}`,
       },
     };
   } catch (err) {
@@ -153,6 +186,7 @@ const Container = styled.div`
   padding-top: 8rem;
   h2,
   h3 {
+    font-weight: 200;
     font-size: 3rem !important;
   }
   padding-bottom: 4rem;
@@ -219,7 +253,7 @@ const GreenDropDownSelector = styled(DropDownGroupSelector)`
   background-color: #2fbb96;
   border: #3e5363;
   margin-top: 120px;
-  padding: 5rem 2rem;
+  padding: 3.5rem 2rem;
   font-size: 2.5rem !important;
   width: 80%;
   @media (max-width: 600px) {
@@ -237,11 +271,63 @@ const GeneralInfoList = styled.ul`
     }
     display: flex;
     align-items: center;
-    img {
+  }
+`;
+const MainGraphSectionHeader = styled.div`
+  font-size: 4rem;
+  color: #3e5363;
+  display: flex;
+  width: 100%;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center;
+  h2 {
+    margin-bottom: 1rem;
+    font-size: 3rem;
+  }
+  span {
+    margin-top: 2rem;
+    font-size: 2rem;
+    font-weight: 400;
+  }
+  div {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 35rem;
+    button {
+      &:disabled,
+      &[disabled] {
+        border: 2px solid #3e5363;
+        img {
+          filter: invert(75%) sepia(56%) saturate(285%) hue-rotate(163deg)
+            brightness(87%) contrast(84%);
+        }
+        background-color: #fff;
+      }
+      &.left {
+        transform: rotate(180deg);
+      }
+      img {
+        position: initial;
+      }
+      width: 30px;
+      color: #3e5363;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       border-radius: 50%;
-      margin-right: 1rem;
-      width: 4rem;
-      background: #3e5363;
+      border: none;
+      background-color: #3e5363;
+    }
+    @media (max-width: 600px) {
+      width: 30rem;
+    }
+    span {
+      font-size: 2rem;
+      font-weight: bold;
     }
   }
+  margin-bottom: 4.5rem;
 `;

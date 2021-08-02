@@ -11,12 +11,14 @@ export interface RemunerationBarGraphProps {
   year: number;
   data: any[];
   dataLoading: boolean;
+  billion?: boolean;
 }
 
 const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   year,
   data,
   dataLoading,
+  billion = false,
 }) => {
   // this constant is used as an alx value to determine the max graph height
   const MaxMonthPlaceholder = 29000321;
@@ -40,9 +42,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   total += w;
                 });
                 // here we return the final value to millions showing 2 decimal places
-                return (total / 1000000).toFixed(1);
+                return !billion
+                  ? `${(total / 1000000).toFixed(1)}M`
+                  : `${(total / 1000000000).toFixed(1)}B`;
               })()}
-              M
             </h3>
           </span>
           <span className="info">
@@ -92,9 +95,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   wages.forEach(w => {
                     total += w;
                   });
-                  return (total / 1000000).toFixed(1);
+                  return !billion
+                    ? `${(total / 1000000).toFixed(1)}M`
+                    : `${(total / 1000000000).toFixed(1)}B`;
                 })()}
-                M
               </b>
             </span>
           </CaptionItems>
@@ -127,9 +131,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   monthlyTotals.forEach(w => {
                     total += w;
                   });
-                  return (total / 1000000).toFixed(1);
+                  return !billion
+                    ? `${(total / 1000000).toFixed(1)}M`
+                    : `${(total / 1000000000).toFixed(1)}B`;
                 })()}
-                M
               </b>
             </span>
           </CaptionItems>
@@ -204,7 +209,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                 cssClass: 'apexcharts-yaxis-label',
                               },
                               formatter(value) {
-                                return `R$ ${(value / 1000000).toFixed(2)}M`;
+                                return !billion
+                                  ? `R$ ${(value / 1000000).toFixed(2)}M`
+                                  : `R$ ${(value / 1000000000).toFixed(2)}B`;
                               },
                             },
                           },
@@ -242,7 +249,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         formatter(value) {
                           if (value === 29000321)
                             return 'Não existem dados para esse mês';
-                          return `R$ ${(value / 1000000).toFixed(2)}M`;
+                          return !billion
+                            ? `R$ ${(value / 1000000).toFixed(2)}M`
+                            : `R$ ${(value / 1000000000).toFixed(2)}B`;
                         },
                       },
                     },
