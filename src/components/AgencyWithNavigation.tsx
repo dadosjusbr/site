@@ -14,6 +14,7 @@ export interface AgencyPageWithNavigationProps {
   data: any[];
   dataLoading: boolean;
   navigableMonth: number;
+  summaryPackage?: any;
 }
 
 const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
@@ -24,6 +25,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   data,
   dataLoading,
   navigableMonth,
+  summaryPackage,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const nextDateIsNavigable = useMemo<boolean>(
@@ -65,27 +67,45 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           dataLoading={dataLoading}
         />
         <div className="buttons">
-          <Button
-            textColor="#3e5363"
-            borderColor="#3e5363"
-            backgroundColor="#fff"
-            hoverBackgroundColor="#3e5363"
-            onClick={() => setModalIsOpen(true)}
-          >
-            Compartilhar
-            <img src="/img/icon_share.svg" alt="compartilhar" />
-          </Button>
-          <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
+          <div>
+            {summaryPackage && (
+              <a href={summaryPackage.Package.url}>
+                <Button
+                  textColor="#3e5363"
+                  borderColor="#3e5363"
+                  backgroundColor="#fff"
+                  hoverBackgroundColor="#3e5363"
+                  id="download-button"
+                >
+                  Baixar Dados
+                  <img src="/img/icon_download_share.svg" alt="compartilhar" />
+                </Button>
+              </a>
+            )}
+          </div>
+          <div>
             <Button
-              textColor="#B361C6"
-              borderColor="#B361C6"
+              textColor="#3e5363"
+              borderColor="#3e5363"
               backgroundColor="#fff"
-              hoverBackgroundColor="#B361C6"
+              hoverBackgroundColor="#3e5363"
+              onClick={() => setModalIsOpen(true)}
             >
-              Explorar Meses
-              <img src="/img/icon_calendario.svg" alt="calendario" />
+              Compartilhar
+              <img src="/img/icon_share.svg" alt="compartilhar" />
             </Button>
-          </a>
+            <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
+              <Button
+                textColor="#B361C6"
+                borderColor="#B361C6"
+                backgroundColor="#fff"
+                hoverBackgroundColor="#B361C6"
+              >
+                Explorar Meses
+                <img src="/img/icon_calendario.svg" alt="calendario" />
+              </Button>
+            </a>
+          </div>
         </div>
         <ShareModal
           isOpen={modalIsOpen}
@@ -180,13 +200,34 @@ const MainGraphSection = styled.section`
   flex-direction: column;
   font-family: 'Roboto Condensed', sans-serif;
   .buttons {
-    justify-content: flex-end;
+    justify-content: space-between;
     display: flex;
     flex-wrap: wrap;
     width: 100%;
+    #download-button:hover {
+      img {
+        filter: brightness(0) invert(1);
+      }
+    }
+    div {
+      @media (max-width: 600px) {
+        justify-content: center;
+      }
+      display: flex;
+      flex-wrap: wrap;
+      flex-direction: row;
+      & + div {
+        & > :first-child {
+          &:hover {
+            img {
+              filter: brightness(0) invert(1);
+            }
+          }
+        }
+      }
+    }
     @media (max-width: 600px) {
       justify-content: center;
-      margin-bottom: 2rem;
     }
     button {
       font-size: 2rem;

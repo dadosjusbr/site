@@ -59,6 +59,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
 }) => {
   // this state is used to store the api fetched data after fetch it
   const [data, setData] = useState<any[]>([]);
+  const [summaryPackage, setSummaryPackage] = useState<any>();
   const [year, setYear] = useState(new Date().getFullYear());
   const [dataLoading, setDataLoading] = useState(true);
   // the useMemo hook is used to create an memoization (https://en.wikipedia.org/wiki/Memoization) with a state, it's used to avoid the need to recalculate values in screen rederization, here it's used to check if the date is valid to active the nextDate and the previousDate button using dates between 2018-2021 (https://pt-br.reactjs.org/docs/hooks-reference.html#usememo)
@@ -83,6 +84,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
           ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
           : 1,
       );
+      setSummaryPackage(agency.SummaryPackage);
       setDataLoading(false);
     } catch (err) {
       console.log(err);
@@ -99,6 +101,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       setYear={setYear}
       title={title}
       year={year}
+      summaryPackage={summaryPackage}
     />
   );
 };
