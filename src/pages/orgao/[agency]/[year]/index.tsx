@@ -15,6 +15,7 @@ export default function AgencyPage({
   previousDateIsNavigable,
   navigableMonth,
   fullName,
+  summaryPackage,
 }) {
   const router = useRouter();
   function navigateToGivenYear(y: number) {
@@ -46,6 +47,7 @@ export default function AgencyPage({
           title={fullName}
           navigableMonth={navigableMonth}
           setYear={navigateToGivenYear}
+          summaryPackage={summaryPackage}
         />
       </Container>
       <Footer />
@@ -71,6 +73,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
           ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
           : 1,
         fullName: agency.AgencyFullName,
+        summaryPackage: agency.SummaryPackage,
       },
     };
   } catch (err) {
