@@ -21,9 +21,9 @@ module.exports = {
   async redirects() {
     return [
       {
-        source: '/download/datapackage/:folder/:filename',
-        destination: 'https://cloud5.lsd.ufcg.edu.br:8080/swift/v1/dadosjusbr/:folder/:filename',
-        permanent: false,
+        source: '/download/datapackage/:path*',
+        destination: 'https://cloud5.lsd.ufcg.edu.br:8080/swift/v1/dadosjusbr/path*',
+        permanent: true,
       },
     ]
   },
