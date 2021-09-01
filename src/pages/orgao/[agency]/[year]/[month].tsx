@@ -12,7 +12,7 @@ import Button from '../../../../components/Button';
 import Footer from '../../../../components/Footer';
 import Header from '../../../../components/Header';
 import api from '../../../../services/api';
-import { buildDownloadRedirectUrl } from '../../../../utils/buildDownloadRedirectUrl';
+import * as url from '../../../../url';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -336,7 +336,7 @@ export default function OmaPage({
                     Compartilhar
                     <img src="/img/icon_share.svg" alt="compartilhar" />
                   </Button>
-                  <a href={buildDownloadRedirectUrl(fileLink)}>
+                  <a href={url.downloadURL(fileLink)}>
                     <Button
                       textColor="#3e5363"
                       borderColor="#3e5363"
