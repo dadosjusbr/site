@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Button from './Button';
 import ShareModal from './ShareModal';
 import RemunerationBarGraph from './RemunerationBarGraph';
+import { buildDownloadRedirectUrl } from '../utils/buildDownloadRedirectUrl';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -69,7 +70,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         <div className="buttons">
           <div>
             {summaryPackage && (
-              <a href={summaryPackage.Package.url}>
+              <a href={buildDownloadRedirectUrl(summaryPackage.Package.url)}>
                 <Button
                   textColor="#3e5363"
                   borderColor="#3e5363"
