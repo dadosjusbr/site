@@ -18,4 +18,13 @@ module.exports = {
     API_BASE_URL: process.env.API_BASE_URL,
     ID_ANALYTICS: process.env.ID_ANALYTICS
   },
+  async redirects() {
+    return [
+      {
+        source: '/download/datapackage/:folder/:filename',
+        destination: 'https://cloud5.lsd.ufcg.edu.br:8080/swift/v1/dadosjusbr/:folder/:filename',
+        permanent: false,
+      },
+    ]
+  },
 }
