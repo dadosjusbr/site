@@ -1,4 +1,3 @@
-import GATracker from '../components/GATracker';
 import GlobalStyle from '../styles/global_style';
 import { PrivacityPolicyProvider } from '../contexts/privacity-policy-context';
 /*
