@@ -4,8 +4,13 @@ import https from 'https';
 export const getServerSideProps: GetServerSideProps = async ctx => {
   // gets the the variable path from next spread param and uses the params array to map to the external path
   const params = (ctx.params.path as string[]).join('/');
-  https.get(process.env.PACKAGE_REPO_URL + params, res => {
-    res.pipe(ctx.res);
+  await new Promise((resolve, reject) => {
+    https.get(process.env.PACKAGE_REPO_URL + params, res => {
+      res.on('end', () => {
+        resolve(res.pipe(ctx.res));
+      });
+      res.on('error', err => reject(err));
+    });
   });
   return {
     redirect: {
