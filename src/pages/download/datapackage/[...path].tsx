@@ -6,16 +6,14 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
   const params = (ctx.params.path as string[]).join('/');
   await new Promise((resolve, reject) => {
     https.get(process.env.PACKAGE_REPO_URL + params, res => {
+      res.pipe(ctx.res);
       res.on('end', () => {
-        resolve(res.pipe(ctx.res));
+        resolve(undefined);
       });
       res.on('error', err => reject(err));
     });
   });
   return {
-    redirect: {
-      destination: ctx.resolvedUrl,
-    },
     props: {},
   };
 };
