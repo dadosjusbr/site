@@ -11,10 +11,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <PrivacityPolicyProvider>
-        <GATracker>
-          <Component {...pageProps} />
-          <GlobalStyle />
-        </GATracker>
+        <Component {...pageProps} />
+        <GlobalStyle />
       </PrivacityPolicyProvider>
     </>
   );
