@@ -309,7 +309,11 @@ export default function OmaPage({
               </div>
               <div className="buttons">
                 <div>
-                  <a href={`/orgao/${agency}/${year}`}>
+                  <a
+                    target="_blank"
+                    href={`/orgao/${agency}/${year}`}
+                    rel="noreferrer"
+                  >
                     <Button
                       textColor="#2FBB96"
                       borderColor="#2FBB96"

@@ -13,14 +13,18 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
 };
 export default function Download({ params }) {
   useEffect(() => {
-    window.close();
-  }, []);
+    document.body.onload = () => {
+      setTimeout(() => {
+        window.close();
+      }, 1000);
+    };
+  }, [params]);
   return (
     <>
       <Head>
         <meta
           httpEquiv="refresh"
-          content={`2;url=${process.env.PACKAGE_REPO_URL}${params}`}
+          content={`0;url=${process.env.PACKAGE_REPO_URL}${params}`}
         />
       </Head>
       <p>downloading...</p>

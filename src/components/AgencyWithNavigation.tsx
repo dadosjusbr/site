@@ -70,7 +70,11 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         <div className="buttons">
           <div>
             {summaryPackage && (
-              <a href={url.downloadURL(summaryPackage.Package.url)}>
+              <a
+                target="_blank"
+                href={url.downloadURL(summaryPackage.Package.url)}
+                rel="noreferrer"
+              >
                 <Button
                   textColor="#3e5363"
                   borderColor="#3e5363"
