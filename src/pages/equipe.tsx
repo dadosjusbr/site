@@ -75,6 +75,10 @@ export default function Team() {
       name: 'UFCG',
       img: '/img/team/logo_ufcg.svg',
     },
+    {
+      name: 'IFAL',
+      img: '/img/partners/IFAL.svg',
+    },
   ]);
   return (
     <Page>
@@ -127,6 +131,14 @@ export default function Team() {
           </a>
         </div>
       </WantHelp>
+      <ResizableListWrapper className="for-partners contribuitors">
+        <h1>FINANCIADOR</h1>
+        <ul>
+          <Partner key="IBEJL">
+            <img src="/img/partners/IBEJL.svg" alt="IBEJL" />
+          </Partner>
+        </ul>
+      </ResizableListWrapper>
       <ResizableListWrapper className="for-partners contribuitors">
         <h1>REALIZAÇÃO</h1>
         <ul>
