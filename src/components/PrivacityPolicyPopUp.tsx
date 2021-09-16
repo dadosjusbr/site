@@ -9,12 +9,12 @@ const PrivacityPolicyPopUp: React.FC = () => {
     <Container>
       <span>
         O DadosJusBr utiliza Cookies para melhorar a experiencia do usuário
-        dentro do nosso sistema, ao aceitar os cookies você concorda com a nossa{' '}
+        dentro do nosso sistema, ao navegar você concorda com a nossa{' '}
         <Link href="/politica-de-privacidade">política de privacidade</Link>.
       </span>
       {/* here we send the information to PrivacityPolicyContext to allow the cookie storing */}
       <button type="button" onClick={acceptCookies}>
-        Aceitar Cookies
+        Entendido
       </button>
     </Container>
   );
