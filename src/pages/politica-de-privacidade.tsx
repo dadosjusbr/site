@@ -67,7 +67,8 @@ export default function PrivacityPolicy() {
                 <a href="https://www.techtudo.com.br/noticias/2018/10/o-que-sao-cookies-entenda-os-dados-que-os-sites-guardam-sobre-voce.ghtml">
                   cookies
                 </a>
-                . Você pode ajustar suas configurações de navegador para
+                .o DadosJus utliza <strong>Cookies Obrigatórios</strong> porém
+                Você pode ajustar suas configurações de navegador para
                 desabilitar os cookies ou deletá-los. Caso estejam habilitados,
                 nós (e os terceiros previamente mencionados) emitiremos cookies
                 quando você interagir com o nosso site. Somente coletamos, via

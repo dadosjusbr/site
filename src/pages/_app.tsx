@@ -1,4 +1,3 @@
-import GATracker from '../components/GATracker';
 import GlobalStyle from '../styles/global_style';
 import { PrivacityPolicyProvider } from '../contexts/privacity-policy-context';
 /*
@@ -11,10 +10,8 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <PrivacityPolicyProvider>
-        <GATracker>
-          <Component {...pageProps} />
-          <GlobalStyle />
-        </GATracker>
+        <Component {...pageProps} />
+        <GlobalStyle />
       </PrivacityPolicyProvider>
     </>
   );
