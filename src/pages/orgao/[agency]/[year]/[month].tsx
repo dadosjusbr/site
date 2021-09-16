@@ -12,6 +12,7 @@ import Button from '../../../../components/Button';
 import Footer from '../../../../components/Footer';
 import Header from '../../../../components/Header';
 import api from '../../../../services/api';
+import * as url from '../../../../url';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -308,7 +309,11 @@ export default function OmaPage({
               </div>
               <div className="buttons">
                 <div>
-                  <a href={`/orgao/${agency}/${year}`}>
+                  <a
+                    target="_blank"
+                    href={`/orgao/${agency}/${year}`}
+                    rel="noreferrer"
+                  >
                     <Button
                       textColor="#2FBB96"
                       borderColor="#2FBB96"
@@ -335,7 +340,7 @@ export default function OmaPage({
                     Compartilhar
                     <img src="/img/icon_share.svg" alt="compartilhar" />
                   </Button>
-                  <a href={fileLink}>
+                  <a href={url.downloadURL(fileLink)}>
                     <Button
                       textColor="#3e5363"
                       borderColor="#3e5363"
