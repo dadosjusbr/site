@@ -11,6 +11,7 @@ export const getServerSideProps: GetServerSideProps = async ctx => {
     },
   };
 };
+// this function use the route params to redirect the page to downloaded file after load the react GA
 export default function Download({ params }) {
   useEffect(() => {
     document.body.onload = () => {
