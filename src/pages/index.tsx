@@ -94,7 +94,7 @@ export default function Index({
       </Container>
       <GraphWrapper>
         <section>
-          <h2>Remunerações {year}</h2>
+          <h2>Total das remunerações dos membros de todos os órgãos</h2>
           <MainGraphSectionHeader>
             <div>
               <button
