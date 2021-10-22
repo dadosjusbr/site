@@ -47,6 +47,24 @@ export default function Team() {
       profileURL: 'https://www.linkedin.com/in/samara-sonale-4b805b194/',
       photoURL: '/img/team/samara_sonale.jpg',
     },
+    {
+      name: 'Raul Durlo',
+      role: 'Cientista de Dados',
+      profileURL: 'https://github.com/rdurl0',
+      photoURL: 'https://avatars.githubusercontent.com/u/22898231?v=4',
+    },
+    {
+      name: 'João Menezes',
+      role: 'Developer',
+      photoURL: 'https://avatars.githubusercontent.com/u/20714862?v=4',
+      profileURL: 'https://github.com/joaolgm',
+    },
+    {
+      name: 'Marcos Vinicius',
+      role: 'Developer',
+      photoURL: '/img/team/marcos_vinicius.jpg',
+      profileURL: 'https://github.com/marcos-inja',
+    },
   ]);
   const [partners] = useState([
     {
