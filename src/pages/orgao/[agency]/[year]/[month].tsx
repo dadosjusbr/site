@@ -139,7 +139,7 @@ export default function OmaPage({
             <span>
               Dados capturados em{' '}
               {(() => {
-                const d = new Date(crawlingTime);
+                const d = new Date(crawlingTime * 1000);
                 // eslint-disable-next-line prettier/prettier
                 return `${d.getDay()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
               })()}
@@ -378,7 +378,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         totalWage: d2.TotalWage,
         maxPerk: d2.MaxPerk,
         totalPerks: d2.TotalPerks,
-        crawlingTime: d2.CrawlingTime,
+        crawlingTime: d2.CrawlingTime.seconds,
         previousButtonActive: d2.HasPrevious,
         nextButtonActive: d2.HasNext,
       },
