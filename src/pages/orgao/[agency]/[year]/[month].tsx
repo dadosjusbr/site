@@ -139,6 +139,7 @@ export default function OmaPage({
             <span>
               Dados capturados em{' '}
               {(() => {
+                // Converts UNIX timestamp to miliseconds timestamp
                 const d = new Date(crawlingTime * 1000);
                 // eslint-disable-next-line prettier/prettier
                 return `${d.getDay()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
