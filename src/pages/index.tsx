@@ -42,9 +42,8 @@ export default function Index({
       const { data } = await api.get(`/geral/remuneracao/${year}`);
       setCompleteChartData(
         data.map(d => ({
-          Wage: d.wage,
-          Perks: d.perks,
-          Others: d.others,
+          BaseRemuneration: d.base_remuneration,
+          OtherRemunerations: d.other_remunerations,
           // eslint-disable-next-line no-underscore-dangle
           Month: d._id,
         })),
