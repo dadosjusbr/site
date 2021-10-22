@@ -36,7 +36,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 // this function is used to sum the data from all money arrays and generate the last remuneration value
                 let total = 0;
                 const monthlyTotals = data.map(
-                  d => d.Perks + d.Others + d.Wage,
+                  d => d.BaseRemuneration + d.OtherRemunerations,
                 );
                 monthlyTotals.forEach(w => {
                   total += w;
@@ -91,7 +91,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 R${' '}
                 {(() => {
                   let total = 0;
-                  const wages = data.map(d => d.Wage);
+                  const wages = data.map(d => d.BaseRemuneration);
                   wages.forEach(w => {
                     total += w;
                   });
@@ -127,7 +127,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 R${' '}
                 {(() => {
                   let total = 0;
-                  const monthlyTotals = data.map(d => d.Perks + d.Others);
+                  const monthlyTotals = data.map(d => d.OtherRemunerations);
                   monthlyTotals.forEach(w => {
                     total += w;
                   });
@@ -293,10 +293,8 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           return createArrayFilledWithValue(12, 0).map(
                             (v, i) => {
                               if (fixYearDataArray(data)[i]) {
-                                return (
-                                  fixYearDataArray(data)[i].Perks +
-                                  fixYearDataArray(data)[i].Others
-                                );
+                                return fixYearDataArray(data)[i]
+                                  .OtherRemunerations;
                               }
                               return v;
                             },
@@ -311,7 +309,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         if (!hidingWage) {
                           return createArrayFilledWithValue(12, 0).map((v, i) =>
                             fixYearDataArray(data)[i]
-                              ? fixYearDataArray(data)[i].Wage
+                              ? fixYearDataArray(data)[i].BaseRemuneration
                               : v,
                           );
                         }
