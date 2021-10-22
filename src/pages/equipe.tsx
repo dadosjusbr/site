@@ -60,9 +60,9 @@ export default function Team() {
       profileURL: 'https://github.com/joaolgm',
     },
     {
-      name: 'Marcos Vas',
+      name: 'Marcos Vinicius',
       role: 'Developer',
-      photoURL: '/img/team/marcos_vas.jpg',
+      photoURL: '/img/team/marcos_vinicius.jpg',
       profileURL: 'https://github.com/marcos-inja',
     },
   ]);
