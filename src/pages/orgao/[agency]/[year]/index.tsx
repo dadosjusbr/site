@@ -47,7 +47,7 @@ export default function AgencyPage({
           title={fullName}
           navigableMonth={navigableMonth}
           setYear={navigateToGivenYear}
-          summaryPackage={summaryPackage}
+          summaryPackage={summaryPackage && summaryPackage}
         />
       </Container>
       <Footer />
@@ -73,7 +73,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
           ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
           : 1,
         fullName: agency.AgencyFullName,
-        summaryPackage: agency.SummaryPackage,
+        summaryPackage: agency.SummaryPackage || null,
       },
     };
   } catch (err) {
