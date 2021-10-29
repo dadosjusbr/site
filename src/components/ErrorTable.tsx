@@ -28,7 +28,7 @@ const ErrorTable: React.FC<{
     <Table>
       <tbody>
         <tr>
-          <th>Erro</th>
+          <th>Stderr</th>
           <td>{error.stderr}</td>
         </tr>
         <tr>
