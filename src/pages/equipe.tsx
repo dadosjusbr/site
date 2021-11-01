@@ -93,22 +93,24 @@ export default function Team() {
         />
       </Head>
       <Header />
-      <ResizableListWrapper>
-        <h1>EQUIPE</h1>
-        <ul>
-          {teamMates.map(teamMate => (
-            <TeamMateProfile key={teamMate.name}>
-              <a href={teamMate.profileURL}>
-                <img src={teamMate.photoURL} alt={teamMate.name} />
-                <span>{teamMate.name}</span>
-                <p>{teamMate.role}</p>
-              </a>
-            </TeamMateProfile>
-          ))}
-        </ul>
-      </ResizableListWrapper>
+      <div className="container">
+        <ResizableListWrapper>
+          <h1>EQUIPE</h1>
+          <ul>
+            {teamMates.map(teamMate => (
+              <TeamMateProfile key={teamMate.name}>
+                <a href={teamMate.profileURL}>
+                  <img src={teamMate.photoURL} alt={teamMate.name} />
+                  <span>{teamMate.name}</span>
+                  <p>{teamMate.role}</p>
+                </a>
+              </TeamMateProfile>
+            ))}
+          </ul>
+        </ResizableListWrapper>
+      </div>
       <WantHelp>
-        <div>
+        <div className="container">
           <h2> SE INTERESSOU, QUER AJUDAR?</h2>
           <br />O sistema de justiça brasileiro é composto por uma grande
           quantidade de órgãos federais e estaduais distribuídos por todo o
@@ -131,34 +133,36 @@ export default function Team() {
           </a>
         </div>
       </WantHelp>
-      <ResizableListWrapper className="for-partners contribuitors">
-        <h1>FINANCIADOR</h1>
-        <ul>
-          <Partner key="IBEJL">
-            <img src="/img/partners/IBEJL.svg" alt="IBEJL" />
-          </Partner>
-        </ul>
-      </ResizableListWrapper>
-      <ResizableListWrapper className="for-partners contribuitors">
-        <h1>REALIZAÇÃO</h1>
-        <ul>
-          {contribuitors.map(contribuitor => (
-            <Partner key={contribuitor.name}>
-              <img src={contribuitor.img} alt={contribuitor.name} />
+      <div className="container">
+        <ResizableListWrapper className="for-partners contribuitors">
+          <h1>FINANCIADOR</h1>
+          <ul>
+            <Partner key="IBEJL">
+              <img src="/img/partners/IBEJL.svg" alt="IBEJL" />
             </Partner>
-          ))}
-        </ul>
-      </ResizableListWrapper>
-      <ResizableListWrapper className="for-partners">
-        <h1>PARCEIROS</h1>
-        <ul>
-          {partners.map(partner => (
-            <Partner key={partner.name}>
-              <img src={partner.img} alt={partner.name} />
-            </Partner>
-          ))}
-        </ul>
-      </ResizableListWrapper>
+          </ul>
+        </ResizableListWrapper>
+        <ResizableListWrapper className="for-partners contribuitors">
+          <h1>REALIZAÇÃO</h1>
+          <ul>
+            {contribuitors.map(contribuitor => (
+              <Partner key={contribuitor.name}>
+                <img src={contribuitor.img} alt={contribuitor.name} />
+              </Partner>
+            ))}
+          </ul>
+        </ResizableListWrapper>
+        <ResizableListWrapper className="for-partners">
+          <h1>PARCEIROS</h1>
+          <ul>
+            {partners.map(partner => (
+              <Partner key={partner.name}>
+                <img src={partner.img} alt={partner.name} />
+              </Partner>
+            ))}
+          </ul>
+        </ResizableListWrapper>
+      </div>
       <Footer />
     </Page>
   );
@@ -167,8 +171,6 @@ const Page = styled.div`
   background: #3e5363;
 `;
 const ResizableListWrapper = styled.div`
-  margin: 10% 68px 0%;
-
   @media (max-width: 600px) {
     padding: 0;
     margin: 10% 20px 0%;
