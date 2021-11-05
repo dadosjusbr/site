@@ -201,21 +201,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   } catch (err) {
-    try {
-      const { data } = await api.get(`/orgao/totais/${agency}/${year}`);
-      const nMonth = data.MonthTotals[data.MonthTotals.length - 1].Month;
-      context.res.writeHead(301, {
-        Location: `/orgao/${agency}/${year}/${nMonth}`,
-      });
-      context.res.end();
-      return { props: {} };
-    } catch (error) {
-      context.res.writeHead(301, {
-        Location: `/404`,
-      });
-      context.res.end();
-      return { props: {} };
-    }
+    return {
+      props: {
+        agency,
+        year,
+        month,
+      },
+    };
   }
 };
 const Page = styled.div`
