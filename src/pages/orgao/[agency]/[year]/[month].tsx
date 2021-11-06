@@ -4,6 +4,7 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
 import styled from 'styled-components';
+import { addMonths, isAfter, isBefore } from 'date-fns';
 import MONTHS from '../../../../@types/MONTHS';
 import ActivityIndicator from '../../../../components/ActivityIndicator';
 import Footer from '../../../../components/Footer';
@@ -16,19 +17,12 @@ export default function OmaPage({
   agency,
   year,
   month,
-  fullName,
-  totalMembers,
-  maxWage,
-  totalWage,
-  maxPerk,
-  totalPerks,
-  crawlingTime,
+  oma,
   previousButtonActive,
   nextButtonActive,
 }) {
   const [chartData, setChartData] = useState<any>();
   const [loading, setLoading] = useState(true);
-
   function getNextDate() {
     let m = parseInt(month, 10);
     let y = parseInt(year, 10);
@@ -57,14 +51,14 @@ export default function OmaPage({
 
   // this effect is using the page changing as a hook to fetch the data from api
   useEffect(() => {
-    // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
-    setLoading(true);
     // then it checks the next and the previous year to block the navigation buttons or to help to choose the right year
     // finally it fetchs the data from the api to fill the chart with the agency/month/year data
     fetchChartData();
   }, [year, month]);
   async function fetchChartData() {
     try {
+      // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
+      setLoading(true);
       const { data } = await api.get(
         `/orgao/salario/${agency}/${year}/${month}`,
       );
@@ -72,7 +66,7 @@ export default function OmaPage({
       setChartData(data);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
     }
   }
   function handleNavigateToNextSummaryOption() {
@@ -94,7 +88,11 @@ export default function OmaPage({
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
-          content={`Veja os dados de ${month}/${year} do ${fullName} (${agency})`}
+          content={
+            oma
+              ? `Veja os dados de ${month}/${year} do ${oma.fullName} (${agency})`
+              : `Dados não coletados`
+          }
         />
         <meta
           property="og:description"
@@ -105,7 +103,8 @@ export default function OmaPage({
       <MainGraphSection>
         <MainGraphSectionHeader>
           <h2>
-            {fullName} ({agency.toLocaleUpperCase('pt')})
+            {oma ? oma.fullName : 'Coleta não realizada!'} (
+            {agency.toLocaleUpperCase('pt')})
           </h2>
           <div>
             <button
@@ -127,51 +126,65 @@ export default function OmaPage({
               <img src="/img/arrow.svg" alt="seta direita" />
             </button>
           </div>
-          {loading ||
-            (crawlingTime && (
-              <span>
-                Dados capturados em{' '}
-                {(() => {
-                  // Converts UNIX timestamp to miliseconds timestamp
-                  const d = new Date(crawlingTime * 1000);
-                  // eslint-disable-next-line prettier/prettier
-                  return `${d.getDay()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
-                })()}
-              </span>
-            ))}
+          {loading ? (
+            <ActivityIndicatorPlaceholder fontColor="#3e5363">
+              <ActivityIndicator spinnerColor="#3e5363" />
+              <span>Carregando...</span>
+            </ActivityIndicatorPlaceholder>
+          ) : (
+            (() =>
+              !oma ? (
+                <ActivityIndicatorPlaceholder fontColor="#3e5363">
+                  Não há dados para esse mês
+                </ActivityIndicatorPlaceholder>
+              ) : (
+                oma.crawlingTime && (
+                  <span>
+                    Dados capturados em{' '}
+                    {(() => {
+                      // Converts UNIX timestamp to miliseconds timestamp
+                      const d = new Date(oma.crawlingTime * 1000);
+                      // eslint-disable-next-line prettier/prettier
+                      return `${d.getDay()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
+                    })()}
+                  </span>
+                )
+              ))()
+          )}
         </MainGraphSectionHeader>
-        {(() => {
-          if (loading) {
+        {oma &&
+          (() => {
+            if (loading) {
+              return (
+                <ActivityIndicatorPlaceholder fontColor="#3e5363">
+                  <ActivityIndicator spinnerColor="#3e5363" />
+                  <span>Carregando dados...</span>
+                </ActivityIndicatorPlaceholder>
+              );
+            }
+            if (!chartData.ProcInfo) {
+              return (
+                <OMASummary
+                  agency={agency}
+                  chartData={chartData}
+                  maxPerk={oma.maxPerk}
+                  maxWage={oma.maxWage}
+                  totalMembers={oma.totalMembers}
+                  totalPerks={oma.totalPerks}
+                  totalWage={oma.totalWage}
+                  year={year}
+                />
+              );
+            }
             return (
-              <ActivityIndicatorPlaceholder fontColor="#3e5363">
-                <ActivityIndicator spinnerColor="#3e5363" />
-                <span>Carregando dados...</span>
-              </ActivityIndicatorPlaceholder>
-            );
-          }
-          if (!chartData.ProcInfo) {
-            return (
-              <OMASummary
+              <ErrorTable
                 agency={agency}
-                chartData={chartData}
-                maxPerk={maxPerk}
-                maxWage={maxWage}
-                totalMembers={totalMembers}
-                totalPerks={totalPerks}
-                totalWage={totalWage}
+                month={month}
                 year={year}
+                error={chartData.ProcInfo}
               />
             );
-          }
-          return (
-            <ErrorTable
-              agency={agency}
-              month={month}
-              year={year}
-              error={chartData.ProcInfo}
-            />
-          );
-        })()}
+          })()}
       </MainGraphSection>
       <Footer theme="LIGHT" />
     </Page>
@@ -189,23 +202,33 @@ export const getServerSideProps: GetServerSideProps = async context => {
         agency,
         year,
         month,
-        fullName: d2.FullName,
-        totalMembers: d2.TotalMembers,
-        maxWage: d2.MaxWage,
-        totalWage: d2.TotalWage,
-        maxPerk: d2.MaxPerk,
-        totalPerks: d2.TotalPerks,
-        crawlingTime: d2.CrawlingTime && d2.CrawlingTime.seconds,
         previousButtonActive: d2.HasPrevious,
         nextButtonActive: d2.HasNext,
+        oma: {
+          fullName: d2.FullName,
+          totalMembers: d2.TotalMembers,
+          maxWage: d2.MaxWage,
+          totalWage: d2.TotalWage,
+          maxPerk: d2.MaxPerk,
+          totalPerks: d2.TotalPerks,
+          crawlingTime: d2.CrawlingTime && d2.CrawlingTime.seconds,
+        },
       },
     };
   } catch (err) {
+    const nextMonth = addMonths(new Date(), 1);
+    const date = new Date(
+      parseInt(year as string, 10),
+      parseInt(month as string, 10),
+      1,
+    );
     return {
       props: {
         agency,
         year,
         month,
+        previousButtonActive: isAfter(date, new Date(2018, 1, 1)),
+        nextButtonActive: isBefore(date, nextMonth),
       },
     };
   }
