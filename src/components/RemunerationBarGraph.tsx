@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import dynamic from 'next/dynamic';
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import MONTHS from '../@types/MONTHS';
 import ActivityIndicator from './ActivityIndicator';
@@ -21,7 +21,21 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   billion = false,
 }) => {
   // this constant is used as an alx value to determine the max graph height
-  const MaxMonthPlaceholder = 29000321;
+  const MaxMonthPlaceholder = useMemo(() => {
+    if (data) {
+      // first we sorts the array to get the max chart size (using the sum of BaseRemuneration and OtherRemunerations), and return the max value if it exists
+      const found = data
+        .sort(
+          (a, b) =>
+            a.BaseRemuneration +
+            a.OtherRemunerations -
+            (b.BaseRemuneration + b.OtherRemunerations),
+        )
+        .reverse()[0];
+      return found ? found.BaseRemuneration + found.OtherRemunerations : 0;
+    }
+    return 0;
+  }, [data]);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
@@ -268,7 +282,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           cssClass: 'apexcharts-yaxis-label',
                         },
                         formatter(value) {
-                          if (value === 29000321)
+                          if (value === MaxMonthPlaceholder)
                             return 'Não existem dados para esse mês';
                           return !billion
                             ? `R$ ${(value / 1000000).toFixed(2)}M`
