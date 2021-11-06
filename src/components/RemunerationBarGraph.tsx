@@ -25,6 +25,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
+  const [hidingErrors, setHidingErrors] = useState(false);
   return (
     <>
       <Captions>
@@ -158,6 +159,26 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             </button>
             <span>Sem dados</span>
           </CaptionItems>
+          <CaptionItems>
+            <button
+              onClick={e => {
+                if (hidingErrors) {
+                  e.currentTarget.classList.remove('active');
+                  setHidingErrors(false);
+                } else {
+                  e.currentTarget.classList.add('active');
+                  setHidingErrors(true);
+                }
+              }}
+              type="button"
+            >
+              <img
+                src="/img/data-graph-captions/icon_erro.svg"
+                alt="problemas na coleta"
+              />
+            </button>
+            <span>Problemas na coleta</span>
+          </CaptionItems>
         </ul>
       </Captions>
       <GraphDivWithPagination>
@@ -173,7 +194,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               <div className="main-chart-wrapper">
                 <Chart
                   options={{
-                    colors: ['#97BB2F', '#2FBB96', '#2c3236'],
+                    colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
                     chart: {
                       stacked: true,
                       toolbar: {
@@ -340,6 +361,26 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         return createArrayFilledWithValue(12, 0);
                       })(),
                     },
+                    {
+                      name: 'Problema na coleta',
+                      data: (() => {
+                        if (!hidingErrors) {
+                          return createArrayFilledWithValue(12, 0).map(
+                            (v, i) => {
+                              // fills the chart data if theres an error in given month
+                              if (
+                                fixYearDataArray(data)[i] &&
+                                fixYearDataArray(data)[i].Error
+                              ) {
+                                return MaxMonthPlaceholder;
+                              }
+                              return 0;
+                            },
+                          );
+                        }
+                        return createArrayFilledWithValue(12, 0);
+                      })(),
+                    },
                   ]}
                   width="100%"
                   height="500"
@@ -363,7 +404,7 @@ export default RemunerationBarGraph;
 const Captions = styled.div`
   padding: 2rem;
   width: 50%;
-  min-width: 34rem;
+  min-width: 35rem;
   justify-content: center;
   color: #3e5363;
   background: rgba(62, 83, 99, 0.05);
@@ -443,7 +484,6 @@ const CaptionItems = styled.li`
     margin-top: 1rem;
     font-size: 1.5rem;
     color: #3e5363;
-    white-space: nowrap;
     & > * {
       font-size: 1.5rem;
     }
