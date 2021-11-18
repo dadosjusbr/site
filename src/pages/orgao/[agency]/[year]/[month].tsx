@@ -3,38 +3,26 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import styled from 'styled-components';
-import ShareModal from '../../../../components/ShareModal';
+import { addMonths, isAfter, isBefore } from 'date-fns';
 import MONTHS from '../../../../@types/MONTHS';
 import ActivityIndicator from '../../../../components/ActivityIndicator';
-import Button from '../../../../components/Button';
 import Footer from '../../../../components/Footer';
 import Header from '../../../../components/Header';
 import api from '../../../../services/api';
-import * as url from '../../../../url';
-
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+import OMASummary from '../../../../components/OmaChart';
+import ErrorTable from '../../../../components/ErrorTable';
 
 export default function OmaPage({
   agency,
   year,
   month,
-  fullName,
-  totalMembers,
-  maxWage,
-  totalWage,
-  maxPerk,
-  totalPerks,
-  crawlingTime,
+  oma,
   previousButtonActive,
   nextButtonActive,
 }) {
   const [chartData, setChartData] = useState<any>();
   const [loading, setLoading] = useState(true);
-  const [fileLink, setFileLink] = useState('');
-  const [modalIsOpen, setModalIsOpen] = useState(false);
-
   function getNextDate() {
     let m = parseInt(month, 10);
     let y = parseInt(year, 10);
@@ -63,23 +51,22 @@ export default function OmaPage({
 
   // this effect is using the page changing as a hook to fetch the data from api
   useEffect(() => {
-    // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
-    setLoading(true);
     // then it checks the next and the previous year to block the navigation buttons or to help to choose the right year
     // finally it fetchs the data from the api to fill the chart with the agency/month/year data
     fetchChartData();
   }, [year, month]);
   async function fetchChartData() {
     try {
+      // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
+      setLoading(true);
       const { data } = await api.get(
         `/orgao/salario/${agency}/${year}/${month}`,
       );
       // after get the data from api the state is updated with the chart data
       setChartData(data);
-      setFileLink(data.PackageURL);
       setLoading(false);
     } catch (error) {
-      console.log(error);
+      setLoading(false);
     }
   }
   function handleNavigateToNextSummaryOption() {
@@ -92,7 +79,6 @@ export default function OmaPage({
     setLoading(true);
     router.push(`/orgao/${agency}/${y}/${m}`);
   }
-
   return (
     <Page>
       <Head>
@@ -102,7 +88,11 @@ export default function OmaPage({
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
-          content={`Veja os dados de ${month}/${year} do ${fullName} (${agency})`}
+          content={
+            oma
+              ? `Veja os dados de ${month}/${year} do ${oma.fullName} (${agency})`
+              : `Dados não coletados`
+          }
         />
         <meta
           property="og:description"
@@ -113,7 +103,8 @@ export default function OmaPage({
       <MainGraphSection>
         <MainGraphSectionHeader>
           <h2>
-            {fullName} ({agency.toLocaleUpperCase('pt')})
+            {oma ? oma.fullName : 'Coleta não realizada!'} (
+            {agency.toLocaleUpperCase('pt')})
           </h2>
           <div>
             <button
@@ -135,232 +126,71 @@ export default function OmaPage({
               <img src="/img/arrow.svg" alt="seta direita" />
             </button>
           </div>
-          {loading || (
-            <span>
-              Dados capturados em{' '}
-              {(() => {
-                const d = new Date(crawlingTime);
-                // eslint-disable-next-line prettier/prettier
-                return `${d.getDay()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
-              })()}
-            </span>
+          {loading ? (
+            <ActivityIndicatorPlaceholder fontColor="#3e5363">
+              <ActivityIndicator spinnerColor="#3e5363" />
+              <span>Carregando...</span>
+            </ActivityIndicatorPlaceholder>
+          ) : (
+            (() =>
+              !oma ? (
+                <ActivityIndicatorPlaceholder fontColor="#3e5363">
+                  Não há dados para esse mês
+                </ActivityIndicatorPlaceholder>
+              ) : (
+                oma.crawlingTime && (
+                  <span>
+                    Dados capturados em{' '}
+                    {(() => {
+                      // Converts UNIX timestamp to miliseconds timestamp
+                      const d = new Date(oma.crawlingTime * 1000);
+                      // eslint-disable-next-line prettier/prettier
+                      return `${d.getDay()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
+                    })()}
+                  </span>
+                )
+              ))()
           )}
         </MainGraphSectionHeader>
-        {loading ? (
-          <ActivityIndicatorPlaceholder fontColor="#3e5363">
-            <ActivityIndicator spinnerColor="#3e5363" />
-            <span>Carregando dados...</span>
-          </ActivityIndicatorPlaceholder>
-        ) : (
-          <>
-            <Captions>
-              <div>
-                <span className="info">
-                  <img src="/img/icon_info.svg" alt="informações" />
-                  <div>
-                    <span>
-                      <b>Salário:</b> valor recebido de acordo com a prestação
-                      de serviços, em decorrência do contrato de trabalho.
-                      <br />
-                      <br />
-                      <b>Remuneração:</b> é a soma do salário mais outras
-                      vantagens (indenizações e benefícios). - Benefício:
-                      valores eventuais, por exemplo, auxílios alimentação,
-                      saúde, escolar... - Membro: é o integrante da carreira
-                      'principal' do órgão do sistema de justiça. Por exemplo,
-                      juízes, desembargadores, ministros, defensores,
-                      procuradores públicos, promotores de justiça, procuradores
-                      de justiça, etc...
-                    </span>
-                  </div>
-                </span>
-                <span>
-                  <h3>{totalMembers} Membros</h3>
-                </span>
-                <span>
-                  <img src="/img/anim-group-2/icon_salario.svg" alt="salário" />
-                </span>
-              </div>
-              <ul>
-                <CaptionItems>
-                  <img src="/img/anim-group-2/icon_salario.svg" alt="salário" />
-                  <div>
-                    <span>
-                      Maior salário: R$ {(maxWage / 1000).toFixed(2)} mil
-                    </span>
-                    <span>
-                      Total Salários: R$ {(totalWage / 100000).toFixed(2)}M
-                    </span>
-                  </div>
-                </CaptionItems>
-                <CaptionItems>
-                  <img
-                    src="/img/anim-group-2/icon_beneficio.svg"
-                    alt="beneficios"
-                  />
-                  <div>
-                    <span>
-                      Maior Benefício: R$ {(maxPerk / 1000).toFixed(2)} mil
-                    </span>
-                    <span>
-                      Total benefícios: R$ {(totalPerks / 1000000).toFixed(2)}M
-                    </span>
-                  </div>
-                </CaptionItems>
-              </ul>
-            </Captions>
-            <ShareModal
-              isOpen={modalIsOpen}
-              onRequestClose={() => setModalIsOpen(false)}
-            />
-            <GraphDivWithPagination>
-              <h3>Total de Remunerações de Membros por Mês em {year}</h3>
-              <div className="main-chart-wrapper">
-                {!chartData.Members ? (
-                  <ActivityIndicatorPlaceholder fontColor="#3e5363">
-                    <span>Não há dados de membros para esse mês</span>
-                  </ActivityIndicatorPlaceholder>
-                ) : (
-                  <Chart
-                    options={{
-                      legend: {
-                        show: false,
-                      },
-                      colors: ['#c9a0d0', '#513658'],
-                      chart: {
-                        stacked: true,
-                        toolbar: {
-                          show: false,
-                        },
-                        zoom: {
-                          enabled: true,
-                        },
-                      },
-                      responsive: [
-                        {
-                          breakpoint: 500,
-                          options: {
-                            chart: {
-                              width: '95%',
-                            },
-                          },
-                        },
-                      ],
-                      plotOptions: {
-                        bar: {
-                          horizontal: true,
-                          barHeight: '70%',
-                        },
-                      },
-                      yaxis: {
-                        decimalsInFloat: 2,
-                        labels: {
-                          show: true,
-                          minWidth: 0,
-                          maxWidth: 160,
-                          style: {
-                            colors: [],
-                            fontSize: '14px',
-                            fontFamily: 'Roboto Condensed, sans-serif',
-                            fontWeight: 600,
-                            cssClass: 'apexcharts-yaxis-label',
-                          },
-                        },
-                      },
-                      xaxis: {
-                        categories: [
-                          '> R$ 50 mil',
-                          'R$ 40-50 mil',
-                          'R$ 30-40 mil',
-                          'R$ 20-30 mil',
-                          'R$ 10-20 mil',
-                          '< R$ 10 mil',
-                        ],
-                        title: {
-                          text: 'Quantidade',
-                          offsetY: 30,
-                        },
-                      },
-                      fill: {
-                        opacity: 1,
-                      },
-                      dataLabels: {
-                        enabled: false,
-                      },
-                    }}
-                    series={[
-                      {
-                        name: 'Membros',
-                        data: [
-                          chartData.Members['-1'],
-                          chartData.Members['50000'],
-                          chartData.Members['40000'],
-                          chartData.Members['30000'],
-                          chartData.Members['20000'],
-                          chartData.Members['10000'],
-                        ],
-                      },
-                    ]}
-                    width="100%"
-                    height="500"
-                    type="bar"
-                  />
-                )}
-              </div>
-              <div className="buttons">
-                <div>
-                  <a
-                    target="_blank"
-                    href={`/orgao/${agency}/${year}`}
-                    rel="noreferrer"
-                  >
-                    <Button
-                      textColor="#2FBB96"
-                      borderColor="#2FBB96"
-                      backgroundColor="#fff"
-                      hoverBackgroundColor="#2FBB96"
-                      className="left"
-                    >
-                      Voltar para anos
-                      <img
-                        src="/img/icon_calendario_green.svg"
-                        alt="calendário"
-                      />
-                    </Button>
-                  </a>
-                </div>
-                <div>
-                  <Button
-                    textColor="#3e5363"
-                    borderColor="#3e5363"
-                    backgroundColor="#fff"
-                    hoverBackgroundColor="#3e5363"
-                    onClick={() => setModalIsOpen(true)}
-                  >
-                    Compartilhar
-                    <img src="/img/icon_share.svg" alt="compartilhar" />
-                  </Button>
-                  <a href={url.downloadURL(fileLink)}>
-                    <Button
-                      textColor="#3e5363"
-                      borderColor="#3e5363"
-                      backgroundColor="#fff"
-                      hoverBackgroundColor="#3e5363"
-                    >
-                      Baixar
-                      <img src="/img/icon_download_share.svg" alt="download" />
-                    </Button>
-                  </a>
-                </div>
-              </div>
-            </GraphDivWithPagination>
-          </>
-        )}
+        {oma &&
+          (() => {
+            if (loading) {
+              return (
+                <ActivityIndicatorPlaceholder fontColor="#3e5363">
+                  <ActivityIndicator spinnerColor="#3e5363" />
+                  <span>Carregando dados...</span>
+                </ActivityIndicatorPlaceholder>
+              );
+            }
+            if (!chartData.ProcInfo) {
+              return (
+                <OMASummary
+                  agency={agency}
+                  chartData={chartData}
+                  maxPerk={oma.maxPerk}
+                  maxWage={oma.maxWage}
+                  totalMembers={oma.totalMembers}
+                  totalPerks={oma.totalPerks}
+                  totalWage={oma.totalWage}
+                  year={year}
+                />
+              );
+            }
+            return (
+              <ErrorTable
+                agency={agency}
+                month={month}
+                year={year}
+                error={chartData.ProcInfo}
+              />
+            );
+          })()}
       </MainGraphSection>
       <Footer theme="LIGHT" />
     </Page>
   );
 }
+
 export const getServerSideProps: GetServerSideProps = async context => {
   const { agency, year, month } = context.params;
   try {
@@ -372,33 +202,35 @@ export const getServerSideProps: GetServerSideProps = async context => {
         agency,
         year,
         month,
-        fullName: d2.FullName,
-        totalMembers: d2.TotalMembers,
-        maxWage: d2.MaxWage,
-        totalWage: d2.TotalWage,
-        maxPerk: d2.MaxPerk,
-        totalPerks: d2.TotalPerks,
-        crawlingTime: d2.CrawlingTime,
         previousButtonActive: d2.HasPrevious,
         nextButtonActive: d2.HasNext,
+        oma: {
+          fullName: d2.FullName,
+          totalMembers: d2.TotalMembers,
+          maxWage: d2.MaxWage,
+          totalWage: d2.TotalWage,
+          maxPerk: d2.MaxPerk,
+          totalPerks: d2.TotalPerks,
+          crawlingTime: d2.CrawlingTime && d2.CrawlingTime.seconds,
+        },
       },
     };
   } catch (err) {
-    try {
-      const { data } = await api.get(`/orgao/totais/${agency}/${year}`);
-      const nMonth = data.MonthTotals[data.MonthTotals.length - 1].Month;
-      context.res.writeHead(301, {
-        Location: `/orgao/${agency}/${year}/${nMonth}`,
-      });
-      context.res.end();
-      return { props: {} };
-    } catch (error) {
-      context.res.writeHead(301, {
-        Location: `/404`,
-      });
-      context.res.end();
-      return { props: {} };
-    }
+    const nextMonth = addMonths(new Date(), 1);
+    const date = new Date(
+      parseInt(year as string, 10),
+      parseInt(month as string, 10),
+      1,
+    );
+    return {
+      props: {
+        agency,
+        year,
+        month,
+        previousButtonActive: isAfter(date, new Date(2018, 1, 1)),
+        nextButtonActive: isBefore(date, nextMonth),
+      },
+    };
   }
 };
 const Page = styled.div`
@@ -513,137 +345,7 @@ const MainGraphSectionHeader = styled.div`
   }
   margin-bottom: 4.5rem;
 `;
-const Captions = styled.div`
-  padding: 2rem;
-  width: 100%;
-  min-width: 34rem;
-  justify-content: center;
-  color: #3e5363;
-  background: rgba(62, 83, 99, 0.05);
-  div {
-    padding: 0 1rem;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    span {
-      &.info {
-        position: relative;
-        div {
-          background-color: #ced9e1;
-          color: #3e5363;
-          width: 800%;
-          z-index: 100;
-          padding: 2rem;
-          font-size: 2rem;
-          text-align: left;
-          b {
-            font-size: 1.5rem;
-          }
-          display: none;
-          position: absolute;
-        }
-        &:hover {
-          div {
-            display: block;
-          }
-        }
-      }
-      h3 {
-        text-align: center;
-        font-size: 2rem;
-      }
-    }
-    img {
-      background-color: #3e5363;
-      border-radius: 50%;
-      width: 4rem;
-    }
-    align-items: center;
-  }
-  ul {
-    list-style: none;
-    margin-top: 3rem;
-    border-top: 1px solid #3e5363;
-    padding: 1rem 1rem;
-    padding-top: 2rem;
-    display: flex;
-    transition: all 1s ease;
-    flex-wrap: wrap;
-    justify-content: space-around;
-    @media (max-width: 600px) {
-      justify-content: flex-start;
-    }
-  }
-`;
-const CaptionItems = styled.li`
-  display: flex;
-  align-items: center;
-  & + li {
-    @media (max-width: 765px) {
-      margin-top: 5rem;
-    }
-  }
-  div {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    margin-left: 1.5rem;
-    width: fit-content;
-  }
-  button.active {
-    opacity: 0.4;
-    width: 65%;
-  }
-  img {
-    width: 4rem;
-    background: #3e5363;
-    border-radius: 50%;
-  }
-  span {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: #3e5363;
-    margin: 10px 0;
-    text-align: left;
-    font-family: 'Roboto Condensed', sans-serif;
-  }
-`;
-const GraphDivWithPagination = styled.div`
-  margin-top: 3rem;
-  display: flex;
-  align-self: center;
-  justify-content: center;
-  flex-direction: column;
-  width: 100%;
-  color: #3e5363;
-  background: rgba(62, 83, 99, 0.06);
-  h3 {
-    padding: 1.5rem;
-  }
-  .main-chart-wrapper {
-    width: 100%;
-    div {
-      & > * {
-        font-size: 125%;
-      }
-      text {
-        font-family: 'Roboto Condensed', sans-serif;
-        font-size: 2.5rem;
-        @media (max-width: 600px) {
-          font-size: 2rem;
-        }
-        color: #fff;
-        font-weight: bold;
-        &.title {
-          font-size: 120%;
-        }
-      }
-    }
-    padding-bottom: 1rem;
-    border-bottom: 2px solid #3e5363;
-  }
-  margin-bottom: 3rem;
-`;
+
 const ActivityIndicatorPlaceholder = styled.div`
   width: 100%;
   display: flex;

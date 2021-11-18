@@ -101,7 +101,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       setYear={setYear}
       title={title}
       year={year}
-      summaryPackage={summaryPackage}
+      summaryPackage={summaryPackage && summaryPackage}
     />
   );
 };

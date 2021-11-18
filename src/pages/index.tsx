@@ -42,9 +42,8 @@ export default function Index({
       const { data } = await api.get(`/geral/remuneracao/${year}`);
       setCompleteChartData(
         data.map(d => ({
-          Wage: d.wage,
-          Perks: d.perks,
-          Others: d.others,
+          BaseRemuneration: d.base_remuneration,
+          OtherRemunerations: d.other_remunerations,
           // eslint-disable-next-line no-underscore-dangle
           Month: d._id,
         })),
@@ -84,6 +83,15 @@ export default function Index({
           <GreenDropDownSelector />
         </DropDownWrapper>
       </Container>
+      <BannerWrapper fontColor="#3e5363">
+        <span>Estamos coletando os dados novamente</span>
+        <br />
+        <br />
+        <p>
+          O dadosjusbr passou por uma reestruturação para viabilizar análises
+          ainda melhores. Agradecemos a compreensão!
+        </p>
+      </BannerWrapper>
       <Container className="released-data">
         <section>
           Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
@@ -328,4 +336,22 @@ const MainGraphSectionHeader = styled.div`
     }
   }
   margin-bottom: 4.5rem;
+`;
+const BannerWrapper = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  padding: 20rem 20%;
+  text-align: center;
+  background-color: #fff;
+  span {
+    margin-top: 3rem;
+    font-size: 3rem;
+  }
+  p {
+    font-size: 1.5rem;
+  }
+  font-family: 'Roboto Condensed', sans-serif;
+  color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
+  align-items: center;
 `;
