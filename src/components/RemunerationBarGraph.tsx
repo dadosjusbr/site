@@ -357,12 +357,21 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         if (!hidingNoData) {
                           return createArrayFilledWithValue(12, 0).map(
                             (v, i) => {
-                              if (fixYearDataArray(data)[i]) {
+                              const dateFixedArray = fixYearDataArray(data);
+                              if (dateFixedArray[i]) {
                                 return v;
                               }
                               // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
                               if (year === new Date().getFullYear()) {
-                                if (i < data[data.length - 1].Month) {
+                                const dateFixedWithoutUndefined = dateFixedArray.filter(
+                                  el => el,
+                                );
+                                if (
+                                  i <
+                                  dateFixedWithoutUndefined[
+                                    dateFixedWithoutUndefined.length - 1
+                                  ].Month
+                                ) {
                                   return MaxMonthPlaceholder;
                                 }
                               } else {
