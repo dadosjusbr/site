@@ -32,18 +32,6 @@ const ErrorTable: React.FC<{
           <td>{error.stderr}</td>
         </tr>
         <tr>
-          <th>Comando</th>
-          <td>
-            <code>{error.cmd}</code>
-          </td>
-        </tr>
-        <tr>
-          <th>Stdin</th>
-          <td>
-            <code>{error.stdin}</code>
-          </td>
-        </tr>
-        <tr>
           <th>Status</th>
           <td>{error.status}</td>
         </tr>
