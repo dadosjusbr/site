@@ -78,8 +78,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 alimentação, saúde, escolar...
                 <br />
                 <br />
-                <b>Sem dados:</b> Quando o dadosjusbr fez a coleta do
-                determinado mês porém o órgão não disponibilizou esses dados
+                <b>Sem dados:</b>Quando um órgão não disponibiliza os dados de um determinado mês
                 <br />
                 <br />
                 <b>Problemas na coleta:</b> Quando existe um problema na coleta
