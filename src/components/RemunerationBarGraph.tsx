@@ -83,8 +83,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 <br />
                 <br />
                 <b>Problemas na coleta:</b> Quando existe um problema na coleta
-                de um mês o site do dadosjusbr salva a informação de porquê não
-                foi possível coletar o dado mês
+                de um determinado mês
               </span>
             </div>
           </span>
