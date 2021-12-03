@@ -76,6 +76,13 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 benefícios são: diárias, gratificações, remuneração por função
                 de confiança, benefícios pessoais ou eventuais, auxílios
                 alimentação, saúde, escolar...
+                <br />
+                <br />
+                <b>Sem dados:</b>Quando um órgão não disponibiliza os dados de um determinado mês
+                <br />
+                <br />
+                <b>Problemas na coleta:</b> Quando existe um problema na coleta
+                de um determinado mês
               </span>
             </div>
           </span>
