@@ -28,6 +28,10 @@ const BannerWrapper = styled.div`
   padding: 25rem 20%;
   text-align: center;
   background-color: #fff;
+  @media (max-width: 570px) {
+    margin: 3rem 0%;
+    padding: 10rem 20%;
+  }
   span {
     margin-top: 3rem;
     font-size: 3rem;
