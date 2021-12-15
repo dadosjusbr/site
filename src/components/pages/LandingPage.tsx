@@ -1,10 +1,20 @@
 import React from 'react';
 import styled from 'styled-components';
+import Head from 'next/head';
 import Footer from '../Footer';
 import Header from '../Header';
 
 export const LandingPage: React.FC = () => (
   <Page>
+    <Head>
+      <title>DadosJusBr</title>
+      <meta property="og:image" content="/img/icon_dadosjus_background.png" />
+      <meta property="og:title" content="DadosJusBr" />
+      <meta
+        property="og:description"
+        content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
+      />
+    </Head>
     <Header />
     <BannerWrapper>
       <span>Voltamos em breve!</span>
