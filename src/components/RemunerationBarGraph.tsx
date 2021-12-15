@@ -25,6 +25,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     if (data) {
       // first we sorts the array to get the max chart size (using the sum of BaseRemuneration and OtherRemunerations), and return the max value if it exists
       const found = data
+        .filter(d => !d.Error)
         .sort(
           (a, b) =>
             a.BaseRemuneration +
@@ -32,9 +33,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             (b.BaseRemuneration + b.OtherRemunerations),
         )
         .reverse()[0];
-      return found ? found.BaseRemuneration + found.OtherRemunerations : 0;
+      // 10000 is used here as the min value of chart height
+      return found ? found.BaseRemuneration + found.OtherRemunerations : 10000;
     }
-    return 0;
+    return 10000;
   }, [data]);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
@@ -78,7 +80,8 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 alimentação, saúde, escolar...
                 <br />
                 <br />
-                <b>Sem dados:</b>Quando um órgão não disponibiliza os dados de um determinado mês
+                <b>Sem dados:</b>Quando um órgão não disponibiliza os dados de
+                um determinado mês
                 <br />
                 <br />
                 <b>Problemas na coleta:</b> Quando existe um problema na coleta
@@ -369,16 +372,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                 return v;
                               }
                               // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
-                              if (year === new Date().getFullYear()) {
-                                const dateFixedWithoutUndefined = dateFixedArray.filter(
-                                  el => el,
-                                );
-                                if (
-                                  i <
-                                  dateFixedWithoutUndefined[
-                                    dateFixedWithoutUndefined.length - 1
-                                  ].Month
-                                ) {
+                              const date = new Date();
+                              if (year === date.getFullYear()) {
+                                if (i < date.getMonth()) {
                                   return MaxMonthPlaceholder;
                                 }
                               } else {
