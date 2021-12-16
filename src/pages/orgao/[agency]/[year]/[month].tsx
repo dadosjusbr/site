@@ -192,7 +192,23 @@ export default function OmaPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { agency, year, month } = context.params;
+  const { agency, year: y, month: m } = context.params as {
+    agency: string;
+    year: string;
+    month: string;
+  };
+  const year = parseInt(y, 10);
+  const month = parseInt(m, 10);
+
+  if (Number.isNaN(year) || Number.isNaN(month)) {
+    return {
+      redirect: {
+        destination: '/404',
+      },
+      props: {},
+    };
+  }
+
   try {
     const { data: d2 } = await api.get(
       `/orgao/resumo/${agency}/${year}/${month}`,
@@ -217,11 +233,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   } catch (err) {
     const nextMonth = addMonths(new Date(), 1);
-    const date = new Date(
-      parseInt(year as string, 10),
-      parseInt(month as string, 10),
-      1,
-    );
+    const date = new Date(year, month, 1);
     return {
       props: {
         agency,
