@@ -13,6 +13,15 @@ module.exports = {
   ...withTM({
     esModule: true
   }),
+  async redirects() {
+    return [
+      {
+        source: '/download/datapackage/:path*',
+        destination: '/api/download/datapackage/:path*',
+        permanent: true,
+      },
+    ]
+  },
   //the env variables are set here to access in browser
   env: {
     API_BASE_URL: process.env.API_BASE_URL,

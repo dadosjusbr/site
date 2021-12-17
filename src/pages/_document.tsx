@@ -6,7 +6,6 @@ import Document, {
   Head,
 } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
-import GATracker from '../components/GATracker';
 /**
  * This document is used to create the default layout of the page like others template engines
  * https://nextjs.org/docs/advanced-features/custom-document
@@ -61,7 +60,6 @@ export default class MyDocument extends Document {
             rel="stylesheet"
           />
           <meta charSet="utf-8" />
-          <GATracker />
         </Head>
         <body>
           <Main />

@@ -1,5 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import styled from 'styled-components';
+import ReactGA from 'react-ga';
 import Button from './Button';
 import ShareModal from './ShareModal';
 import RemunerationBarGraph from './RemunerationBarGraph';
@@ -79,7 +80,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           <div>
             {summaryPackage && (
               <a
-                target="_blank"
                 href={url.downloadURL(summaryPackage.Package.url)}
                 rel="noreferrer"
               >
@@ -87,6 +87,9 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                   textColor="#3e5363"
                   borderColor="#3e5363"
                   backgroundColor="#fff"
+                  onClick={() => {
+                    ReactGA.pageview(summaryPackage.Package.url);
+                  }}
                   hoverBackgroundColor="#3e5363"
                   id="download-button"
                 >
