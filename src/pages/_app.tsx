@@ -1,5 +1,6 @@
 import GlobalStyle from '../styles/global_style';
 import { PrivacityPolicyProvider } from '../contexts/privacity-policy-context';
+import GATracker from '../components/GATracker';
 /*
 o _app.tsx nesse caso está sendo utilizado para conseguirmos
 usar a api de contextos do next, ela permite compartilharmos funcionalidades
@@ -10,6 +11,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <>
       <PrivacityPolicyProvider>
+        <GATracker />
         <Component {...pageProps} />
         <GlobalStyle />
       </PrivacityPolicyProvider>
