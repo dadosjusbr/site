@@ -33,6 +33,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     () => year !== new Date().getFullYear(),
     [year],
   );
+  const [selectedMonth, setSelectedMonth] = useState<number>(navigableMonth);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   return (
     <>
@@ -63,6 +64,13 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           </div>
         </MainGraphSectionHeader>
         <RemunerationBarGraph
+          onMonthChange={month => {
+            if (selectedMonth === month) {
+              setSelectedMonth(navigableMonth);
+            } else {
+              setSelectedMonth(month);
+            }
+          }}
           data={data}
           year={year}
           dataLoading={dataLoading}
@@ -99,7 +107,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
               Compartilhar
               <img src="/img/icon_share.svg" alt="compartilhar" />
             </Button>
-            <a href={`/orgao/${id}/${year}/${navigableMonth}`}>
+            <a href={`/orgao/${id}/${year}/${selectedMonth}`}>
               <Button
                 textColor="#B361C6"
                 borderColor="#B361C6"
