@@ -80,7 +80,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           <div>
             {summaryPackage && (
               <a
-                target="_blank"
                 href={url.downloadURL(summaryPackage.Package.url)}
                 rel="noreferrer"
               >
