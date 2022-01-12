@@ -18,13 +18,11 @@ export default function Index({
 }) {
   const formatedStartDate = useMemo<string>(() => {
     const d = new Date(startDate);
-    d.setMonth(d.getMonth() + 1);
-    return `${d.getMonth()}/${d.getFullYear()}`;
+    return `${d.getMonth() + 1}/${d.getFullYear()}`;
   }, [startDate]);
   const formatedEndDate = useMemo<string>(() => {
     const d = new Date(endDate);
-    d.setMonth(d.getMonth());
-    return `${d.getMonth()}/${d.getFullYear()}`;
+    return `${d.getMonth() + 1}/${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   const [year, setYear] = useState(new Date().getFullYear() - 1);

@@ -32,7 +32,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         <option value="" disabled selected hidden>
           Acessar dados
         </option>
-        <option value="Federal">Órgãos Federais</option>
+        {/* <option value="Federal">Órgãos Federais</option> */}
         <optgroup label="Órgãos Estaduais">
           {(() => {
             const list = [];
