@@ -23,11 +23,11 @@ export default function Index({
   }, [startDate]);
   const formatedEndDate = useMemo<string>(() => {
     const d = new Date(endDate);
-    d.setMonth(d.getMonth() + 1);
+    d.setMonth(d.getMonth());
     return `${d.getMonth()}/${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
-  const [year, setYear] = useState(new Date().getFullYear());
+  const [year, setYear] = useState(new Date().getFullYear() - 1);
   const [loading, setLoading] = useState(true);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
