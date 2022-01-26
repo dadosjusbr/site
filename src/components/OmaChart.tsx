@@ -140,7 +140,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             </div>
           </span>
           <span>
-            <h3>Índice de Transparência: {mi.Score.indice_transparencia}</h3>
+            <h3>Índice de Transparência: {mi.Score?.indice_transparencia}</h3>
           </span>
           <span>&nbsp;</span>
         </div>
@@ -148,33 +148,33 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <CaptionItems>
             <div>
               <span>
-                Índice de completude: {mi.Score.indice_completude}
+                Índice de completude: {mi.Score?.indice_completude}
                 <style jsx>{`
                   span {
                     font-size: 2rem;
                   }
                 `}</style>
               </span>
-              {mi.Meta.tem_lotacao ? (
+              {mi.Meta?.tem_lotacao ? (
                 <span>Tem lotação</span>
               ) : (
                 <Riscado>Tem lotação</Riscado>
               )}
-              {mi.Meta.tem_cargo ? (
+              {mi.Meta?.tem_cargo ? (
                 <span>Tem cargo</span>
               ) : (
                 <Riscado>Tem cargo</Riscado>
               )}
-              {mi.Meta.tem_matricula ? (
+              {mi.Meta?.tem_matricula ? (
                 <span>Tem matrícula</span>
               ) : (
                 <Riscado>Tem matrícula</Riscado>
               )}
-              <ShowTipoDado tipo={mi.Meta.remuneracao_basica}>
+              <ShowTipoDado tipo={mi.Meta?.remuneracao_basica}>
                 remuneração básica
               </ShowTipoDado>
-              <ShowTipoDado tipo={mi.Meta.despesas}>despesas</ShowTipoDado>
-              <ShowTipoDado tipo={mi.Meta.outras_receitas}>
+              <ShowTipoDado tipo={mi.Meta?.despesas}>despesas</ShowTipoDado>
+              <ShowTipoDado tipo={mi.Meta?.outras_receitas}>
                 outras receitas
               </ShowTipoDado>
             </div>
@@ -182,30 +182,30 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <CaptionItems>
             <div>
               <span>
-                Índice de facilidade: {mi.Score.indice_facilidade}
+                Índice de facilidade: {mi.Score?.indice_facilidade}
                 <style jsx>{`
                   span {
                     font-size: 2rem;
                   }
                 `}</style>
               </span>
-              {mi.Meta.login_nao_necessario ? (
+              {mi.Meta?.login_nao_necessario ? (
                 <span>Não é necessário login</span>
               ) : (
                 <Riscado>Não é necessário login</Riscado>
               )}
-              {mi.Meta.captcha_nao_necessario ? (
+              {mi.Meta?.captcha_nao_necessario ? (
                 <span>Não é necessário captcha</span>
               ) : (
                 <Riscado>Não é necessário captcha</Riscado>
               )}
-              <ShowAcesso>{mi.Meta.acesso}</ShowAcesso>
-              {mi.Meta.manteve_consistencia_no_formato ? (
+              <ShowAcesso>{mi.Meta?.acesso}</ShowAcesso>
+              {mi.Meta?.manteve_consistencia_no_formato ? (
                 <span>Manteve consistência no formato</span>
               ) : (
                 <Riscado>Manteve consistência no formato</Riscado>
               )}
-              {mi.Meta.dados_estritamente_tabulares ? (
+              {mi.Meta?.dados_estritamente_tabulares ? (
                 <span>Dados estritamente tabulares</span>
               ) : (
                 <Riscado>Dados estritamente tabulares</Riscado>
