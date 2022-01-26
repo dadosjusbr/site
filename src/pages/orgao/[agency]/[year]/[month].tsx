@@ -9,7 +9,7 @@ import MONTHS from '../../../../@types/MONTHS';
 import ActivityIndicator from '../../../../components/ActivityIndicator';
 import Footer from '../../../../components/Footer';
 import Header from '../../../../components/Header';
-import api from '../../../../services/api';
+import { api, apiVersion } from '../../../../services/api';
 import OMASummary from '../../../../components/OmaChart';
 import ErrorTable from '../../../../components/ErrorTable';
 
@@ -17,6 +17,7 @@ export default function OmaPage({
   agency,
   year,
   month,
+  mi,
   oma,
   previousButtonActive,
   nextButtonActive,
@@ -145,7 +146,9 @@ export default function OmaPage({
                       // Converts UNIX timestamp to miliseconds timestamp
                       const d = new Date(oma.crawlingTime * 1000);
                       // eslint-disable-next-line prettier/prettier
-                      return `${d.getDay()} de ${MONTHS[d.getMonth()]} de ${d.getFullYear()}`;
+                      return `${d.getDay()} de ${
+                        MONTHS[d.getMonth()]
+                      } de ${d.getFullYear()}`;
                     })()}
                   </span>
                 )
@@ -173,6 +176,7 @@ export default function OmaPage({
                   totalPerks={oma.totalPerks}
                   totalWage={oma.totalWage}
                   year={year}
+                  mi={mi}
                 />
               );
             }
@@ -192,7 +196,11 @@ export default function OmaPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { agency, year: y, month: m } = context.params as {
+  const {
+    agency,
+    year: y,
+    month: m,
+  } = context.params as {
     agency: string;
     year: string;
     month: string;
@@ -209,6 +217,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
+  const { data: d3 } = await apiVersion.get(
+    `/dados/${agency}/${year}/${month}`,
+  );
+
   try {
     const { data: d2 } = await api.get(
       `/orgao/resumo/${agency}/${year}/${month}`,
@@ -218,6 +230,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         agency,
         year,
         month,
+        mi: d3[0],
         previousButtonActive: d2.HasPrevious,
         nextButtonActive: d2.HasNext,
         oma: {
@@ -239,6 +252,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         agency,
         year,
         month,
+        mi: d3[0],
         previousButtonActive: isAfter(date, new Date(2018, 1, 1)),
         nextButtonActive: isBefore(date, nextMonth),
       },

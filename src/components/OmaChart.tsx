@@ -12,11 +12,47 @@ export interface OMASummaryProps {
   maxPerk: number;
   totalPerks: number;
   chartData: any;
+  mi: any;
   year: number;
   agency: string;
 }
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+function ShowAcesso(props) {
+  const acesso = props.children;
+  switch (acesso) {
+    case 'ACESSO_DIRETO':
+      return <span>Acesso direto</span>;
+      break;
+    case 'AMIGAVEL_PARA_RASPAGEM':
+      return <span>Amigável para raspagem</span>;
+      break;
+    case 'RASPAGEM_DIFICULTADA':
+      return <span>Raspagem dificultada</span>;
+      break;
+    case 'NECESSITA_SIMULACAO_USUARIO':
+      return <span>Necessita simulação do usuário</span>;
+      break;
+    default:
+      return <span>--</span>;
+      break;
+  }
+}
+function ShowTipoDado(props) {
+  const tipo = props.children;
+  switch (tipo) {
+    case 'SUMARIZADO':
+      return <span>Acesso direto</span>;
+      break;
+    case 'DETALHADO':
+      return <span>Amigável para raspagem</span>;
+      break;
+    default:
+      return <span>--</span>;
+      break;
+  }
+}
 
 const OMASummary: React.FC<OMASummaryProps> = ({
   totalMembers,
@@ -25,6 +61,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   maxPerk,
   totalPerks,
   chartData,
+  mi,
   year,
   agency,
 }) => {
@@ -74,6 +111,86 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               <span>
                 Total benefícios: R$ {(totalPerks / 1000000).toFixed(2)}M
               </span>
+            </div>
+          </CaptionItems>
+        </ul>
+      </Captions>
+      <br />
+      <Captions>
+        <div>
+          <span className="info">
+            <img src="/img/icon_info.svg" alt="informações" />
+            <div>
+              <span>
+                <b>Salário:</b> valor recebido de acordo com a prestação de
+                serviços, em decorrência do contrato de trabalho.
+                <br />
+                <br />
+                <b>Remuneração:</b> é a soma do salário mais outras vantagens
+                (indenizações e benefícios). - Benefício: valores eventuais, por
+                exemplo, auxílios alimentação, saúde, escolar... - Membro: é o
+                integrante da carreira &apos;principal&apos; do órgão do sistema
+                de justiça. Por exemplo, juízes, desembargadores, ministros,
+                defensores, procuradores públicos, promotores de justiça,
+                procuradores de justiça, etc...
+              </span>
+            </div>
+          </span>
+          <span>
+            <h3>Índice de Transparência: {mi.Score.indice_transparencia}</h3>
+          </span>
+          <span>&nbsp;</span>
+        </div>
+        <ul>
+          <CaptionItems>
+            <div>
+              <span>Índice de completude: {mi.Score.indice_completude}</span>
+              {mi.Meta.tem_lotacao ? (
+                <span>Tem lotação</span>
+              ) : (
+                <Riscado>Tem lotação</Riscado>
+              )}
+              {mi.Meta.tem_cargo ? (
+                <span>Tem cargo</span>
+              ) : (
+                <Riscado>Tem cargo</Riscado>
+              )}
+              {mi.Meta.tem_matricula ? (
+                <span>Tem matrícula</span>
+              ) : (
+                <Riscado>Tem matrícula</Riscado>
+              )}
+              {mi.Meta.tem_matricula ? (
+                <span>Tem matrícula</span>
+              ) : (
+                <Riscado>Tem matrícula</Riscado>
+              )}
+            </div>
+          </CaptionItems>
+          <CaptionItems>
+            <div>
+              <span>Índice de facilidade: {mi.Score.indice_facilidade}</span>
+              {mi.Meta.login_nao_necessario ? (
+                <span>Não é necessário login</span>
+              ) : (
+                <Riscado>Não é necessário login</Riscado>
+              )}
+              {mi.Meta.captcha_nao_necessario ? (
+                <span>Não é necessário captcha</span>
+              ) : (
+                <Riscado>Não é necessário captcha</Riscado>
+              )}
+              <ShowAcesso>{mi.Meta.acesso}</ShowAcesso>
+              {mi.Meta.manteve_consistencia_no_formato ? (
+                <span>Manteve consistência no formato</span>
+              ) : (
+                <Riscado>Manteve consistência no formato</Riscado>
+              )}
+              {mi.Meta.dados_estritamente_tabulares ? (
+                <span>Dados estritamente tabulares</span>
+              ) : (
+                <Riscado>Dados estritamente tabulares</Riscado>
+              )}
             </div>
           </CaptionItems>
         </ul>
@@ -223,6 +340,10 @@ const OMASummary: React.FC<OMASummaryProps> = ({
     </>
   );
 };
+
+const Riscado = styled.span`
+  text-decoration: line-through;
+`;
 
 const Captions = styled.div`
   padding: 2rem;
