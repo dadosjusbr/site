@@ -4,6 +4,7 @@ import dynamic from 'next/dynamic';
 import Button from './Button';
 import * as url from '../url';
 import ShareModal from './ShareModal';
+import MONTHS from '../@types/MONTHS';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -14,6 +15,7 @@ export interface OMASummaryProps {
   chartData: any;
   mi: any;
   year: number;
+  month: number;
   agency: string;
 }
 
@@ -40,16 +42,17 @@ function ShowAcesso(props) {
   }
 }
 function ShowTipoDado(props) {
-  const tipo = props.children;
+  const texto = props.children;
+  const tipo = props.tipo;
   switch (tipo) {
     case 'SUMARIZADO':
-      return <span>Acesso direto</span>;
+      return <span>Disponibiliza dados de {texto} sumarizados</span>;
       break;
     case 'DETALHADO':
-      return <span>Amigável para raspagem</span>;
+      return <span>Disponibiliza dados de {texto} detalhados</span>;
       break;
     default:
-      return <span>--</span>;
+      return <span>Não disponibiliza dados de {texto}</span>;
       break;
   }
 }
@@ -63,6 +66,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   chartData,
   mi,
   year,
+  month,
   agency,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -122,17 +126,16 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <img src="/img/icon_info.svg" alt="informações" />
             <div>
               <span>
-                <b>Salário:</b> valor recebido de acordo com a prestação de
-                serviços, em decorrência do contrato de trabalho.
+                <b>Índice de transparência:</b> Média entre os índices de
+                completude e facilidade em {MONTHS[month]} de {year}
                 <br />
                 <br />
-                <b>Remuneração:</b> é a soma do salário mais outras vantagens
-                (indenizações e benefícios). - Benefício: valores eventuais, por
-                exemplo, auxílios alimentação, saúde, escolar... - Membro: é o
-                integrante da carreira &apos;principal&apos; do órgão do sistema
-                de justiça. Por exemplo, juízes, desembargadores, ministros,
-                defensores, procuradores públicos, promotores de justiça,
-                procuradores de justiça, etc...
+                <b>Índice de completude:</b> Pontua a completude dos dados
+                segundo os critérios listados
+                <br />
+                <br />
+                <b>Índice de facilidade:</b> Pontua a facilidade de obtenção e
+                uso dos dados segundo os critérios listados
               </span>
             </div>
           </span>
@@ -144,7 +147,14 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         <ul>
           <CaptionItems>
             <div>
-              <span>Índice de completude: {mi.Score.indice_completude}</span>
+              <span>
+                Índice de completude: {mi.Score.indice_completude}
+                <style jsx>{`
+                  span {
+                    font-size: 2rem;
+                  }
+                `}</style>
+              </span>
               {mi.Meta.tem_lotacao ? (
                 <span>Tem lotação</span>
               ) : (
@@ -160,16 +170,25 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               ) : (
                 <Riscado>Tem matrícula</Riscado>
               )}
-              {mi.Meta.tem_matricula ? (
-                <span>Tem matrícula</span>
-              ) : (
-                <Riscado>Tem matrícula</Riscado>
-              )}
+              <ShowTipoDado tipo={mi.Meta.remuneracao_basica}>
+                remuneração básica
+              </ShowTipoDado>
+              <ShowTipoDado tipo={mi.Meta.despesas}>despesas</ShowTipoDado>
+              <ShowTipoDado tipo={mi.Meta.outras_receitas}>
+                outras receitas
+              </ShowTipoDado>
             </div>
           </CaptionItems>
           <CaptionItems>
             <div>
-              <span>Índice de facilidade: {mi.Score.indice_facilidade}</span>
+              <span>
+                Índice de facilidade: {mi.Score.indice_facilidade}
+                <style jsx>{`
+                  span {
+                    font-size: 2rem;
+                  }
+                `}</style>
+              </span>
               {mi.Meta.login_nao_necessario ? (
                 <span>Não é necessário login</span>
               ) : (

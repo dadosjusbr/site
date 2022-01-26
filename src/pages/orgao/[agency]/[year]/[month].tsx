@@ -176,6 +176,7 @@ export default function OmaPage({
                   totalPerks={oma.totalPerks}
                   totalWage={oma.totalWage}
                   year={year}
+                  month={month}
                   mi={mi}
                 />
               );
