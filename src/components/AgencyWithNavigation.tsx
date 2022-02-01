@@ -34,7 +34,8 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     () => year !== new Date().getFullYear(),
     [year],
   );
-  const [selectedMonth, setSelectedMonth] = useState<number>(navigableMonth);
+  const m = navigableMonth || 1;
+  const [selectedMonth, setSelectedMonth] = useState<number>(m);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   return (
     <>
