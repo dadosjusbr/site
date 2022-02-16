@@ -9,7 +9,7 @@ import MONTHS from '../../../../@types/MONTHS';
 import ActivityIndicator from '../../../../components/ActivityIndicator';
 import Footer from '../../../../components/Footer';
 import Header from '../../../../components/Header';
-import { api, apiVersion } from '../../../../services/api';
+import api from '../../../../services/api';
 import OMASummary from '../../../../components/OmaChart';
 import ErrorTable from '../../../../components/ErrorTable';
 
@@ -60,7 +60,7 @@ export default function OmaPage({
     try {
       // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
       setLoading(true);
-      const { data } = await api.get(
+      const { data } = await api.ui.get(
         `/orgao/salario/${agency}/${year}/${month}`,
       );
       // after get the data from api the state is updated with the chart data
@@ -218,12 +218,12 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
-  const { data: d3 } = await apiVersion.get(
+  const { data: d3 } = await api.default.get(
     `/dados/${agency}/${year}/${month}`,
   );
 
   try {
-    const { data: d2 } = await api.get(
+    const { data: d2 } = await api.ui.get(
       `/orgao/resumo/${agency}/${year}/${month}`,
     );
     return {
