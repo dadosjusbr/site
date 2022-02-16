@@ -34,7 +34,7 @@ function ShowAcesso(props) {
       return <span>Raspagem dificultada</span>;
       break;
     case 'NECESSITA_SIMULACAO_USUARIO':
-      return <span>Necessita simulação do usuário</span>;
+      return <span>É possível navegar no html do site</span>;
       break;
     default:
       return <span>--</span>;
@@ -166,9 +166,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 <Riscado>Tem cargo</Riscado>
               )}
               {mi.Meta?.tem_matricula ? (
-                <span>Tem matrícula</span>
+                <span>Tem matrícula e nome</span>
               ) : (
-                <Riscado>Tem matrícula</Riscado>
+                <Riscado>Tem matrícula e nome</Riscado>
               )}
               <ShowTipoDado tipo={mi.Meta?.remuneracao_basica}>
                 remuneração básica
