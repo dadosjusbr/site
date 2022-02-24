@@ -138,10 +138,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   } catch (err) {
-    context.res.writeHead(301, {
-      Location: `/404`,
-    });
-    context.res.end();
+    // context.res.writeHead(301, {
+    //   Location: `/404`,
+    // });
+    // context.res.end();
     return { props: {} };
   }
 };

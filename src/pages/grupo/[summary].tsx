@@ -28,20 +28,21 @@ export default function SummaryPage({ dataList, summary }) {
       <DropDownGroupSelector value={summary} />
       <div>
         {(() => {
-          if (dataList.length === 0) {
+          if (typeof dataList !== 'undefined' && dataList.length > 0) {
+            return dataList.map(agency => (
+              <GraphWithNavigation
+                key={agency.Name}
+                title={agency.FullName}
+                id={agency.Name}
+              />
+            ));
+          } else {
             return (
               <ActivityIndicatorPlaceholder>
                 Ocorreu um erro.
               </ActivityIndicatorPlaceholder>
             );
           }
-          return dataList.map(agency => (
-            <GraphWithNavigation
-              key={agency.Name}
-              title={agency.FullName}
-              id={agency.Name}
-            />
-          ));
         })()}
       </div>
       <Footer />
@@ -111,10 +112,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
   try {
     const { data } = await api.get(`/orgao/${summary}`);
     if (!data.Agency) {
-      context.res.writeHead(301, {
-        Location: `/404`,
-      });
-      context.res.end();
+      // context.res.writeHead(301, {
+      //   Location: `/404`,
+      // });
+      // context.res.end();
       return { props: {} };
     }
     return {
@@ -124,10 +125,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   } catch (error) {
-    context.res.writeHead(301, {
-      Location: `/404`,
-    });
-    context.res.end();
+    // context.res.writeHead(301, {
+    //   Location: `/404`,
+    // });
+    // context.res.end();
     return { props: {} };
   }
 };
