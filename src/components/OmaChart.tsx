@@ -126,8 +126,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <img src="/img/icon_info.svg" alt="informações" />
             <div>
               <span>
-                <b>Índice de transparência:</b> Média entre os índices de
-                completude e facilidade em {MONTHS[month]} de {year}
+                <b>Índice de transparência:</b> Média harmônica entre os índices
+                de completude e facilidade em {MONTHS[month]} de {year}
                 <br />
                 <br />
                 <b>Índice de completude:</b> Pontua a completude dos dados
@@ -140,7 +140,10 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             </div>
           </span>
           <span>
-            <h3>Índice de Transparência: {mi.Score?.indice_transparencia}</h3>
+            <h3>
+              Índice de Transparência:{' '}
+              {mi.Score?.indice_transparencia.toFixed(2)}
+            </h3>
           </span>
           <span>&nbsp;</span>
         </div>
@@ -148,7 +151,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <CaptionItems>
             <div>
               <span>
-                Índice de completude: {mi.Score?.indice_completude}
+                Índice de completude: {mi.Score?.indice_completude.toFixed(2)}
                 <style jsx>{`
                   span {
                     font-size: 2rem;
@@ -182,7 +185,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <CaptionItems>
             <div>
               <span>
-                Índice de facilidade: {mi.Score?.indice_facilidade}
+                Índice de facilidade: {mi.Score?.indice_facilidade.toFixed(2)}
                 <style jsx>{`
                   span {
                     font-size: 2rem;
