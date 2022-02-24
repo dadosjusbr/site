@@ -60,7 +60,7 @@ const Page = styled.div`
 export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id, year } = context.params;
   try {
-    const { data: agency } = await api.get(`/orgao/totais/${id}/${year}`);
+    const { data: agency } = await api.ui.get(`/orgao/totais/${id}/${year}`);
     return {
       props: {
         id,
