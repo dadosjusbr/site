@@ -89,7 +89,9 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                   borderColor="#3e5363"
                   backgroundColor="#fff"
                   onClick={() => {
-                    ReactGA.pageview(summaryPackage.Package.url);
+                    ReactGA.pageview(
+                      url.downloadURL(summaryPackage.Package.url),
+                    );
                   }}
                   hoverBackgroundColor="#3e5363"
                   id="download-button"

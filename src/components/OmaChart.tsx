@@ -317,11 +317,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         </div>
         <div className="buttons">
           <div>
-            <a
-              target="_blank"
-              href={`/orgao/${agency}/${year}`}
-              rel="noreferrer"
-            >
+            <a href={`/orgao/${agency}/${year}`} rel="noreferrer">
               <Button
                 textColor="#2FBB96"
                 borderColor="#2FBB96"
