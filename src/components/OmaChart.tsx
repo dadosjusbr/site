@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
+import ReactGA from 'react-ga';
 import Button from './Button';
 import * as url from '../url';
 import ShareModal from './ShareModal';
@@ -347,6 +348,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 borderColor="#3e5363"
                 backgroundColor="#fff"
                 hoverBackgroundColor="#3e5363"
+                onClick={() => {
+                  ReactGA.pageview(url.downloadURL(fileLink));
+                }}
               >
                 Baixar
                 <img src="/img/icon_download_share.svg" alt="download" />
