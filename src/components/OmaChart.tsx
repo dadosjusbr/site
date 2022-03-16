@@ -1,9 +1,11 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
+import ReactGA from 'react-ga';
 import Button from './Button';
 import * as url from '../url';
 import ShareModal from './ShareModal';
+import MONTHS from '../@types/MONTHS';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -12,11 +14,49 @@ export interface OMASummaryProps {
   maxPerk: number;
   totalPerks: number;
   chartData: any;
+  mi: any;
   year: number;
+  month: number;
   agency: string;
 }
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+function ShowAcesso(props) {
+  const acesso = props.children;
+  switch (acesso) {
+    case 'ACESSO_DIRETO':
+      return <span>Acesso direto</span>;
+      break;
+    case 'AMIGAVEL_PARA_RASPAGEM':
+      return <span>Amigável para raspagem</span>;
+      break;
+    case 'RASPAGEM_DIFICULTADA':
+      return <span>Raspagem dificultada</span>;
+      break;
+    case 'NECESSITA_SIMULACAO_USUARIO':
+      return <span>É possível navegar no html do site</span>;
+      break;
+    default:
+      return <span>--</span>;
+      break;
+  }
+}
+function ShowTipoDado(props) {
+  const texto = props.children;
+  const tipo = props.tipo;
+  switch (tipo) {
+    case 'SUMARIZADO':
+      return <span>Disponibiliza dados de {texto} sumarizados</span>;
+      break;
+    case 'DETALHADO':
+      return <span>Disponibiliza dados de {texto} detalhados</span>;
+      break;
+    default:
+      return <span>Não disponibiliza dados de {texto}</span>;
+      break;
+  }
+}
 
 const OMASummary: React.FC<OMASummaryProps> = ({
   totalMembers,
@@ -25,7 +65,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   maxPerk,
   totalPerks,
   chartData,
+  mi,
   year,
+  month,
   agency,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
@@ -74,6 +116,104 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               <span>
                 Total benefícios: R$ {(totalPerks / 1000000).toFixed(2)}M
               </span>
+            </div>
+          </CaptionItems>
+        </ul>
+      </Captions>
+      <br />
+      <Captions>
+        <div>
+          <span className="info">
+            <img src="/img/icon_info.svg" alt="informações" />
+            <div>
+              <span>
+                <b>Índice de transparência:</b> Média harmônica entre os índices
+                de completude e facilidade em {MONTHS[month]} de {year}
+                <br />
+                <br />
+                <b>Índice de completude:</b> Pontua a completude dos dados
+                segundo os critérios listados
+                <br />
+                <br />
+                <b>Índice de facilidade:</b> Pontua a facilidade de obtenção e
+                uso dos dados segundo os critérios listados
+              </span>
+            </div>
+          </span>
+          <span>
+            <h3>
+              Índice de Transparência:{' '}
+              {mi.Score?.indice_transparencia.toFixed(2)}
+            </h3>
+          </span>
+          <span>&nbsp;</span>
+        </div>
+        <ul>
+          <CaptionItems>
+            <div>
+              <span>
+                Índice de completude: {mi.Score?.indice_completude.toFixed(2)}
+                <style jsx>{`
+                  span {
+                    font-size: 2rem;
+                  }
+                `}</style>
+              </span>
+              {mi.Meta?.tem_lotacao ? (
+                <span>Tem lotação</span>
+              ) : (
+                <Riscado>Tem lotação</Riscado>
+              )}
+              {mi.Meta?.tem_cargo ? (
+                <span>Tem cargo</span>
+              ) : (
+                <Riscado>Tem cargo</Riscado>
+              )}
+              {mi.Meta?.tem_matricula ? (
+                <span>Tem matrícula e nome</span>
+              ) : (
+                <Riscado>Tem matrícula e nome</Riscado>
+              )}
+              <ShowTipoDado tipo={mi.Meta?.remuneracao_basica}>
+                remuneração básica
+              </ShowTipoDado>
+              <ShowTipoDado tipo={mi.Meta?.despesas}>despesas</ShowTipoDado>
+              <ShowTipoDado tipo={mi.Meta?.outras_receitas}>
+                outras receitas
+              </ShowTipoDado>
+            </div>
+          </CaptionItems>
+          <CaptionItems>
+            <div>
+              <span>
+                Índice de facilidade: {mi.Score?.indice_facilidade.toFixed(2)}
+                <style jsx>{`
+                  span {
+                    font-size: 2rem;
+                  }
+                `}</style>
+              </span>
+              {mi.Meta?.login_nao_necessario ? (
+                <span>Não é necessário login</span>
+              ) : (
+                <Riscado>Não é necessário login</Riscado>
+              )}
+              {mi.Meta?.captcha_nao_necessario ? (
+                <span>Não é necessário captcha</span>
+              ) : (
+                <Riscado>Não é necessário captcha</Riscado>
+              )}
+              <ShowAcesso>{mi.Meta?.acesso}</ShowAcesso>
+              {mi.Meta?.manteve_consistencia_no_formato ? (
+                <span>Manteve consistência no formato</span>
+              ) : (
+                <Riscado>Manteve consistência no formato</Riscado>
+              )}
+              {mi.Meta?.dados_estritamente_tabulares ? (
+                <span>Dados estritamente tabulares</span>
+              ) : (
+                <Riscado>Dados estritamente tabulares</Riscado>
+              )}
             </div>
           </CaptionItems>
         </ul>
@@ -178,11 +318,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         </div>
         <div className="buttons">
           <div>
-            <a
-              target="_blank"
-              href={`/orgao/${agency}/${year}`}
-              rel="noreferrer"
-            >
+            <a href={`/orgao/${agency}/${year}`} rel="noreferrer">
               <Button
                 textColor="#2FBB96"
                 borderColor="#2FBB96"
@@ -212,6 +348,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 borderColor="#3e5363"
                 backgroundColor="#fff"
                 hoverBackgroundColor="#3e5363"
+                onClick={() => {
+                  ReactGA.pageview(url.downloadURL(fileLink));
+                }}
               >
                 Baixar
                 <img src="/img/icon_download_share.svg" alt="download" />
@@ -223,6 +362,10 @@ const OMASummary: React.FC<OMASummaryProps> = ({
     </>
   );
 };
+
+const Riscado = styled.span`
+  text-decoration: line-through;
+`;
 
 const Captions = styled.div`
   padding: 2rem;

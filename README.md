@@ -37,6 +37,8 @@ Essa aplicação foi feita utilizando o next js [Next.js](https://nextjs.org/) o
 
 ## Como rodar localmente
 
+Crie uma cópia do arquivo `.env.sample` e renomeie para `.env.local` e configure as variáveis devidamente, caso necessário.
+
 Rodando o servidor de desenvolvimento.
 
 ```bash

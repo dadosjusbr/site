@@ -37,7 +37,7 @@ export default function Index({
   }, [year]);
   async function fetchGeneralChartData() {
     try {
-      const { data } = await api.get(`/geral/remuneracao/${year}`);
+      const { data } = await api.ui.get(`/geral/remuneracao/${year}`);
       setCompleteChartData(
         data.map(d => ({
           BaseRemuneration: d.base_remuneration,
@@ -126,7 +126,7 @@ export default function Index({
 }
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
-    const { data } = await api.get('/geral/resumo');
+    const { data } = await api.ui.get('/geral/resumo');
     return {
       props: {
         agencyAmount: data.AgencyAmount,
