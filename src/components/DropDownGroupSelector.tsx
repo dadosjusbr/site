@@ -56,12 +56,11 @@ export default DropDownGroupSelector;
 const SelectContainer = styled.div`
   display: flex;
   align-items: center;
-  padding: 3rem 0;
   width: 100%;
   justify-content: center;
 `;
 const SumarySelectorComboBox = styled.select`
-  padding: 3rem 2rem;
+  padding: 2rem 2rem;
   border-radius: 5px;
   width: 30%;
   min-width: 25rem;
@@ -69,8 +68,6 @@ const SumarySelectorComboBox = styled.select`
   background: #3e5363
     url("data:image/svg+xml;charset=utf-8,<svg xmlns='http://www.w3.org/2000/svg' width='4' height='5'><path fill='white' d='M2 0L0 2h4zm0 5L0 3h4z'/></svg>")
     no-repeat right 3rem center/8px 10px;
-  font-size: 2rem;
-  font-family: 'Roboto Condensed', sans-serif;
   display: flex;
   color: #fff;
   font-weight: bold;

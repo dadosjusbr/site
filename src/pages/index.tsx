@@ -1,12 +1,17 @@
+import { useEffect, useMemo, useState } from 'react';
+import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import styled from 'styled-components';
-import { GetServerSideProps } from 'next';
-import { useEffect, useMemo, useState } from 'react';
+import { Container, Grid, Paper, Box } from '@mui/material';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
 import RemunerationBarGraph from '../components/RemunerationBarGraph';
 import api from '../services/api';
+
+const lightTheme = createTheme({ palette: { mode: 'light' } });
 
 export default function Index({
   agencyAmount,
@@ -64,22 +69,29 @@ export default function Index({
       </Head>
       <Nav />
       <Container>
-        <section>
-          <h2>O DadosJus liberta os dados!</h2>
-          <br />
-          <GeneralInfoList>
-            <li>
-              <span>Orgãos libertados: {agencyAmount}</span>
-            </li>
-            <li>
-              <span>Meses libertados: {monthAmount}</span>
-            </li>
-          </GeneralInfoList>
-        </section>
-        <DropDownWrapper>
-          <h3>Dados Por Grupo</h3>
-          <GreenDropDownSelector />
-        </DropDownWrapper>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <h2>O DadosJus liberta os dados!</h2>
+            <ThemeProvider theme={lightTheme}>
+              <Paper elevation={3}>
+                <Box py={2}>
+                  <List>
+                    <li>
+                      <span>Orgãos libertados: {agencyAmount}</span>
+                    </li>
+                    <li>
+                      <span>Meses libertados: {monthAmount}</span>
+                    </li>
+                  </List>
+                </Box>
+              </Paper>
+            </ThemeProvider>
+          </Grid>
+          <Grid item xs={6}>
+            <h2>Dados Por Grupo</h2>
+            <DropDownGroupSelector />
+          </Grid>
+        </Grid>
       </Container>
       <Container className="released-data">
         <section>
@@ -148,6 +160,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const Page = styled.div`
   background: #3e5363;
 `;
+const List = styled.ul`
+  list-style: none;
+`;
 const GraphWrapper = styled.div`
   margin: 2rem 7.8rem;
   font-family: 'Roboto Condensed', sans-serif;
@@ -172,100 +187,6 @@ const GraphWrapper = styled.div`
     max-width: 100%;
     justify-content: center;
     flex-direction: column;
-  }
-`;
-const Container = styled.div`
-  display: flex;
-  margin: 0px 68px;
-  color: #fff;
-  padding-top: 8rem;
-  h2,
-  h3 {
-    font-weight: 200;
-    font-size: 3rem !important;
-  }
-  padding-bottom: 4rem;
-  @media (max-width: 600px) {
-    padding: 0;
-    margin: 0px 20px;
-  }
-  section {
-    font-size: 1rem;
-    * {
-      font-size: 2rem;
-    }
-    flex-direction: column;
-    font-size: 2rem;
-    justify-content: space-between;
-    width: 100%;
-    margin: 0px 1rem;
-    div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    display: flex;
-    font-family: 'Roboto Condensed', sans-serif;
-  }
-  @media (max-width: 600px) {
-    section {
-      max-width: 100%;
-      padding-top: 4rem;
-      margin: 0;
-      padding-bottom: 4rem;
-    }
-    flex-direction: column;
-  }
-  &.first {
-    padding-top: 4rem;
-    @media (max-width: 600px) {
-      padding-top: 3rem;
-      div {
-        padding-top: 0rem;
-      }
-    }
-  }
-  &.released-data {
-    margin: 4rem 0;
-    padding: 68px;
-    background-color: #7f3d8b;
-    background-image: url('/img/splash_background.png');
-  }
-`;
-const DropDownWrapper = styled.section`
-  width: 100%;
-  flex-direction: column;
-  div {
-    padding: 0;
-    max-width: 100%;
-    select {
-      width: 100%;
-      margin: 0;
-    }
-  }
-`;
-const GreenDropDownSelector = styled(DropDownGroupSelector)`
-  background-color: #2fbb96;
-  border: #3e5363;
-  margin-top: 120px;
-  padding: 3.5rem 2rem;
-  font-size: 2.5rem !important;
-  width: 80%;
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-`;
-const GeneralInfoList = styled.ul`
-  list-style: none;
-  background-color: #f5f6f7;
-  padding: 2rem;
-  color: #3e5363;
-  li {
-    & + li {
-      margin-top: 1rem;
-    }
-    display: flex;
-    align-items: center;
   }
 `;
 const MainGraphSectionHeader = styled.div`
