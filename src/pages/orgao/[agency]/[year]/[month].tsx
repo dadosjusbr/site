@@ -141,12 +141,12 @@ export default function OmaPage({
               ) : (
                 oma.crawlingTime && (
                   <span>
-                    Dados capturados em{' '}
+                    Dados coletados em{' '}
                     {(() => {
                       // Converts UNIX timestamp to miliseconds timestamp
                       const d = new Date(oma.crawlingTime * 1000);
                       // eslint-disable-next-line prettier/prettier
-                      return `${d.getDay()} de ${
+                      return `${d.getDate()} de ${
                         MONTHS[d.getMonth() + 1]
                       } de ${d.getFullYear()}`;
                     })()}
