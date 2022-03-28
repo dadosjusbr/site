@@ -6,10 +6,7 @@ const theme = createTheme({
     mode: 'dark',
   },
   typography: {
-    fontFamily: "'Quicksand', sans-serif",
-    h1: {
-      fontFamily: "'Rowdies', sans-serif",
-    },
+    fontFamily: "'Roboto Condensed', sans-serif",
   },
 });
 

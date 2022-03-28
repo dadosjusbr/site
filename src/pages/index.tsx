@@ -69,6 +69,13 @@ export default function Index({
       </Head>
       <Nav />
       <Container>
+        <Headline>
+          O DadosJusBr recupera continuamente dados dos diferentes orgãos do
+          sistema de jusiça, os padroniza e publica como dado aberto. Libertamos
+          os dados.
+          <br />
+          Já são {monthAmount} Meses de {agencyAmount} Orgãos libertados!
+        </Headline>
         <Grid container spacing={2}>
           <Grid item xs={6}>
             <h2>O DadosJus liberta os dados!</h2>
@@ -159,6 +166,11 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 const Page = styled.div`
   background: #3e5363;
+`;
+const Headline = styled.div`
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+  font-size: 2rem;
 `;
 const List = styled.ul`
   list-style: none;
