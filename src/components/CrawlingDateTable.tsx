@@ -3,11 +3,11 @@ import MONTHS from '../@types/MONTHS';
 import ActivityIndicator from './ActivityIndicator';
 
 function TableRow(props) {
-  const t = props.crawlingtimeseconds;
-  const d = new Date(t.CrawlingTimestamp.seconds * 1000);
+  const { month, crawlingtimeseconds } = props;
+  const d = new Date(crawlingtimeseconds * 1000);
   return (
     <CrawlingDate>
-      {d.getDate()} de {MONTHS[d.getMonth() + 1]} de {d.getFullYear()}
+      <CrawlingMonth>{MONTHS[month]}</CrawlingMonth> {d.getDate()} de {MONTHS[d.getMonth() + 1]} de {d.getFullYear()}
     </CrawlingDate>
   );
 }
@@ -18,16 +18,20 @@ const CrawlingDateTable: React.FC<{
 }> = ({ data, dataLoading }) => (
   <div>
     {dataLoading ? (
-      <ActivityIndicatorPlaceholder fontColor="#3e5363">
+      <>
         <ActivityIndicator spinnerColor="#3e5363" />
         <span>Aguarde...</span>
-      </ActivityIndicatorPlaceholder>
+      </>
     ) : (
       <>
         {data.length > 0 ? (
           <CrawlingDates>
-            {data.map(t => (
-              <TableRow crawlingtimeseconds={t} />
+            {data.map(d => (
+              <TableRow
+                month={d.Month}
+                crawlingtimeseconds={d.CrawlingTimestamp.seconds}
+              />
+              // <pre>{JSON.stringify(d.CrawlingTimestamp.seconds)}</pre>
             ))}
           </CrawlingDates>
         ) : (
@@ -44,6 +48,13 @@ const CrawlingDates = styled.div`
 
 const CrawlingDate = styled.div`
   font-size: 1.8rem;
+`;
+
+const CrawlingMonth = styled.span`
+  display: inline-block;
+  width: 80px;
+  font-size: 1.8rem;
+  text-align: left;
 `;
 
 export default CrawlingDateTable;
