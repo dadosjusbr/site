@@ -6,7 +6,7 @@ import { Container, Grid, Paper, Box } from '@mui/material';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 import Footer from '../components/Footer';
-import Nav from '../components/Header';
+import Header from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
 import RemunerationBarGraph from '../components/RemunerationBarGraph';
 import api from '../services/api';
@@ -67,7 +67,7 @@ export default function Index({
           content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
         />
       </Head>
-      <Nav />
+      <Header />
       <Container>
         <Headline>
           O DadosJusBr recupera continuamente dados dos diferentes orgãos do

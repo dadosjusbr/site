@@ -72,7 +72,6 @@ const Container = styled.div`
     padding: 51px 10px 34px;
     border-bottom: 2px solid
       ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
-    width: 90%;
     justify-content: space-between;
   }
   @media (max-width: 600px) {
