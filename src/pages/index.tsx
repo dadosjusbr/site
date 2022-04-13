@@ -2,16 +2,15 @@ import { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import styled from 'styled-components';
-import { Container, Grid, Paper, Box } from '@mui/material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Container, Grid, Button, Box, Typography } from '@mui/material';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
 import RemunerationBarGraph from '../components/RemunerationBarGraph';
 import api from '../services/api';
-
-const lightTheme = createTheme({ palette: { mode: 'light' } });
+import MONTHS from '../@types/MONTHS';
 
 export default function Index({
   agencyAmount,
@@ -23,11 +22,11 @@ export default function Index({
 }) {
   const formatedStartDate = useMemo<string>(() => {
     const d = new Date(startDate);
-    return `${d.getMonth() + 1}/${d.getFullYear()}`;
+    return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [startDate]);
   const formatedEndDate = useMemo<string>(() => {
     const d = new Date(endDate);
-    return `${d.getMonth() + 1}/${d.getFullYear()}`;
+    return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   const [year, setYear] = useState(new Date().getFullYear() - 1);
@@ -74,39 +73,58 @@ export default function Index({
           sistema de jusiça, os padroniza e publica como dado aberto. Libertamos
           os dados.
           <br />
-          Já são {monthAmount} Meses de {agencyAmount} Orgãos libertados!
+          Já são{' '}
+          <Typography variant="inherit" component="span" color="success.main">
+            {monthAmount}
+          </Typography>{' '}
+          Meses de{' '}
+          <Typography variant="inherit" component="span" color="success.main">
+            {agencyAmount}
+          </Typography>{' '}
+          Orgãos libertados!
+          <Box py={4}>
+            <Typography component="p">
+              Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
+              <Typography
+                variant="inherit"
+                component="span"
+                color="success.main"
+              >
+                {recordAmount}
+              </Typography>{' '}
+              registros de pagamentos de salários, indenizações, gratificações e
+              diárias, somando{' '}
+              <Typography
+                variant="inherit"
+                component="span"
+                color="success.main"
+              >
+                R$ {(finalValue / 1000000000).toFixed(2)} bilhões
+              </Typography>
+              .
+            </Typography>
+          </Box>
+          <Grid
+            container
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item xs={4} textAlign="center">
+              <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
+                Índice de transparência
+              </Button>
+            </Grid>
+            <Grid item xs={4} textAlign="center">
+              <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
+                Dados gerais
+              </Button>
+            </Grid>
+            <Grid item xs={4} textAlign="center">
+              <DropDownGroupSelector />
+            </Grid>
+          </Grid>
         </Headline>
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
-            <h2>O DadosJus liberta os dados!</h2>
-            <ThemeProvider theme={lightTheme}>
-              <Paper elevation={3}>
-                <Box py={2}>
-                  <List>
-                    <li>
-                      <span>Orgãos libertados: {agencyAmount}</span>
-                    </li>
-                    <li>
-                      <span>Meses libertados: {monthAmount}</span>
-                    </li>
-                  </List>
-                </Box>
-              </Paper>
-            </ThemeProvider>
-          </Grid>
-          <Grid item xs={6}>
-            <h2>Dados Por Grupo</h2>
-            <DropDownGroupSelector />
-          </Grid>
-        </Grid>
-      </Container>
-      <Container className="released-data">
-        <section>
-          Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
-          {recordAmount} registros de pagamentos de salários, indenizações,
-          gratificações e diárias, somando R${' '}
-          {(finalValue / 1000000000).toFixed(2)} bilhões de reais
-        </section>
       </Container>
       <GraphWrapper>
         <section>
@@ -168,9 +186,25 @@ const Page = styled.div`
   background: #3e5363;
 `;
 const Headline = styled.div`
-  padding-top: 4rem;
-  padding-bottom: 4rem;
-  font-size: 2rem;
+  margin-top: 1rem;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background-image: url('img/bg.svg');
+  background-position: right top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  @media (min-width: 600px) {
+    padding-right: 8rem;
+    font-size: 2rem;
+  }
+  @media (min-width: 900px) {
+    padding-right: 22rem;
+    font-size: 2rem;
+  }
 `;
 const List = styled.ul`
   list-style: none;

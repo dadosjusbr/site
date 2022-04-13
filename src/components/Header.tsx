@@ -35,11 +35,13 @@ function Header() {
           justifyContent="center"
         >
           <Grid item xs={3} md={2}>
-            <img
-              src="/img/header/icon_dadosjusbr_default.svg"
-              width="100%"
-              alt="DadosjusBR"
-            />
+            <Link href="/">
+              <img
+                src="/img/header/icon_dadosjusbr_default.svg"
+                width="80%"
+                alt="DadosjusBR"
+              />
+            </Link>
           </Grid>
           <Grid
             item
