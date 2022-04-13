@@ -141,13 +141,13 @@ export default function OmaPage({
               ) : (
                 oma.crawlingTime && (
                   <span>
-                    Dados capturados em{' '}
+                    Dados coletados em{' '}
                     {(() => {
                       // Converts UNIX timestamp to miliseconds timestamp
                       const d = new Date(oma.crawlingTime * 1000);
                       // eslint-disable-next-line prettier/prettier
-                      return `${d.getDay()} de ${
-                        MONTHS[d.getMonth()]
+                      return `${d.getDate()} de ${
+                        MONTHS[d.getMonth() + 1]
                       } de ${d.getFullYear()}`;
                     })()}
                   </span>
@@ -197,11 +197,7 @@ export default function OmaPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const {
-    agency,
-    year: y,
-    month: m,
-  } = context.params as {
+  const { agency, year: y, month: m } = context.params as {
     agency: string;
     year: string;
     month: string;

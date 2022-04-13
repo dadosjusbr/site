@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
+import Image from 'next/image';
 import styled from 'styled-components';
 import { Container, Grid, Button, Box, Typography } from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -128,6 +129,25 @@ export default function Index({
       </Container>
       <GraphWrapper>
         <section>
+          <h2>Índice de Transparência</h2>
+          <p>
+            O Índice de Transparência é composto por duas dimensões: facilidade
+            e completude. Cada uma das dimensões, por sua vez, é composta por
+            até seis critérios em cada prestação de contas, que são avaliados
+            mês a mês. O índice corresponde à média harmônica das duas
+            dimensões.
+          </p>
+          <ImgGraph>
+            <img
+              src="/img/indice_legenda.png"
+              alt="Legenda do índice de transparência"
+            />
+            <img src="/img/indice.png" alt="Índice de transparência" />
+          </ImgGraph>
+        </section>
+      </GraphWrapper>
+      <GraphWrapper>
+        <section>
           <h2>Total das remunerações dos membros de todos os órgãos</h2>
           <MainGraphSectionHeader>
             <div>
@@ -234,6 +254,11 @@ const GraphWrapper = styled.div`
     justify-content: center;
     flex-direction: column;
   }
+  p {
+    font-size: 1.8rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
 `;
 const MainGraphSectionHeader = styled.div`
   font-size: 4rem;
@@ -310,4 +335,9 @@ const BannerWrapper = styled.div`
   font-family: 'Roboto Condensed', sans-serif;
   color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
   align-items: center;
+`;
+const ImgGraph = styled.div`
+  text-align: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 `;
