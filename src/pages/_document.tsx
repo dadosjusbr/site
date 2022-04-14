@@ -6,7 +6,6 @@ import Document, {
   Head,
 } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
-
 /**
  * This document is used to create the default layout of the page like others template engines
  * https://nextjs.org/docs/advanced-features/custom-document
