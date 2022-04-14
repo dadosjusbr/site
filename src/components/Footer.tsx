@@ -1,5 +1,6 @@
 import { HTMLAttributes } from 'react';
-import styled from 'styled-components';
+
+import { Container, Box, Grid, Link } from '@mui/material';
 
 // The footer is a component that appears at various times in the application
 // It consists of DadosJus logo and a message for contact.
@@ -7,71 +8,53 @@ export interface FooterPropos extends HTMLAttributes<HTMLDivElement> {
   theme?: 'DEFAULT' | 'LIGHT';
 }
 
-const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT', ...rest }) => (
-  <Container theme={theme} {...rest}>
-    <div>
-      <img
-        src={
-          theme === 'DEFAULT'
-            ? '/img/footer/icon_dadosjusbr_dafault.svg'
-            : '/img/footer/icon_dadosjusbr_light.svg'
-        }
-        alt="dados_jus_logo"
-      />
-      <span>
-        Alguma dica? Tem algum feedback geral? Se você tiver uma ideia que você
-        gostaria de ver no DadosJusBr, envie-nos um e-mail{' '}
-        <b>
-          <a href="/">dadosjusbr@gmail.com</a>
-        </b>{' '}
-        ou visite nosso{' '}
-        <b>
-          <a href="https://github.com/dadosjusbr/">github</a>
-        </b>
-        .
-      </span>
-    </div>
+const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
+  <Container fixed>
+    <Box
+      p={4}
+      sx={{
+        borderTop: '2px solid',
+      }}
+    >
+      <Grid container columnSpacing={4} display="flex" justifyContent="center">
+        <Grid item xs={5} sm={4} md={2}>
+          <img
+            src={
+              theme === 'DEFAULT'
+                ? '/img/footer/icon_dadosjusbr_dafault.svg'
+                : '/img/footer/icon_dadosjusbr_light.svg'
+            }
+            width="100%"
+            alt="DadosjusBR"
+          />
+        </Grid>
+        <Grid item xs={12} sm={8} md={10}>
+          <p>
+            Alguma dica? Tem algum feedback geral? Se você tiver uma ideia que
+            você gostaria de ver no DadosJusBr, envie-nos um e-mail{' '}
+            <Link
+              color="inherit"
+              underline="hover"
+              href="mailto:dadosjusbr@gmail.com"
+            >
+              dadosjusbr@gmail.com
+            </Link>{' '}
+            ou visite nosso{' '}
+            <Link
+              color="inherit"
+              underline="hover"
+              href="https://github.com/dadosjusbr/"
+              target="_blank"
+              rel="noopener"
+            >
+              github
+            </Link>
+            .
+          </p>
+        </Grid>
+      </Grid>
+    </Box>
   </Container>
 );
 
 export default Footer;
-
-const Container = styled.div`
-  display: flex;
-  flex: 1;
-  align-items: center;
-  justify-content: center;
-  div {
-    border-top: 2px solid ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
-    span {
-      color: ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
-      font-family: 'Roboto Condensed', sans-serif;
-      font-size: 2rem;
-      * {
-        color: ${p => (p.theme === 'DEFAULT' ? '#fff' : '#3e5363')};
-        font-family: 'Roboto Condensed', sans-serif;
-        font-size: 2rem;
-      }
-      width: 70%;
-    }
-    display: flex;
-    padding: 60px 40px 5rem;
-    width: 90%;
-    justify-content: space-between;
-  }
-  @media (max-width: 600px) {
-    width: 100%;
-    padding: 60px 0px 0px;
-    img {
-      display: none;
-    }
-    div {
-      span {
-        width: 100%;
-      }
-    }
-  }
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-`;

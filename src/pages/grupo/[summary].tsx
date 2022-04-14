@@ -1,8 +1,9 @@
-/* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { Container, Grid } from '@mui/material';
+
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
@@ -25,25 +26,31 @@ export default function SummaryPage({ dataList, summary }) {
         />
       </Head>
       <Header />
-      <DropDownGroupSelector value={summary} />
-      <div>
-        {(() => {
-          if (dataList.length === 0) {
-            return (
-              <ActivityIndicatorPlaceholder>
-                Ocorreu um erro.
-              </ActivityIndicatorPlaceholder>
-            );
-          }
-          return dataList.map(agency => (
-            <GraphWithNavigation
-              key={agency.Name}
-              title={agency.FullName}
-              id={agency.Name}
-            />
-          ));
-        })()}
-      </div>
+      <Container>
+        <Grid container display="flex" justifyContent="center" py={4}>
+          <Grid item pb={4} sx={{ width: 250 }}>
+            <DropDownGroupSelector value={summary} />
+          </Grid>
+          <div>
+            {(() => {
+              if (typeof dataList !== 'undefined' && dataList.length > 0) {
+                return dataList.map(agency => (
+                  <GraphWithNavigation
+                    key={agency.Name}
+                    title={agency.FullName}
+                    id={agency.Name}
+                  />
+                ));
+              }
+              return (
+                <ActivityIndicatorPlaceholder>
+                  Ocorreu um erro.
+                </ActivityIndicatorPlaceholder>
+              );
+            })()}
+          </div>
+        </Grid>
+      </Container>
       <Footer />
     </Page>
   );
@@ -111,10 +118,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
   try {
     const { data } = await api.ui.get(`/orgao/${summary}`);
     if (!data.Agency) {
-      context.res.writeHead(301, {
-        Location: `/404`,
-      });
-      context.res.end();
+      // context.res.writeHead(301, {
+      //   Location: `/404`,
+      // });
+      // context.res.end();
       return { props: {} };
     }
     return {
@@ -124,10 +131,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   } catch (error) {
-    context.res.writeHead(301, {
-      Location: `/404`,
-    });
-    context.res.end();
+    // context.res.writeHead(301, {
+    //   Location: `/404`,
+    // });
+    // context.res.end();
     return { props: {} };
   }
 };

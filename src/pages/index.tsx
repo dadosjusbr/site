@@ -1,12 +1,17 @@
-import Head from 'next/head';
-import styled from 'styled-components';
-import { GetServerSideProps } from 'next';
 import { useEffect, useMemo, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import Head from 'next/head';
+import Image from 'next/image';
+import styled from 'styled-components';
+import { Container, Grid, Button, Box, Typography } from '@mui/material';
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+
 import Footer from '../components/Footer';
-import Nav from '../components/Header';
+import Header from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
 import RemunerationBarGraph from '../components/RemunerationBarGraph';
 import api from '../services/api';
+import MONTHS from '../@types/MONTHS';
 
 export default function Index({
   agencyAmount,
@@ -18,11 +23,11 @@ export default function Index({
 }) {
   const formatedStartDate = useMemo<string>(() => {
     const d = new Date(startDate);
-    return `${d.getMonth() + 1}/${d.getFullYear()}`;
+    return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [startDate]);
   const formatedEndDate = useMemo<string>(() => {
     const d = new Date(endDate);
-    return `${d.getMonth() + 1}/${d.getFullYear()}`;
+    return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   const [year, setYear] = useState(new Date().getFullYear() - 1);
@@ -62,33 +67,85 @@ export default function Index({
           content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
         />
       </Head>
-      <Nav />
+      <Header />
       <Container>
-        <section>
-          <h2>O DadosJus liberta os dados!</h2>
+        <Headline>
+          O DadosJusBr recupera continuamente dados dos diferentes orgãos do
+          sistema de jusiça, os padroniza e publica como dado aberto. Libertamos
+          os dados.
           <br />
-          <GeneralInfoList>
-            <li>
-              <span>Orgãos libertados: {agencyAmount}</span>
-            </li>
-            <li>
-              <span>Meses libertados: {monthAmount}</span>
-            </li>
-          </GeneralInfoList>
-        </section>
-        <DropDownWrapper>
-          <h3>Dados Por Grupo</h3>
-          <GreenDropDownSelector />
-        </DropDownWrapper>
+          Já são{' '}
+          <Typography variant="inherit" component="span" color="success.main">
+            {monthAmount}
+          </Typography>{' '}
+          Meses de{' '}
+          <Typography variant="inherit" component="span" color="success.main">
+            {agencyAmount}
+          </Typography>{' '}
+          Orgãos libertados!
+          <Box py={4}>
+            <Typography component="p">
+              Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
+              <Typography
+                variant="inherit"
+                component="span"
+                color="success.main"
+              >
+                {recordAmount}
+              </Typography>{' '}
+              registros de pagamentos de salários, indenizações, gratificações e
+              diárias, somando{' '}
+              <Typography
+                variant="inherit"
+                component="span"
+                color="success.main"
+              >
+                R$ {(finalValue / 1000000000).toFixed(2)} bilhões
+              </Typography>
+              .
+            </Typography>
+          </Box>
+          <Grid
+            container
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item xs={4} textAlign="center">
+              <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
+                Índice de transparência
+              </Button>
+            </Grid>
+            <Grid item xs={4} textAlign="center">
+              <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
+                Dados gerais
+              </Button>
+            </Grid>
+            <Grid item xs={4} textAlign="center">
+              <DropDownGroupSelector />
+            </Grid>
+          </Grid>
+        </Headline>
       </Container>
-      <Container className="released-data">
+      <GraphWrapper>
         <section>
-          Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
-          {recordAmount} registros de pagamentos de salários, indenizações,
-          gratificações e diárias, somando R${' '}
-          {(finalValue / 1000000000).toFixed(2)} bilhões de reais
+          <h2>Índice de Transparência</h2>
+          <p>
+            O Índice de Transparência é composto por duas dimensões: facilidade
+            e completude. Cada uma das dimensões, por sua vez, é composta por
+            até seis critérios em cada prestação de contas, que são avaliados
+            mês a mês. O índice corresponde à média harmônica das duas
+            dimensões.
+          </p>
+          <ImgGraph>
+            <img
+              src="/img/indice_legenda.png"
+              alt="Legenda do índice de transparência"
+            />
+            <img src="/img/indice.png" alt="Índice de transparência" />
+          </ImgGraph>
         </section>
-      </Container>
+      </GraphWrapper>
       <GraphWrapper>
         <section>
           <h2>Total das remunerações dos membros de todos os órgãos</h2>
@@ -138,15 +195,39 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   } catch (err) {
-    context.res.writeHead(301, {
-      Location: `/404`,
-    });
-    context.res.end();
+    // context.res.writeHead(301, {
+    //   Location: `/404`,
+    // });
+    // context.res.end();
     return { props: {} };
   }
 };
 const Page = styled.div`
   background: #3e5363;
+`;
+const Headline = styled.div`
+  margin-top: 1rem;
+  padding-top: 6rem;
+  padding-bottom: 6rem;
+  padding-right: 1rem;
+  padding-left: 1rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  background-image: url('img/bg.svg');
+  background-position: right top;
+  background-repeat: no-repeat;
+  background-size: contain;
+  @media (min-width: 600px) {
+    padding-right: 8rem;
+    font-size: 2rem;
+  }
+  @media (min-width: 900px) {
+    padding-right: 22rem;
+    font-size: 2rem;
+  }
+`;
+const List = styled.ul`
+  list-style: none;
 `;
 const GraphWrapper = styled.div`
   margin: 2rem 7.8rem;
@@ -173,99 +254,10 @@ const GraphWrapper = styled.div`
     justify-content: center;
     flex-direction: column;
   }
-`;
-const Container = styled.div`
-  display: flex;
-  margin: 0px 68px;
-  color: #fff;
-  padding-top: 8rem;
-  h2,
-  h3 {
-    font-weight: 200;
-    font-size: 3rem !important;
-  }
-  padding-bottom: 4rem;
-  @media (max-width: 600px) {
-    padding: 0;
-    margin: 0px 20px;
-  }
-  section {
-    font-size: 1rem;
-    * {
-      font-size: 2rem;
-    }
-    flex-direction: column;
-    font-size: 2rem;
-    justify-content: space-between;
-    width: 100%;
-    margin: 0px 1rem;
-    div {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    display: flex;
-    font-family: 'Roboto Condensed', sans-serif;
-  }
-  @media (max-width: 600px) {
-    section {
-      max-width: 100%;
-      padding-top: 4rem;
-      margin: 0;
-      padding-bottom: 4rem;
-    }
-    flex-direction: column;
-  }
-  &.first {
-    padding-top: 4rem;
-    @media (max-width: 600px) {
-      padding-top: 3rem;
-      div {
-        padding-top: 0rem;
-      }
-    }
-  }
-  &.released-data {
-    margin: 4rem 0;
-    padding: 68px;
-    background-color: #7f3d8b;
-    background-image: url('/img/splash_background.png');
-  }
-`;
-const DropDownWrapper = styled.section`
-  width: 100%;
-  flex-direction: column;
-  div {
-    padding: 0;
-    max-width: 100%;
-    select {
-      width: 100%;
-      margin: 0;
-    }
-  }
-`;
-const GreenDropDownSelector = styled(DropDownGroupSelector)`
-  background-color: #2fbb96;
-  border: #3e5363;
-  margin-top: 120px;
-  padding: 3.5rem 2rem;
-  font-size: 2.5rem !important;
-  width: 80%;
-  @media (max-width: 600px) {
-    width: 100%;
-  }
-`;
-const GeneralInfoList = styled.ul`
-  list-style: none;
-  background-color: #f5f6f7;
-  padding: 2rem;
-  color: #3e5363;
-  li {
-    & + li {
-      margin-top: 1rem;
-    }
-    display: flex;
-    align-items: center;
+  p {
+    font-size: 1.8rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
   }
 `;
 const MainGraphSectionHeader = styled.div`
@@ -343,4 +335,9 @@ const BannerWrapper = styled.div`
   font-family: 'Roboto Condensed', sans-serif;
   color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
   align-items: center;
+`;
+const ImgGraph = styled.div`
+  text-align: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
 `;
