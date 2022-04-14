@@ -91,6 +91,31 @@ export default function Index({
       </Container>
       <GraphWrapper>
         <section>
+          <h2>Índice de Transparência</h2>
+          <p>
+            O Índice de Transparência é composto por duas dimensões: facilidade
+            e completude. Cada uma das dimensões, por sua vez, é composta por
+            até seis critérios em cada prestação de contas, que são avaliados
+            mês a mês. O índice corresponde à média harmônica das duas
+            dimensões.
+          </p>
+          <br />
+          <p>
+            Este gráfico representa dados de <Negrito>Jan de 2018</Negrito> até{' '}
+            <Negrito>Dez de 2021</Negrito> e foi gerado em{' '}
+            <Negrito>Mar de 2022</Negrito>.
+          </p>
+          <ImgGraph>
+            <img
+              src="/img/indice_legenda.png"
+              alt="Legenda do índice de transparência"
+            />
+            <img src="/img/indice.png" alt="Índice de transparência" />
+          </ImgGraph>
+        </section>
+      </GraphWrapper>
+      <GraphWrapper>
+        <section>
           <h2>Total das remunerações dos membros de todos os órgãos</h2>
           <MainGraphSectionHeader>
             <div>
@@ -343,4 +368,13 @@ const BannerWrapper = styled.div`
   font-family: 'Roboto Condensed', sans-serif;
   color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
   align-items: center;
+`;
+const ImgGraph = styled.div`
+  text-align: center;
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+`;
+const Negrito = styled.span`
+  font-weight: 700;
+  font-size: 1.8rem;
 `;
