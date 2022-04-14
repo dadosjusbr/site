@@ -4,6 +4,7 @@ import ReactGA from 'react-ga';
 import Button from './Button';
 import ShareModal from './ShareModal';
 import RemunerationBarGraph from './RemunerationBarGraph';
+import CrawlingDateTable from './CrawlingDateTable';
 import * as url from '../url';
 
 export interface AgencyPageWithNavigationProps {
@@ -77,6 +78,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           year={year}
           dataLoading={dataLoading}
         />
+        <CrawlingDateTable data={data} dataLoading={dataLoading} />
         <div className="buttons">
           <div>
             {summaryPackage && (
