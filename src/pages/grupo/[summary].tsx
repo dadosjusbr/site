@@ -1,8 +1,9 @@
-/* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { Container, Grid } from '@mui/material';
+
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
@@ -25,26 +26,31 @@ export default function SummaryPage({ dataList, summary }) {
         />
       </Head>
       <Header />
-      <DropDownGroupSelector value={summary} />
-      <div>
-        {(() => {
-          if (typeof dataList !== 'undefined' && dataList.length > 0) {
-            return dataList.map(agency => (
-              <GraphWithNavigation
-                key={agency.Name}
-                title={agency.FullName}
-                id={agency.Name}
-              />
-            ));
-          } else {
-            return (
-              <ActivityIndicatorPlaceholder>
-                Ocorreu um erro.
-              </ActivityIndicatorPlaceholder>
-            );
-          }
-        })()}
-      </div>
+      <Container>
+        <Grid container display="flex" justifyContent="center" py={4}>
+          <Grid item pb={4} sx={{ width: 250 }}>
+            <DropDownGroupSelector value={summary} />
+          </Grid>
+          <div>
+            {(() => {
+              if (typeof dataList !== 'undefined' && dataList.length > 0) {
+                return dataList.map(agency => (
+                  <GraphWithNavigation
+                    key={agency.Name}
+                    title={agency.FullName}
+                    id={agency.Name}
+                  />
+                ));
+              }
+              return (
+                <ActivityIndicatorPlaceholder>
+                  Ocorreu um erro.
+                </ActivityIndicatorPlaceholder>
+              );
+            })()}
+          </div>
+        </Grid>
+      </Container>
       <Footer />
     </Page>
   );
