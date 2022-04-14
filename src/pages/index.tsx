@@ -198,6 +198,11 @@ const GraphWrapper = styled.div`
     justify-content: center;
     flex-direction: column;
   }
+  p {
+    font-size: 1.8rem;
+    padding-left: 4rem;
+    padding-right: 4rem;
+  }
 `;
 const Container = styled.div`
   display: flex;
@@ -350,24 +355,6 @@ const MainGraphSectionHeader = styled.div`
     }
   }
   margin-bottom: 4.5rem;
-`;
-const BannerWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 20rem 20%;
-  text-align: center;
-  background-color: #fff;
-  span {
-    margin-top: 3rem;
-    font-size: 3rem;
-  }
-  p {
-    font-size: 1.5rem;
-  }
-  font-family: 'Roboto Condensed', sans-serif;
-  color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
-  align-items: center;
 `;
 const ImgGraph = styled.div`
   text-align: center;
