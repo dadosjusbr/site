@@ -1,5 +1,4 @@
 import Head from 'next/head';
-import Image from 'next/image';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useEffect, useMemo, useState } from 'react';
@@ -198,11 +197,6 @@ const GraphWrapper = styled.div`
     max-width: 100%;
     justify-content: center;
     flex-direction: column;
-  }
-  p {
-    font-size: 1.8rem;
-    padding-left: 4rem;
-    padding-right: 4rem;
   }
 `;
 const Container = styled.div`
