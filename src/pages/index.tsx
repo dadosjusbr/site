@@ -100,6 +100,12 @@ export default function Index({
             mês a mês. O índice corresponde à média harmônica das duas
             dimensões.
           </p>
+          <br />
+          <p>
+            Este gráfico representa dados de <Negrito>Jan de 2018</Negrito> até{' '}
+            <Negrito>Dez de 2021</Negrito> e foi gerado em{' '}
+            <Negrito>Mar de 2022</Negrito>.
+          </p>
           <ImgGraph>
             <img
               src="/img/indice_legenda.png"
@@ -373,4 +379,8 @@ const ImgGraph = styled.div`
   text-align: center;
   padding-top: 4rem;
   padding-bottom: 4rem;
+`;
+const Negrito = styled.span`
+  font-weight: 700;
+  font-size: 1.8rem;
 `;
