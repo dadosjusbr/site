@@ -101,9 +101,7 @@ export default function Index({
           </p>
           <br />
           <p>
-            Este gráfico representa dados de <Negrito>Jan de 2018</Negrito> até{' '}
-            <Negrito>Dez de 2021</Negrito> e foi gerado em{' '}
-            <Negrito>Mar de 2022</Negrito>.
+            Dados atualizados até <Negrito>8 Fev de 2022</Negrito>.
           </p>
           <ImgGraph>
             <img
