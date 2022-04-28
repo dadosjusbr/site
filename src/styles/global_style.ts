@@ -22,10 +22,12 @@ const theme = createTheme({
     h1: {
       fontSize: '2.5rem',
       fontWeight: '700',
+      paddingBottom: '1rem',
     },
     h2: {
       fontSize: '2rem',
       fontWeight: '700',
+      paddingBottom: '1rem',
     },
   },
   components: {

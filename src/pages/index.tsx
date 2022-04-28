@@ -1,10 +1,18 @@
 import { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import Image from 'next/image';
 import styled from 'styled-components';
-import { Container, Grid, Button, Box, Typography } from '@mui/material';
+import {
+  Container,
+  Grid,
+  Button,
+  Box,
+  Typography,
+  IconButton,
+} from '@mui/material';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -127,56 +135,64 @@ export default function Index({
           </Grid>
         </Headline>
       </Container>
-      <GraphWrapper>
-        <section>
-          <h2>Índice de Transparência</h2>
-          <p>
-            O Índice de Transparência é composto por duas dimensões: facilidade
-            e completude. Cada uma das dimensões, por sua vez, é composta por
-            até seis critérios em cada prestação de contas, que são avaliados
-            mês a mês. O índice corresponde à média harmônica das duas
-            dimensões.
-          </p>
-          <ImgGraph>
+      <Container>
+        <Box my={4} py={4}>
+          <Typography variant="h2" textAlign="center">
+            Índice de Transparência
+          </Typography>
+          <Typography component="p" textAlign="center">
+            Este gráfico representa dados de <b>Jan de 2018</b> até{' '}
+            <b>Dez de 2021</b> e foi gerado em <b>Mar de 2022</b>. Dados
+            atualizados até <b>8 Fev de 2022</b>.
+          </Typography>
+          <Box
+            mt={4}
+            py={4}
+            textAlign="center"
+            sx={{ backgroundColor: 'info.main' }}
+          >
             <img
               src="/img/indice_legenda.png"
               alt="Legenda do índice de transparência"
             />
             <img src="/img/indice.png" alt="Índice de transparência" />
-          </ImgGraph>
-        </section>
-      </GraphWrapper>
-      <GraphWrapper>
-        <section>
-          <h2>Total das remunerações dos membros de todos os órgãos</h2>
-          <MainGraphSectionHeader>
-            <div>
-              <button
-                className="left"
-                onClick={() => setYear(year - 1)}
-                disabled={!previousDateIsNavigable}
-                type="button"
-              >
-                <img src="/img/arrow.svg" alt="seta esquerda" />
-              </button>
-              <span>{year}</span>
-              <button
-                disabled={!nextDateIsNavigable}
-                onClick={() => setYear(year + 1)}
-                type="button"
-              >
-                <img src="/img/arrow.svg" alt="seta direita" />
-              </button>
-            </div>
-          </MainGraphSectionHeader>
+          </Box>
+        </Box>
+      </Container>
+      <Container>
+        <Box my={4}>
+          <Typography variant="h2" textAlign="center">
+            Total das remunerações dos membros de todos os órgãos
+          </Typography>
+          <Box textAlign="center">
+            <IconButton
+              aria-label="voltar"
+              color="info"
+              onClick={() => setYear(year - 1)}
+              disabled={!previousDateIsNavigable}
+            >
+              <ArrowBackIosNewIcon />
+            </IconButton>
+            <Typography component="span" variant="h6">
+              {year}
+            </Typography>
+            <IconButton
+              aria-label="voltar"
+              color="info"
+              onClick={() => setYear(year + 1)}
+              disabled={!nextDateIsNavigable}
+            >
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </Box>
           <RemunerationBarGraph
             year={year}
             data={completeChartData}
             dataLoading={loading}
             billion
           />
-        </section>
-      </GraphWrapper>
+        </Box>
+      </Container>
       <Footer />
     </Page>
   );
@@ -225,119 +241,4 @@ const Headline = styled.div`
     padding-right: 22rem;
     font-size: 2rem;
   }
-`;
-const List = styled.ul`
-  list-style: none;
-`;
-const GraphWrapper = styled.div`
-  margin: 2rem 7.8rem;
-  font-family: 'Roboto Condensed', sans-serif;
-  h2,
-  h3 {
-    text-align: center;
-    font-size: 1.5rem;
-  }
-  h2 {
-    font-size: 2rem;
-    margin-bottom: 4rem;
-  }
-  @media (max-width: 600px) {
-    padding: 0;
-    margin: 0px;
-  }
-  section {
-    padding-top: 6rem;
-    background-color: #fff;
-    color: #3e5363;
-    width: 100%;
-    max-width: 100%;
-    justify-content: center;
-    flex-direction: column;
-  }
-  p {
-    font-size: 1.8rem;
-    padding-left: 4rem;
-    padding-right: 4rem;
-  }
-`;
-const MainGraphSectionHeader = styled.div`
-  font-size: 4rem;
-  color: #3e5363;
-  display: flex;
-  width: 100%;
-  flex-direction: column !important;
-  align-items: center !important;
-  justify-content: center;
-  h2 {
-    margin-bottom: 1rem;
-    font-size: 3rem;
-  }
-  span {
-    margin-top: 2rem;
-    font-size: 2rem;
-    font-weight: 400;
-  }
-  div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 35rem;
-    button {
-      &:disabled,
-      &[disabled] {
-        border: 2px solid #3e5363;
-        img {
-          filter: invert(75%) sepia(56%) saturate(285%) hue-rotate(163deg)
-            brightness(87%) contrast(84%);
-        }
-        background-color: #fff;
-      }
-      &.left {
-        transform: rotate(180deg);
-      }
-      img {
-        position: initial;
-      }
-      width: 30px;
-      color: #3e5363;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      border: none;
-      background-color: #3e5363;
-    }
-    @media (max-width: 600px) {
-      width: 30rem;
-    }
-    span {
-      font-size: 2rem;
-      font-weight: bold;
-    }
-  }
-  margin-bottom: 4.5rem;
-`;
-const BannerWrapper = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 20rem 20%;
-  text-align: center;
-  background-color: #fff;
-  span {
-    margin-top: 3rem;
-    font-size: 3rem;
-  }
-  p {
-    font-size: 1.5rem;
-  }
-  font-family: 'Roboto Condensed', sans-serif;
-  color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
-  align-items: center;
-`;
-const ImgGraph = styled.div`
-  text-align: center;
-  padding-top: 4rem;
-  padding-bottom: 4rem;
 `;
