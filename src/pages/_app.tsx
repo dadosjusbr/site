@@ -3,7 +3,7 @@ import Head from 'next/head';
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import theme from '../styles/global_style';
+import theme from '../styles/theme-dark';
 import { PrivacityPolicyProvider } from '../contexts/privacity-policy-context';
 import GATracker from '../components/GATracker';
 /*

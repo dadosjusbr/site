@@ -135,7 +135,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             >
               <AccountBalanceWalletIcon />
             </SalarioButton>
-            <Typography>
+            <Typography pt={1}>
               Salário: R${' '}
               {(() => {
                 let total = 0;
@@ -163,7 +163,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             >
               <CardGiftcardIcon />
             </BeneficiosButton>
-            <Typography>
+            <Typography pt={1}>
               Benefícios: R${' '}
               {(() => {
                 let total = 0;
@@ -191,7 +191,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             >
               <CropSquareIcon />
             </SemDadosButton>
-            <Typography>Sem dados</Typography>
+            <Typography pt={1}>Sem dados</Typography>
           </Grid>
           {/* <Grid item textAlign="center">
           <IconButton
@@ -218,7 +218,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
           </Typography>
           {dataLoading ? (
             <Box
-              my={4}
+              m={4}
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -233,7 +233,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
           ) : (
             <>
               {data.length > 0 ? (
-                <div className="main-chart-wrapper">
+                <Box ml={4} mr={2}>
                   <Chart
                     options={{
                       colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
@@ -440,7 +440,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                     height="500"
                     type="bar"
                   />
-                </div>
+                </Box>
               ) : (
                 <div>Não há dados para esse ano</div>
               )}

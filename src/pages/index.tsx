@@ -10,6 +10,7 @@ import {
   Typography,
   IconButton,
 } from '@mui/material';
+import { ThemeProvider } from '@mui/material/styles';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -20,6 +21,7 @@ import DropDownGroupSelector from '../components/DropDownGroupSelector';
 import RemunerationBarGraph from '../components/RemunerationBarGraph';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
+import theme from '../styles/theme-light';
 
 export default function Index({
   agencyAmount,
@@ -159,40 +161,44 @@ export default function Index({
           </Box>
         </Box>
       </Container>
-      <Container>
-        <Box my={4}>
-          <Typography variant="h2" textAlign="center">
-            Total das remunerações dos membros de todos os órgãos
-          </Typography>
-          <Box textAlign="center">
-            <IconButton
-              aria-label="voltar"
-              color="info"
-              onClick={() => setYear(year - 1)}
-              disabled={!previousDateIsNavigable}
-            >
-              <ArrowBackIosNewIcon />
-            </IconButton>
-            <Typography component="span" variant="h6">
-              {year}
+      <ThemeProvider theme={theme}>
+        <Container>
+          <Box my={12}>
+            <Typography variant="h2" textAlign="center">
+              Total das remunerações dos membros de todos os órgãos
             </Typography>
-            <IconButton
-              aria-label="voltar"
-              color="info"
-              onClick={() => setYear(year + 1)}
-              disabled={!nextDateIsNavigable}
-            >
-              <ArrowForwardIosIcon />
-            </IconButton>
+            <Box textAlign="center">
+              <IconButton
+                aria-label="voltar"
+                color="info"
+                onClick={() => setYear(year - 1)}
+                disabled={!previousDateIsNavigable}
+              >
+                <ArrowBackIosNewIcon />
+              </IconButton>
+              <Typography component="span" variant="h6">
+                {year}
+              </Typography>
+              <IconButton
+                aria-label="voltar"
+                color="info"
+                onClick={() => setYear(year + 1)}
+                disabled={!nextDateIsNavigable}
+              >
+                <ArrowForwardIosIcon />
+              </IconButton>
+            </Box>
+            <Box my={4}>
+              <RemunerationBarGraph
+                year={year}
+                data={completeChartData}
+                dataLoading={loading}
+                billion
+              />
+            </Box>
           </Box>
-          <RemunerationBarGraph
-            year={year}
-            data={completeChartData}
-            dataLoading={loading}
-            billion
-          />
-        </Box>
-      </Container>
+        </Container>
+      </ThemeProvider>
       <Footer />
     </Page>
   );
