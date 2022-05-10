@@ -2,6 +2,7 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useEffect, useMemo, useState } from 'react';
+import ToggleButton from 'react-toggle-button'
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
@@ -32,6 +33,7 @@ export default function Index({
     [year],
   );
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
+  const [indexChart, setIndexChart] = useState(true);
   useEffect(() => {
     fetchGeneralChartData();
   }, [year]);
@@ -101,14 +103,32 @@ export default function Index({
           </p>
           <br />
           <p>
-            Dados atualizados até <Negrito>8 Fev de 2022</Negrito>.
+            Dados atualizados até <Negrito>3 Mai de 2022</Negrito>.
           </p>
+          <ToggleChartButton>
+            <ToggleButton
+              inactiveLabel={'MP'}
+              activeLabel={'TJ'}
+              colors={{
+                active: {
+                  base: '#3e5363',
+                },
+                inactive: {
+                  base: '#3e5363',
+                }
+              }}
+              value={indexChart}
+              onToggle={value => {
+                setIndexChart(!value);
+            }}/>
+          </ToggleChartButton>
           <ImgGraph>
             <img
               src="/img/indice_legenda.png"
               alt="Legenda do índice de transparência"
             />
-            <img src="/img/indice.png" alt="Índice de transparência" />
+            {indexChart && <img src="/img/indice_tjs.png" alt="Índice de transparência" />}
+            {!indexChart && <img src="/img/indice_mps.png" alt="Índice de transparência" />}
           </ImgGraph>
         </section>
       </GraphWrapper>
@@ -362,4 +382,11 @@ const ImgGraph = styled.div`
 const Negrito = styled.span`
   font-weight: 700;
   font-size: 1.8rem;
+`;
+const ToggleChartButton = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 4rem;
 `;
