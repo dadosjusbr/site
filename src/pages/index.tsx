@@ -127,6 +127,7 @@ export default function Index({
               src="/img/indice_legenda.png"
               alt="Legenda do índice de transparência"
             />
+            <br />
             {indexChart && <img src="/img/indice_tjs.png" alt="Índice de transparência" />}
             {!indexChart && <img src="/img/indice_mps.png" alt="Índice de transparência" />}
           </ImgGraph>
