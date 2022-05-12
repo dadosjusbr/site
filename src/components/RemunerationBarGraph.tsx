@@ -17,6 +17,7 @@ import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 
 import MONTHS from '../@types/MONTHS';
+import CrawlingDateTable from './CrawlingDateTable';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -69,7 +70,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const [hidingErrors, setHidingErrors] = useState(false);
   return (
     <>
-      {/* <ThemeProvider theme={theme}> */}
       <Paper elevation={0}>
         <Box pt={4} py={4} textAlign="center">
           <Typography variant="h5" textAlign="center">
@@ -447,153 +447,18 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             </>
           )}
         </Box>
+        <Grid container display="flex" justifyContent="center">
+          <Grid item pb={4} sx={{ width: '50%' }}>
+            <CrawlingDateTable data={data} dataLoading={dataLoading} />
+          </Grid>
+        </Grid>
       </Paper>
-      {/* </ThemeProvider> */}
     </>
   );
 };
 
 export default RemunerationBarGraph;
 
-// const Captions = styled.div`
-//   padding: 2rem;
-//   width: 50%;
-//   min-width: 35rem;
-//   justify-content: center;
-//   color: #3e5363;
-//   background: rgba(62, 83, 99, 0.05);
-//   div {
-//     padding: 0 1rem;
-//     width: 100%;
-//     display: flex;
-//     justify-content: space-between;
-//     span {
-//       &.info {
-//         position: relative;
-//         div {
-//           background-color: #ced9e1;
-//           color: #3e5363;
-//           width: 600%;
-//           z-index: 100;
-//           padding: 2rem;
-//           font-size: 2rem;
-//           right: 0%;
-//           text-align: left;
-//           b {
-//             font-size: 1.5rem;
-//           }
-//           display: none;
-//           position: absolute;
-//         }
-//         &:hover {
-//           div {
-//             display: block;
-//           }
-//         }
-//       }
-//       h3 {
-//         text-align: center;
-//         font-size: 1.7rem;
-//       }
-//     }
-//     img {
-//       background-color: #3e5363;
-//       border-radius: 50%;
-//       width: 3rem;
-//       margin: 0 1rem;
-//     }
-//     align-items: center;
-//   }
-//   ul {
-//     list-style: none;
-//     margin-top: 3rem;
-//     border-top: 1px solid #3e5363;
-//     padding: 1rem 1rem;
-//     padding-top: 2rem;
-//     display: flex;
-//     transition: all 1s ease;
-//     justify-content: space-between;
-//   }
-// `;
-// const CaptionItems = styled.li`
-//   display: flex;
-//   flex-direction: column;
-//   align-items: center;
-//   width: 20%;
-//   button {
-//     border: none;
-//     width: 65%;
-//     background: none;
-//   }
-//   button.active {
-//     opacity: 0.4;
-//     width: 65%;
-//   }
-//   img {
-//     width: 100%;
-//     background: #2c3236;
-//     border: solid 2px #3e5363;
-//   }
-//   span {
-//     margin-top: 1rem;
-//     font-size: 1.5rem;
-//     color: #3e5363;
-//     & > * {
-//       font-size: 1.5rem;
-//     }
-//     font-family: 'Roboto Condensed', sans-serif;
-//   }
-// `;
-// const GraphDivWithPagination = styled.div`
-//   margin-top: 3rem;
-//   display: flex;
-//   align-self: center;
-//   justify-content: center;
-//   flex-direction: column;
-//   width: 100%;
-//   color: #3e5363;
-//   background: rgba(62, 83, 99, 0.05);
-//   h3 {
-//     padding: 1.5rem;
-//   }
-//   .main-chart-wrapper {
-//     width: 100%;
-//     div {
-//       & > * {
-//         font-size: 125%;
-//       }
-//       text {
-//         font-family: 'Roboto Condensed', sans-serif;
-//         font-size: 400%;
-//         color: #fff;
-//         font-size: 2rem;
-//         @media (max-width: 600px) {
-//           font-size: 1.5rem;
-//         }
-//         font-weight: bold;
-//         &.title {
-//           font-size: 120%;
-//         }
-//       }
-//     }
-//     padding-bottom: 1rem;
-//     border-bottom: 2px solid #3e5363;
-//   }
-//   margin-bottom: 3rem;
-// `;
-// const ActivityIndicatorPlaceholder = styled.div`
-//   width: 100%;
-//   display: flex;
-//   flex-direction: column;
-//   padding: 20rem 0;
-//   span {
-//     margin-top: 3rem;
-//   }
-//   font-family: 'Roboto Condensed', sans-serif;
-//   color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
-//   font-size: 3rem;
-//   align-items: center;
-// `;
 function createArrayFilledWithValue<T>(size: number, value: T): T[] {
   const array = [];
   for (let i = 0; i < size; i += 1) {

@@ -2,7 +2,7 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Container, Grid } from '@mui/material';
+import { Box, CircularProgress, Container, Grid } from '@mui/material';
 
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
@@ -27,29 +27,42 @@ export default function SummaryPage({ dataList, summary }) {
       </Head>
       <Header />
       <Container>
-        <Grid container display="flex" justifyContent="center" py={4}>
+        <Grid container display="flex" flexDirection="column" py={4} my={4}>
+          <Grid item pb={4}>
+            Selecione os órgãos que você deseja explorar.
+          </Grid>
           <Grid item pb={4} sx={{ width: 250 }}>
             <DropDownGroupSelector value={summary} />
           </Grid>
-          <div>
-            {(() => {
-              if (typeof dataList !== 'undefined' && dataList.length > 0) {
-                return dataList.map(agency => (
-                  <GraphWithNavigation
-                    key={agency.Name}
-                    title={agency.FullName}
-                    id={agency.Name}
-                  />
-                ));
-              }
-              return (
-                <ActivityIndicatorPlaceholder>
-                  Ocorreu um erro.
-                </ActivityIndicatorPlaceholder>
-              );
-            })()}
-          </div>
         </Grid>
+        <div>
+          {(() => {
+            if (typeof dataList !== 'undefined' && dataList.length > 0) {
+              return dataList.map(agency => (
+                <GraphWithNavigation
+                  key={agency.Name}
+                  title={agency.FullName}
+                  id={agency.Name}
+                />
+              ));
+            }
+            return (
+              <Box
+                m={4}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  <CircularProgress color="info" />
+                </div>
+                <p>Aguarde...</p>
+              </Box>
+            );
+          })()}
+        </div>
       </Container>
       <Footer />
     </Page>

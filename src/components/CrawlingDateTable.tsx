@@ -1,6 +1,13 @@
-import styled from 'styled-components';
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+  Box,
+  CircularProgress,
+  Typography,
+} from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MONTHS from '../@types/MONTHS';
-import ActivityIndicator from './ActivityIndicator';
 
 function TableRow(props) {
   const { month, crawlingtimeseconds } = props;
@@ -23,50 +30,47 @@ const CrawlingDateTable: React.FC<{
 }> = ({ data, dataLoading }) => (
   <div>
     {dataLoading ? (
-      <>
-        <ActivityIndicator spinnerColor="#3e5363" />
-        <span>Aguarde...</span>
-      </>
+      <Box
+        m={4}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <div>
+          <CircularProgress color="info" />
+        </div>
+        <p>Aguarde...</p>
+      </Box>
     ) : (
-      <CrawlingDates>
-        <Heading>Datas de realização das coletas dos dados</Heading>
-        {data.length > 0 ? (
-          <CrawlingTable>
-            <table>
-              {data.map(d => (
-                <TableRow
-                  month={d.Month}
-                  crawlingtimeseconds={d.CrawlingTimestamp.seconds}
-                />
-                // <pre>{JSON.stringify(d.CrawlingTimestamp.seconds)}</pre>
-              ))}
-            </table>
-          </CrawlingTable>
-        ) : (
-          <></>
-        )}
-      </CrawlingDates>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+        >
+          <Typography>Datas de realização das coletas dos dados</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          {data.length > 0 ? (
+            <Box>
+              <table>
+                {data.map(d => (
+                  <TableRow
+                    month={d.Month}
+                    crawlingtimeseconds={d.CrawlingTimestamp.seconds}
+                  />
+                ))}
+              </table>
+            </Box>
+          ) : (
+            <></>
+          )}
+        </AccordionDetails>
+      </Accordion>
     )}
   </div>
 );
-
-const CrawlingDates = styled.div`
-  color: black;
-  margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-`;
-
-const CrawlingTable = styled.div`
-  > table > tr > td {
-    font-size: 1.6rem;
-  }
-`;
-
-const Heading = styled.h2`
-  margin-bottom: 2rem;
-  font-size: 1.8rem;
-`;
 
 export default CrawlingDateTable;
