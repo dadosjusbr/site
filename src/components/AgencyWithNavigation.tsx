@@ -105,7 +105,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             variant="outlined"
             color="info"
             endIcon={<ArrowForwardIosIcon />}
-            href={`/orgao/${id}/${year}`}
+            href={`/orgao/${id}/${year}/${selectedMonth}`}
           >
             EXPLORAR POR MÊS
           </Button>
