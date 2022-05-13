@@ -154,16 +154,3 @@ export const getServerSideProps: GetServerSideProps = async context => {
 const Page = styled.div`
   background: #3e5363;
 `;
-const ActivityIndicatorPlaceholder = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 20rem 0;
-  span {
-    margin-top: 3rem;
-  }
-  font-family: 'Roboto Condensed', sans-serif;
-  color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
-  font-size: 3rem;
-  align-items: center;
-`;

@@ -24,6 +24,33 @@ function TableRow(props) {
   );
 }
 
+function DateTable(props) {
+  const { data } = props;
+  return (
+    <Accordion>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
+        <Typography>Datas de realização das coletas dos dados</Typography>
+      </AccordionSummary>
+      <AccordionDetails>
+        <Box>
+          <table>
+            {data.map(d => (
+              <TableRow
+                month={d.Month}
+                crawlingtimeseconds={d.CrawlingTimestamp.seconds}
+              />
+            ))}
+          </table>
+        </Box>
+      </AccordionDetails>
+    </Accordion>
+  );
+}
+
 const CrawlingDateTable: React.FC<{
   data;
   dataLoading;
@@ -44,31 +71,7 @@ const CrawlingDateTable: React.FC<{
         <p>Aguarde...</p>
       </Box>
     ) : (
-      <Accordion>
-        <AccordionSummary
-          expandIcon={<ExpandMoreIcon />}
-          aria-controls="panel1a-content"
-          id="panel1a-header"
-        >
-          <Typography>Datas de realização das coletas dos dados</Typography>
-        </AccordionSummary>
-        <AccordionDetails>
-          {data.length > 0 ? (
-            <Box>
-              <table>
-                {data.map(d => (
-                  <TableRow
-                    month={d.Month}
-                    crawlingtimeseconds={d.CrawlingTimestamp.seconds}
-                  />
-                ))}
-              </table>
-            </Box>
-          ) : (
-            <></>
-          )}
-        </AccordionDetails>
-      </Accordion>
+      <DateTable data={data} />
     )}
   </div>
 );
