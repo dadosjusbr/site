@@ -71,7 +71,7 @@ const CrawlingDateTable: React.FC<{
         <p>Aguarde...</p>
       </Box>
     ) : (
-      <DateTable data={data} />
+      data && data[0].CrawlingTimestamp && <DateTable data={data} />
     )}
   </div>
 );
