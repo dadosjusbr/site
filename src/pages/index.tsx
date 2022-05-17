@@ -1,4 +1,5 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useEffect, useMemo, useState } from 'react';
@@ -100,6 +101,10 @@ export default function Index({
             até seis critérios em cada prestação de contas, que são avaliados
             mês a mês. O índice corresponde à média harmônica das duas
             dimensões.
+          </p>
+          <br />
+          <p>
+            Conheça mais sobre o <LinkIndice><Link href="/indice">índice de transparência</Link></LinkIndice>!
           </p>
           <br />
           <p>
@@ -389,4 +394,8 @@ const ToggleChartButton = styled.div`
   justify-content: center;
   text-align: center;
   padding-top: 4rem;
+`;
+const LinkIndice = styled.span`
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 2.8rem !important;
 `;
