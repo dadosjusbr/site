@@ -1,8 +1,9 @@
 import Head from 'next/head';
+import Link from 'next/link';
 import styled from 'styled-components';
 import { GetServerSideProps } from 'next';
 import { useEffect, useMemo, useState } from 'react';
-import ToggleButton from 'react-toggle-button'
+import ToggleButton from 'react-toggle-button';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
@@ -103,6 +104,14 @@ export default function Index({
           </p>
           <br />
           <p>
+            Conheça mais sobre o{' '}
+            <LinkIndice>
+              <Link href="/indice">índice de transparência</Link>
+            </LinkIndice>
+            !
+          </p>
+          <br />
+          <p>
             Dados atualizados até <Negrito>3 Mai de 2022</Negrito>.
           </p>
           <ToggleChartButton>
@@ -115,12 +124,13 @@ export default function Index({
                 },
                 inactive: {
                   base: '#3e5363',
-                }
+                },
               }}
               value={indexChart}
               onToggle={value => {
                 setIndexChart(!value);
-            }}/>
+              }}
+            />
           </ToggleChartButton>
           <ImgGraph>
             <img
@@ -128,8 +138,12 @@ export default function Index({
               alt="Legenda do índice de transparência"
             />
             <br />
-            {indexChart && <img src="/img/indice_tjs.png" alt="Índice de transparência" />}
-            {!indexChart && <img src="/img/indice_mps.png" alt="Índice de transparência" />}
+            {indexChart && (
+              <img src="/img/indice_tjs.png" alt="Índice de transparência" />
+            )}
+            {!indexChart && (
+              <img src="/img/indice_mps.png" alt="Índice de transparência" />
+            )}
           </ImgGraph>
         </section>
       </GraphWrapper>
@@ -390,4 +404,14 @@ const ToggleChartButton = styled.div`
   justify-content: center;
   text-align: center;
   padding-top: 4rem;
+`;
+
+const LinkIndice = styled.span`
+  font-family: 'Roboto Condensed', sans-serif;
+  font-size: 2.8rem !important;
+
+  > a:link,
+  > a:visited {
+    color: #7f3d8b;
+  }
 `;
