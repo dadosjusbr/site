@@ -137,6 +137,7 @@ export default function Index({
               src="/img/indice_legenda.png"
               alt="Legenda do índice de transparência"
             />
+            <br />
             {indexChart && (
               <img src="/img/indice_tjs.png" alt="Índice de transparência" />
             )}
@@ -404,6 +405,7 @@ const ToggleChartButton = styled.div`
   text-align: center;
   padding-top: 4rem;
 `;
+
 const LinkIndice = styled.span`
   font-family: 'Roboto Condensed', sans-serif;
   font-size: 2.8rem !important;
