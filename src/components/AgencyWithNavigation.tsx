@@ -3,7 +3,6 @@ import ReactGA from 'react-ga';
 import {
   Container,
   Box,
-  Grid,
   IconButton,
   Typography,
   Button,
@@ -79,6 +78,14 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           </IconButton>
         </Box>
         <Stack spacing={2} direction="row" justifyContent="flex-end" mt={4}>
+          <Button
+            variant="outlined"
+            color="info"
+            endIcon={<IosShareIcon />}
+            onClick={() => setModalIsOpen(true)}
+          >
+            COMPARTILHAR
+          </Button>
           {summaryPackage && (
             <Button
               variant="outlined"
@@ -93,14 +100,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
               BAIXAR DADOS
             </Button>
           )}
-          <Button
-            variant="outlined"
-            color="info"
-            endIcon={<IosShareIcon />}
-            onClick={() => setModalIsOpen(true)}
-          >
-            COMPARTILHAR
-          </Button>
           <Button
             variant="outlined"
             color="info"
