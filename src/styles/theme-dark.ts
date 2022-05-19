@@ -16,6 +16,10 @@ const theme = createTheme({
     success: {
       main: '#3edbb1',
     },
+    background: {
+      paper: '#3e5363',
+      default: '#3e5363',
+    },
   },
   typography: {
     fontFamily: "'Roboto Condensed', sans-serif",

@@ -175,64 +175,69 @@ export default function Index({
         </Headline>
       </Container>
       <ThemeProvider theme={light}>
-        <Container>
-          <Box my={4} py={4}>
-            <Typography variant="h2" textAlign="center">
-              Índice de Transparência
-            </Typography>
-            <Grid container justifyContent="center" py={4}>
-              <Grid item width={692}>
-                <p>
-                  O Índice de Transparência é composto por duas dimensões:
-                  facilidade e completude. Cada uma das dimensões, por sua vez,
-                  é composta por até seis critérios em cada prestação de contas,
-                  que são avaliados mês a mês. O índice corresponde à média
-                  harmônica das duas dimensões.{' '}
-                  <Link href="/indice" color="inherit">
-                    Saiba mais
-                  </Link>
-                  .
-                </p>
-                <p>
-                  Este gráfico representa dados de <b>jan.2018</b> até{' '}
-                  <b>dez.2021</b> e foi gerado em <b>mar.2022</b>. Dados
-                  atualizados até <b>3.mar.2022</b>.
-                </p>
+        <Paper elevation={0} square>
+          <Container>
+            <Box my={4} pt={8} pb={4}>
+              <Typography variant="h2" textAlign="center">
+                Índice de Transparência
+              </Typography>
+              <Grid container justifyContent="center" py={4}>
+                <Grid item width={692}>
+                  <p>
+                    O Índice de Transparência é composto por duas dimensões:
+                    facilidade e completude. Cada uma das dimensões, por sua
+                    vez, é composta por até seis critérios em cada prestação de
+                    contas, que são avaliados mês a mês. O índice corresponde à
+                    média harmônica das duas dimensões.{' '}
+                    <Link href="/indice" color="inherit">
+                      Saiba mais
+                    </Link>
+                    .
+                  </p>
+                  <p>
+                    Este gráfico representa dados de <b>jan.2018</b> até{' '}
+                    <b>dez.2021</b> e foi gerado em <b>mar.2022</b>. Dados
+                    atualizados até <b>3.mar.2022</b>.
+                  </p>
+                </Grid>
+                <Grid item width={900}>
+                  <Grid container justifyContent="center" pt={4} pb={2}>
+                    <Grid item>
+                      <Tabs
+                        value={value}
+                        onChange={handleChange}
+                        aria-label="Gráfico do índice de transparêncai"
+                      >
+                        <Tab label="Tribunais de justiça" {...a11yProps(0)} />
+                        <Tab label="Ministérios públicos" {...a11yProps(1)} />
+                      </Tabs>
+                    </Grid>
+                  </Grid>
+                  <TabPanel value={value} index={0}>
+                    <Box textAlign="center">
+                      <IndexChartLegend />
+                      <img
+                        src="/img/indice_tjs.png"
+                        alt="Índice de transparência"
+                        width="100%"
+                      />
+                    </Box>
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    <Box textAlign="center">
+                      <IndexChartLegend />
+                      <img
+                        src="/img/indice_mps.png"
+                        alt="Índice de transparência"
+                        width="100%"
+                      />
+                    </Box>
+                  </TabPanel>
+                </Grid>
               </Grid>
-            </Grid>
-            <Paper elevation={0}>
-              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                <Tabs
-                  value={value}
-                  onChange={handleChange}
-                  aria-label="Gráfico do índice de transparêncai"
-                >
-                  <Tab label="Tribunais de justiça" {...a11yProps(0)} />
-                  <Tab label="Ministérios públicos" {...a11yProps(1)} />
-                </Tabs>
-              </Box>
-              <TabPanel value={value} index={0}>
-                <Box textAlign="center">
-                  <IndexChartLegend />
-                  <img
-                    src="/img/indice_tjs.png"
-                    alt="Índice de transparência"
-                    width="100%"
-                  />
-                </Box>
-              </TabPanel>
-              <TabPanel value={value} index={1}>
-                <Box textAlign="center">
-                  <IndexChartLegend />
-                  <img
-                    src="/img/indice_mps.png"
-                    alt="Índice de transparência"
-                  />
-                </Box>
-              </TabPanel>
-            </Paper>
-          </Box>
-        </Container>
+            </Box>
+          </Container>
+        </Paper>
         <Container>
           <Box my={12}>
             <Typography variant="h2" textAlign="center">
@@ -300,6 +305,7 @@ const Page = styled.div`
 `;
 const Headline = styled.div`
   margin-top: 1rem;
+  margin-bottom: 4rem;
   padding-top: 6rem;
   padding-bottom: 6rem;
   padding-right: 1rem;

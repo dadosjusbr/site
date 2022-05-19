@@ -19,6 +19,10 @@ const theme = createTheme({
     warning: {
       main: '#f2ca4b',
     },
+    background: {
+      paper: '#ffffff',
+      default: '#ffffff',
+    },
   },
   typography: {
     fontFamily: "'Roboto Condensed', sans-serif",
