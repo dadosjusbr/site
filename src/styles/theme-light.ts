@@ -16,6 +16,9 @@ const theme = createTheme({
     success: {
       main: '#3edbb1',
     },
+    warning: {
+      main: '#f2ca4b',
+    },
   },
   typography: {
     fontFamily: "'Roboto Condensed', sans-serif",

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
@@ -7,8 +8,12 @@ import {
   Grid,
   Button,
   Box,
+  Paper,
   Typography,
   IconButton,
+  Link,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -19,9 +24,37 @@ import Footer from '../components/Footer';
 import Header from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
 import RemunerationBarGraph from '../components/RemunerationBarGraph';
+import IndexChartLegend from '../components/IndexChartLegend';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
-import theme from '../styles/theme-light';
+import light from '../styles/theme-light';
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && (
+        <Box sx={{ p: 3 }}>
+          <Typography>{children}</Typography>
+        </Box>
+      )}
+    </div>
+  );
+}
+
+function a11yProps(index: number) {
+  return {
+    id: `simple-tab-${index}`,
+    'aria-controls': `simple-tabpanel-${index}`,
+  };
+}
 
 export default function Index({
   agencyAmount,
@@ -50,6 +83,10 @@ export default function Index({
   useEffect(() => {
     fetchGeneralChartData();
   }, [year]);
+  const [value, setValue] = React.useState(0);
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
   async function fetchGeneralChartData() {
     try {
       const { data } = await api.ui.get(`/geral/remuneracao/${year}`);
@@ -137,31 +174,65 @@ export default function Index({
           </Grid>
         </Headline>
       </Container>
-      <Container>
-        <Box my={4} py={4}>
-          <Typography variant="h2" textAlign="center">
-            Índice de Transparência
-          </Typography>
-          <Typography component="p" textAlign="center">
-            Este gráfico representa dados de <b>Jan de 2018</b> até{' '}
-            <b>Dez de 2021</b> e foi gerado em <b>Mar de 2022</b>. Dados
-            atualizados até <b>8 Fev de 2022</b>.
-          </Typography>
-          <Box
-            mt={4}
-            py={4}
-            textAlign="center"
-            sx={{ backgroundColor: 'info.main' }}
-          >
-            <img
-              src="/img/indice_legenda.png"
-              alt="Legenda do índice de transparência"
-            />
-            <img src="/img/indice.png" alt="Índice de transparência" />
+      <ThemeProvider theme={light}>
+        <Container>
+          <Box my={4} py={4}>
+            <Typography variant="h2" textAlign="center">
+              Índice de Transparência
+            </Typography>
+            <Grid container justifyContent="center" py={4}>
+              <Grid item width={692}>
+                <p>
+                  O Índice de Transparência é composto por duas dimensões:
+                  facilidade e completude. Cada uma das dimensões, por sua vez,
+                  é composta por até seis critérios em cada prestação de contas,
+                  que são avaliados mês a mês. O índice corresponde à média
+                  harmônica das duas dimensões.{' '}
+                  <Link href="/indice" color="inherit">
+                    Saiba mais
+                  </Link>
+                  .
+                </p>
+                <p>
+                  Este gráfico representa dados de <b>jan.2018</b> até{' '}
+                  <b>dez.2021</b> e foi gerado em <b>mar.2022</b>. Dados
+                  atualizados até <b>3.mar.2022</b>.
+                </p>
+              </Grid>
+            </Grid>
+            <Paper elevation={0}>
+              <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="Gráfico do índice de transparêncai"
+                >
+                  <Tab label="Tribunais de justiça" {...a11yProps(0)} />
+                  <Tab label="Ministérios públicos" {...a11yProps(1)} />
+                </Tabs>
+              </Box>
+              <TabPanel value={value} index={0}>
+                <Box textAlign="center">
+                  <IndexChartLegend />
+                  <img
+                    src="/img/indice_tjs.png"
+                    alt="Índice de transparência"
+                    width="100%"
+                  />
+                </Box>
+              </TabPanel>
+              <TabPanel value={value} index={1}>
+                <Box textAlign="center">
+                  <IndexChartLegend />
+                  <img
+                    src="/img/indice_mps.png"
+                    alt="Índice de transparência"
+                  />
+                </Box>
+              </TabPanel>
+            </Paper>
           </Box>
-        </Box>
-      </Container>
-      <ThemeProvider theme={theme}>
+        </Container>
         <Container>
           <Box my={12}>
             <Typography variant="h2" textAlign="center">
