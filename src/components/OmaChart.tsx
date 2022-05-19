@@ -226,7 +226,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <Paper elevation={0}>
               <Box p={2}>
                 <Typography variant="h6">
-                  Índice de transparência
+                  Índice de transparência em <Sub>{MONTHS[month]}</Sub> de {year}
                   <Tooltip
                     placement="top"
                     title={
@@ -397,7 +397,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <Paper elevation={0}>
               <Box pt={4} py={4}>
                 <Typography variant="h6" textAlign="center">
-                  Total de Remunerações de Membros por Mês em {year}
+                  Total de remunerações de membros por mês em {year}
                 </Typography>
                 <Box px={2}>
                   {!chartData.Members ? (
@@ -545,6 +545,10 @@ const ActivityIndicatorPlaceholder = styled.div`
   color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
   font-size: 3rem;
   align-items: center;
+`;
+
+const Sub = styled.span`
+  text-transform: lowercase;
 `;
 
 export default OMASummary;

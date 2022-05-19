@@ -3,6 +3,7 @@ import ReactGA from 'react-ga';
 import {
   Container,
   Box,
+  Grid,
   IconButton,
   Typography,
   Button,
@@ -56,27 +57,33 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         <Typography variant="h2" textAlign="center">
           {title} ({id.toLocaleUpperCase('pt')})
         </Typography>
-        <Box textAlign="center">
-          <IconButton
-            aria-label="voltar"
-            color="info"
-            onClick={() => setYear(year - 1)}
-            disabled={!previousDateIsNavigable}
-          >
-            <ArrowBackIosNewIcon />
-          </IconButton>
-          <Typography component="span" variant="h6">
-            {year}
-          </Typography>
-          <IconButton
-            aria-label="voltar"
-            color="info"
-            onClick={() => setYear(year + 1)}
-            disabled={!nextDateIsNavigable}
-          >
-            <ArrowForwardIosIcon />
-          </IconButton>
-        </Box>
+        <Grid container justifyContent="center" alignItems="center">
+          <Grid item>
+            <IconButton
+              aria-label="voltar"
+              color="info"
+              onClick={() => setYear(year - 1)}
+              disabled={!previousDateIsNavigable}
+            >
+              <ArrowBackIosNewIcon />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            <Typography component="span" variant="h4">
+              {year}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton
+              aria-label="voltar"
+              color="info"
+              onClick={() => setYear(year + 1)}
+              disabled={!nextDateIsNavigable}
+            >
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
         <Stack spacing={2} direction="row" justifyContent="flex-end" mt={4}>
           <Button
             variant="outlined"

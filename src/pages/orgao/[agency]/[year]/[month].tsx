@@ -7,6 +7,7 @@ import styled from 'styled-components';
 import { addMonths, isAfter, isBefore } from 'date-fns';
 import {
   Box,
+  Grid,
   CircularProgress,
   Container,
   IconButton,
@@ -21,6 +22,11 @@ import Header from '../../../../components/Header';
 import api from '../../../../services/api';
 import OMASummary from '../../../../components/OmaChart';
 import ErrorTable from '../../../../components/ErrorTable';
+
+function UnixToHumanDate(unix) {
+  const d = new Date(unix * 1000);
+  return d;
+}
 
 export default function OmaPage({
   agency,
@@ -116,47 +122,33 @@ export default function OmaPage({
             {oma ? oma.fullName : 'Coleta não realizada!'} (
             {agency.toLocaleUpperCase('pt')})
           </Typography>
-          <Box textAlign="center">
-            <IconButton
-              aria-label="voltar"
-              color="info"
-              onClick={() => handleNavigateToPreviousSummaryOption()}
-              disabled={!previousButtonActive}
-            >
-              <ArrowBackIosNewIcon />
-            </IconButton>
-            <Typography component="span" variant="h6">
-              {MONTHS[month]}, {year}
-            </Typography>
-            <IconButton
-              aria-label="voltar"
-              color="info"
-              onClick={() => handleNavigateToNextSummaryOption()}
-              disabled={!nextButtonActive}
-            >
-              <ArrowForwardIosIcon />
-            </IconButton>
-          </Box>
-          {/* <div>
-            <button
-              className="left"
-              onClick={() => handleNavigateToPreviousSummaryOption()}
-              type="button"
-              disabled={!previousButtonActive}
-            >
-              <img src="/img/arrow.svg" alt="seta esquerda" />
-            </button>
-            <span>
-              {MONTHS[month]} {year}
-            </span>
-            <button
-              onClick={() => handleNavigateToNextSummaryOption()}
-              type="button"
-              disabled={!nextButtonActive}
-            >
-              <img src="/img/arrow.svg" alt="seta direita" />
-            </button>
-          </div> */}
+          <Grid container justifyContent="center" alignItems="center">
+            <Grid item>
+              <IconButton
+                aria-label="voltar"
+                color="info"
+                onClick={() => handleNavigateToPreviousSummaryOption()}
+                disabled={!previousButtonActive}
+              >
+                <ArrowBackIosNewIcon />
+              </IconButton>
+            </Grid>
+            <Grid item>
+              <Typography component="span" variant="h4">
+                {MONTHS[month]} {year}
+              </Typography>
+            </Grid>
+            <Grid item>
+              <IconButton
+                aria-label="voltar"
+                color="info"
+                onClick={() => handleNavigateToNextSummaryOption()}
+                disabled={!nextButtonActive}
+              >
+                <ArrowForwardIosIcon />
+              </IconButton>
+            </Grid>
+          </Grid>
           {loading ? (
             <Box
               m={4}
@@ -191,14 +183,11 @@ export default function OmaPage({
                 oma.crawlingTime && (
                   <Typography textAlign="center">
                     Dados coletados em{' '}
-                    {(() => {
-                      // Converts UNIX timestamp to miliseconds timestamp
-                      const d = new Date(oma.crawlingTime * 1000);
-                      // eslint-disable-next-line prettier/prettier
-                      return `${d.getDate()} de ${
-                        MONTHS[d.getMonth() + 1]
-                      } de ${d.getFullYear()}`;
-                    })()}
+                    {UnixToHumanDate(oma.crawlingTime).getDate()} de{' '}
+                    <Sub>
+                      {MONTHS[UnixToHumanDate(oma.crawlingTime).getMonth() + 1]}
+                    </Sub>{' '}
+                    de {UnixToHumanDate(oma.crawlingTime).getFullYear()}
                   </Typography>
                 )
               ))()
@@ -316,4 +305,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 const Page = styled.div`
   background: #3e5363;
+`;
+const Sub = styled.span`
+  text-transform: lowercase;
 `;
