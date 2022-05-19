@@ -20,8 +20,8 @@ const theme = createTheme({
       main: '#f2ca4b',
     },
     background: {
-      paper: '#ffffff',
-      default: '#ffffff',
+      paper: '#f5f5f5',
+      default: '#f5f5f5',
     },
   },
   typography: {
