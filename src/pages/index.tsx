@@ -112,7 +112,7 @@ export default function Index({
           </p>
           <br />
           <p>
-            Dados atualizados até <Negrito>3 Mai de 2022</Negrito>.
+            Dados atualizados até <Negrito>18 Mai de 2022</Negrito>.
           </p>
           <ToggleChartButton>
             <ToggleButton
