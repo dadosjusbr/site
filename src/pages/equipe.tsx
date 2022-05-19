@@ -2,7 +2,7 @@ import Head from 'next/head';
 import { useState } from 'react';
 import styled from 'styled-components';
 
-import { Box, Container, Grid, Button, Typography } from '@mui/material';
+import { Box, Container, Grid, Button, Typography, Link } from '@mui/material';
 
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -10,11 +10,24 @@ import Header from '../components/Header';
 export default function Team() {
   const [teamMates] = useState([
     {
+      name: 'Bianca Berti',
+      role: 'Analista de transparência e integridade',
+      profileURL: 'https://www.linkedin.com/in/bertibianca/',
+      photoURL:
+        'https://www.transparencia.org.br/uploads/quemsomos/bberti.jpeg',
+    },
+    {
       name: 'Daniel Fireman',
       role: 'Professor',
       profileURL: 'https://github.com/danielfireman',
       photoURL:
         'https://avatars2.githubusercontent.com/u/8951363?s=400&u=acdedbbd00a15d2f913e3e1bde6b14f2c7451f90&v=4',
+    },
+    {
+      name: 'Eduardo Queiroz',
+      role: 'Desenvolvedor',
+      profileURL: 'https://github.com/duardoqueiroz',
+      photoURL: 'https://avatars.githubusercontent.com/u/83377894?v=4',
     },
     {
       name: 'Jefferson Neves',
@@ -118,11 +131,13 @@ export default function Team() {
           <Grid container spacing={8}>
             {teamMates.map(teamMate => (
               <Grid item xs={6} sm={4} md={3}>
-                <TeamAvatar
-                  src={teamMate.photoURL}
-                  alt={teamMate.name}
-                  width="100%"
-                />
+                <Link href={teamMate.profileURL}>
+                  <TeamAvatar
+                    src={teamMate.photoURL}
+                    alt={teamMate.name}
+                    width="100%"
+                  />
+                </Link>
                 <Typography variant="h5" textAlign="center">
                   {teamMate.name}
                 </Typography>
@@ -208,6 +223,8 @@ const Page = styled.div`
 
 const TeamAvatar = styled.img`
   border-radius: 50%;
+  filter: grayscale(100%);
+  padding: 1rem;
 `;
 
 const Partner = styled.img`
