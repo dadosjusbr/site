@@ -41,6 +41,9 @@ const theme = createTheme({
           borderRadius: 0,
           borderWidth: '2px',
           textTransform: 'none',
+          '&:hover': {
+            borderWidth: '2px',
+          },
         },
       },
     },
