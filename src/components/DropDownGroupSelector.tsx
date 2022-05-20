@@ -22,19 +22,19 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
     router.push(`/grupo/${a}`);
   };
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth sx={{ m: 1, minWidth: 240 }}>
       <Select
-        labelId="demo-simple-select-label"
+        labelId="estados-select-label"
         id="demo-simple-select"
         value={agency}
-        label="Age"
+        label="Estados"
         onChange={handleChange}
         displayEmpty
         inputProps={{ 'aria-label': 'Dados por órgão' }}
         input={<OutlinedInput />}
       >
         <MenuItem disabled value="">
-          Dados por órgão
+          Estados
         </MenuItem>
         {(() => {
           const list = [];

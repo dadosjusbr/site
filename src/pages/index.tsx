@@ -152,13 +152,8 @@ export default function Index({
               .
             </Typography>
           </Box>
-          <Grid
-            container
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-          >
-            <Grid item xs={4} textAlign="center">
+          <Grid container spacing={2} display="flex" alignItems="center">
+            {/* <Grid item xs={4} textAlign="center">
               <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
                 Índice de transparência
               </Button>
@@ -167,8 +162,11 @@ export default function Index({
               <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
                 Dados gerais
               </Button>
+            </Grid> */}
+            <Grid item>
+              <Typography variant="h6">Navegue pelos dados:</Typography>
             </Grid>
-            <Grid item xs={4} textAlign="center">
+            <Grid item>
               <DropDownGroupSelector />
             </Grid>
           </Grid>
