@@ -118,8 +118,8 @@ export default function Index({
       <Container fixed>
         <Headline>
           O DadosJusBr recupera continuamente dados dos diferentes orgãos do
-          sistema de jusiça, os padroniza e publica como dado aberto. Libertamos
-          os dados.
+          sistema de justiça, os padroniza e publica como dado aberto.
+          Libertamos os dados.
           <br />
           Já são{' '}
           <Typography variant="inherit" component="span" color="success.main">
