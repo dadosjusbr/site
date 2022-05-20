@@ -36,6 +36,14 @@ const theme = createTheme({
       fontWeight: '700',
       paddingBottom: '1rem',
     },
+    h3: {
+      fontSize: '1.4rem',
+      fontWeight: '700',
+      paddingBottom: '1rem',
+    },
+    body1: {
+      paddingBottom: '0.5rem',
+    },
   },
   components: {
     MuiButton: {
@@ -47,6 +55,13 @@ const theme = createTheme({
           '&:hover': {
             borderWidth: '2px',
           },
+        },
+      },
+    },
+    MuiTypography: {
+      defaultProps: {
+        variantMapping: {
+          body1: 'p',
         },
       },
     },

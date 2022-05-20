@@ -115,7 +115,7 @@ export default function Index({
         />
       </Head>
       <Header />
-      <Container>
+      <Container fixed>
         <Headline>
           O DadosJusBr recupera continuamente dados dos diferentes orgãos do
           sistema de jusiça, os padroniza e publica como dado aberto. Libertamos
@@ -321,7 +321,7 @@ const Headline = styled.div`
     font-size: 2rem;
   }
   @media (min-width: 900px) {
-    padding-right: 22rem;
+    padding-right: 20rem;
     font-size: 2rem;
   }
 `;
