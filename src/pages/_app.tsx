@@ -1,4 +1,9 @@
-import GlobalStyle from '../styles/global_style';
+import Head from 'next/head';
+
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+import theme from '../styles/theme-dark';
 import { PrivacityPolicyProvider } from '../contexts/privacity-policy-context';
 import GATracker from '../components/GATracker';
 /*
@@ -10,11 +15,16 @@ https://nextjs.org/docs/advanced-features/custom-app
 function MyApp({ Component, pageProps }) {
   return (
     <>
-      <PrivacityPolicyProvider>
-        <GATracker />
-        <Component {...pageProps} />
-        <GlobalStyle />
-      </PrivacityPolicyProvider>
+      <Head>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+      </Head>
+      <ThemeProvider theme={theme}>
+        <PrivacityPolicyProvider>
+          <CssBaseline />
+          <GATracker />
+          <Component {...pageProps} />
+        </PrivacityPolicyProvider>
+      </ThemeProvider>
     </>
   );
 }

@@ -1,11 +1,24 @@
 import React, { useMemo, useState } from 'react';
-import styled from 'styled-components';
 import ReactGA from 'react-ga';
-import Button from './Button';
+import {
+  Container,
+  Box,
+  Grid,
+  IconButton,
+  Typography,
+  Button,
+  ThemeProvider,
+  Stack,
+} from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import IosShareIcon from '@mui/icons-material/IosShare';
+
 import ShareModal from './ShareModal';
 import RemunerationBarGraph from './RemunerationBarGraph';
-import CrawlingDateTable from './CrawlingDateTable';
 import * as url from '../url';
+import light from '../styles/theme-light';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -39,225 +52,95 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const [selectedMonth, setSelectedMonth] = useState<number>(m);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   return (
-    <>
-      <MainGraphSection>
-        <MainGraphSectionHeader>
-          <a href={`/orgao/${id}/${year}`}>
-            <h2>
-              {title} ({id.toLocaleUpperCase('pt')})
-            </h2>
-          </a>
-          <div>
-            <button
-              className="left"
+    <Container fixed>
+      <Box pb={4}>
+        <Typography variant="h2" textAlign="center">
+          {title} ({id.toLocaleUpperCase('pt')})
+        </Typography>
+        <Grid container justifyContent="center" alignItems="center">
+          <Grid item>
+            <IconButton
+              aria-label="voltar"
+              color="info"
               onClick={() => setYear(year - 1)}
               disabled={!previousDateIsNavigable}
-              type="button"
             >
-              <img src="/img/arrow.svg" alt="seta esquerda" />
-            </button>
-            <span>{year}</span>
-            <button
-              disabled={!nextDateIsNavigable}
+              <ArrowBackIosNewIcon />
+            </IconButton>
+          </Grid>
+          <Grid item>
+            <Typography component="span" variant="h4">
+              {year}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <IconButton
+              aria-label="voltar"
+              color="info"
               onClick={() => setYear(year + 1)}
-              type="button"
+              disabled={!nextDateIsNavigable}
             >
-              <img src="/img/arrow.svg" alt="seta direita" />
-            </button>
-          </div>
-        </MainGraphSectionHeader>
-        <RemunerationBarGraph
-          onMonthChange={month => {
-            if (selectedMonth === month) {
-              setSelectedMonth(navigableMonth);
-            } else {
-              setSelectedMonth(month);
-            }
-          }}
-          data={data}
-          year={year}
-          dataLoading={dataLoading}
-        />
-        <CrawlingDateTable data={data} dataLoading={dataLoading} />
-        <div className="buttons">
-          <div>
-            {summaryPackage && (
-              <a
-                href={url.downloadURL(summaryPackage.Package.url)}
-                rel="noreferrer"
-              >
-                <Button
-                  textColor="#3e5363"
-                  borderColor="#3e5363"
-                  backgroundColor="#fff"
-                  onClick={() => {
-                    ReactGA.pageview(
-                      url.downloadURL(summaryPackage.Package.url),
-                    );
-                  }}
-                  hoverBackgroundColor="#3e5363"
-                  id="download-button"
-                >
-                  Baixar Dados
-                  <img src="/img/icon_download_share.svg" alt="compartilhar" />
-                </Button>
-              </a>
-            )}
-          </div>
-          <div>
+              <ArrowForwardIosIcon />
+            </IconButton>
+          </Grid>
+        </Grid>
+        <Stack spacing={2} direction="row" justifyContent="flex-end" mt={4}>
+          <Button
+            variant="outlined"
+            color="info"
+            endIcon={<IosShareIcon />}
+            onClick={() => setModalIsOpen(true)}
+          >
+            COMPARTILHAR
+          </Button>
+          {summaryPackage && (
             <Button
-              textColor="#3e5363"
-              borderColor="#3e5363"
-              backgroundColor="#fff"
-              hoverBackgroundColor="#3e5363"
-              onClick={() => setModalIsOpen(true)}
+              variant="outlined"
+              color="info"
+              endIcon={<CloudDownloadIcon />}
+              onClick={() => {
+                ReactGA.pageview(url.downloadURL(summaryPackage.Package.url));
+              }}
+              href={url.downloadURL(summaryPackage.Package.url)}
+              id="download-button"
             >
-              Compartilhar
-              <img src="/img/icon_share.svg" alt="compartilhar" />
+              BAIXAR DADOS
             </Button>
-            <a href={`/orgao/${id}/${year}/${selectedMonth}`}>
-              <Button
-                textColor="#B361C6"
-                borderColor="#B361C6"
-                backgroundColor="#fff"
-                hoverBackgroundColor="#B361C6"
-              >
-                Explorar Meses
-                <img src="/img/icon_calendario.svg" alt="calendario" />
-              </Button>
-            </a>
-          </div>
-        </div>
-        <ShareModal
-          isOpen={modalIsOpen}
-          url={`https://dadosjusbr.org/orgao/${id}/${year}`}
-          onRequestClose={() => setModalIsOpen(false)}
-        />
-      </MainGraphSection>
-    </>
+          )}
+          <Button
+            variant="outlined"
+            color="info"
+            endIcon={<ArrowForwardIosIcon />}
+            href={`/orgao/${id}/${year}/${selectedMonth}`}
+          >
+            EXPLORAR POR MÊS
+          </Button>
+        </Stack>
+      </Box>
+      <ThemeProvider theme={light}>
+        <Box mb={12}>
+          <RemunerationBarGraph
+            onMonthChange={month => {
+              if (selectedMonth === month) {
+                setSelectedMonth(navigableMonth);
+              } else {
+                setSelectedMonth(month);
+              }
+            }}
+            data={data}
+            year={year}
+            dataLoading={dataLoading}
+          />
+        </Box>
+      </ThemeProvider>
+
+      <ShareModal
+        isOpen={modalIsOpen}
+        url={`https://dadosjusbr.org/orgao/${id}/${year}`}
+        onRequestClose={() => setModalIsOpen(false)}
+      />
+    </Container>
   );
 };
 
 export default AgencyPageWithNavigation;
-const MainGraphSectionHeader = styled.div`
-  font-size: 4rem;
-  color: #3e5363;
-  display: flex;
-  a {
-    color: #3e5363;
-    text-decoration: none;
-    &:hover {
-      h2 {
-        text-decoration: underline #3e5363;
-      }
-    }
-  }
-  width: 35rem;
-  flex-direction: column;
-  align-items: center;
-  align-self: center;
-  h2 {
-    margin-bottom: 1rem;
-    font-size: 3rem;
-  }
-  span {
-    margin-top: 2rem;
-    font-size: 2rem;
-    font-weight: 400;
-  }
-  div {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    width: 80%;
-    button {
-      &:disabled,
-      &[disabled] {
-        border: 2px solid #3e5363;
-        img {
-          filter: invert(75%) sepia(56%) saturate(285%) hue-rotate(163deg)
-            brightness(87%) contrast(84%);
-        }
-        background-color: #fff;
-      }
-      &.left {
-        transform: rotate(180deg);
-      }
-      img {
-        position: initial;
-      }
-      width: 30px;
-      color: #3e5363;
-      height: 30px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 50%;
-      border: none;
-      background-color: #3e5363;
-    }
-    span {
-      font-size: 2rem;
-      font-weight: bold;
-    }
-  }
-  margin-bottom: 4.5rem;
-`;
-const MainGraphSection = styled.section`
-  padding: 5rem;
-  @media (max-width: 600px) {
-    padding: 1rem;
-  }
-  @media (min-width: 600px) {
-    margin-left: 8rem;
-    margin-right: 8rem;
-  }
-  margin-bottom: 4rem;
-  text-align: center;
-  background-color: #fff;
-  font-size: 4rem;
-  color: #fff;
-  display: flex;
-  flex-direction: column;
-  font-family: 'Roboto Condensed', sans-serif;
-  .buttons {
-    justify-content: space-between;
-    display: flex;
-    flex-wrap: wrap;
-    width: 100%;
-    #download-button:hover {
-      img {
-        filter: brightness(0) invert(1);
-      }
-    }
-    div {
-      @media (max-width: 600px) {
-        justify-content: center;
-      }
-      display: flex;
-      flex-wrap: wrap;
-      flex-direction: row;
-      & + div {
-        & > :first-child {
-          &:hover {
-            img {
-              filter: brightness(0) invert(1);
-            }
-          }
-        }
-      }
-    }
-    @media (max-width: 600px) {
-      justify-content: center;
-    }
-    button {
-      font-size: 2rem;
-      margin: 1rem;
-      position: relative;
-      img {
-        right: 3rem;
-        position: absolute;
-      }
-    }
-  }
-`;

@@ -1,8 +1,9 @@
-/* eslint-disable no-restricted-syntax */
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
+import { Box, CircularProgress, Container, Grid } from '@mui/material';
+
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
@@ -25,25 +26,44 @@ export default function SummaryPage({ dataList, summary }) {
         />
       </Head>
       <Header />
-      <DropDownGroupSelector value={summary} />
-      <div>
-        {(() => {
-          if (dataList.length === 0) {
+      <Container>
+        <Grid container display="flex" flexDirection="column" py={4} my={4}>
+          <Grid item pb={4}>
+            Selecione os órgãos que você deseja explorar.
+          </Grid>
+          <Grid item pb={4} sx={{ width: 250 }}>
+            <DropDownGroupSelector value={summary} />
+          </Grid>
+        </Grid>
+        <div>
+          {(() => {
+            if (typeof dataList !== 'undefined' && dataList.length > 0) {
+              return dataList.map(agency => (
+                <GraphWithNavigation
+                  key={agency.Name}
+                  title={agency.FullName}
+                  id={agency.Name}
+                />
+              ));
+            }
             return (
-              <ActivityIndicatorPlaceholder>
-                Ocorreu um erro.
-              </ActivityIndicatorPlaceholder>
+              <Box
+                m={4}
+                sx={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                }}
+              >
+                <div>
+                  <CircularProgress color="info" />
+                </div>
+                <p>Aguarde...</p>
+              </Box>
             );
-          }
-          return dataList.map(agency => (
-            <GraphWithNavigation
-              key={agency.Name}
-              title={agency.FullName}
-              id={agency.Name}
-            />
-          ));
-        })()}
-      </div>
+          })()}
+        </div>
+      </Container>
       <Footer />
     </Page>
   );
@@ -111,10 +131,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
   try {
     const { data } = await api.ui.get(`/orgao/${summary}`);
     if (!data.Agency) {
-      context.res.writeHead(301, {
-        Location: `/404`,
-      });
-      context.res.end();
+      // context.res.writeHead(301, {
+      //   Location: `/404`,
+      // });
+      // context.res.end();
       return { props: {} };
     }
     return {
@@ -124,26 +144,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   } catch (error) {
-    context.res.writeHead(301, {
-      Location: `/404`,
-    });
-    context.res.end();
+    // context.res.writeHead(301, {
+    //   Location: `/404`,
+    // });
+    // context.res.end();
     return { props: {} };
   }
 };
 const Page = styled.div`
   background: #3e5363;
-`;
-const ActivityIndicatorPlaceholder = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 20rem 0;
-  span {
-    margin-top: 3rem;
-  }
-  font-family: 'Roboto Condensed', sans-serif;
-  color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
-  font-size: 3rem;
-  align-items: center;
 `;
