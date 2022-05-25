@@ -1,5 +1,7 @@
 import Head from 'next/head';
 import styled from 'styled-components';
+import { Grid, Link } from '@mui/material';
+
 import Footer from '../components/Footer';
 import Header from '../components/Header';
 
@@ -9,10 +11,10 @@ export default function PrivacityPolicy() {
       <Head>
         <title>Política de Privacidade do DadosJusBr</title>
       </Head>
-      <Header theme="LIGHT" />
-      <Container>
-        <h1>DadosJusBr Um compromisso com a sua privacidade!</h1>
-        <MainSection>
+      <Header />
+      <Grid container justifyContent="center" py={4}>
+        <Grid item width={692}>
+          <h1>DadosJusBr Um compromisso com a sua privacidade!</h1>
           <p>
             Esta Política de Privacidade dispõe sobre o processo de coleta,
             armazenamento, utilização, tratamento, compartilhamento e exclusão
@@ -53,59 +55,63 @@ export default function PrivacityPolicy() {
 
           <h4>1. DADOS POSSIVELMENTE COLETADOS PELO DADOSJUSBR</h4>
 
-          <CollectList>
-            <li>
-              <p>
-                Visita ao site do DadosJusBr: durante a visita ao site, podemos
-                registrar alguns dados, como dados relativos ao seu provedor de
-                internet, sistema operacional, navegador, configurações de vídeo
-                e páginas acessadas.
-              </p>
+          <li>
+            <p>
+              Visita ao site do DadosJusBr: durante a visita ao site, podemos
+              registrar alguns dados, como dados relativos ao seu provedor de
+              internet, sistema operacional, navegador, configurações de vídeo e
+              páginas acessadas.
+            </p>
 
-              <p>
-                Esses dados são coletados por meio de{' '}
-                <a href="https://www.techtudo.com.br/noticias/2018/10/o-que-sao-cookies-entenda-os-dados-que-os-sites-guardam-sobre-voce.ghtml">
-                  cookies
-                </a>
-                .o DadosJus utliza <strong>Cookies Obrigatórios</strong> porém
-                Você pode ajustar suas configurações de navegador para
-                desabilitar os cookies ou deletá-los. Caso estejam habilitados,
-                nós (e os terceiros previamente mencionados) emitiremos cookies
-                quando você interagir com o nosso site. Somente coletamos, via
-                cookies, dados essenciais para o funcionamento do nosso site e
-                para as métricas de acesso. Não compartilhamos esses dados com
-                terceiros, além daqueles responsáveis pelos próprios cookies.
-              </p>
+            <p>
+              Esses dados são coletados por meio de{' '}
+              <Link
+                color="inherit"
+                href="https://www.techtudo.com.br/noticias/2018/10/o-que-sao-cookies-entenda-os-dados-que-os-sites-guardam-sobre-voce.ghtml"
+              >
+                cookies
+              </Link>
+              .o DadosJus utliza <strong>Cookies Obrigatórios</strong> porém
+              Você pode ajustar suas configurações de navegador para desabilitar
+              os cookies ou deletá-los. Caso estejam habilitados, nós (e os
+              terceiros previamente mencionados) emitiremos cookies quando você
+              interagir com o nosso site. Somente coletamos, via cookies, dados
+              essenciais para o funcionamento do nosso site e para as métricas
+              de acesso. Não compartilhamos esses dados com terceiros, além
+              daqueles responsáveis pelos próprios cookies.
+            </p>
 
-              <p>
-                Não serão automaticamente coletados dados pessoais; informações
-                dessa natureza serão registradas em nossos bancos de dados
-                apenas quando um formulário for preenchido voluntariamente pelo
-                usuário.
-              </p>
+            <p>
+              Não serão automaticamente coletados dados pessoais; informações
+              dessa natureza serão registradas em nossos bancos de dados apenas
+              quando um formulário for preenchido voluntariamente pelo usuário.
+            </p>
 
-              <p>
-                Além disso, o site do DadosJusBr usa a ferramenta{' '}
-                <a href="https://analytics.google.com/analytics/web/">
-                  Google Analytics
-                </a>{' '}
-                que analisa suas interações e como você usa o site. O Google
-                Analytics é um serviço de web analytics que identifica os seus
-                padrões de navegação no nosso site e gera relatórios sobre essas
-                atividades, para que possamos melhorar o site do DadosJusBr.
-                Para fazer isso, são coletados/compartilhados dados pessoais
-                para contato, como você usa o site e dados que o identificam. O
-                tratamento desses dados é regido pela{' '}
-                <a
-                  href="https://policies.google.com/privacy"
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  política de privacidade do Google.
-                </a>
-              </p>
-            </li>
-          </CollectList>
+            <p>
+              Além disso, o site do DadosJusBr usa a ferramenta{' '}
+              <Link
+                color="inherit"
+                href="https://analytics.google.com/analytics/web/"
+              >
+                Google Analytics
+              </Link>{' '}
+              que analisa suas interações e como você usa o site. O Google
+              Analytics é um serviço de web analytics que identifica os seus
+              padrões de navegação no nosso site e gera relatórios sobre essas
+              atividades, para que possamos melhorar o site do DadosJusBr. Para
+              fazer isso, são coletados/compartilhados dados pessoais para
+              contato, como você usa o site e dados que o identificam. O
+              tratamento desses dados é regido pela{' '}
+              <Link
+                color="inherit"
+                href="https://policies.google.com/privacy"
+                target="_blank"
+                rel="noreferrer"
+              >
+                política de privacidade do Google.
+              </Link>
+            </p>
+          </li>
 
           <p>
             Para fins das atividades aqui mencionadas <strong>não serão</strong>{' '}
@@ -164,68 +170,21 @@ export default function PrivacityPolicy() {
             usuário deseje a exclusão imediata de seus dados, poderá, a qualquer
             momento, solicitá-la por mensagem enviada à nossa equipe por meio do
             e-mail:{' '}
-            <a
+            <Link
+              color="inherit"
               href="mailto:dadosjusbr@gmail.com"
               target="_blank"
               rel="noreferrer"
             >
               dadosjusbr@gmail.com
-            </a>
+            </Link>
           </p>
-          <p />
-        </MainSection>
-      </Container>
-      <Footer theme="LIGHT" />
+        </Grid>
+      </Grid>
+      <Footer />
     </Page>
   );
 }
-const Container = styled.div`
-  font-family: 'Roboto Condensed', sans-serif;
-  font-size: 3rem;
-  display: flex;
-  flex-direction: column;
-  margin: 0px 68px;
-  padding-top: 8rem;
-  padding-bottom: 8rem;
-  strong,
-  a {
-    font-size: 2rem;
-  }
-  a {
-    color: #3e5363;
-    text-decoration: underline;
-  }
-  h1 {
-    font-size: 3rem;
-    color: #3e5363;
-  }
-  @media (max-width: 600px) {
-    padding-top: 4rem;
-    padding-bottom: 4rem;
-    margin: 0px 20px;
-  }
-`;
-export const MainSection = styled.section`
-  display: flex;
-  & > * {
-    font-size: 2rem;
-    margin: 1rem 0;
-  }
-  flex-wrap: wrap;
-  margin-top: 2rem;
-  color: #3e5363;
-`;
-export const CollectList = styled.ul`
-  font-size: 1rem;
-  margin-left: 5rem;
-  li {
-    font-size: 2.5rem;
-  }
-  strong,
-  a {
-    font-size: 1.6rem;
-  }
-`;
 const Page = styled.div`
-  background-color: #fff;
+  background-color: #3e5363;
 `;
