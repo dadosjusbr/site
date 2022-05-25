@@ -6,7 +6,6 @@ import styled from 'styled-components';
 import {
   Container,
   Grid,
-  Button,
   Box,
   Paper,
   Typography,
@@ -16,7 +15,6 @@ import {
   Tab,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -28,6 +26,12 @@ import IndexChartLegend from '../components/IndexChartLegend';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
