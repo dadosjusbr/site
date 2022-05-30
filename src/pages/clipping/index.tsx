@@ -41,8 +41,8 @@ export default function Clipping({ news }) {
       <Container fixed>
         <Grid container justifyContent="center" my={4} spacing={2}>
           {news.map((n, i) => (
-            <Grid id={i} item sx={{ width: 692 }}>
-              <Card>
+            <Grid id={`clip-${i}`} item sx={{ width: 692 }}>
+              <Card id={`clipcard-${i}`}>
                 <CardContent>
                   <Typography color="text.secondary">{n.date}</Typography>
                   <Typography variant="h5">{n.title}</Typography>

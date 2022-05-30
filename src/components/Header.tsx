@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Container, Box, Grid, Link, Stack, Button } from '@mui/material';
+import { Container, Box, Grid, Link, Button } from '@mui/material';
 
 function Header() {
   const [pages] = useState([
@@ -12,6 +12,11 @@ function Header() {
       key: 'equipe',
       title: 'Equipe',
       anchor: '/equipe',
+    },
+    {
+      key: 'clipping',
+      title: 'Clipping',
+      anchor: '/clipping',
     },
     {
       key: 'sobre',
