@@ -172,11 +172,11 @@ export default function PrivacityPolicy() {
             e-mail:{' '}
             <Link
               color="inherit"
-              href="mailto:dadosjusbr@gmail.com"
+              href="mailto:contato@dadosjusbr.org"
               target="_blank"
               rel="noreferrer"
             >
-              dadosjusbr@gmail.com
+              contato@dadosjusbr.org
             </Link>
           </p>
         </Grid>
