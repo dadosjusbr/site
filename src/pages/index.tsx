@@ -243,7 +243,8 @@ export default function Index({
         <Container>
           <Box my={12}>
             <Typography variant="h2" textAlign="center">
-              Total das remunerações dos membros de todos os órgãos
+              Total das remunerações dos membros dos Tribunais de Justiça e
+              Ministérios Públicos
             </Typography>
             <Box textAlign="center">
               <IconButton
