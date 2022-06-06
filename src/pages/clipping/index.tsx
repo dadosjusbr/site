@@ -1,18 +1,10 @@
 import Head from 'next/head';
 import styled from 'styled-components';
-import {
-  Container,
-  Grid,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Typography,
-} from '@mui/material';
-import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { Container, Grid } from '@mui/material';
 
 import Footer from '../../components/Footer';
 import Nav from '../../components/Header';
+import NewsClipping from '../../components/NewsClipping';
 
 export async function getStaticProps() {
   const result = await fetch(`${process.env.STATIC_API_BASE_URL}/news`);
@@ -40,29 +32,7 @@ export default function Clipping({ news }) {
       <Nav />
       <Container fixed>
         <Grid container justifyContent="center" my={4} spacing={2}>
-          {news.map((n, i) => (
-            <Grid id={`clip-${i}`} item sx={{ width: 692 }}>
-              <Card id={`clipcard-${i}`}>
-                <CardContent>
-                  <Typography color="text.secondary">{n.date}</Typography>
-                  <Typography variant="h5">{n.title}</Typography>
-                  <Typography color="text.secondary">{n.site}</Typography>
-                  <Box textAlign="right">
-                    <Button
-                      size="small"
-                      variant="outlined"
-                      color="info"
-                      endIcon={<OpenInNewIcon />}
-                      href={n.url}
-                      target="_blank"
-                    >
-                      Leia
-                    </Button>
-                  </Box>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
+          <NewsClipping news={news} />
         </Grid>
       </Container>
       <Footer />
