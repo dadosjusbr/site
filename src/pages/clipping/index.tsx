@@ -6,13 +6,12 @@ import Footer from '../../components/Footer';
 import Nav from '../../components/Header';
 import NewsClipping from '../../components/NewsClipping';
 
-export async function getStaticProps() {
-  const result = await fetch(`${process.env.STATIC_API_BASE_URL}/news`);
-  const news = await result.json();
+const newsJSON = require('../../../public/news.json');
 
+export async function getStaticProps() {
   return {
     props: {
-      news,
+      news: newsJSON,
     },
   };
 }
