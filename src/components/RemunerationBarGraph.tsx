@@ -18,6 +18,7 @@ import CropSquareIcon from '@mui/icons-material/CropSquare';
 
 import MONTHS from '../@types/MONTHS';
 import CrawlingDateTable from './CrawlingDateTable';
+import NotCollecting from './NotCollecting';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -33,6 +34,7 @@ const SemDadosButton = styled(IconButton)({
 
 export interface RemunerationBarGraphProps {
   year: number;
+  agency: any;
   data: any[];
   dataLoading: boolean;
   billion?: boolean;
@@ -41,6 +43,7 @@ export interface RemunerationBarGraphProps {
 
 const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   year,
+  agency,
   data,
   dataLoading = true,
   billion = false,
@@ -70,130 +73,134 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const [hidingErrors, setHidingErrors] = useState(false);
   return (
     <>
-      <Paper elevation={0}>
-        <Box pt={4} py={4} textAlign="center">
-          <Typography variant="h5" textAlign="center">
-            Total de remunerações de membros em {year}: R${' '}
-            {(() => {
-              // this function is used to sum the data from all money arrays and generate the last remuneration value
-              let total = 0;
-              const monthlyTotals = data.map(
-                d => d.BaseRemuneration + d.OtherRemunerations,
-              );
-              monthlyTotals.forEach(w => {
-                total += w;
-              });
-              // here we return the final value to millions showing 2 decimal places
-              return !billion
-                ? `${(total / 1000000).toFixed(1)}M`
-                : `${(total / 1000000000).toFixed(1)}B`;
-            })()}
-            <Tooltip
-              placement="top"
-              title={
-                <Typography fontSize="0.8rem">
-                  <p>
-                    <b>Salário:</b> valor recebido de acordo com a prestação de
-                    serviços, em decorrência do contrato de trabalho.
-                  </p>
-                  <p>
-                    <b>Benefícios:</b> Qualquer remuneração recebida por um
-                    funcionário que não seja proveniente de salário. Exemplos de
-                    benefícios são: diárias, gratificações, remuneração por
-                    função de confiança, benefícios pessoais ou eventuais,
-                    auxílios alimentação, saúde, escolar...
-                  </p>
-                  <p>
-                    <b>Sem dados:</b> Quando um órgão não disponibiliza os dados
-                    de um determinado mês
-                  </p>
-                  {/* <p>
+      {agency && agency.collecting ? (
+        <NotCollecting agency={agency} />
+      ) : (
+        <>
+          <Paper elevation={0}>
+            <Box pt={4} py={4} textAlign="center">
+              <Typography variant="h5" textAlign="center">
+                Total de remunerações de membros em {year}: R${' '}
+                {(() => {
+                  // this function is used to sum the data from all money arrays and generate the last remuneration value
+                  let total = 0;
+                  const monthlyTotals = data.map(
+                    d => d.BaseRemuneration + d.OtherRemunerations,
+                  );
+                  monthlyTotals.forEach(w => {
+                    total += w;
+                  });
+                  // here we return the final value to millions showing 2 decimal places
+                  return !billion
+                    ? `${(total / 1000000).toFixed(1)}M`
+                    : `${(total / 1000000000).toFixed(1)}B`;
+                })()}
+                <Tooltip
+                  placement="top"
+                  title={
+                    <Typography fontSize="0.8rem">
+                      <p>
+                        <b>Salário:</b> valor recebido de acordo com a prestação
+                        de serviços, em decorrência do contrato de trabalho.
+                      </p>
+                      <p>
+                        <b>Benefícios:</b> Qualquer remuneração recebida por um
+                        funcionário que não seja proveniente de salário.
+                        Exemplos de benefícios são: diárias, gratificações,
+                        remuneração por função de confiança, benefícios pessoais
+                        ou eventuais, auxílios alimentação, saúde, escolar...
+                      </p>
+                      <p>
+                        <b>Sem dados:</b> Quando um órgão não disponibiliza os
+                        dados de um determinado mês
+                      </p>
+                      {/* <p>
                   <b>Problemas na coleta:</b> Quando existe um problema na coleta
                   de um determinado mês
                 </p> */}
+                    </Typography>
+                  }
+                >
+                  <IconButton>
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+            </Box>
+            <Grid pb={4} container spacing={2} justifyContent="center">
+              <Grid item textAlign="center">
+                <SalarioButton
+                  onClick={e => {
+                    if (hidingWage) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingWage(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingWage(true);
+                    }
+                  }}
+                >
+                  <AccountBalanceWalletIcon />
+                </SalarioButton>
+                <Typography pt={1}>
+                  Salário: R${' '}
+                  {(() => {
+                    let total = 0;
+                    const wages = data.map(d => d.BaseRemuneration);
+                    wages.forEach(w => {
+                      total += w;
+                    });
+                    return !billion
+                      ? `${(total / 1000000).toFixed(1)}M`
+                      : `${(total / 1000000000).toFixed(1)}B`;
+                  })()}
                 </Typography>
-              }
-            >
-              <IconButton>
-                <InfoIcon />
-              </IconButton>
-            </Tooltip>
-          </Typography>
-        </Box>
-        <Grid pb={4} container spacing={2} justifyContent="center">
-          <Grid item textAlign="center">
-            <SalarioButton
-              onClick={e => {
-                if (hidingWage) {
-                  e.currentTarget.classList.remove('active');
-                  setHidingWage(false);
-                } else {
-                  e.currentTarget.classList.add('active');
-                  setHidingWage(true);
-                }
-              }}
-            >
-              <AccountBalanceWalletIcon />
-            </SalarioButton>
-            <Typography pt={1}>
-              Salário: R${' '}
-              {(() => {
-                let total = 0;
-                const wages = data.map(d => d.BaseRemuneration);
-                wages.forEach(w => {
-                  total += w;
-                });
-                return !billion
-                  ? `${(total / 1000000).toFixed(1)}M`
-                  : `${(total / 1000000000).toFixed(1)}B`;
-              })()}
-            </Typography>
-          </Grid>
-          <Grid item textAlign="center">
-            <BeneficiosButton
-              onClick={e => {
-                if (hidingBenefits) {
-                  e.currentTarget.classList.remove('active');
-                  setHidingBenefits(false);
-                } else {
-                  e.currentTarget.classList.add('active');
-                  setHidingBenefits(true);
-                }
-              }}
-            >
-              <CardGiftcardIcon />
-            </BeneficiosButton>
-            <Typography pt={1}>
-              Benefícios: R${' '}
-              {(() => {
-                let total = 0;
-                const monthlyTotals = data.map(d => d.OtherRemunerations);
-                monthlyTotals.forEach(w => {
-                  total += w;
-                });
-                return !billion
-                  ? `${(total / 1000000).toFixed(1)}M`
-                  : `${(total / 1000000000).toFixed(1)}B`;
-              })()}
-            </Typography>
-          </Grid>
-          <Grid item textAlign="center">
-            <SemDadosButton
-              onClick={e => {
-                if (hidingNoData) {
-                  e.currentTarget.classList.remove('active');
-                  setHidingNoData(false);
-                } else {
-                  e.currentTarget.classList.add('active');
-                  setHidingNoData(true);
-                }
-              }}
-            >
-              <CropSquareIcon />
-            </SemDadosButton>
-            <Typography pt={1}>Sem dados</Typography>
-          </Grid>
-          {/* <Grid item textAlign="center">
+              </Grid>
+              <Grid item textAlign="center">
+                <BeneficiosButton
+                  onClick={e => {
+                    if (hidingBenefits) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingBenefits(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingBenefits(true);
+                    }
+                  }}
+                >
+                  <CardGiftcardIcon />
+                </BeneficiosButton>
+                <Typography pt={1}>
+                  Benefícios: R${' '}
+                  {(() => {
+                    let total = 0;
+                    const monthlyTotals = data.map(d => d.OtherRemunerations);
+                    monthlyTotals.forEach(w => {
+                      total += w;
+                    });
+                    return !billion
+                      ? `${(total / 1000000).toFixed(1)}M`
+                      : `${(total / 1000000000).toFixed(1)}B`;
+                  })()}
+                </Typography>
+              </Grid>
+              <Grid item textAlign="center">
+                <SemDadosButton
+                  onClick={e => {
+                    if (hidingNoData) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingNoData(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingNoData(true);
+                    }
+                  }}
+                >
+                  <CropSquareIcon />
+                </SemDadosButton>
+                <Typography pt={1}>Sem dados</Typography>
+              </Grid>
+              {/* <Grid item textAlign="center">
           <IconButton
             onClick={e => {
               if (hidingErrors) {
@@ -209,250 +216,257 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
           </IconButton>
           <Typography>Problemas na coleta</Typography>
         </Grid> */}
-        </Grid>
-      </Paper>
-      <Paper elevation={0}>
-        <Box my={4} pt={2}>
-          <Typography variant="h6" textAlign="center">
-            Total de remunerações de membros por mês em {year}
-          </Typography>
-          {dataLoading ? (
-            <Box
-              m={4}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <div>
-                <CircularProgress color="info" />
-              </div>
-              <p>Aguarde...</p>
-            </Box>
-          ) : (
-            <>
-              {data.length > 0 ? (
-                <Box ml={4} mr={2}>
-                  <Chart
-                    options={{
-                      colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
-                      chart: {
-                        events: {
-                          click(__, _, config) {
-                            if (config.dataPointIndex >= 0) {
-                              onMonthChange(config.dataPointIndex + 1);
-                            }
-                          },
-                        },
-                        stacked: true,
-                        toolbar: {
-                          show: false,
-                        },
-                        zoom: {
-                          enabled: true,
-                        },
-                      },
-                      responsive: [
-                        {
-                          breakpoint: 500,
-                          options: {
-                            legend: {
-                              position: 'bottom',
-                              offsetX: -10,
-                              offsetY: 0,
-                            },
-                            chart: {
-                              width: '100%',
-                            },
-                            yaxis: {
-                              decimalsInFloat: 2,
-                              labels: {
-                                show: true,
-                                minWidth: 0,
-                                maxWidth: 50,
-                                style: {
-                                  colors: [],
-                                  fontSize: '10rem',
-                                  fontFamily: 'Roboto Condensed, sans-serif',
-                                  fontWeight: 600,
-                                  cssClass: 'apexcharts-yaxis-label',
-                                },
-                                formatter(value) {
-                                  return !billion
-                                    ? `R$ ${(value / 1000000).toFixed(2)}M`
-                                    : `R$ ${(value / 1000000000).toFixed(2)}B`;
-                                },
-                              },
-                            },
-                          },
-                        },
-                      ],
-                      plotOptions: {
-                        bar: {
-                          horizontal: false,
-                        },
-                      },
-                      yaxis: {
-                        decimalsInFloat: 2,
-                        title: {
-                          text: 'Total de Remunerações',
-                          offsetY: 10,
-                          style: {
-                            fontSize: '14px',
-                            fontWeight: 'bold',
-                            fontFamily: undefined,
-                            color: '#091216',
-                          },
-                        },
-                        labels: {
-                          show: true,
-                          minWidth: 0,
-                          maxWidth: 160,
-                          style: {
-                            colors: [],
-                            fontSize: '16px',
-                            fontFamily: 'Roboto Condensed, sans-serif',
-                            fontWeight: 600,
-                            cssClass: 'apexcharts-yaxis-label',
-                          },
-                          formatter(value) {
-                            if (value === MaxMonthPlaceholder)
-                              return 'Não existem dados para esse mês';
-                            return !billion
-                              ? `R$ ${(value / 1000000).toFixed(2)}M`
-                              : `R$ ${(value / 1000000000).toFixed(2)}B`;
-                          },
-                        },
-                      },
-                      xaxis: {
-                        categories: (() => {
-                          const list = [];
-                          for (const i in MONTHS) {
-                            if (Number.isNaN(Number(i))) {
-                              list.push(i);
-                            }
-                          }
-                          return list;
-                        })(),
-                        title: {
-                          text: 'Meses',
-                          offsetX: 6,
-                          style: {
-                            fontSize: '15px',
-                            fontWeight: 'bold',
-                            fontFamily: undefined,
-                            color: '#263238',
-                          },
-                        },
-                      },
-                      legend: {
-                        show: false,
-                        position: 'right',
-                        offsetY: 120,
-                      },
-                      dataLabels: {
-                        enabled: false,
-                      },
-                    }}
-                    series={[
-                      {
-                        name: 'Benefícios',
-                        data: (() => {
-                          if (!hidingBenefits) {
-                            return createArrayFilledWithValue(12, 0).map(
-                              (v, i) => {
-                                if (fixYearDataArray(data)[i]) {
-                                  return fixYearDataArray(data)[i]
-                                    .OtherRemunerations;
-                                }
-                                return v;
-                              },
-                            );
-                          }
-                          return createArrayFilledWithValue(12, 0);
-                        })(),
-                      },
-                      {
-                        name: 'Salário',
-                        data: (() => {
-                          if (!hidingWage) {
-                            return createArrayFilledWithValue(
-                              12,
-                              0,
-                            ).map((v, i) =>
-                              fixYearDataArray(data)[i]
-                                ? fixYearDataArray(data)[i].BaseRemuneration
-                                : v,
-                            );
-                          }
-                          return createArrayFilledWithValue(12, 0);
-                        })(),
-                      },
-                      {
-                        name: 'Sem Dados',
-                        data: (() => {
-                          if (!hidingNoData) {
-                            return createArrayFilledWithValue(12, 0).map(
-                              (v, i) => {
-                                const dateFixedArray = fixYearDataArray(data);
-                                if (dateFixedArray[i]) {
-                                  return v;
-                                }
-                                // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
-                                const date = new Date();
-                                if (year === date.getFullYear()) {
-                                  if (i < date.getMonth()) {
-                                    return MaxMonthPlaceholder;
-                                  }
-                                } else {
-                                  return MaxMonthPlaceholder;
-                                }
-                                return 0;
-                              },
-                            );
-                          }
-                          return createArrayFilledWithValue(12, 0);
-                        })(),
-                      },
-                      {
-                        name: 'Problema na coleta',
-                        data: (() => {
-                          if (!hidingErrors) {
-                            return createArrayFilledWithValue(12, 0).map(
-                              (v, i) => {
-                                // fills the chart data if theres an error in given month
-                                if (
-                                  fixYearDataArray(data)[i] &&
-                                  fixYearDataArray(data)[i].Error
-                                ) {
-                                  return MaxMonthPlaceholder;
-                                }
-                                return 0;
-                              },
-                            );
-                          }
-                          return createArrayFilledWithValue(12, 0);
-                        })(),
-                      },
-                    ]}
-                    width="100%"
-                    height="500"
-                    type="bar"
-                  />
+            </Grid>
+          </Paper>
+          <Paper elevation={0}>
+            <Box my={4} pt={2}>
+              <Typography variant="h6" textAlign="center">
+                Total de remunerações de membros por mês em {year}
+              </Typography>
+              {dataLoading ? (
+                <Box
+                  m={4}
+                  sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div>
+                    <CircularProgress color="info" />
+                  </div>
+                  <p>Aguarde...</p>
                 </Box>
               ) : (
-                <div>Não há dados para esse ano</div>
+                <>
+                  {data.length > 0 ? (
+                    <Box ml={4} mr={2}>
+                      <Chart
+                        options={{
+                          colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
+                          chart: {
+                            events: {
+                              click(__, _, config) {
+                                if (config.dataPointIndex >= 0) {
+                                  onMonthChange(config.dataPointIndex + 1);
+                                }
+                              },
+                            },
+                            stacked: true,
+                            toolbar: {
+                              show: false,
+                            },
+                            zoom: {
+                              enabled: true,
+                            },
+                          },
+                          responsive: [
+                            {
+                              breakpoint: 500,
+                              options: {
+                                legend: {
+                                  position: 'bottom',
+                                  offsetX: -10,
+                                  offsetY: 0,
+                                },
+                                chart: {
+                                  width: '100%',
+                                },
+                                yaxis: {
+                                  decimalsInFloat: 2,
+                                  labels: {
+                                    show: true,
+                                    minWidth: 0,
+                                    maxWidth: 50,
+                                    style: {
+                                      colors: [],
+                                      fontSize: '10rem',
+                                      fontFamily:
+                                        'Roboto Condensed, sans-serif',
+                                      fontWeight: 600,
+                                      cssClass: 'apexcharts-yaxis-label',
+                                    },
+                                    formatter(value) {
+                                      return !billion
+                                        ? `R$ ${(value / 1000000).toFixed(2)}M`
+                                        : `R$ ${(value / 1000000000).toFixed(
+                                            2,
+                                          )}B`;
+                                    },
+                                  },
+                                },
+                              },
+                            },
+                          ],
+                          plotOptions: {
+                            bar: {
+                              horizontal: false,
+                            },
+                          },
+                          yaxis: {
+                            decimalsInFloat: 2,
+                            title: {
+                              text: 'Total de Remunerações',
+                              offsetY: 10,
+                              style: {
+                                fontSize: '14px',
+                                fontWeight: 'bold',
+                                fontFamily: undefined,
+                                color: '#091216',
+                              },
+                            },
+                            labels: {
+                              show: true,
+                              minWidth: 0,
+                              maxWidth: 160,
+                              style: {
+                                colors: [],
+                                fontSize: '16px',
+                                fontFamily: 'Roboto Condensed, sans-serif',
+                                fontWeight: 600,
+                                cssClass: 'apexcharts-yaxis-label',
+                              },
+                              formatter(value) {
+                                if (value === MaxMonthPlaceholder)
+                                  return 'Não existem dados para esse mês';
+                                return !billion
+                                  ? `R$ ${(value / 1000000).toFixed(2)}M`
+                                  : `R$ ${(value / 1000000000).toFixed(2)}B`;
+                              },
+                            },
+                          },
+                          xaxis: {
+                            categories: (() => {
+                              const list = [];
+                              for (const i in MONTHS) {
+                                if (Number.isNaN(Number(i))) {
+                                  list.push(i);
+                                }
+                              }
+                              return list;
+                            })(),
+                            title: {
+                              text: 'Meses',
+                              offsetX: 6,
+                              style: {
+                                fontSize: '15px',
+                                fontWeight: 'bold',
+                                fontFamily: undefined,
+                                color: '#263238',
+                              },
+                            },
+                          },
+                          legend: {
+                            show: false,
+                            position: 'right',
+                            offsetY: 120,
+                          },
+                          dataLabels: {
+                            enabled: false,
+                          },
+                        }}
+                        series={[
+                          {
+                            name: 'Benefícios',
+                            data: (() => {
+                              if (!hidingBenefits) {
+                                return createArrayFilledWithValue(12, 0).map(
+                                  (v, i) => {
+                                    if (fixYearDataArray(data)[i]) {
+                                      return fixYearDataArray(data)[i]
+                                        .OtherRemunerations;
+                                    }
+                                    return v;
+                                  },
+                                );
+                              }
+                              return createArrayFilledWithValue(12, 0);
+                            })(),
+                          },
+                          {
+                            name: 'Salário',
+                            data: (() => {
+                              if (!hidingWage) {
+                                return createArrayFilledWithValue(
+                                  12,
+                                  0,
+                                ).map((v, i) =>
+                                  fixYearDataArray(data)[i]
+                                    ? fixYearDataArray(data)[i].BaseRemuneration
+                                    : v,
+                                );
+                              }
+                              return createArrayFilledWithValue(12, 0);
+                            })(),
+                          },
+                          {
+                            name: 'Sem Dados',
+                            data: (() => {
+                              if (!hidingNoData) {
+                                return createArrayFilledWithValue(12, 0).map(
+                                  (v, i) => {
+                                    const dateFixedArray = fixYearDataArray(
+                                      data,
+                                    );
+                                    if (dateFixedArray[i]) {
+                                      return v;
+                                    }
+                                    // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
+                                    const date = new Date();
+                                    if (year === date.getFullYear()) {
+                                      if (i < date.getMonth()) {
+                                        return MaxMonthPlaceholder;
+                                      }
+                                    } else {
+                                      return MaxMonthPlaceholder;
+                                    }
+                                    return 0;
+                                  },
+                                );
+                              }
+                              return createArrayFilledWithValue(12, 0);
+                            })(),
+                          },
+                          {
+                            name: 'Problema na coleta',
+                            data: (() => {
+                              if (!hidingErrors) {
+                                return createArrayFilledWithValue(12, 0).map(
+                                  (v, i) => {
+                                    // fills the chart data if theres an error in given month
+                                    if (
+                                      fixYearDataArray(data)[i] &&
+                                      fixYearDataArray(data)[i].Error
+                                    ) {
+                                      return MaxMonthPlaceholder;
+                                    }
+                                    return 0;
+                                  },
+                                );
+                              }
+                              return createArrayFilledWithValue(12, 0);
+                            })(),
+                          },
+                        ]}
+                        width="100%"
+                        height="500"
+                        type="bar"
+                      />
+                    </Box>
+                  ) : (
+                    <div>Não há dados para esse ano</div>
+                  )}
+                </>
               )}
-            </>
-          )}
-        </Box>
-        <Grid container display="flex" justifyContent="center">
-          <Grid item pb={4} sx={{ width: '50%' }}>
-            <CrawlingDateTable data={data} dataLoading={dataLoading} />
-          </Grid>
-        </Grid>
-      </Paper>
+            </Box>
+            <Grid container display="flex" justifyContent="center">
+              <Grid item pb={4} sx={{ width: '50%' }}>
+                <CrawlingDateTable data={data} dataLoading={dataLoading} />
+              </Grid>
+            </Grid>
+          </Paper>
+        </>
+      )}
     </>
   );
 };

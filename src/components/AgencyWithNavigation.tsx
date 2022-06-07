@@ -23,6 +23,7 @@ import light from '../styles/theme-light';
 export interface AgencyPageWithNavigationProps {
   id: string;
   year: number;
+  agency: any;
   title: string;
   nextDateIsNavigable: boolean;
   previousDateIsNavigable: boolean;
@@ -37,6 +38,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   id,
   title,
   year,
+  agency,
   setYear,
   data,
   dataLoading,
@@ -129,6 +131,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             }}
             data={data}
             year={year}
+            agency={agency}
             dataLoading={dataLoading}
           />
         </Box>
