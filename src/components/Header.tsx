@@ -14,9 +14,9 @@ function Header() {
       anchor: '/equipe',
     },
     {
-      key: 'clipping',
-      title: 'Clipping',
-      anchor: '/clipping',
+      key: 'namidia',
+      title: 'Na mídia',
+      anchor: '/namidia',
     },
     {
       key: 'sobre',
