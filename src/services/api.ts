@@ -8,9 +8,6 @@ const api = {
   ui: axios.create({
     baseURL: process.env.API_BASE_URL,
   }),
-  static: axios.create({
-    baseURL: process.env.STATIC_BASE_URL,
-  }),
 };
 
 export default api;

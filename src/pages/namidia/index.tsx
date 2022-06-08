@@ -6,7 +6,7 @@ import Footer from '../../components/Footer';
 import Nav from '../../components/Header';
 import NewsClipping from '../../components/NewsClipping';
 
-const newsJSON = require('../../../public/news.json');
+import newsJSON from '../../../public/news.json';
 
 export async function getStaticProps() {
   return {
