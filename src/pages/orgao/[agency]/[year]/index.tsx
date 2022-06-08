@@ -10,6 +10,7 @@ import AgencyWithNavigation from '../../../../components/AgencyWithNavigation';
 export default function AgencyPage({
   id,
   year,
+  agency,
   data,
   nextDateIsNavigable,
   previousDateIsNavigable,
@@ -41,6 +42,7 @@ export default function AgencyPage({
           data={data}
           id={id}
           year={year}
+          agency={agency}
           dataLoading={false}
           nextDateIsNavigable={nextDateIsNavigable}
           previousDateIsNavigable={previousDateIsNavigable}
@@ -66,6 +68,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         id,
         data: agency.MonthTotals ? agency.MonthTotals : [],
         year: parseInt(year as string, 10),
+        agency: agency.Agency,
         nextDateIsNavigable:
           parseInt(year as string, 10) !== new Date().getFullYear(),
         previousDateIsNavigable: parseInt(year as string, 10) !== 2018,
