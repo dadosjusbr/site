@@ -270,6 +270,7 @@ export default function Index({
             <Box my={4}>
               <RemunerationBarGraph
                 year={year}
+                agency={null}
                 data={completeChartData}
                 dataLoading={loading}
                 billion
