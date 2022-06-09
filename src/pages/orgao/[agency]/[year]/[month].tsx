@@ -228,14 +228,7 @@ export default function OmaPage({
                 />
               );
             }
-            return (
-              <ErrorTable
-                agency={agency}
-                month={month}
-                year={year}
-                error={chartData.ProcInfo}
-              />
-            );
+            return <ErrorTable agency={agency} month={month} year={year} />;
           })()}
       </Container>
       <Footer />
@@ -261,9 +254,13 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
+  let mi = [];
   const { data: d3 } = await api.default.get(
     `/dados/${agency}/${year}/${month}`,
   );
+  if (d3) {
+    mi = d3;
+  }
 
   try {
     const { data: d2 } = await api.ui.get(
@@ -274,7 +271,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         agency,
         year,
         month,
-        mi: d3[0],
+        mi,
         previousButtonActive: d2.HasPrevious,
         nextButtonActive: d2.HasNext,
         oma: {
@@ -296,7 +293,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         agency,
         year,
         month,
-        mi: d3[0],
+        mi,
         previousButtonActive: isAfter(date, new Date(2018, 1, 1)),
         nextButtonActive: isBefore(date, nextMonth),
       },
