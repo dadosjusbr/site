@@ -4,19 +4,20 @@ import {
   TwitterShareButton,
   WhatsappShareButton,
   FacebookShareButton,
-  EmailIcon,
-  TwitterIcon,
-  WhatsappIcon,
-  FacebookIcon,
 } from 'react-share';
-import Modal from 'react-modal';
-import styled from 'styled-components';
-// import { Container } from './styles';
+
+import { Box, IconButton, Typography, Modal } from '@mui/material';
+import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
+import TwitterIcon from '@mui/icons-material/Twitter';
+import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
+import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
+
 interface ShareModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
   url?: string;
 }
+
 const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onRequestClose,
@@ -24,76 +25,47 @@ const ShareModal: React.FC<ShareModalProps> = ({
 }) => {
   const a = 0;
   return (
-    <Modal
-      isOpen={isOpen}
-      onAfterOpen={() => {
-        console.log('abriu');
-      }}
-      onRequestClose={onRequestClose}
-      style={{
-        content: {
+    <Modal open={isOpen} onClose={onRequestClose} aria-labelledby="modal-title">
+      <Box
+        textAlign="center"
+        sx={{
+          position: 'absolute',
           top: '50%',
           left: '50%',
-          right: 'auto',
-          bottom: 'auto',
-          width: '40rem',
-          height: '20rem',
-          marginRight: '-50%',
-          borderRadius: '0',
-          backgroundColor: '#CED9E1',
           transform: 'translate(-50%, -50%)',
-        },
-      }}
-      contentLabel="Example Modal"
-    >
-      <ModalDiv>
-        <span>
-          <h2>Compartilhar</h2>
-          <img src="/img/icon_share.svg" alt="share" />
-        </span>
-        <div>
-          <EmailShareButton url={url || window.location.href}>
-            <EmailIcon />
-          </EmailShareButton>
-          <TwitterShareButton url={url || window.location.href}>
+          width: 320,
+          bgcolor: 'background.paper',
+          border: '2px solid #fff',
+          boxShadow: 24,
+          p: 4,
+        }}
+      >
+        <Typography id="modal-title" variant="h6" component="h2">
+          Compartilhar
+        </Typography>
+        <WhatsappShareButton url={url || window.location.href}>
+          <IconButton aria-label="whatsapp" size="large">
+            <WhatsappOutlinedIcon />
+          </IconButton>
+        </WhatsappShareButton>
+        <TwitterShareButton url={url || window.location.href}>
+          <IconButton aria-label="twitter" size="large">
             <TwitterIcon />
-          </TwitterShareButton>
-          <WhatsappShareButton url={url || window.location.href}>
-            <WhatsappIcon />
-          </WhatsappShareButton>
-          <FacebookShareButton url={url || window.location.href}>
-            <FacebookIcon />
-          </FacebookShareButton>
-        </div>
-      </ModalDiv>
+          </IconButton>
+        </TwitterShareButton>
+        <FacebookShareButton url={url || window.location.href}>
+          <IconButton aria-label="facebook" size="large">
+            <FacebookOutlinedIcon />
+          </IconButton>
+        </FacebookShareButton>
+        <EmailShareButton url={url || window.location.href}>
+          <IconButton aria-label="email" size="large">
+            <EmailOutlinedIcon />
+          </IconButton>
+        </EmailShareButton>
+      </Box>
     </Modal>
   );
 };
 
 export default ShareModal;
-const ModalDiv = styled.div`
-  width: 100%;
-  color: #3e5363;
-  span {
-    font-size: 3rem;
-    display: flex;
-    position: relative;
-    justify-content: center;
-    img {
-      position: absolute;
-      left: 120%;
-      bottom: 0%;
-    }
-  }
-  div {
-    width: 80%;
-    justify-content: space-between;
-    margin-top: 3rem;
-    display: flex;
-  }
-  align-items: center;
-  justify-content: center;
-  font-family: 'Roboto Condensed', sans-serif;
-  display: flex;
-  flex-direction: column;
-`;
