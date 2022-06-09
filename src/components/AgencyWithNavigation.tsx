@@ -23,6 +23,7 @@ import light from '../styles/theme-light';
 export interface AgencyPageWithNavigationProps {
   id: string;
   year: number;
+  agency: any;
   title: string;
   nextDateIsNavigable: boolean;
   previousDateIsNavigable: boolean;
@@ -37,6 +38,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   id,
   title,
   year,
+  agency,
   setYear,
   data,
   dataLoading,
@@ -57,65 +59,73 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         <Typography variant="h2" textAlign="center">
           {title} ({id.toLocaleUpperCase('pt')})
         </Typography>
-        <Grid container justifyContent="center" alignItems="center">
-          <Grid item>
-            <IconButton
-              aria-label="voltar"
-              color="info"
-              onClick={() => setYear(year - 1)}
-              disabled={!previousDateIsNavigable}
-            >
-              <ArrowBackIosNewIcon />
-            </IconButton>
-          </Grid>
-          <Grid item>
-            <Typography component="span" variant="h4">
-              {year}
-            </Typography>
-          </Grid>
-          <Grid item>
-            <IconButton
-              aria-label="voltar"
-              color="info"
-              onClick={() => setYear(year + 1)}
-              disabled={!nextDateIsNavigable}
-            >
-              <ArrowForwardIosIcon />
-            </IconButton>
-          </Grid>
-        </Grid>
-        <Stack spacing={2} direction="row" justifyContent="flex-end" mt={4}>
-          <Button
-            variant="outlined"
-            color="info"
-            endIcon={<IosShareIcon />}
-            onClick={() => setModalIsOpen(true)}
-          >
-            COMPARTILHAR
-          </Button>
-          {summaryPackage && (
-            <Button
-              variant="outlined"
-              color="info"
-              endIcon={<CloudDownloadIcon />}
-              onClick={() => {
-                ReactGA.pageview(url.downloadURL(summaryPackage.Package.url));
-              }}
-              href={url.downloadURL(summaryPackage.Package.url)}
-              id="download-button"
-            >
-              BAIXAR DADOS
-            </Button>
-          )}
-          <Button
-            variant="outlined"
-            color="info"
-            endIcon={<ArrowForwardIosIcon />}
-            href={`/orgao/${id}/${year}/${selectedMonth}`}
-          >
-            EXPLORAR POR MÊS
-          </Button>
-        </Stack>
+        {agency && agency.collecting ? (
+          <></>
+        ) : (
+          <>
+            <Grid container justifyContent="center" alignItems="center">
+              <Grid item>
+                <IconButton
+                  aria-label="voltar"
+                  color="info"
+                  onClick={() => setYear(year - 1)}
+                  disabled={!previousDateIsNavigable}
+                >
+                  <ArrowBackIosNewIcon />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <Typography component="span" variant="h4">
+                  {year}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <IconButton
+                  aria-label="voltar"
+                  color="info"
+                  onClick={() => setYear(year + 1)}
+                  disabled={!nextDateIsNavigable}
+                >
+                  <ArrowForwardIosIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+            <Stack spacing={2} direction="row" justifyContent="flex-end" mt={4}>
+              <Button
+                variant="outlined"
+                color="info"
+                endIcon={<IosShareIcon />}
+                onClick={() => setModalIsOpen(true)}
+              >
+                COMPARTILHAR
+              </Button>
+              {summaryPackage && (
+                <Button
+                  variant="outlined"
+                  color="info"
+                  endIcon={<CloudDownloadIcon />}
+                  onClick={() => {
+                    ReactGA.pageview(
+                      url.downloadURL(summaryPackage.Package.url),
+                    );
+                  }}
+                  href={url.downloadURL(summaryPackage.Package.url)}
+                  id="download-button"
+                >
+                  BAIXAR DADOS
+                </Button>
+              )}
+              <Button
+                variant="outlined"
+                color="info"
+                endIcon={<ArrowForwardIosIcon />}
+                href={`/orgao/${id}/${year}/${selectedMonth}`}
+              >
+                EXPLORAR POR MÊS
+              </Button>
+            </Stack>
+          </>
+        )}
       </Box>
       <ThemeProvider theme={light}>
         <Box mb={12}>
@@ -129,6 +139,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             }}
             data={data}
             year={year}
+            agency={agency}
             dataLoading={dataLoading}
           />
         </Box>
