@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-shadow
 enum MONTHS {
   Janeiro = 1,
-  Feveveiro = 2,
+  Fevereiro = 2,
   Março = 3,
   Abril = 4,
   Maio = 5,

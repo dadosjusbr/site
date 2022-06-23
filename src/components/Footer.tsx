@@ -30,8 +30,7 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
         </Grid>
         <Grid item xs={12} sm={8} md={10}>
           <p>
-            Alguma dica? Tem algum feedback geral? Se você tiver uma ideia que
-            você gostaria de ver no DadosJusBr, envie-nos um e-mail{' '}
+            Para dúvidas e sugestões, envie uma mensagem para{' '}
             <Link
               color="inherit"
               underline="hover"
@@ -39,7 +38,7 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
             >
               contato@dadosjusbr.org
             </Link>{' '}
-            ou visite nosso{' '}
+            , ou visite nosso{' '}
             <Link
               color="inherit"
               underline="hover"
@@ -47,7 +46,7 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
               target="_blank"
               rel="noopener"
             >
-              github
+              Github
             </Link>
             .
           </p>

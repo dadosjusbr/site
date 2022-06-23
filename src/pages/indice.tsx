@@ -106,7 +106,9 @@ export default function Index() {
                 ou pdf).
               </li>
             </ul>
-            <Typography variant="h3">Metodologia</Typography>
+            <Typography gutterBottom variant="h2" textAlign="center">
+              Metodologia
+            </Typography>
             <Typography variant="body1">
               Inicialmente calcula-se, para cada mês do período avaliado, a
               média simples da pontuação que o órgão alcançou tanto na dimensão

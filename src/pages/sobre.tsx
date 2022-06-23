@@ -37,19 +37,18 @@ export default function Index() {
               Você já tentou acessar dados em sites de órgãos públicos?
             </Typography>
             <Typography variant="body1">
-              A Lei Federal 12.527/2011, ou mais comumente conhecida como Lei de
-              Acesso à Informação (LAI), afirma obrigatória a divulgação dos
-              dados de gastos públicos.
+              A Lei Federal 12.527/2011, mais conhecida como Lei de Acesso à
+              Informação (LAI), impõe a obrigatoriedade da divulgação dos dados
+              de gastos públicos.
             </Typography>
             <Typography variant="body1">
-              Porém, a LAI pouco diz sobre a forma como esses dados devem ser
-              disponibilizados. Isso acaba trazendo uma falta de padronização
-              com relação a forma que os dados são organizados e publicados.
+              Porém, a LAI não detalha a forma como esses dados devem ser
+              disponibilizados, o que resulta em uma falta de padronização e
+              organização das informações, prejudicando a transparência pública.
             </Typography>
             <Typography variant="body1">
-              Devido a essas características realizar um controle social e
-              financeiro sobre essa enorme quantidade de dados de gastos
-              públicos é uma tarefa difícil para uma pessoa.
+              Nessas condições, a fiscalização dos gastos públicos torna-se uma
+              tarefa complexa.
             </Typography>
           </Grid>
           <Grid item sm={6} py={12}>
@@ -60,7 +59,8 @@ export default function Index() {
       <Banner pt={12} pb={8}>
         <Container fixed>
           <Typography variant="h3" textAlign="center">
-            O DadosJusBr existe para denunciar e lebertar estes dados
+            O DadosJusBr existe para libertar estes dados e facilitar o controle
+            social da remuneração da elite do sistema de Justiça.
           </Typography>
         </Container>
       </Banner>
