@@ -9,14 +9,19 @@ function Header() {
       anchor: '/',
     },
     {
-      key: 'equipe',
-      title: 'Equipe',
-      anchor: '/equipe',
+      key: 'indice',
+      title: 'Índice',
+      anchor: '/indice',
     },
     {
       key: 'namidia',
       title: 'Na mídia',
       anchor: '/namidia',
+    },
+    {
+      key: 'equipe',
+      title: 'Equipe',
+      anchor: '/equipe',
     },
     {
       key: 'sobre',

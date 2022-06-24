@@ -34,7 +34,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         input={<OutlinedInput />}
       >
         <MenuItem disabled value="">
-          Estados
+          Estado
         </MenuItem>
         {(() => {
           const list = [];

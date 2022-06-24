@@ -121,22 +121,15 @@ export default function Index({
       <Header />
       <Container fixed>
         <Headline>
-          O DadosJusBr recupera continuamente dados dos diferentes orgãos do
-          sistema de justiça, os padroniza e publica como dado aberto.
-          Libertamos os dados.
+          O DadosJusBr liberta dados do sistema de Justiça. Recuperamos,
+          padronizamos e publicamos continuamente as informações de remuneração
+          de diferentes órgãos como dados abertos.
           <br />
-          Já são{' '}
-          <Typography variant="inherit" component="span" color="success.main">
-            {monthAmount}
-          </Typography>{' '}
-          Meses de{' '}
-          <Typography variant="inherit" component="span" color="success.main">
-            {agencyAmount}
-          </Typography>{' '}
-          Orgãos libertados!
+          Disponibilizamos dados dos Tribunais de Justiça e dos Ministérios
+          Públicos estaduais desde 2018. A atualização é realizada mensalmente.
           <Box py={4}>
             <Typography component="p">
-              Os dados vão de {formatedStartDate} a {formatedEndDate}, e incluem{' '}
+              Os dados vão de {formatedStartDate} a {formatedEndDate}. São{' '}
               <Typography
                 variant="inherit"
                 component="span"
@@ -145,15 +138,15 @@ export default function Index({
                 {recordAmount}
               </Typography>{' '}
               registros de pagamentos de salários, indenizações, gratificações e
-              diárias, somando{' '}
+              diárias, totalizando{' '}
               <Typography
                 variant="inherit"
                 component="span"
                 color="success.main"
               >
                 R$ {(finalValue / 1000000000).toFixed(2)} bilhões
-              </Typography>
-              .
+              </Typography>{' '}
+              em recursos públicos.
             </Typography>
           </Box>
           <Grid container spacing={2} display="flex" alignItems="center">
