@@ -29,7 +29,7 @@ import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import light from '../styles/theme-light';
-import api from '../services/api';
+// import api from '../services/api';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -364,27 +364,27 @@ export default function Index() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async context => {
-  try {
-    const { data } = await api.ui.get('/geral/resumo');
-    return {
-      props: {
-        agencyAmount: data.AgencyAmount,
-        monthAmount: data.MonthlyTotalsAmount,
-        startDate: data.StartDate,
-        endDate: data.EndDate,
-        recordAmount: `${data.RemunerationRecordsCount}`,
-        finalValue: `${data.GeneralRemunerationValue}`,
-      },
-    };
-  } catch (err) {
-    // context.res.writeHead(301, {
-    //   Location: `/404`,
-    // });
-    // context.res.end();
-    return { props: {} };
-  }
-};
+// export const getServerSideProps: GetServerSideProps = async context => {
+//   try {
+//     const { data } = await api.ui.get('/geral/resumo');
+//     return {
+//       props: {
+//         agencyAmount: data.AgencyAmount,
+//         monthAmount: data.MonthlyTotalsAmount,
+//         startDate: data.StartDate,
+//         endDate: data.EndDate,
+//         recordAmount: `${data.RemunerationRecordsCount}`,
+//         finalValue: `${data.GeneralRemunerationValue}`,
+//       },
+//     };
+//   } catch (err) {
+//     // context.res.writeHead(301, {
+//     //   Location: `/404`,
+//     // });
+//     // context.res.end();
+//     return { props: {} };
+//   }
+// };
 
 const Page = styled.div`
   background: #3e5363;
