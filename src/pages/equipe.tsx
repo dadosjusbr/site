@@ -35,11 +35,17 @@ export default function Team() {
       profileURL: 'https://github.com/jeffersonrpn',
       photoURL: 'https://github.com/jeffersonrpn.png',
     },
+    // {
+    //   name: 'João Menezes',
+    //   role: 'Desenvolvedor',
+    //   photoURL: 'https://avatars.githubusercontent.com/u/20714862?v=4',
+    //   profileURL: 'https://github.com/joaolgm',
+    // },
     {
-      name: 'João Menezes',
-      role: 'Desenvolvedor',
-      photoURL: 'https://avatars.githubusercontent.com/u/20714862?v=4',
-      profileURL: 'https://github.com/joaolgm',
+      name: 'Joellen Silva',
+      role: 'Desenvolvedora',
+      profileURL: 'https://github.com/Joellensilva',
+      photoURL: 'https://github.com/Joellensilva.png',
     },
     {
       name: 'Juliana Sakai',
