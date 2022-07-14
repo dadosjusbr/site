@@ -23,10 +23,13 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import light from '../styles/theme-light';
+import api from '../services/api';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -76,7 +79,10 @@ const rows = [
 ];
 
 export default function Index() {
-  const years = [2018, 2019, 2020, 2021, 2022];
+  const years = [];
+  for (let i = 2022; i >= 2018; i--) {
+    years.push(i);
+  }
   const months = [
     { name: 'Janeiro', value: 1 },
     { name: 'Fevereiro', value: 2 },
@@ -130,8 +136,8 @@ export default function Index() {
     },
   ];
   const [loading, setLoading] = React.useState(false);
-  const [type, setType] = React.useState('');
-  const [category, setCategory] = React.useState('');
+  const [type, setType] = React.useState('Tudo');
+  const [category, setCategory] = React.useState('Tudo');
 
   function searchHandleClick() {
     setLoading(true);
@@ -181,6 +187,7 @@ export default function Index() {
                 options={years}
                 disableCloseOnSelect
                 getOptionLabel={option => `${option}`}
+                defaultValue={[2022]}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
                     <Checkbox
@@ -216,6 +223,30 @@ export default function Index() {
                 renderInput={params => <TextField {...params} label="Meses" />}
               />
             </Grid>
+            <Grid item xs={12} sm={6}>
+              <FormControl fullWidth>
+                <InputLabel id="demo-simple-select-label">
+                  Tipo de órgão
+                </InputLabel>
+                <Select
+                  labelId="demo-simple-select-label"
+                  id="demo-simple-select"
+                  value={type}
+                  label="Tipo de órgão"
+                  onChange={typeHandleChange}
+                >
+                  <MenuItem value="Tudo" selected>
+                    Tudo
+                  </MenuItem>
+                  <MenuItem value="Ministérios Públicos">
+                    Ministérios Públicos
+                  </MenuItem>
+                  <MenuItem value="Tribunais de Justiça">
+                    Tribunais de Justiça
+                  </MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
             <Grid item xs={12}>
               <Autocomplete
                 multiple
@@ -239,44 +270,48 @@ export default function Index() {
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Tipo</InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={type}
-                  label="Tipo"
-                  onChange={typeHandleChange}
-                >
-                  <MenuItem value={''}>Indiferente</MenuItem>
-                  <MenuItem value={'Ministérios'}>Ministérios</MenuItem>
-                  <MenuItem value={'Tribunais'}>Tribunais</MenuItem>
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Categoria</InputLabel>
+                <InputLabel id="demo-simple-select-label">
+                  Categoria de remuneração
+                </InputLabel>
                 <Select
                   labelId="demo-simple-select-label"
                   id="demo-simple-select"
                   value={category}
-                  label="Categoria"
+                  label="Categoria de remuneração"
                   onChange={categoryHandleChange}
                 >
-                  <MenuItem value={''}>Indiferente</MenuItem>
-                  <MenuItem value={'contracheque'}>Contracheque</MenuItem>
-                  <MenuItem value={'outras'}>Outras</MenuItem>
+                  <MenuItem value="Tudo">Tudo</MenuItem>
+                  <MenuItem value="Remuneração básica">
+                    Remuneração básica
+                  </MenuItem>
+                  <MenuItem value="Benefícios e indenizações">
+                    Benefícios e indenizações
+                  </MenuItem>
                 </Select>
               </FormControl>
             </Grid>
+          </Grid>
+          <Grid container spacing={3} pt={3}>
             <Grid item xs={12} sm={3}>
               <LoadingButton
                 size="large"
                 onClick={searchHandleClick}
                 loading={loading}
                 variant="outlined"
+                startIcon={<SearchOutlinedIcon />}
               >
                 Pesquisar
+              </LoadingButton>
+            </Grid>
+            <Grid item xs={12} sm={9} display="flex" justifyContent="right">
+              <LoadingButton
+                size="large"
+                onClick={searchHandleClick}
+                loading={loading}
+                variant="outlined"
+                startIcon={<SearchOffOutlinedIcon />}
+              >
+                Limpar pesquisa
               </LoadingButton>
             </Grid>
           </Grid>
@@ -328,6 +363,28 @@ export default function Index() {
     </Page>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async context => {
+  try {
+    const { data } = await api.ui.get('/geral/resumo');
+    return {
+      props: {
+        agencyAmount: data.AgencyAmount,
+        monthAmount: data.MonthlyTotalsAmount,
+        startDate: data.StartDate,
+        endDate: data.EndDate,
+        recordAmount: `${data.RemunerationRecordsCount}`,
+        finalValue: `${data.GeneralRemunerationValue}`,
+      },
+    };
+  } catch (err) {
+    // context.res.writeHead(301, {
+    //   Location: `/404`,
+    // });
+    // context.res.end();
+    return { props: {} };
+  }
+};
 
 const Page = styled.div`
   background: #3e5363;
