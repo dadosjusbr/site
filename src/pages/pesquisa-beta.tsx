@@ -29,7 +29,7 @@ import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import light from '../styles/theme-light';
-// import api from '../services/api';
+import api from '../services/api';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -78,7 +78,7 @@ const rows = [
   { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
 ];
 
-export default function Index() {
+export default function Index({ ais }) {
   const years = [];
   for (let i = 2022; i >= 2018; i--) {
     years.push(i);
@@ -97,44 +97,7 @@ export default function Index() {
     { name: 'Novembro', value: 11 },
     { name: 'Dezembro', value: 12 },
   ];
-  const ags = [
-    {
-      aid: 'tjpb',
-      name: 'Tribunal de Justiça do Estado da Paraíba',
-      type: 'Estadual',
-      entity: 'Tribunal',
-      uf: 'PB',
-      url: 'v1/orgao/tjpb',
-      collecting: null,
-    },
-    {
-      aid: 'tjrs',
-      name: 'Tribunal de Justiça do Estado do Rio Grande do Sul',
-      type: 'Estadual',
-      entity: 'Tribunal',
-      uf: 'RS',
-      url: 'v1/orgao/tjrs',
-      collecting: null,
-    },
-    {
-      aid: 'tjes',
-      name: 'Tribunal de Justiça do Estado do Espírito Santo',
-      type: 'Estadual',
-      entity: 'Tribunal',
-      uf: 'ES',
-      url: 'v1/orgao/tjes',
-      collecting: null,
-    },
-    {
-      aid: 'tjpe',
-      name: 'Tribunal de Justiça de Pernambuco',
-      type: 'Estadual',
-      entity: 'Tribunal',
-      uf: 'PE',
-      url: 'v1/orgao/tjpe',
-      collecting: null,
-    },
-  ];
+  const [agencies, setAgencies] = React.useState(ais);
   const [loading, setLoading] = React.useState(false);
   const [type, setType] = React.useState('Tudo');
   const [category, setCategory] = React.useState('Tudo');
@@ -148,6 +111,13 @@ export default function Index() {
 
   const typeHandleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
+    if (event.target.value === 'Ministérios Públicos') {
+      setAgencies(ais.filter(a => a.entity === 'Ministério'));
+    } else if (event.target.value === 'Tribunais de Justiça') {
+      setAgencies(ais.filter(a => a.entity === 'Tribunal'));
+    } else {
+      setAgencies(ais);
+    }
   };
 
   const categoryHandleChange = (event: SelectChangeEvent) => {
@@ -178,6 +148,7 @@ export default function Index() {
               qui animi minus dolorem accusantium dolore, culpa placeat fugit?
               Optio consequatur libero.
             </Typography>
+            <pre>{ type }</pre>
           </Box>
           <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -251,7 +222,7 @@ export default function Index() {
               <Autocomplete
                 multiple
                 id="checkboxes-tags-demo"
-                options={ags}
+                options={agencies}
                 disableCloseOnSelect
                 getOptionLabel={option => option.aid}
                 renderOption={(props, option, { selected }) => (
@@ -364,27 +335,22 @@ export default function Index() {
   );
 }
 
-// export const getServerSideProps: GetServerSideProps = async context => {
-//   try {
-//     const { data } = await api.ui.get('/geral/resumo');
-//     return {
-//       props: {
-//         agencyAmount: data.AgencyAmount,
-//         monthAmount: data.MonthlyTotalsAmount,
-//         startDate: data.StartDate,
-//         endDate: data.EndDate,
-//         recordAmount: `${data.RemunerationRecordsCount}`,
-//         finalValue: `${data.GeneralRemunerationValue}`,
-//       },
-//     };
-//   } catch (err) {
-//     // context.res.writeHead(301, {
-//     //   Location: `/404`,
-//     // });
-//     // context.res.end();
-//     return { props: {} };
-//   }
-// };
+export async function getServerSideProps() {
+  try {
+    const res = await api.default.get('/orgaos');
+    return {
+      props: {
+        ais: res.data,
+      },
+    };
+  } catch (err) {
+    return {
+      props: {
+        ais: [],
+      },
+    };
+  }
+}
 
 const Page = styled.div`
   background: #3e5363;
