@@ -76,7 +76,7 @@ export default function OmaPage({
       // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
       setLoading(true);
       const { data } = await api.ui.get(
-        `/orgao/salario/${agency}/${year}/${month}`,
+        `/v1/orgao/salario/${agency}/${year}/${month}`,
       );
       // after get the data from api the state is updated with the chart data
       setChartData(data);
@@ -264,7 +264,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
 
   try {
     const { data: d2 } = await api.ui.get(
-      `/orgao/resumo/${agency}/${year}/${month}`,
+      `/v1/orgao/resumo/${agency}/${year}/${month}`,
     );
     return {
       props: {
