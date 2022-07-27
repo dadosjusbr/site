@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ReactGA from 'react-ga';
 import Head from 'next/head';
 import styled from 'styled-components';
 import {
@@ -35,47 +36,22 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', width: 90 },
+  { field: 'id', headerName: '#', width: 90 },
+  { field: 'orgao', headerName: 'Órgão', width: 90 },
+  { field: 'mes', headerName: 'Mês', width: 90 },
+  { field: 'ano', headerName: 'Ano', width: 90 },
+  { field: 'matricula', headerName: 'Matrícula', width: 90 },
+  { field: 'nome', headerName: 'Nome', width: 200 },
   {
-    field: 'firstName',
-    headerName: 'First name',
-    width: 150,
-    editable: true,
+    field: 'tipo_remuneracao',
+    headerName: 'Categoria de remuneração',
+    width: 200,
   },
-  {
-    field: 'lastName',
-    headerName: 'Last name',
-    width: 150,
-    editable: true,
-  },
-  {
-    field: 'age',
-    headerName: 'Age',
-    type: 'number',
-    width: 110,
-    editable: true,
-  },
-  {
-    field: 'fullName',
-    headerName: 'Full name',
-    description: 'This column has a value getter and is not sortable.',
-    sortable: false,
-    width: 160,
-    valueGetter: (params: GridValueGetterParams) =>
-      `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-  },
-];
-
-const rows = [
-  { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-  { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-  { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-  { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-  { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: null },
-  { id: 6, lastName: 'Melisandre', firstName: 'Noname', age: 150 },
-  { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-  { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-  { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+  { field: 'item', headerName: 'Item', width: 200 },
+  { field: 'valor', headerName: 'Valor', width: 90 },
+  { field: 'funcao', headerName: 'Função', width: 150 },
+  { field: 'tipo_empregado', headerName: 'Tipo de empregado', width: 150 },
+  { field: 'ativo', headerName: 'Ativo', width: 90 },
 ];
 
 export default function Index({ ais }) {
@@ -159,12 +135,13 @@ export default function Index({ ais }) {
         'meses',
         selectedMonths.map(m => String(m.value)),
       );
-      const qType = makeQueryFromValue(
-        'tipos',
-        type,
-        ['Ministérios Públicos', 'Tribunais de Justiça', 'Tudo'],
-        ['mp', 'tj', ''],
-      );
+      // O tipo está sendo usado apenas para filtro dos órgãos na interface
+      // const qType = makeQueryFromValue(
+      //   'tipos',
+      //   type,
+      //   ['Ministérios Públicos', 'Tribunais de Justiça', 'Tudo'],
+      //   ['mp', 'tj', ''],
+      // );
       const qSelectedAgencies = makeQueryFromList(
         'orgaos',
         selectedAgencies.map(m => m.aid),
@@ -175,10 +152,15 @@ export default function Index({ ais }) {
         ['Remuneração básica', 'Benefícios e indenizações', 'Tudo'],
         ['contracheque', 'outras', ''],
       );
-      q = `${q}${qSelectedYears}${qSelectedMonths}${qType}${qSelectedAgencies}${qCategories}`;
+      q = `${q}${qSelectedYears}${qSelectedMonths}${qSelectedAgencies}${qCategories}`;
       setQuery(q);
       const res = await api.ui.get(`/v2/pesquisar${q}`);
-      setResult(res.data.result);
+      const data = res.data.result.map((d, i) => {
+        const item = d;
+        item.id = i + 1;
+        return item;
+      });
+      setResult(data);
       setCount(res.data.count);
       setShowResults(true);
     } catch (err) {
@@ -351,7 +333,7 @@ export default function Index({ ais }) {
               </FormControl>
             </Grid>
           </Grid>
-          <Grid container spacing={3} pt={3}>
+          <Grid container spacing={3} py={3}>
             <Grid item xs={12} sm={3}>
               <LoadingButton
                 size="large"
@@ -374,44 +356,43 @@ export default function Index({ ais }) {
               </LoadingButton>
             </Grid>
           </Grid>
-          <div>
-            <Box py={4}>
+          <Box>
+            <Box>
               <Typography variant="h3" gutterBottom>
                 Resultados encontrados
               </Typography>
+              <Typography variant="body1" gutterBottom>
+                A pesquisa encontrou <strong>{count}</strong> linhas. Abaixo,
+                uma amostra de 100 linhas.
+              </Typography>
             </Box>
-            <Grid container pb={4}>
-              <Grid item xs={12} sm={3}>
-                <Button
-                  variant="outlined"
-                  color="info"
-                  endIcon={<CloudDownloadIcon />}
-                  id="download-button"
-                >
-                  BAIXAR DADOS
-                </Button>
-              </Grid>
-              <Grid item xs={12} sm={9}>
-                <Typography variant="body1" textAlign="right" gutterBottom>
-                  Monstrando <strong>100</strong> resultados de um total de{' '}
-                  <strong>{count}</strong>.
-                </Typography>
-              </Grid>
-            </Grid>
+            <Box pb={4} textAlign="right">
+              <Button
+                variant="outlined"
+                endIcon={<CloudDownloadIcon />}
+                onClick={() => {
+                  ReactGA.pageview(`${process.env.API_BASE_URL}v2/download`);
+                }}
+                href={`${process.env.API_BASE_URL}v2/download${query}`}
+                id="download-button"
+              >
+                BAIXAR DADOS
+              </Button>
+            </Box>
             <ThemeProvider theme={light}>
               <Paper>
                 <Box sx={{ height: 400, width: '100%' }}>
                   <DataGrid
-                    rows={rows}
+                    rows={result}
                     columns={columns}
-                    pageSize={5}
-                    rowsPerPageOptions={[5]}
+                    pageSize={10}
+                    rowsPerPageOptions={[10]}
                     disableSelectionOnClick
                   />
                 </Box>
               </Paper>
             </ThemeProvider>
-          </div>
+          </Box>
         </Box>
       </Container>
       <Footer />
