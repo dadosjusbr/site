@@ -97,7 +97,7 @@ export default function Index({ ais }) {
     { name: 'Novembro', value: 11 },
     { name: 'Dezembro', value: 12 },
   ];
-  const [selectedYears, setSelectedYears] = React.useState([2022]);
+  const [selectedYears, setSelectedYears] = React.useState([2021]);
   const [selectedMonths, setSelectedMonths] = React.useState([]);
   const [selectedAgencies, setSelectedAgencies] = React.useState([]);
   const [agencies, setAgencies] = React.useState(ais);
@@ -105,8 +105,18 @@ export default function Index({ ais }) {
   const [type, setType] = React.useState('Tudo');
   const [category, setCategory] = React.useState('Tudo');
   const [showResults, setShowResults] = React.useState(false);
-  const [result, setResult] = React.useState(null);
+  const [result, setResult] = React.useState([]);
+  const [count, setCount] = React.useState(0);
   const [query, setQuery] = React.useState('');
+
+  const clearSearch = () => {
+    setSelectedYears([2021]);
+    setSelectedMonths([]);
+    setSelectedAgencies([]);
+    setType('Tudo');
+    setCategory('Tudo');
+    setShowResults(false);
+  };
 
   const makeQueryFromList = (word: string, list: Array<string>) => {
     if (list.length === 0) {
@@ -168,11 +178,12 @@ export default function Index({ ais }) {
       q = `${q}${qSelectedYears}${qSelectedMonths}${qType}${qSelectedAgencies}${qCategories}`;
       setQuery(q);
       const res = await api.ui.get(`/v2/pesquisar${q}`);
-      const data = await res.data.json();
-      setResult(data);
+      setResult(res.data.result);
+      setCount(res.data.count);
       setShowResults(true);
     } catch (err) {
       setResult([]);
+      setCount(0);
     }
     setLoading(false);
   };
@@ -355,8 +366,7 @@ export default function Index({ ais }) {
             <Grid item xs={12} sm={9} display="flex" justifyContent="right">
               <LoadingButton
                 size="large"
-                onClick={searchHandleClick}
-                loading={loading}
+                onClick={clearSearch}
                 variant="outlined"
                 startIcon={<SearchOffOutlinedIcon />}
               >
@@ -364,57 +374,44 @@ export default function Index({ ais }) {
               </LoadingButton>
             </Grid>
           </Grid>
-          <p>Query:</p>
-          <p>{query}</p>
-          {!showResults ? (
-            <div>
-              <Box py={4}>
-                <Typography variant="h3" gutterBottom>
-                  Resultados encontrados
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                  Texto de ajuda ainda não definido. Lorem ipsum dolor sit amet,
-                  consectetur adipisicing elit. Quia explicabo dolorum,
-                  inventore qui animi minus dolorem accusantium dolore, culpa
-                  placeat fugit? Optio consequatur libero.
-                </Typography>
-                <pre>{result}</pre>
-              </Box>
-              <Grid container pb={4}>
-                <Grid item xs={12} sm={6}>
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    endIcon={<CloudDownloadIcon />}
-                    id="download-button"
-                  >
-                    BAIXAR DADOS
-                  </Button>
-                </Grid>
-                <Grid item xs={12} sm={6}>
-                  <Typography variant="body1" textAlign="right" gutterBottom>
-                    Monstrando <strong>xxx</strong> resultados de um total de{' '}
-                    <strong>yyyyyyy</strong>.
-                  </Typography>
-                </Grid>
+          <div>
+            <Box py={4}>
+              <Typography variant="h3" gutterBottom>
+                Resultados encontrados
+              </Typography>
+            </Box>
+            <Grid container pb={4}>
+              <Grid item xs={12} sm={3}>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  endIcon={<CloudDownloadIcon />}
+                  id="download-button"
+                >
+                  BAIXAR DADOS
+                </Button>
               </Grid>
-              <ThemeProvider theme={light}>
-                <Paper>
-                  <Box sx={{ height: 400, width: '100%' }}>
-                    <DataGrid
-                      rows={rows}
-                      columns={columns}
-                      pageSize={5}
-                      rowsPerPageOptions={[5]}
-                      disableSelectionOnClick
-                    />
-                  </Box>
-                </Paper>
-              </ThemeProvider>
-            </div>
-          ) : (
-            <div />
-          )}
+              <Grid item xs={12} sm={9}>
+                <Typography variant="body1" textAlign="right" gutterBottom>
+                  Monstrando <strong>100</strong> resultados de um total de{' '}
+                  <strong>{count}</strong>.
+                </Typography>
+              </Grid>
+            </Grid>
+            <ThemeProvider theme={light}>
+              <Paper>
+                <Box sx={{ height: 400, width: '100%' }}>
+                  <DataGrid
+                    rows={rows}
+                    columns={columns}
+                    pageSize={5}
+                    rowsPerPageOptions={[5]}
+                    disableSelectionOnClick
+                  />
+                </Box>
+              </Paper>
+            </ThemeProvider>
+          </div>
         </Box>
       </Container>
       <Footer />
