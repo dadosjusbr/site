@@ -97,17 +97,85 @@ export default function Index({ ais }) {
     { name: 'Novembro', value: 11 },
     { name: 'Dezembro', value: 12 },
   ];
+  const [selectedYears, setSelectedYears] = React.useState([2022]);
+  const [selectedMonths, setSelectedMonths] = React.useState([]);
+  const [selectedAgencies, setSelectedAgencies] = React.useState([]);
   const [agencies, setAgencies] = React.useState(ais);
   const [loading, setLoading] = React.useState(false);
   const [type, setType] = React.useState('Tudo');
   const [category, setCategory] = React.useState('Tudo');
+  const [showResults, setShowResults] = React.useState(false);
+  const [result, setResult] = React.useState(null);
+  const [query, setQuery] = React.useState('');
 
-  function searchHandleClick() {
+  const makeQueryFromList = (word: string, list: Array<string>) => {
+    if (list.length === 0) {
+      return '';
+    }
+    let q = '&';
+    q += `${word}=`;
+    list.forEach(item => {
+      q += `${item},`;
+    });
+    q = q.slice(0, -1);
+    return q;
+  };
+  const makeQueryFromValue = (
+    word: string,
+    value: string,
+    values: Array<string>,
+    equivalents: Array<string>,
+  ) => {
+    if (!value) return '';
+    for (let i = 0; i < values.length; i++) {
+      if (value === values[i]) {
+        if (!equivalents[i]) return '';
+        return `&${word}=${equivalents[i]}`;
+      }
+    }
+    return ``;
+  };
+
+  const searchHandleClick = async () => {
     setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 3000);
-  }
+    setShowResults(false);
+    try {
+      let q = '?';
+      const qSelectedYears = makeQueryFromList(
+        'anos',
+        selectedYears.map(y => String(y)),
+      );
+      const qSelectedMonths = makeQueryFromList(
+        'meses',
+        selectedMonths.map(m => String(m.value)),
+      );
+      const qType = makeQueryFromValue(
+        'tipos',
+        type,
+        ['Ministérios Públicos', 'Tribunais de Justiça', 'Tudo'],
+        ['mp', 'tj', ''],
+      );
+      const qSelectedAgencies = makeQueryFromList(
+        'orgaos',
+        selectedAgencies.map(m => m.aid),
+      );
+      const qCategories = makeQueryFromValue(
+        'categorias',
+        category,
+        ['Remuneração básica', 'Benefícios e indenizações', 'Tudo'],
+        ['contracheque', 'outras', ''],
+      );
+      q = `${q}${qSelectedYears}${qSelectedMonths}${qType}${qSelectedAgencies}${qCategories}`;
+      setQuery(q);
+      const res = await api.ui.get(`/v2/pesquisar${q}`);
+      const data = await res.data.json();
+      setResult(data);
+      setShowResults(true);
+    } catch (err) {
+      setResult([]);
+    }
+    setLoading(false);
+  };
 
   const typeHandleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
@@ -148,7 +216,6 @@ export default function Index({ ais }) {
               qui animi minus dolorem accusantium dolore, culpa placeat fugit?
               Optio consequatur libero.
             </Typography>
-            <pre>{ type }</pre>
           </Box>
           <Grid container spacing={3}>
             <Grid item xs={12}>
@@ -158,7 +225,8 @@ export default function Index({ ais }) {
                 options={years}
                 disableCloseOnSelect
                 getOptionLabel={option => `${option}`}
-                defaultValue={[2022]}
+                value={selectedYears}
+                onChange={(event, newValue) => setSelectedYears(newValue)}
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
                     <Checkbox
@@ -180,6 +248,11 @@ export default function Index({ ais }) {
                 options={months}
                 disableCloseOnSelect
                 getOptionLabel={option => option.name}
+                value={selectedMonths}
+                onChange={(event, newValue) => setSelectedMonths(newValue)}
+                isOptionEqualToValue={(option, value) =>
+                  option.value === value.value
+                }
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
                     <Checkbox
@@ -225,6 +298,11 @@ export default function Index({ ais }) {
                 options={agencies}
                 disableCloseOnSelect
                 getOptionLabel={option => option.aid}
+                value={selectedAgencies}
+                onChange={(event, newValue) => setSelectedAgencies(newValue)}
+                isOptionEqualToValue={(option, value) =>
+                  option.aid === value.aid
+                }
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
                     <Checkbox
@@ -286,48 +364,57 @@ export default function Index({ ais }) {
               </LoadingButton>
             </Grid>
           </Grid>
-          <Box py={4}>
-            <Typography variant="h3" gutterBottom>
-              Resultados encontrados
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Texto de ajuda ainda não definido. Lorem ipsum dolor sit amet,
-              consectetur adipisicing elit. Quia explicabo dolorum, inventore
-              qui animi minus dolorem accusantium dolore, culpa placeat fugit?
-              Optio consequatur libero.
-            </Typography>
-          </Box>
-          <Grid container pb={4}>
-            <Grid item xs={12} sm={6}>
-              <Button
-                variant="outlined"
-                color="info"
-                endIcon={<CloudDownloadIcon />}
-                id="download-button"
-              >
-                BAIXAR DADOS
-              </Button>
-            </Grid>
-            <Grid item xs={12} sm={6}>
-              <Typography variant="body1" textAlign="right" gutterBottom>
-                Monstrando <strong>xxx</strong> resultados de um total de{' '}
-                <strong>yyyyyyy</strong>.
-              </Typography>
-            </Grid>
-          </Grid>
-          <ThemeProvider theme={light}>
-            <Paper>
-              <Box sx={{ height: 400, width: '100%' }}>
-                <DataGrid
-                  rows={rows}
-                  columns={columns}
-                  pageSize={5}
-                  rowsPerPageOptions={[5]}
-                  disableSelectionOnClick
-                />
+          <p>Query:</p>
+          <p>{query}</p>
+          {!showResults ? (
+            <div>
+              <Box py={4}>
+                <Typography variant="h3" gutterBottom>
+                  Resultados encontrados
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                  Texto de ajuda ainda não definido. Lorem ipsum dolor sit amet,
+                  consectetur adipisicing elit. Quia explicabo dolorum,
+                  inventore qui animi minus dolorem accusantium dolore, culpa
+                  placeat fugit? Optio consequatur libero.
+                </Typography>
+                <pre>{result}</pre>
               </Box>
-            </Paper>
-          </ThemeProvider>
+              <Grid container pb={4}>
+                <Grid item xs={12} sm={6}>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<CloudDownloadIcon />}
+                    id="download-button"
+                  >
+                    BAIXAR DADOS
+                  </Button>
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body1" textAlign="right" gutterBottom>
+                    Monstrando <strong>xxx</strong> resultados de um total de{' '}
+                    <strong>yyyyyyy</strong>.
+                  </Typography>
+                </Grid>
+              </Grid>
+              <ThemeProvider theme={light}>
+                <Paper>
+                  <Box sx={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={rows}
+                      columns={columns}
+                      pageSize={5}
+                      rowsPerPageOptions={[5]}
+                      disableSelectionOnClick
+                    />
+                  </Box>
+                </Paper>
+              </ThemeProvider>
+            </div>
+          ) : (
+            <div />
+          )}
         </Box>
       </Container>
       <Footer />
