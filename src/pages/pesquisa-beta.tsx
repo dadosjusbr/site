@@ -17,12 +17,13 @@ import {
   SelectChangeEvent,
   Paper,
   Button,
+  CircularProgress,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
-import { DataGrid, GridColDef, GridValueGetterParams } from '@mui/x-data-grid';
+import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
@@ -363,6 +364,21 @@ export default function Index({ ais }) {
               </LoadingButton>
             </Grid>
           </Grid>
+          {loading && (
+            <Box
+              m={4}
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+              }}
+            >
+              <div>
+                <CircularProgress color="info" />
+              </div>
+              <p>Aguarde...</p>
+            </Box>
+          )}
           {showResults && (
             <Box>
               <Box
@@ -372,20 +388,30 @@ export default function Index({ ais }) {
                 }}
               >
                 <Typography variant="h3" gutterBottom>
-                  Resultados encontrados
+                  Resultados
                 </Typography>
-                {!downloadAvailable && (
+                {numRowsIfAvailable === 0 && (
                   <Typography variant="body1" gutterBottom>
-                    A pesquisa retorna mais linhas que o número máximo permitido
-                    para download ({`${downloadLimit / 1000}mil`}). Abaixo, uma
-                    amostra dos dados:
+                    A pesquisa não encontrou resultados.
                   </Typography>
                 )}
-                {downloadAvailable && (
-                  <Typography variant="body1" gutterBottom>
-                    A pesquisa retornou <strong>{numRowsIfAvailable}</strong>{' '}
-                    linhas. Abaixo, uma amostra dos dados:
-                  </Typography>
+                {numRowsIfAvailable > 0 && (
+                  <Box>
+                    {!downloadAvailable && (
+                      <Typography variant="body1" gutterBottom>
+                        A pesquisa retorna mais linhas que o número máximo
+                        permitido para download ({`${downloadLimit / 1000}mil`}
+                        ). Abaixo, uma amostra dos dados:
+                      </Typography>
+                    )}
+                    {downloadAvailable && (
+                      <Typography variant="body1" gutterBottom>
+                        A pesquisa retornou{' '}
+                        <strong>{numRowsIfAvailable}</strong> linhas. Abaixo,
+                        uma amostra dos dados:
+                      </Typography>
+                    )}
+                  </Box>
                 )}
               </Box>
               {downloadAvailable && (
@@ -405,19 +431,23 @@ export default function Index({ ais }) {
                   </Button>
                 </Box>
               )}
-              <ThemeProvider theme={light}>
-                <Paper>
-                  <Box sx={{ height: 400, width: '100%' }}>
-                    <DataGrid
-                      rows={result}
-                      columns={columns}
-                      pageSize={10}
-                      rowsPerPageOptions={[10]}
-                      disableSelectionOnClick
-                    />
-                  </Box>
-                </Paper>
-              </ThemeProvider>
+              {numRowsIfAvailable > 0 && (
+                <ThemeProvider theme={light}>
+                  <Paper>
+                    <Box sx={{ width: '100%' }}>
+                      <DataGrid
+                        rows={result}
+                        columns={columns}
+                        pageSize={10}
+                        rowsPerPageOptions={[10]}
+                        disableSelectionOnClick
+                        rowHeight={35}
+                        autoHeight
+                      />
+                    </Box>
+                  </Paper>
+                </ThemeProvider>
+              )}
               {downloadAvailable && (
                 <Box py={4} textAlign="right">
                   <Button
