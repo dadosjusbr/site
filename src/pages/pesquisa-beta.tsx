@@ -376,9 +376,9 @@ export default function Index({ ais }) {
                 variant="outlined"
                 endIcon={<CloudDownloadIcon />}
                 onClick={() => {
-                  ReactGA.pageview(`${process.env.API_BASE_URL}v2/download`);
+                  ReactGA.pageview(`${process.env.API_BASE_URL}/v2/download`);
                 }}
-                href={`${process.env.API_BASE_URL}v2/download${query}`}
+                href={`${process.env.API_BASE_URL}/v2/download${query}`}
                 id="download-button"
               >
                 BAIXAR DADOS
