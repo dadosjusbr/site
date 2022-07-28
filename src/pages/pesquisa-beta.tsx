@@ -357,7 +357,12 @@ export default function Index({ ais }) {
             </Grid>
           </Grid>
           <Box>
-            <Box>
+            <Box
+              pt={4}
+              sx={{
+                borderTop: '2px solid',
+              }}
+            >
               <Typography variant="h3" gutterBottom>
                 Resultados encontrados
               </Typography>
