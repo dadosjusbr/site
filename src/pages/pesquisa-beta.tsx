@@ -73,7 +73,7 @@ export default function Index({ ais }) {
     { name: 'Novembro', value: 11 },
     { name: 'Dezembro', value: 12 },
   ];
-  const [selectedYears, setSelectedYears] = React.useState([2021]);
+  const [selectedYears, setSelectedYears] = React.useState([2022]);
   const [selectedMonths, setSelectedMonths] = React.useState([]);
   const [selectedAgencies, setSelectedAgencies] = React.useState([]);
   const [agencies, setAgencies] = React.useState(ais);
@@ -146,13 +146,13 @@ export default function Index({ ais }) {
         'orgaos',
         selectedAgencies.map(m => m.aid),
       );
-      const qCategories = makeQueryFromValue(
-        'categorias',
-        category,
-        ['Remuneração básica', 'Benefícios e indenizações', 'Tudo'],
-        ['contracheque', 'outras', ''],
-      );
-      q = `${q}${qSelectedYears}${qSelectedMonths}${qSelectedAgencies}${qCategories}`;
+      // const qCategories = makeQueryFromValue(
+      //   'categorias',
+      //   category,
+      //   ['Remuneração básica', 'Benefícios e indenizações', 'Tudo'],
+      //   ['contracheque', 'outras', ''],
+      // );
+      q = `${q}${qSelectedYears}${qSelectedMonths}${qSelectedAgencies}`;
       setQuery(q);
       const res = await api.ui.get(`/v2/pesquisar${q}`);
       const data = res.data.result.map((d, i) => {
@@ -310,7 +310,7 @@ export default function Index({ ais }) {
                 renderInput={params => <TextField {...params} label="Órgãos" />}
               />
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">
                   Categoria de remuneração
@@ -331,7 +331,7 @@ export default function Index({ ais }) {
                   </MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid container spacing={3} py={3}>
             <Grid item xs={12} sm={3}>
