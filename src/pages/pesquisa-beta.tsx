@@ -82,7 +82,10 @@ export default function Index({ ais }) {
   const [category, setCategory] = React.useState('Tudo');
   const [showResults, setShowResults] = React.useState(false);
   const [result, setResult] = React.useState([]);
-  const [count, setCount] = React.useState(0);
+  const [downloadAvailable, setDownloadAvailable] = React.useState(false);
+  const [downloadLimit, setDownloadLimit] = React.useState(0);
+  const [searchLimit, setSearchLimit] = React.useState(0);
+  const [numRowsIfAvailable, setNumRowsIfAvailable] = React.useState(0);
   const [query, setQuery] = React.useState('');
 
   const clearSearch = () => {
@@ -161,11 +164,15 @@ export default function Index({ ais }) {
         return item;
       });
       setResult(data);
-      setCount(res.data.count);
+      setDownloadAvailable(res.data.download_available);
+      setDownloadLimit(res.data.download_limit);
+      setSearchLimit(res.data.search_limit);
+      setNumRowsIfAvailable(res.data.num_rows_if_available);
       setShowResults(true);
     } catch (err) {
       setResult([]);
-      setCount(0);
+      setDownloadAvailable(false);
+      setShowResults(false);
     }
     setLoading(false);
   };
@@ -356,48 +363,80 @@ export default function Index({ ais }) {
               </LoadingButton>
             </Grid>
           </Grid>
-          <Box>
-            <Box
-              pt={4}
-              sx={{
-                borderTop: '2px solid',
-              }}
-            >
-              <Typography variant="h3" gutterBottom>
-                Resultados encontrados
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                A pesquisa encontrou <strong>{count}</strong> linhas. Abaixo,
-                uma amostra de 100 linhas.
-              </Typography>
-            </Box>
-            <Box pb={4} textAlign="right">
-              <Button
-                variant="outlined"
-                endIcon={<CloudDownloadIcon />}
-                onClick={() => {
-                  ReactGA.pageview(`${process.env.API_BASE_URL}/v2/download`);
+          {showResults && (
+            <Box>
+              <Box
+                pt={4}
+                sx={{
+                  borderTop: '2px solid',
                 }}
-                href={`${process.env.API_BASE_URL}/v2/download${query}`}
-                id="download-button"
               >
-                BAIXAR DADOS
-              </Button>
-            </Box>
-            <ThemeProvider theme={light}>
-              <Paper>
-                <Box sx={{ height: 400, width: '100%' }}>
-                  <DataGrid
-                    rows={result}
-                    columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[10]}
-                    disableSelectionOnClick
-                  />
+                <Typography variant="h3" gutterBottom>
+                  Resultados encontrados
+                </Typography>
+                {!downloadAvailable && (
+                  <Typography variant="body1" gutterBottom>
+                    A pesquisa retorna mais linhas que o número máximo permitido
+                    para download ({`${downloadLimit / 1000}mil`}). Abaixo, uma
+                    amostra dos dados:
+                  </Typography>
+                )}
+                {downloadAvailable && (
+                  <Typography variant="body1" gutterBottom>
+                    A pesquisa retornou <strong>{numRowsIfAvailable}</strong>{' '}
+                    linhas. Abaixo, uma amostra dos dados:
+                  </Typography>
+                )}
+              </Box>
+              {downloadAvailable && (
+                <Box pb={4} textAlign="right">
+                  <Button
+                    variant="outlined"
+                    endIcon={<CloudDownloadIcon />}
+                    onClick={() => {
+                      ReactGA.pageview(
+                        `${process.env.API_BASE_URL}/v2/download`,
+                      );
+                    }}
+                    href={`${process.env.API_BASE_URL}/v2/download${query}`}
+                    id="download-button"
+                  >
+                    BAIXAR DADOS
+                  </Button>
                 </Box>
-              </Paper>
-            </ThemeProvider>
-          </Box>
+              )}
+              <ThemeProvider theme={light}>
+                <Paper>
+                  <Box sx={{ height: 400, width: '100%' }}>
+                    <DataGrid
+                      rows={result}
+                      columns={columns}
+                      pageSize={10}
+                      rowsPerPageOptions={[10]}
+                      disableSelectionOnClick
+                    />
+                  </Box>
+                </Paper>
+              </ThemeProvider>
+              {downloadAvailable && (
+                <Box py={4} textAlign="right">
+                  <Button
+                    variant="outlined"
+                    endIcon={<CloudDownloadIcon />}
+                    onClick={() => {
+                      ReactGA.pageview(
+                        `${process.env.API_BASE_URL}/v2/download`,
+                      );
+                    }}
+                    href={`${process.env.API_BASE_URL}/v2/download${query}`}
+                    id="download-button"
+                  >
+                    BAIXAR DADOS
+                  </Button>
+                </Box>
+              )}
+            </Box>
+          )}
         </Box>
       </Container>
       <Footer />
