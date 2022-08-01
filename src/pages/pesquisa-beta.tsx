@@ -19,6 +19,7 @@ import {
   Button,
   CircularProgress,
 } from '@mui/material';
+import { createFilterOptions } from '@mui/material/Autocomplete';
 import { ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -196,6 +197,15 @@ export default function Index({ ais }) {
     setCategory(event.target.value as string);
   };
 
+  const agencyFilterOptions = createFilterOptions({
+    stringify: (option: AgencyOptionType) => option.aid + option.name,
+  });
+
+  interface AgencyOptionType {
+    aid: string;
+    name: string;
+  }
+
   return (
     <Page>
       <Head>
@@ -319,6 +329,7 @@ export default function Index({ ais }) {
                   </li>
                 )}
                 renderInput={params => <TextField {...params} label="Órgãos" />}
+                filterOptions={agencyFilterOptions}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
