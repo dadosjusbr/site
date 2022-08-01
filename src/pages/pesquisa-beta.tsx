@@ -37,22 +37,25 @@ const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const columns: GridColDef[] = [
-  { field: 'id', headerName: '#', width: 90 },
-  { field: 'orgao', headerName: 'Órgão', width: 90 },
-  { field: 'mes', headerName: 'Mês', width: 90 },
-  { field: 'ano', headerName: 'Ano', width: 90 },
+  { field: 'id', headerName: '#', width: 50 },
+  { field: 'orgao', headerName: 'Órgão', width: 70 },
+  { field: 'mes', headerName: 'Mês', width: 70 },
+  { field: 'ano', headerName: 'Ano', width: 70 },
   { field: 'matricula', headerName: 'Matrícula', width: 90 },
   { field: 'nome', headerName: 'Nome', width: 200 },
+  { field: 'cargo', headerName: 'Cargo', width: 150 },
+  { field: 'lotacao', headerName: 'Lotacao', width: 150 },
   {
-    field: 'tipo_remuneracao',
+    field: 'categoria_contracheque',
     headerName: 'Categoria de remuneração',
-    width: 200,
+    width: 90,
   },
-  { field: 'item', headerName: 'Item', width: 200 },
+  {
+    field: 'detalhamento_contracheque',
+    headerName: 'Descrição de remuneração',
+    width: 150,
+  },
   { field: 'valor', headerName: 'Valor', width: 90 },
-  { field: 'funcao', headerName: 'Função', width: 150 },
-  { field: 'tipo_empregado', headerName: 'Tipo de empregado', width: 150 },
-  { field: 'ativo', headerName: 'Ativo', width: 90 },
 ];
 
 export default function Index({ ais }) {
