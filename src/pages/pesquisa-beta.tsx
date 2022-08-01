@@ -44,7 +44,7 @@ const columns: GridColDef[] = [
   { field: 'matricula', headerName: 'Matrícula', width: 90 },
   { field: 'nome', headerName: 'Nome', width: 200 },
   { field: 'cargo', headerName: 'Cargo', width: 150 },
-  { field: 'lotacao', headerName: 'Lotacao', width: 150 },
+  { field: 'lotacao', headerName: 'Lotação', width: 150 },
   {
     field: 'categoria_contracheque',
     headerName: 'Categoria de remuneração',
@@ -55,7 +55,7 @@ const columns: GridColDef[] = [
     headerName: 'Descrição de remuneração',
     width: 150,
   },
-  { field: 'valor', headerName: 'Valor', width: 90 },
+  { field: 'valor', headerName: 'Valor', width: 120 },
 ];
 
 export default function Index({ ais }) {
@@ -153,13 +153,13 @@ export default function Index({ ais }) {
         'orgaos',
         selectedAgencies.map(m => m.aid),
       );
-      // const qCategories = makeQueryFromValue(
-      //   'categorias',
-      //   category,
-      //   ['Remuneração básica', 'Benefícios e indenizações', 'Tudo'],
-      //   ['contracheque', 'outras', ''],
-      // );
-      q = `${q}${qSelectedYears}${qSelectedMonths}${qSelectedAgencies}`;
+      const qCategories = makeQueryFromValue(
+        'categorias',
+        category,
+        ['Remuneração base', 'Outras remunerações', 'Descontos', 'Tudo'],
+        ['base', 'outras', 'descontos', ''],
+      );
+      q = `${q}${qSelectedYears}${qSelectedMonths}${qSelectedAgencies}${qCategories}`;
       setQuery(q);
       const res = await api.ui.get(`/v2/pesquisar${q}`);
       const data = res.data.result.map((d, i) => {
@@ -321,7 +321,7 @@ export default function Index({ ais }) {
                 renderInput={params => <TextField {...params} label="Órgãos" />}
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6}>
+            <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
                 <InputLabel id="demo-simple-select-label">
                   Categoria de remuneração
@@ -334,15 +334,14 @@ export default function Index({ ais }) {
                   onChange={categoryHandleChange}
                 >
                   <MenuItem value="Tudo">Tudo</MenuItem>
-                  <MenuItem value="Remuneração básica">
-                    Remuneração básica
+                  <MenuItem value="Remuneração base">Remuneração base</MenuItem>
+                  <MenuItem value="Outras remunerações">
+                    Outras remunerações
                   </MenuItem>
-                  <MenuItem value="Benefícios e indenizações">
-                    Benefícios e indenizações
-                  </MenuItem>
+                  <MenuItem value="Descontos">Descontos</MenuItem>
                 </Select>
               </FormControl>
-            </Grid> */}
+            </Grid>
           </Grid>
           <Grid container spacing={3} py={3}>
             <Grid item xs={12} sm={3}>
