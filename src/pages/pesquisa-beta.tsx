@@ -225,7 +225,7 @@ export default function Index({ ais }) {
             <Grid item xs={12}>
               <Autocomplete
                 multiple
-                id="checkboxes-tags-demo"
+                id="autocomplete-anos"
                 options={years}
                 disableCloseOnSelect
                 getOptionLabel={option => `${option}`}
@@ -248,7 +248,7 @@ export default function Index({ ais }) {
             <Grid item xs={12}>
               <Autocomplete
                 multiple
-                id="checkboxes-tags-demo"
+                id="autocomplete-meses"
                 options={months}
                 disableCloseOnSelect
                 getOptionLabel={option => option.name}
@@ -298,7 +298,7 @@ export default function Index({ ais }) {
             <Grid item xs={12}>
               <Autocomplete
                 multiple
-                id="checkboxes-tags-demo"
+                id="autocomplete-orgaos"
                 options={agencies}
                 disableCloseOnSelect
                 getOptionLabel={option => option.aid}
@@ -479,9 +479,10 @@ export default function Index({ ais }) {
 export async function getServerSideProps() {
   try {
     const res = await api.default.get('/orgaos');
+    const agencies = res.data.filter(ag => ag.collecting === null);
     return {
       props: {
-        ais: res.data,
+        ais: agencies,
       },
     };
   } catch (err) {
