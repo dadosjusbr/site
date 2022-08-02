@@ -18,6 +18,7 @@ import {
   Paper,
   Button,
   CircularProgress,
+  Link,
 } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { ThemeProvider } from '@mui/material/styles';
@@ -65,21 +66,21 @@ export default function Index({ ais }) {
     years.push(i);
   }
   const months = [
-    { name: 'Janeiro', value: 1 },
-    { name: 'Fevereiro', value: 2 },
-    { name: 'Março', value: 3 },
-    { name: 'Abril', value: 4 },
-    { name: 'Maio', value: 5 },
-    { name: 'Junho', value: 6 },
-    { name: 'Julho', value: 7 },
-    { name: 'Agosto', value: 8 },
-    { name: 'Setembro', value: 9 },
-    { name: 'Outubro', value: 10 },
-    { name: 'Novembro', value: 11 },
-    { name: 'Dezembro', value: 12 },
+    { name: 'Jan', value: 1 },
+    { name: 'Fev', value: 2 },
+    { name: 'Mar', value: 3 },
+    { name: 'Abr', value: 4 },
+    { name: 'Mai', value: 5 },
+    { name: 'Jun', value: 6 },
+    { name: 'Jul', value: 7 },
+    { name: 'Ago', value: 8 },
+    { name: 'Set', value: 9 },
+    { name: 'Out', value: 10 },
+    { name: 'Nov', value: 11 },
+    { name: 'Dez', value: 12 },
   ];
   const [selectedYears, setSelectedYears] = React.useState([2022]);
-  const [selectedMonths, setSelectedMonths] = React.useState([]);
+  const [selectedMonths, setSelectedMonths] = React.useState(months);
   const [selectedAgencies, setSelectedAgencies] = React.useState([]);
   const [agencies, setAgencies] = React.useState(ais);
   const [loading, setLoading] = React.useState(false);
@@ -331,6 +332,11 @@ export default function Index({ ais }) {
                 renderInput={params => <TextField {...params} label="Órgãos" />}
                 filterOptions={agencyFilterOptions}
               />
+              <Typography variant="body2" pt={1} pl={1}>
+                Listados apenas os{' '}
+                <Link href="/status-coletas">órgãos coletados</Link> pelo
+                DadosJusBr.
+              </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>
