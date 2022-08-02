@@ -34,6 +34,7 @@ import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import light from '../styles/theme-light';
 import api from '../services/api';
+import { monthsInQuarter } from 'date-fns/esm/fp';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -79,6 +80,7 @@ export default function Index({ ais }) {
     { name: 'Nov', value: 11 },
     { name: 'Dez', value: 12 },
   ];
+
   const [selectedYears, setSelectedYears] = React.useState([2022]);
   const [selectedMonths, setSelectedMonths] = React.useState(months);
   const [selectedAgencies, setSelectedAgencies] = React.useState([]);
@@ -90,12 +92,11 @@ export default function Index({ ais }) {
   const [result, setResult] = React.useState([]);
   const [downloadAvailable, setDownloadAvailable] = React.useState(false);
   const [downloadLimit, setDownloadLimit] = React.useState(0);
-  const [searchLimit, setSearchLimit] = React.useState(0);
   const [numRowsIfAvailable, setNumRowsIfAvailable] = React.useState(0);
   const [query, setQuery] = React.useState('');
 
   const clearSearch = () => {
-    setSelectedYears([2021]);
+    setSelectedYears([]);
     setSelectedMonths([]);
     setSelectedAgencies([]);
     setType('Tudo');
@@ -172,7 +173,6 @@ export default function Index({ ais }) {
       setResult(data);
       setDownloadAvailable(res.data.download_available);
       setDownloadLimit(res.data.download_limit);
-      setSearchLimit(res.data.search_limit);
       setNumRowsIfAvailable(res.data.num_rows_if_available);
       setShowResults(true);
     } catch (err) {
@@ -181,6 +181,10 @@ export default function Index({ ais }) {
       setShowResults(false);
     }
     setLoading(false);
+  };
+
+  const monthsHandleChange = newValue => {
+    setSelectedMonths(newValue);
   };
 
   const typeHandleChange = (event: SelectChangeEvent) => {
@@ -264,7 +268,7 @@ export default function Index({ ais }) {
                 disableCloseOnSelect
                 getOptionLabel={option => option.name}
                 value={selectedMonths}
-                onChange={(event, newValue) => setSelectedMonths(newValue)}
+                onChange={(event, newValue) => monthsHandleChange(newValue)}
                 isOptionEqualToValue={(option, value) =>
                   option.value === value.value
                 }
