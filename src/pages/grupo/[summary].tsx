@@ -97,7 +97,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   }, [year]);
   async function fetchAgencyData() {
     try {
-      const { data: agency } = await api.ui.get(`/orgao/totais/${id}/${year}`);
+      const { data: agency } = await api.ui.get(`/v1/orgao/totais/${id}/${year}`);
       setData(agency.MonthTotals ? agency.MonthTotals : []);
       // sets the navigable month in the application state to the last navigable month for the given year
       setNavigableMonth(
@@ -132,7 +132,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
 export const getServerSideProps: GetServerSideProps = async context => {
   const { summary } = context.params;
   try {
-    const { data } = await api.ui.get(`/orgao/${summary}`);
+    const { data } = await api.ui.get(`/v1/orgao/${summary}`);
     if (!data.Agency) {
       // context.res.writeHead(301, {
       //   Location: `/404`,

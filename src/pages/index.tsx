@@ -13,6 +13,7 @@ import {
   Link,
   Tabs,
   Tab,
+  Button,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -93,7 +94,7 @@ export default function Index({
   };
   async function fetchGeneralChartData() {
     try {
-      const { data } = await api.ui.get(`/geral/remuneracao/${year}`);
+      const { data } = await api.ui.get(`/v1/geral/remuneracao/${year}`);
       setCompleteChartData(
         data.map(d => ({
           BaseRemuneration: d.base_remuneration,
@@ -129,7 +130,8 @@ export default function Index({
           Públicos estaduais desde 2018. A atualização é realizada mensalmente.
           <Box py={4}>
             <Typography component="p">
-              Os dados vão de {formatedStartDate} a {formatedEndDate}. São{' '}
+              Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
+              <Lowercase>{formatedEndDate}</Lowercase>. São{' '}
               <Typography
                 variant="inherit"
                 component="span"
@@ -161,10 +163,20 @@ export default function Index({
               </Button>
             </Grid> */}
             <Grid item>
-              <Typography variant="h6">Navegue pelos dados:</Typography>
+              <Typography variant="h6">Navegue pelos dados</Typography>
             </Grid>
             <Grid item>
               <DropDownGroupSelector />
+            </Grid>
+            <Grid item>
+              <Typography variant="h6" pl={1}>
+                ou faça uma
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" size="large" href="/pesquisar">
+                Pesquisa avançada
+              </Button>
             </Grid>
           </Grid>
         </Headline>
@@ -278,7 +290,7 @@ export default function Index({
 }
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
-    const { data } = await api.ui.get('/geral/resumo');
+    const { data } = await api.ui.get('/v1/geral/resumo');
     return {
       props: {
         agencyAmount: data.AgencyAmount,
@@ -321,4 +333,7 @@ const Headline = styled.div`
     padding-right: 20rem;
     font-size: 2rem;
   }
+`;
+const Lowercase = styled.span`
+  text-transform: lowercase;
 `;
