@@ -414,7 +414,7 @@ export default function Index({ ais }) {
                 </Typography>
                 {numRowsIfAvailable === 0 && (
                   <Typography variant="body1" gutterBottom>
-                    A pesquisa não encontrou resultados.
+                    O órgão não prestou contas neste período.
                   </Typography>
                 )}
                 {numRowsIfAvailable > 0 && (
