@@ -13,6 +13,7 @@ import {
   Link,
   Tabs,
   Tab,
+  Button,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -162,10 +163,20 @@ export default function Index({
               </Button>
             </Grid> */}
             <Grid item>
-              <Typography variant="h6">Navegue pelos dados:</Typography>
+              <Typography variant="h6">Navegue pelos dados</Typography>
             </Grid>
             <Grid item>
               <DropDownGroupSelector />
+            </Grid>
+            <Grid item>
+              <Typography variant="h6" pl={1}>
+                ou faça uma
+              </Typography>
+            </Grid>
+            <Grid item>
+              <Button variant="outlined" size="large" href="/pesquisar">
+                Pesquisa avançada
+              </Button>
             </Grid>
           </Grid>
         </Headline>
