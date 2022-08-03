@@ -19,6 +19,7 @@ import ShareModal from './ShareModal';
 import RemunerationBarGraph from './RemunerationBarGraph';
 import * as url from '../url';
 import light from '../styles/theme-light';
+import { formatAgency } from '../functions/format';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -57,7 +58,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     <Container fixed>
       <Box pb={4}>
         <Typography variant="h2" textAlign="center">
-          {title} ({id.toLocaleUpperCase('pt')})
+          {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
         </Typography>
         {agency && agency.collecting ? (
           <></>

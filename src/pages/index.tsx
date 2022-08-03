@@ -129,7 +129,8 @@ export default function Index({
           Públicos estaduais desde 2018. A atualização é realizada mensalmente.
           <Box py={4}>
             <Typography component="p">
-              Os dados vão de {formatedStartDate} a {formatedEndDate}. São{' '}
+              Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
+              <Lowercase>{formatedEndDate}</Lowercase>. São{' '}
               <Typography
                 variant="inherit"
                 component="span"
@@ -321,4 +322,7 @@ const Headline = styled.div`
     padding-right: 20rem;
     font-size: 2rem;
   }
+`;
+const Lowercase = styled.span`
+  text-transform: lowercase;
 `;

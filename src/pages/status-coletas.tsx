@@ -14,6 +14,7 @@ import {
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import api from '../services/api';
+import { formatAgency } from '../functions/format';
 
 export default function Index({ ais }) {
   const collecting = ais
@@ -65,7 +66,7 @@ export default function Index({ ais }) {
               {collecting.map(ag => (
                 <ListItem key={ag.aid}>
                   <ListItemIcon>
-                    <Upper>{ag.aid}</Upper>
+                    <Upper>{formatAgency(ag.aid)}</Upper>
                   </ListItemIcon>
                   <ListItemText>{ag.name}</ListItemText>
                 </ListItem>
@@ -78,9 +79,11 @@ export default function Index({ ais }) {
               {notCollecting.map(ag => (
                 <ListItem key={ag.aid}>
                   <ListItemIcon>
-                    <Upper>{ag.aid}</Upper>
+                    <Upper>{formatAgency(ag.aid)}</Upper>
                   </ListItemIcon>
-                  <ListItemText secondary={getReasons(ag)}>{ag.name}</ListItemText>
+                  <ListItemText secondary={getReasons(ag)}>
+                    {ag.name}
+                  </ListItemText>
                 </ListItem>
               ))}
             </List>

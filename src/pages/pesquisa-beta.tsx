@@ -91,7 +91,7 @@ export default function Index({ ais }) {
   const [showResults, setShowResults] = React.useState(false);
   const [result, setResult] = React.useState([]);
   const [downloadAvailable, setDownloadAvailable] = React.useState(false);
-  const [downloadLimit, setDownloadLimit] = React.useState(0);
+  const [downloadLimit, setDownloadLimit] = React.useState(150000);
   const [numRowsIfAvailable, setNumRowsIfAvailable] = React.useState(0);
   const [query, setQuery] = React.useState('');
 
@@ -230,10 +230,9 @@ export default function Index({ ais }) {
               Pesquisa de dados
             </Typography>
             <Typography variant="body1" gutterBottom>
-              Texto de ajuda ainda não definido. Lorem ipsum dolor sit amet,
-              consectetur adipisicing elit. Quia explicabo dolorum, inventore
-              qui animi minus dolorem accusantium dolore, culpa placeat fugit?
-              Optio consequatur libero.
+              Use os campos abaixo para selecionar dados de remuneração de
+              membros de TJs e MPs. É possível baixar planilhas com até{' '}
+              {`${downloadLimit / 1000}`}mil linhas.
             </Typography>
           </Box>
           <Grid container spacing={3}>
@@ -423,8 +422,9 @@ export default function Index({ ais }) {
                     {!downloadAvailable && (
                       <Typography variant="body1" gutterBottom>
                         A pesquisa retorna mais linhas que o número máximo
-                        permitido para download ({`${downloadLimit / 1000}mil`}
-                        ). Abaixo, uma amostra dos dados:
+                        permitido para download ({`${downloadLimit / 1000}`}
+                        mil). Refaça a sua busca com menos órgãos ou com um
+                        período mais curto. Abaixo, uma amostra dos dados:
                       </Typography>
                     )}
                     {downloadAvailable && (
