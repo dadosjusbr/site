@@ -204,7 +204,7 @@ export default function Index({
                   <p>
                     Este gráfico representa dados de <b>janeiro de 2018</b> até{' '}
                     <b>junho de 2022</b> e foi gerado em{' '}
-                    <b>21 de julho de 2022</b>
+                    <b>03 de agosto de 2022</b>
                   </p>
                 </Grid>
                 <Grid item width={900}>
