@@ -19,6 +19,8 @@ import {
   Button,
   CircularProgress,
   Link,
+  Alert,
+  AlertTitle,
 } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import { ThemeProvider } from '@mui/material/styles';
@@ -91,7 +93,7 @@ export default function Index({ ais }) {
   const [showResults, setShowResults] = React.useState(false);
   const [result, setResult] = React.useState([]);
   const [downloadAvailable, setDownloadAvailable] = React.useState(false);
-  const [downloadLimit, setDownloadLimit] = React.useState(150000);
+  const [downloadLimit, setDownloadLimit] = React.useState(100000);
   const [numRowsIfAvailable, setNumRowsIfAvailable] = React.useState(0);
   const [query, setQuery] = React.useState('');
 
@@ -232,7 +234,7 @@ export default function Index({ ais }) {
             <Typography variant="body1" gutterBottom>
               Use os campos abaixo para selecionar dados de remuneração de
               membros de TJs e MPs. É possível baixar planilhas com até{' '}
-              {`${downloadLimit / 1000}`}mil linhas.
+              {`${downloadLimit / 1000}`} mil linhas.
             </Typography>
           </Box>
           <Grid container spacing={3}>
@@ -420,12 +422,21 @@ export default function Index({ ais }) {
                 {numRowsIfAvailable > 0 && (
                   <Box>
                     {!downloadAvailable && (
-                      <Typography variant="body1" gutterBottom>
-                        A pesquisa retorna mais linhas que o número máximo
-                        permitido para download ({`${downloadLimit / 1000}`}
-                        mil). Refaça a sua busca com menos órgãos ou com um
-                        período mais curto. Abaixo, uma amostra dos dados:
-                      </Typography>
+                      <ThemeProvider theme={light}>
+                        <Alert severity="warning">
+                          <Typography variant="body1" gutterBottom>
+                            A pesquisa retorna mais linhas que o número máximo
+                            permitido para download ({`${downloadLimit / 1000}`}
+                            {` `}
+                            mil).
+                            <br />
+                            Refaça a sua busca com menos órgãos ou com um
+                            período mais curto.
+                            <br />
+                            Abaixo, uma amostra dos dados:
+                          </Typography>
+                        </Alert>
+                      </ThemeProvider>
                     )}
                     {downloadAvailable && (
                       <Typography variant="body1" gutterBottom>
@@ -437,23 +448,20 @@ export default function Index({ ais }) {
                   </Box>
                 )}
               </Box>
-              {downloadAvailable && (
-                <Box pb={4} textAlign="right">
-                  <Button
-                    variant="outlined"
-                    endIcon={<CloudDownloadIcon />}
-                    onClick={() => {
-                      ReactGA.pageview(
-                        `${process.env.API_BASE_URL}/v2/download`,
-                      );
-                    }}
-                    href={`${process.env.API_BASE_URL}/v2/download${query}`}
-                    id="download-button"
-                  >
-                    BAIXAR DADOS
-                  </Button>
-                </Box>
-              )}
+              <Box py={4} textAlign="right">
+                <Button
+                  variant="outlined"
+                  endIcon={<CloudDownloadIcon />}
+                  disabled={!downloadAvailable}
+                  onClick={() => {
+                    ReactGA.pageview(`${process.env.API_BASE_URL}/v2/download`);
+                  }}
+                  href={`${process.env.API_BASE_URL}/v2/download${query}`}
+                  id="download-button"
+                >
+                  BAIXAR DADOS
+                </Button>
+              </Box>
               {numRowsIfAvailable > 0 && (
                 <ThemeProvider theme={light}>
                   <Paper>
@@ -471,23 +479,20 @@ export default function Index({ ais }) {
                   </Paper>
                 </ThemeProvider>
               )}
-              {downloadAvailable && (
-                <Box py={4} textAlign="right">
-                  <Button
-                    variant="outlined"
-                    endIcon={<CloudDownloadIcon />}
-                    onClick={() => {
-                      ReactGA.pageview(
-                        `${process.env.API_BASE_URL}/v2/download`,
-                      );
-                    }}
-                    href={`${process.env.API_BASE_URL}/v2/download${query}`}
-                    id="download-button"
-                  >
-                    BAIXAR DADOS
-                  </Button>
-                </Box>
-              )}
+              <Box py={4} textAlign="right">
+                <Button
+                  variant="outlined"
+                  endIcon={<CloudDownloadIcon />}
+                  disabled={!downloadAvailable}
+                  onClick={() => {
+                    ReactGA.pageview(`${process.env.API_BASE_URL}/v2/download`);
+                  }}
+                  href={`${process.env.API_BASE_URL}/v2/download${query}`}
+                  id="download-button"
+                >
+                  BAIXAR DADOS
+                </Button>
+              </Box>
             </Box>
           )}
         </Box>
