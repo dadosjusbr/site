@@ -35,7 +35,29 @@ Essa aplicação foi feita utilizando o next js [Next.js](https://nextjs.org/) o
 - [`styled-components`](https://styled-components.com/)
 - [`eslint`](https://eslint.org/)
 
-## Como rodar localmente
+## Rodando localmente com Docker
+
+Antes de mais nada, é necessário ter o [Docker](https://www.docker.com/get-started/) e o [Docker compose](https://docs.docker.com/compose/install/) instalados na sua máquina.
+
+Crie uma cópia do arquivo `.env.sample` e renomeie para `.env.local` e configure as variáveis devidamente, caso necessário.
+
+Rodando o servidor de desenvolvimento.
+
+```bash
+docker-compose --env-file .env.local up -d
+```
+
+Para checar se ocorreu tudo bem ao executar o docker-compose, rode o seguinte comando:
+
+```bash
+docker-compose logs
+```
+
+Caso tenha ocorrido tudo bem, entre no endereço [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
+
+## Como rodar localmente sem Docker)
+
+Para conseguir rodar o servidor de desenvolvimento, sem utilização de Docker, é necessário ter o [Node.js](https://nodejs.org/pt-br/) instalado na sua máquina; ele é um runtime de JavaScript, necessário para executar nosso script.
 
 Crie uma cópia do arquivo `.env.sample` e renomeie para `.env.local` e configure as variáveis devidamente, caso necessário.
 
