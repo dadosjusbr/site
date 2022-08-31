@@ -55,3 +55,18 @@ Para aprender mais sobre o Next.js veja algumas documentações
 
 - [Documentação do Next.js](https://nextjs.org/docs): aprenda mais sobre as features que o Next.js proporciona.
 - [Learn Next.js](https://nextjs.org/learn) - um tuturial interativo de Next.js.
+
+## Executando com docker
+
+Para rodar o site localmente utilizando o docker, é necessário fazer o build do docker file e depois rodar a imagem docker. Para isso, execute os seguinte comando no terminal:
+
+```bash
+docker build -t site .
+docker run -d -p 3000:3000 --env-file .env --rm --name site site
+```
+
+Para checar se ocorreu tudo bem:
+
+```bash
+docker logs site
+```
