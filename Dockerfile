@@ -1,0 +1,17 @@
+FROM node:16
+
+WORKDIR /app
+
+COPY ./package*.json ./
+
+RUN yarn
+
+COPY . .
+
+ENV DEFAULT_API_BASE_URL=$DEFAULT_API_BASE_URL \
+    API_BASE_URL=$API_BASE_URL \
+    PACKAGE_REPO_URL=$PACKAGE_REPO_URL \
+    ID_ANALYTICS=$ID_ANALYTICS
+
+CMD ["yarn","dev"]
+
