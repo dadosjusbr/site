@@ -41,16 +41,23 @@ Antes de mais nada, é necessário ter o [Docker](https://www.docker.com/get-sta
 
 Crie uma cópia do arquivo `.env.sample` e renomeie para `.env.local` e configure as variáveis devidamente, caso necessário.
 
-Rodando o servidor de desenvolvimento.
+É importante configurar as variáveis de ambiente que utilizam o termo "localhost" (caso você queira integração com a API do dadosjusbr). O Docker não consegue ter acesso ao localhost, por isso, é necessário substituir o termo pelo endereço IP da máquina. Para conseguir o endereço IP, execute o seguinte comando:
 
-```bash
-docker-compose --env-file .env.local up -d
+```console
+$ hostname -I | cut -d" " -f1
 ```
 
-Para checar se ocorreu tudo bem ao executar o docker-compose, rode o seguinte comando:
+Para rodar o site localmente utilizando o docker, é necessário fazer o build do docker file e depois rodar a imagem docker. Para isso, execute os seguintes comandos no terminal:
 
 ```bash
-docker-compose logs
+docker build -t site .
+docker run -d -p 3000:3000 --env-file .env --rm --name site site
+```
+
+Para checar se ocorreu tudo bem:
+
+```bash
+docker logs site
 ```
 
 Caso tenha ocorrido tudo bem, entre no endereço [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
@@ -78,17 +85,3 @@ Para aprender mais sobre o Next.js veja algumas documentações
 - [Documentação do Next.js](https://nextjs.org/docs): aprenda mais sobre as features que o Next.js proporciona.
 - [Learn Next.js](https://nextjs.org/learn) - um tuturial interativo de Next.js.
 
-## Executando com docker
-
-Para rodar o site localmente utilizando o docker, é necessário fazer o build do docker file e depois rodar a imagem docker. Para isso, execute os seguinte comando no terminal:
-
-```bash
-docker build -t site .
-docker run -d -p 3000:3000 --env-file .env --rm --name site site
-```
-
-Para checar se ocorreu tudo bem:
-
-```bash
-docker logs site
-```
