@@ -35,5 +35,4 @@ ENV NODE_ENV=production \
     PACKAGE_REPO_URL=$PACKAGE_REPO_URL \
     ID_ANALYTICS=$ID_ANALYTICS
 
-#CMD ["yarn", "start"]
 CMD ["npm", "run", "start"]
