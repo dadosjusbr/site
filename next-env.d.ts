@@ -1,7 +1,5 @@
-/*
- Esse arquivo insere a tipagem padrão do next para a integração
- com o TypeScript tanto para a utilização padrão das tipagens quanto
- para plugins.
-*/
 /// <reference types="next" />
-/// <reference types="next/types/global" />
+/// <reference types="next/image-types/global" />
+
+// NOTE: This file should not be edited
+// see https://nextjs.org/docs/basic-features/typescript for more information.
