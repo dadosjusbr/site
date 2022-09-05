@@ -40,6 +40,7 @@ function DateTable(props) {
           <table>
             {data.map(d => (
               <TableRow
+                key={d.Month}
                 month={d.Month}
                 crawlingtimeseconds={d.CrawlingTimestamp.seconds}
               />

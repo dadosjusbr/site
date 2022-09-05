@@ -95,12 +95,11 @@ export default function OmaPage({
     setLoading(true);
     router.push(`/orgao/${agency}/${y}/${m}`);
   }
+  const pageTitle = `[${agency.toUpperCase()}] Folha de Pagamento ${month}/${year}`;
   return (
     <Page>
       <Head>
-        <title>
-          [{agency.toUpperCase()}] Folha de Pagamento {month}/{year}
-        </title>
+        <title>{pageTitle}</title>
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
