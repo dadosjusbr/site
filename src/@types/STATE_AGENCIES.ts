@@ -6,6 +6,7 @@ enum STATE_AGENCIES {
   AMAZONAS = 'AM',
   BAHIA = 'BA',
   CEARÁ = 'CE',
+  DISTRITO_FEDERAL = 'DF',
   ESPÍRITO_SANTO = 'ES',
   GOIÁS = 'GO',
   MARANHÃO = 'MA',
