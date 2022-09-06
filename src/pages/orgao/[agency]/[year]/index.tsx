@@ -22,10 +22,11 @@ export default function AgencyPage({
   function navigateToGivenYear(y: number) {
     router.push(`/orgao/${id}/${y}`);
   }
+  const pageTitle = `Dados/${id}`;
   return (
     <Page>
       <Head>
-        <title>Dados/{id}</title>
+        <title>{pageTitle}</title>
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"

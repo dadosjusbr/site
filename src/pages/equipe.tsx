@@ -10,6 +10,7 @@ import Header from '../components/Header';
 export default function Team() {
   const [teamMates] = useState([
     {
+      id: 1,
       name: 'Bianca Berti',
       role: 'Analista de transparência e integridade',
       profileURL: 'https://www.linkedin.com/in/bertibianca/',
@@ -17,6 +18,7 @@ export default function Team() {
         'https://www.transparencia.org.br/uploads/quemsomos/bberti.jpeg',
     },
     {
+      id: 2,
       name: 'Daniel Fireman',
       role: 'Professor',
       profileURL: 'https://github.com/danielfireman',
@@ -24,12 +26,14 @@ export default function Team() {
         'https://avatars2.githubusercontent.com/u/8951363?s=400&u=acdedbbd00a15d2f913e3e1bde6b14f2c7451f90&v=4',
     },
     {
+      id: 3,
       name: 'Eduardo Queiroz',
       role: 'Desenvolvedor',
       profileURL: 'https://github.com/duardoqueiroz',
       photoURL: 'https://avatars.githubusercontent.com/u/83377894?v=4',
     },
     {
+      id: 4,
       name: 'Jefferson Neves',
       role: 'Desenvolvedor',
       profileURL: 'https://github.com/jeffersonrpn',
@@ -42,12 +46,14 @@ export default function Team() {
     //   profileURL: 'https://github.com/joaolgm',
     // },
     {
+      id: 5,
       name: 'Joellen Silva',
       role: 'Desenvolvedora',
       profileURL: 'https://github.com/Joellensilva',
       photoURL: 'https://github.com/Joellensilva.png',
     },
     {
+      id: 6,
       name: 'Juliana Sakai',
       role: 'Lider',
       profileURL: 'https://www.linkedin.com/in/julianasakai/',
@@ -60,12 +66,14 @@ export default function Team() {
     //   profileURL: 'https://github.com/marcos-inja',
     // },
     {
+      id: 7,
       name: 'Mariana Souto',
       role: 'Designer',
       profileURL: 'https://github.com/soutoam',
       photoURL: 'https://github.com/soutoam.png',
     },
     {
+      id: 8,
       name: 'Nazareno Andrade',
       role: 'Professor',
       profileURL: 'https://github.com/nazareno',
@@ -78,6 +86,7 @@ export default function Team() {
     //   photoURL: '/img/team/samara_sonale.jpg',
     // },
     {
+      id: 9,
       name: 'Raul Durlo',
       role: 'Cientista de Dados',
       profileURL: 'https://github.com/rdurl0',
@@ -136,7 +145,7 @@ export default function Team() {
           </Typography>
           <Grid container spacing={8}>
             {teamMates.map(teamMate => (
-              <Grid item xs={6} sm={4} md={3}>
+              <Grid item key={teamMate.id} xs={6} sm={4} md={3}>
                 <Link href={teamMate.profileURL}>
                   <TeamAvatar
                     src={teamMate.photoURL}

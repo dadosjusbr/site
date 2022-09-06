@@ -11,10 +11,11 @@ import DropDownGroupSelector from '../../components/DropDownGroupSelector';
 import AgencyWithNavigation from '../../components/AgencyWithNavigation';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
+  const pageTitle = `Dados/${summary}`;
   return (
     <Page>
       <Head>
-        <title>Dados/{summary}</title>
+        <title>{pageTitle}</title>
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
@@ -97,7 +98,9 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   }, [year]);
   async function fetchAgencyData() {
     try {
-      const { data: agency } = await api.ui.get(`/v1/orgao/totais/${id}/${year}`);
+      const { data: agency } = await api.ui.get(
+        `/v1/orgao/totais/${id}/${year}`,
+      );
       setData(agency.MonthTotals ? agency.MonthTotals : []);
       // sets the navigable month in the application state to the last navigable month for the given year
       setNavigableMonth(
