@@ -2,12 +2,8 @@ version: '3'
 services:
   site:
     build:
-      dockerfile: ./Dockerfile
       context: '.'
-    environment:
-      - DEFAULT_API_BASE_URL= ${DEFAULT_API_BASE_URL}
-      - API_BASE_URL= ${API_BASE_URL}
-      - PACKAGE_REPO_URL= ${PACKAGE_REPO_URL}
-      - ID_ANALYTICS= ${ID_ANALYTICS}
+    env_file:
+      - .env
     ports:
-      - 3000:3000
+      - 80:8080
