@@ -35,6 +35,8 @@ Essa aplicação foi feita utilizando o next js [Next.js](https://nextjs.org/) o
 - [`styled-components`](https://styled-components.com/)
 - [`eslint`](https://eslint.org/)
 
+Este projeto utiliza o `npm` para gerenciamento de dependências. Para evitar problemas com versões de produção e desenvolvimento, não utilize o `yarn`.
+
 ## Rodando localmente com Docker
 
 Antes de mais nada, é necessário ter o [Docker](https://www.docker.com/get-started/) e o [Docker compose](https://docs.docker.com/compose/install/) instalados na sua máquina.
@@ -68,12 +70,10 @@ Para conseguir rodar o servidor de desenvolvimento, sem utilização de Docker, 
 
 Crie uma cópia do arquivo `.env.sample` e renomeie para `.env.local` e configure as variáveis devidamente, caso necessário.
 
-Rodando o servidor de desenvolvimento.
+Rodando o servidor de desenvolvimento:
 
 ```bash
 npm run dev
-# ou
-yarn dev
 ```
 
 Entre no endereço [http://localhost:3000](http://localhost:3000) no seu navegador para ver o resultado.
