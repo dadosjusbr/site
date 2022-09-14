@@ -25,6 +25,7 @@ module.exports = {
   //the env variables are set here to access in browser
   env: {
     API_BASE_URL: process.env.API_BASE_URL,
+    DEFAULT_API_BASE_URL: process.env.DEFAULT_API_BASE_URL,
     ID_ANALYTICS: process.env.ID_ANALYTICS,
     PACKAGE_REPO_URL: process.env.PACKAGE_REPO_URL,
   },

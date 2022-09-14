@@ -19,7 +19,7 @@ WORKDIR /site
 COPY --from=builder /site/next.config.js /site/package.json  ./
 COPY --from=builder /site/public ./public
 COPY --from=builder /site/.next ./.next
-COPY --from=builder /site/node_modules ./node_modules
+COPY --from=dependencies /site/node_modules ./node_modules
 
 # The production environment overrides the EXPOST with -p option.
 EXPOSE 8080
