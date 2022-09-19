@@ -10,6 +10,8 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import STATE_AGENCIES from '../@types/STATE_AGENCIES';
 import FEDERAL_AGENCIES from '../@types/FEDERAL_AGENCIES';
+import MILITAR_AGENCIES from '../@types/MILITAR_AGENCIES';
+import TRABALHO_AGENCIES from '../@types/TRABALHO_AGENCIES';
 
 export interface DropDownGroupSelectorProps
   extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange'> {
@@ -30,7 +32,17 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
     name,
     value: FEDERAL_AGENCIES[name as keyof typeof FEDERAL_AGENCIES],
   }));
-  const agencies = [...stateAgencies, ...federalAgencies];
+  const militarAgencies = Object.keys(MILITAR_AGENCIES).map((name, i) => ({
+    id: i,
+    name,
+    value: MILITAR_AGENCIES[name as keyof typeof MILITAR_AGENCIES],
+  }));
+  const trabalhoAgencies = Object.keys(TRABALHO_AGENCIES).map((name, i) => ({
+    id: i,
+    name,
+    value: TRABALHO_AGENCIES[name as keyof typeof TRABALHO_AGENCIES],
+  }));
+  const agencies = [...stateAgencies, ...federalAgencies, ...militarAgencies, ...trabalhoAgencies];
 
   const getAgencyNameByValue = (v: string): string => {
     const ag = agencies.filter(a => a.value === v)[0];
@@ -70,16 +82,23 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
           return selected;
         }}
       >
-        <ListSubheader>
-          <em>Órgãos federais</em>
-        </ListSubheader>
         {federalAgencies.map(ag => (
           <MenuItem key={ag.id} value={ag.value}>
             {formatToAgency(ag.name)}
           </MenuItem>
         ))}
+        {militarAgencies.map(ag => (
+          <MenuItem key={ag.id} value={ag.value}>
+            {formatToAgency(ag.name)}
+          </MenuItem>
+        ))}
+        {trabalhoAgencies.map(ag => (
+          <MenuItem key={ag.id} value={ag.value}>
+            {formatToAgency(ag.name)}
+          </MenuItem>
+        ))}
         <ListSubheader>
-          <em>Órgãos estaduais e Distrito Federal</em>
+          <em>Órgãos Estaduais e Distrito Federal</em>
         </ListSubheader>
         {stateAgencies.map(ag => (
           <MenuItem key={ag.id} value={ag.value}>
