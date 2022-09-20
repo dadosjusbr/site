@@ -221,24 +221,20 @@ export default function Index({
                     </Grid>
                   </Grid>
                   <TabPanel value={value} index={0}>
-                    <Box textAlign="center">
                       <IndexChartLegend />
                       <img
                         src="/img/indice_tjs.png"
                         alt="Índice de transparência"
                         width="100%"
                       />
-                    </Box>
                   </TabPanel>
                   <TabPanel value={value} index={1}>
-                    <Box textAlign="center">
                       <IndexChartLegend />
                       <img
                         src="/img/indice_mps.png"
                         alt="Índice de transparência"
                         width="100%"
                       />
-                    </Box>
                   </TabPanel>
                 </Grid>
               </Grid>
