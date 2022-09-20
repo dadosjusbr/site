@@ -65,7 +65,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
           Justiça do Trabalho
         </MenuItem>
         <ListSubheader>
-          <em>Órgãos estaduais e Distrito Federal</em>
+          <em>Justiça Estadual e do Distrito Federal</em>
         </ListSubheader>
         {stateAgencies.map(ag => (
           <MenuItem key={ag.id} value={ag.value}>
