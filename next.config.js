@@ -10,9 +10,6 @@ module.exports = {
   // this line is used to allow nextjs to use this esModule in ssr
   // it allows to import the lib from the es6 patter in all components
   // https://github.com/sheshbabu/react-frappe-charts#with-nextjs
-  ...withTM({
-    esModule: true
-  }),
   async redirects() {
     return [
       {
