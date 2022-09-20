@@ -6,13 +6,18 @@ FROM node:lts-alpine as dependencies
 WORKDIR /site
 COPY package.json package-lock.json ./
 RUN apk add --no-cache libc6-compat
-RUN npm ci  --omit=dev --omit=optional --ignore-scripts --prefer-offline
+
+# about legacy-peer-deps flag: This flag isn't doing something new,rather it's telling NPM
+# not to do something new, since NPM v7 now installs peerDependencies by default.
+# See more about this flag here: https://stackoverflow.com/questions/66239691/what-does-npm-install-legacy-peer-deps-do-exactly-when-is-it-recommended-wh
+
+RUN npm ci  --omit=dev --omit=optional --ignore-scripts --prefer-offline --legacy-peer-deps
 
 FROM node:lts-alpine as builder
 WORKDIR /site
 COPY . .
 COPY --from=dependencies /site/node_modules ./node_modules
-RUN npm run build
+RUN npm run build --legacy-peer-deps
 
 FROM node:lts-alpine as runner
 WORKDIR /site
