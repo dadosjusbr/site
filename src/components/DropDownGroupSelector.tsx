@@ -9,7 +9,6 @@ import {
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 
 import STATE_AGENCIES from '../@types/STATE_AGENCIES';
-import FEDERAL_AGENCIES from '../@types/FEDERAL_AGENCIES';
 
 export interface DropDownGroupSelectorProps
   extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange'> {
@@ -25,29 +24,15 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
     name,
     value: STATE_AGENCIES[name as keyof typeof STATE_AGENCIES],
   }));
-  const federalAgencies = Object.keys(FEDERAL_AGENCIES).map((name, i) => ({
-    id: i,
-    name,
-    value: FEDERAL_AGENCIES[name as keyof typeof FEDERAL_AGENCIES],
-  }));
-  const agencies = [...stateAgencies, ...federalAgencies];
-
-  const getAgencyNameByValue = (v: string): string => {
-    const ag = agencies.filter(a => a.value === v)[0];
-    if (typeof ag !== 'undefined' && ag !== null) {
-      return ag.name;
-    }
-    return '';
-  };
 
   const router = useRouter();
   const [agencyName, setAgencyName] = React.useState(
-    formatToAgency(getAgencyNameByValue(value)) || '',
+    value || '',
   );
 
   const handleChange = (event: SelectChangeEvent) => {
     const v = event.target.value as string;
-    setAgencyName(formatToAgency(getAgencyNameByValue(v)));
+    setAgencyName(v);
     router.push(`/grupo/${v}`);
   };
 
@@ -70,14 +55,15 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
           return selected;
         }}
       >
-        <ListSubheader>
-          <em>Órgãos federais</em>
-        </ListSubheader>
-        {federalAgencies.map(ag => (
-          <MenuItem key={ag.id} value={ag.value}>
-            {formatToAgency(ag.name)}
-          </MenuItem>
-        ))}
+        <MenuItem key="-2" value="Federal">
+          Justiça Federal
+        </MenuItem>
+        <MenuItem key="-1" value="Militar">
+          Justiça Militar
+        </MenuItem>
+        <MenuItem key="0" value="Trabalho">
+          Justiça do Trabalho
+        </MenuItem>
         <ListSubheader>
           <em>Órgãos estaduais e Distrito Federal</em>
         </ListSubheader>
