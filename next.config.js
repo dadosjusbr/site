@@ -25,5 +25,7 @@ module.exports = {
     DEFAULT_API_BASE_URL: process.env.DEFAULT_API_BASE_URL,
     ID_ANALYTICS: process.env.ID_ANALYTICS,
     PACKAGE_REPO_URL: process.env.PACKAGE_REPO_URL,
+    NEW_RELIC_APP_NAME: process.env.NEW_RELIC_APP_NAME,
+    NEW_RELIC_LICENSE_KEY: process.env.NEW_RELIC_LICENSE_KEY
   },
 }

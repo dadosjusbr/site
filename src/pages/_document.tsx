@@ -1,3 +1,4 @@
+const newrelic = require('newrelic');
 import Document, {
   DocumentContext,
   Html,
@@ -6,12 +7,17 @@ import Document, {
   Head,
 } from 'next/document';
 import { ServerStyleSheet } from 'styled-components';
+import Script from 'next/script';
 
 /**
  * This document is used to create the default layout of the page like others template engines
  * https://nextjs.org/docs/advanced-features/custom-document
  */
-export default class MyDocument extends Document {
+
+type documentProps = {
+  browserTimingHeader: string
+}
+export default class MyDocument extends Document<documentProps> {
   /**
    * The getInitialProps function is used in HOC (high order components)
    * to set data before rendering, and this is used here to load the styled
@@ -30,8 +36,13 @@ export default class MyDocument extends Document {
 
       const initialProps = await Document.getInitialProps(ctx);
 
+      const browserTimingHeader = newrelic.getBrowserTimingHeader({
+        hasToRemoveScriptWrapper: true,
+      });
+
       return {
         ...initialProps,
+        browserTimingHeader,
         styles: (
           <>
             {initialProps.styles}
@@ -67,6 +78,10 @@ export default class MyDocument extends Document {
         <body>
           <Main />
           <NextScript />
+          <Script
+            dangerouslySetInnerHTML={{ __html: this.props.browserTimingHeader }}
+            strategy="beforeInteractive"
+          ></Script>
         </body>
       </Html>
     );
