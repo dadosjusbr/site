@@ -66,7 +66,7 @@ export default function Index({ ais }) {
               {collecting.map(ag => (
                 <ListItem key={ag.aid}>
                   <ListItemIcon>
-                    <Upper>{formatAgency(ag.aid)}</Upper>
+                    <Upper>{formatAgency(ag.aid, ag.name)}</Upper>
                   </ListItemIcon>
                   <ListItemText>{ag.name}</ListItemText>
                 </ListItem>
@@ -79,7 +79,7 @@ export default function Index({ ais }) {
               {notCollecting.map(ag => (
                 <ListItem key={ag.aid}>
                   <ListItemIcon>
-                    <Upper>{formatAgency(ag.aid)}</Upper>
+                    <Upper>{formatAgency(ag.aid, ag.name)}</Upper>
                   </ListItemIcon>
                   <ListItemText secondary={getReasons(ag)}>
                     {ag.name}
