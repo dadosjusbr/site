@@ -258,7 +258,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     `/dados/${agency}/${year}/${month}`,
   );
   if (d3) {
-    mi = d3;
+    mi = d3[0];
   }
 
   try {
