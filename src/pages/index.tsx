@@ -78,7 +78,8 @@ export default function Index({
     return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
-  const [year, setYear] = useState(new Date().getFullYear() - 1);
+  // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
+  const [year, setYear] = useState(new Date().getDate() <= 17 && new Date().getMonth() + 1 == 1 ? new Date().getFullYear() - 1 : new Date().getFullYear());
   const [loading, setLoading] = useState(true);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
