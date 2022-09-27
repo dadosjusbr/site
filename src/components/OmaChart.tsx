@@ -261,7 +261,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <List dense>
                       <ListItem>
                         <ListItemText
-                          primary={`Índice de completude: ${mi.at(0).Score.indice_completude.toFixed(
+                          primary={`Índice de completude: ${mi.at(0).Score?.indice_completude.toFixed(
                             2,
                           )}`}
                           primaryTypographyProps={{
@@ -332,7 +332,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <List dense>
                       <ListItem>
                         <ListItemText
-                          primary={`Índice de facilidade: ${mi.at(0).Score.indice_facilidade.toFixed(
+                          primary={`Índice de facilidade: ${mi.at(0).Score?.indice_facilidade.toFixed(
                             2,
                           )}`}
                           primaryTypographyProps={{
