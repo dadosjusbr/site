@@ -254,14 +254,14 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 </Typography>
                 <Typography variant="h6" textAlign="center">
                   Índice de transparência:{' '}
-                  <b>{mi.Score?.indice_transparencia.toFixed(2)}</b>
+                  <b>{mi.at(0).Score?.indice_transparencia.toFixed(2)}</b>
                 </Typography>
                 <Grid container>
                   <Grid item xs={12} md={6}>
                     <List dense>
                       <ListItem>
                         <ListItemText
-                          primary={`Índice de completude: ${mi.Score?.indice_completude.toFixed(
+                          primary={`Índice de completude: ${mi.at(0).Score.indice_completude.toFixed(
                             2,
                           )}`}
                           primaryTypographyProps={{
@@ -273,7 +273,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Tem lotação"
                           sx={{
-                            textDecoration: mi.Meta?.tem_lotacao
+                            textDecoration: mi.at(0).Meta?.tem_lotacao
                               ? null
                               : 'line-through',
                           }}
@@ -283,7 +283,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Tem cargo"
                           sx={{
-                            textDecoration: mi.Meta?.tem_cargo
+                            textDecoration: mi.at(0).Meta?.tem_cargo
                               ? null
                               : 'line-through',
                           }}
@@ -293,7 +293,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Tem matrícula e nome"
                           sx={{
-                            textDecoration: mi.Meta?.tem_matricula
+                            textDecoration: mi.at(0).Meta?.tem_matricula
                               ? null
                               : 'line-through',
                           }}
@@ -302,7 +302,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado tipo={mi.Meta?.remuneracao_basica}>
+                            <ShowTipoDado tipo={mi.at(0).Meta?.remuneracao_basica}>
                               remuneração básica
                             </ShowTipoDado>
                           }
@@ -311,7 +311,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado tipo={mi.Meta?.despesas}>
+                            <ShowTipoDado tipo={mi.at(0).Meta?.despesas}>
                               despesas
                             </ShowTipoDado>
                           }
@@ -320,7 +320,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado tipo={mi.Meta?.outras_receitas}>
+                            <ShowTipoDado tipo={mi.at(0).Meta?.outras_receitas}>
                               outras receitas
                             </ShowTipoDado>
                           }
@@ -332,7 +332,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <List dense>
                       <ListItem>
                         <ListItemText
-                          primary={`Índice de facilidade: ${mi.Score?.indice_facilidade.toFixed(
+                          primary={`Índice de facilidade: ${mi.at(0).Score.indice_facilidade.toFixed(
                             2,
                           )}`}
                           primaryTypographyProps={{
@@ -344,7 +344,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Não é necessário login"
                           sx={{
-                            textDecoration: mi.Meta?.login_nao_necessario
+                            textDecoration: mi.at(0).Meta?.login_nao_necessario
                               ? null
                               : 'line-through',
                           }}
@@ -354,7 +354,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Não é necessário captcha"
                           sx={{
-                            textDecoration: mi.Meta?.captcha_nao_necessario
+                            textDecoration: mi.at(0).Meta?.captcha_nao_necessario
                               ? null
                               : 'line-through',
                           }}
@@ -362,14 +362,14 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         <ListItemText
-                          primary={<ShowAcesso>{mi.Meta?.acesso}</ShowAcesso>}
+                          primary={<ShowAcesso>{mi.at(0).Meta?.acesso}</ShowAcesso>}
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
                           primary="Manteve consistência no formato"
                           sx={{
-                            textDecoration: mi.Meta
+                            textDecoration: mi.at(0).Meta
                               ?.manteve_consistencia_no_formato
                               ? null
                               : 'line-through',
@@ -380,7 +380,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Dados estritamente tabulares"
                           sx={{
-                            textDecoration: mi.Meta
+                            textDecoration: mi.at(0).Meta
                               ?.dados_estritamente_tabulares
                               ? null
                               : 'line-through',
