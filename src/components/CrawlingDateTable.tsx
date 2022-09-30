@@ -27,7 +27,11 @@ function TableRow(props) {
 function DateTable(props) {
   const { data } = props;
   return (
-    <Accordion>
+    <Accordion
+      sx={{
+        minWidth: 230,
+      }}
+    >
       <AccordionSummary
         expandIcon={<ExpandMoreIcon />}
         aria-controls="panel1a-content"
