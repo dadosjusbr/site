@@ -88,7 +88,11 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             }}
           >
             <Box py={4} textAlign="center" padding={4}>
-              <Typography variant="h5" textAlign="center">
+              <Typography
+                variant="h5"
+                {...(matches && { variant: 'h6' })}
+                textAlign="center"
+              >
                 Total de remunerações de membros em {year}: R${' '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
@@ -331,6 +335,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                 },
                                 xaxis: {
                                   labels: {
+                                    rotate: -60,
                                     style: {
                                       fontSize: '8px',
                                     },
