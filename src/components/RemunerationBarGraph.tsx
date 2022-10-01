@@ -359,7 +359,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                   labels: {
                                     rotate: -60,
                                     style: {
-                                      fontSize: '8px',
+                                      fontSize: '12px',
                                     },
                                   },
                                 },
@@ -419,7 +419,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               return list;
                             })(),
                             title: {
-                              offsetY: 6,
                               text: 'Meses',
                               offsetX: -25,
                               style: {
