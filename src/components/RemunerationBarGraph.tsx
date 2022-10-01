@@ -146,9 +146,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               spacing={8}
               justifyContent="center"
               {...(matches && {
-                justifyContent: 'space-between',
-                pl: 6,
-                pr: 6,
+                justifyContent: 'space-evenly',
                 pb: 0,
                 rowSpacing: 4,
               })}
@@ -182,6 +180,26 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       : `${(total / 1000000000).toFixed(1)}B`;
                   })()}
                 </Typography>
+
+                {matches ? (
+                  <>
+                    <SemDadosButton
+                      sx={{ mt: 2 }}
+                      onClick={e => {
+                        if (hidingNoData) {
+                          e.currentTarget.classList.remove('active');
+                          setHidingNoData(false);
+                        } else {
+                          e.currentTarget.classList.add('active');
+                          setHidingNoData(true);
+                        }
+                      }}
+                    >
+                      <CropSquareIcon />
+                    </SemDadosButton>
+                    <Typography pt={1}>Sem dados</Typography>
+                  </>
+                ) : null}
               </Grid>
               <Grid item textAlign="center">
                 <BeneficiosButton
@@ -213,22 +231,26 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   })()}
                 </Typography>
               </Grid>
-              <Grid item textAlign="center">
-                <SemDadosButton
-                  onClick={e => {
-                    if (hidingNoData) {
-                      e.currentTarget.classList.remove('active');
-                      setHidingNoData(false);
-                    } else {
-                      e.currentTarget.classList.add('active');
-                      setHidingNoData(true);
-                    }
-                  }}
-                >
-                  <CropSquareIcon />
-                </SemDadosButton>
-                <Typography pt={1}>Sem dados</Typography>
-              </Grid>
+              {!matches ? (
+                <>
+                  <Grid item textAlign="center">
+                    <SemDadosButton
+                      onClick={e => {
+                        if (hidingNoData) {
+                          e.currentTarget.classList.remove('active');
+                          setHidingNoData(false);
+                        } else {
+                          e.currentTarget.classList.add('active');
+                          setHidingNoData(true);
+                        }
+                      }}
+                    >
+                      <CropSquareIcon />
+                    </SemDadosButton>
+                    <Typography pt={1}>Sem dados</Typography>
+                  </Grid>
+                </>
+              ) : null}
               {/* <Grid item textAlign="center">
           <IconButton
             onClick={e => {
@@ -269,7 +291,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               ) : (
                 <>
                   {data.length > 0 ? (
-                    <Box ml={2} mr={2}>
+                    <Box>
                       <Chart
                         options={{
                           colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
@@ -299,7 +321,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                   offsetY: 0,
                                 },
                                 chart: {
-                                  width: '100%',
+                                  width: '110%',
                                 },
                                 yaxis: {
                                   decimalsInFloat: 2,
@@ -397,8 +419,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               return list;
                             })(),
                             title: {
+                              offsetY: 6,
                               text: 'Meses',
-                              offsetX: 6,
+                              offsetX: -25,
                               style: {
                                 fontSize: '15px',
                                 fontWeight: 'bold',
