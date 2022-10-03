@@ -339,7 +339,7 @@ export default function Index({ ais }) {
               />
               <Typography variant="body2" pt={1} pl={1}>
                 Listados apenas os{' '}
-                <Link href="/status-coletas">órgãos coletados</Link> pelo
+                <Link href="/status">órgãos monitorados</Link> pelo
                 DadosJusBr.
               </Typography>
             </Grid>

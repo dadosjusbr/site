@@ -60,7 +60,7 @@ export default function Index({ ais }) {
               Status das coletas de dados
             </Typography>
             <Typography variant="h3" gutterBottom>
-              Órgãos que o dadosjusbr realiza coleta regularmente
+              Órgãos monitorados pelo DadosJusBR: {collecting.length}
             </Typography>
             <List dense>
               {collecting.map(ag => (
@@ -73,7 +73,7 @@ export default function Index({ ais }) {
               ))}
             </List>
             <Typography variant="h3" gutterBottom pt={4}>
-              Órgãos que o dadosjusbr NÃO realiza coleta
+              Órgãos NÃO monitorados pelo DadosJusBR: {notCollecting.length}
             </Typography>
             <List dense>
               {notCollecting.map(ag => (
