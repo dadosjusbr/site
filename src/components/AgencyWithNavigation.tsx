@@ -14,6 +14,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import ShareModal from './ShareModal';
 import RemunerationBarGraph from './RemunerationBarGraph';
@@ -54,6 +55,8 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const m = navigableMonth || 1;
   const [selectedMonth, setSelectedMonth] = useState<number>(m);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
+  const matches = useMediaQuery('(max-width:500px)');
+
   return (
     <Container fixed>
       <Box pb={4}>
@@ -91,7 +94,13 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                 </IconButton>
               </Grid>
             </Grid>
-            <Stack spacing={2} direction="row" justifyContent="flex-end" mt={4}>
+            <Stack
+              spacing={2}
+              direction="row"
+              {...(matches && { direction: 'column', spacing: 1 })}
+              justifyContent="flex-end"
+              mt={4}
+            >
               <Button
                 variant="outlined"
                 color="info"

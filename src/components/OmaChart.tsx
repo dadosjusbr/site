@@ -26,6 +26,7 @@ import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import InfoIcon from '@mui/icons-material/Info';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import * as url from '../url';
 import ShareModal from './ShareModal';
@@ -97,11 +98,15 @@ const OMASummary: React.FC<OMASummaryProps> = ({
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const fileLink = useMemo(() => chartData.PackageURL, [chartData]);
+  const matches = useMediaQuery('(max-width:500px)');
   return (
     <>
       <Stack
         spacing={2}
         direction="row"
+        {...(matches && {
+          direction: 'column',
+        })}
         justifyContent="flex-end"
         mt={2}
         mb={4}
@@ -226,7 +231,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <Paper elevation={0}>
               <Box p={2}>
                 <Typography variant="h6">
-                  Índice de transparência em <Sub>{MONTHS[month]}</Sub> de {year}
+                  Índice de transparência em <Sub>{MONTHS[month]}</Sub> de{' '}
+                  {year}
                   <Tooltip
                     placement="top"
                     title={
@@ -495,7 +501,15 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             </Paper>
           </Grid>
         </Grid>
-        <Stack spacing={2} direction="row" justifyContent="flex-end" my={4}>
+        <Stack
+          spacing={2}
+          direction="row"
+          {...(matches && {
+            direction: 'column',
+          })}
+          justifyContent="flex-end"
+          my={4}
+        >
           <Button
             variant="outlined"
             color="info"

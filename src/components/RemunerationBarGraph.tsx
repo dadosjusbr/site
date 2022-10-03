@@ -15,6 +15,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
 import MONTHS from '../@types/MONTHS';
 import CrawlingDateTable from './CrawlingDateTable';
@@ -71,15 +72,27 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [hidingErrors, setHidingErrors] = useState(false);
+  const matches = useMediaQuery('(max-width:500px)');
   return (
     <>
       {agency && agency.collecting ? (
         <NotCollecting agency={agency} />
       ) : (
         <>
-          <Paper elevation={0}>
-            <Box pt={4} py={4} textAlign="center">
-              <Typography variant="h5" textAlign="center">
+          <Paper
+            elevation={0}
+            sx={{
+              ...(matches && {
+                paddingBottom: 4,
+              }),
+            }}
+          >
+            <Box py={4} textAlign="center" padding={4}>
+              <Typography
+                variant="h5"
+                {...(matches && { variant: 'h6' })}
+                textAlign="center"
+              >
                 Total de remunerações de membros em {year}: R${' '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
@@ -127,7 +140,17 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 </Tooltip>
               </Typography>
             </Box>
-            <Grid pb={4} container spacing={2} justifyContent="center">
+            <Grid
+              pb={8}
+              container
+              spacing={8}
+              justifyContent="center"
+              {...(matches && {
+                justifyContent: 'space-evenly',
+                pb: 0,
+                rowSpacing: 4,
+              })}
+            >
               <Grid item textAlign="center">
                 <SalarioButton
                   onClick={e => {
@@ -143,7 +166,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   <AccountBalanceWalletIcon />
                 </SalarioButton>
                 <Typography pt={1}>
-                  Salário: R${' '}
+                  Salário:
+                  {matches ? <br /> : ' '}
+                  R${' '}
                   {(() => {
                     let total = 0;
                     const wages = data.map(d => d.BaseRemuneration);
@@ -155,6 +180,26 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       : `${(total / 1000000000).toFixed(1)}B`;
                   })()}
                 </Typography>
+
+                {matches ? (
+                  <>
+                    <SemDadosButton
+                      sx={{ mt: 2 }}
+                      onClick={e => {
+                        if (hidingNoData) {
+                          e.currentTarget.classList.remove('active');
+                          setHidingNoData(false);
+                        } else {
+                          e.currentTarget.classList.add('active');
+                          setHidingNoData(true);
+                        }
+                      }}
+                    >
+                      <CropSquareIcon />
+                    </SemDadosButton>
+                    <Typography pt={1}>Sem dados</Typography>
+                  </>
+                ) : null}
               </Grid>
               <Grid item textAlign="center">
                 <BeneficiosButton
@@ -171,7 +216,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   <CardGiftcardIcon />
                 </BeneficiosButton>
                 <Typography pt={1}>
-                  Benefícios: R${' '}
+                  Benefícios:
+                  {matches ? <br /> : ' '}
+                  R${' '}
                   {(() => {
                     let total = 0;
                     const monthlyTotals = data.map(d => d.OtherRemunerations);
@@ -184,22 +231,26 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   })()}
                 </Typography>
               </Grid>
-              <Grid item textAlign="center">
-                <SemDadosButton
-                  onClick={e => {
-                    if (hidingNoData) {
-                      e.currentTarget.classList.remove('active');
-                      setHidingNoData(false);
-                    } else {
-                      e.currentTarget.classList.add('active');
-                      setHidingNoData(true);
-                    }
-                  }}
-                >
-                  <CropSquareIcon />
-                </SemDadosButton>
-                <Typography pt={1}>Sem dados</Typography>
-              </Grid>
+              {!matches ? (
+                <>
+                  <Grid item textAlign="center">
+                    <SemDadosButton
+                      onClick={e => {
+                        if (hidingNoData) {
+                          e.currentTarget.classList.remove('active');
+                          setHidingNoData(false);
+                        } else {
+                          e.currentTarget.classList.add('active');
+                          setHidingNoData(true);
+                        }
+                      }}
+                    >
+                      <CropSquareIcon />
+                    </SemDadosButton>
+                    <Typography pt={1}>Sem dados</Typography>
+                  </Grid>
+                </>
+              ) : null}
               {/* <Grid item textAlign="center">
           <IconButton
             onClick={e => {
@@ -219,7 +270,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             </Grid>
           </Paper>
           <Paper elevation={0}>
-            <Box my={4} pt={2}>
+            <Box my={4} pt={2} padding={4}>
               <Typography variant="h6" textAlign="center">
                 Total de remunerações de membros por mês em {year}
               </Typography>
@@ -240,7 +291,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               ) : (
                 <>
                   {data.length > 0 ? (
-                    <Box ml={4} mr={2}>
+                    <Box>
                       <Chart
                         options={{
                           colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
@@ -270,17 +321,26 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                   offsetY: 0,
                                 },
                                 chart: {
-                                  width: '100%',
+                                  width: '110%',
                                 },
                                 yaxis: {
                                   decimalsInFloat: 2,
+                                  title: {
+                                    text: 'Total de Remunerações',
+                                    offsetY: 10,
+                                    style: {
+                                      fontSize: '10px',
+                                      fontWeight: 'bold',
+                                      color: '#091216',
+                                    },
+                                  },
                                   labels: {
                                     show: true,
                                     minWidth: 0,
-                                    maxWidth: 50,
+                                    maxWidth: 70,
                                     style: {
                                       colors: [],
-                                      fontSize: '10rem',
+                                      fontSize: '0.7rem',
                                       fontFamily:
                                         'Roboto Condensed, sans-serif',
                                       fontWeight: 600,
@@ -288,10 +348,18 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                     },
                                     formatter(value) {
                                       return !billion
-                                        ? `R$ ${(value / 1000000).toFixed(2)}M`
+                                        ? `R$ ${(value / 1000000).toFixed(1)}M`
                                         : `R$ ${(value / 1000000000).toFixed(
                                             2,
                                           )}B`;
+                                    },
+                                  },
+                                },
+                                xaxis: {
+                                  labels: {
+                                    rotate: -60,
+                                    style: {
+                                      fontSize: '12px',
                                     },
                                   },
                                 },
@@ -336,6 +404,11 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             },
                           },
                           xaxis: {
+                            labels: {
+                              style: {
+                                fontSize: '12px',
+                              },
+                            },
                             categories: (() => {
                               const list = [];
                               for (const i in MONTHS) {
@@ -347,7 +420,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             })(),
                             title: {
                               text: 'Meses',
-                              offsetX: 6,
+                              offsetX: -25,
                               style: {
                                 fontSize: '15px',
                                 fontWeight: 'bold',
@@ -460,7 +533,13 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               )}
             </Box>
             <Grid container display="flex" justifyContent="center">
-              <Grid item pb={4} sx={{ width: '50%' }}>
+              <Grid
+                display="flex"
+                item
+                pb={4}
+                sx={{ width: '50%' }}
+                justifyContent="center"
+              >
                 <CrawlingDateTable data={data} dataLoading={dataLoading} />
               </Grid>
             </Grid>
