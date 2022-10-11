@@ -12,6 +12,7 @@ import {
   List,
   ListItem,
   ListItemAvatar,
+  ListItemIcon,
   ListItemText,
   Paper,
   Stack,
@@ -27,6 +28,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import { Done, Close } from '@mui/icons-material';
 
 import * as url from '../url';
 import ShareModal from './ShareModal';
@@ -52,19 +54,79 @@ function ShowAcesso(props) {
   const acesso = props.children;
   switch (acesso) {
     case 'ACESSO_DIRETO':
-      return <span>Acesso direto</span>;
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemIcon>
+            <Done color="success" />
+          </ListItemIcon>
+          <span>Acesso direto</span>
+        </div>
+      );
       break;
     case 'AMIGAVEL_PARA_RASPAGEM':
-      return <span>Amigável para raspagem</span>;
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemIcon>
+            <Done color="warning" />
+          </ListItemIcon>
+          <span>Amigável para raspagem</span>
+        </div>
+      );
       break;
     case 'RASPAGEM_DIFICULTADA':
-      return <span>Raspagem dificultada</span>;
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemIcon>
+            <Done color="warning" />
+          </ListItemIcon>
+          <span>Raspagem dificultada</span>
+        </div>
+      );
       break;
     case 'NECESSITA_SIMULACAO_USUARIO':
-      return <span>É possível navegar no html do site</span>;
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemIcon>
+            <Done color="warning" />
+          </ListItemIcon>
+          <span>É possível navegar no html do site</span>
+        </div>
+      );
       break;
     default:
-      return <span>--</span>;
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemIcon>
+            <Close color="error" />
+          </ListItemIcon>
+          <span>--</span>
+        </div>
+      );
       break;
   }
 }
@@ -73,13 +135,47 @@ function ShowTipoDado(props) {
   const tipo = props.tipo;
   switch (tipo) {
     case 'SUMARIZADO':
-      return <span>Disponibiliza dados de {texto} sumarizados</span>;
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <Done color="success" />
+          <span>Disponibiliza dados de {texto} sumarizados</span>
+        </div>
+      );
       break;
     case 'DETALHADO':
-      return <span>Disponibiliza dados de {texto} detalhados</span>;
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemIcon>
+            <Done color="success" />
+          </ListItemIcon>
+          <span>Disponibiliza dados de {texto} detalhados</span>
+        </div>
+      );
       break;
     default:
-      return <span>Não disponibiliza dados de {texto}</span>;
+      return (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+          }}
+        >
+          <ListItemIcon>
+            <Close color="error" />
+          </ListItemIcon>
+          <span> Não disponibiliza dados de {texto} </span>
+        </div>
+      );
       break;
   }
 }
@@ -171,7 +267,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <IconButton>
                       <InfoIcon />
                     </IconButton>
-                  </Tooltip>
+                  </Tooltip>{' '}
                 </Typography>
                 <List dense>
                   <ListItem>
@@ -260,22 +356,37 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 </Typography>
                 <Typography variant="h6" textAlign="center">
                   Índice de transparência:{' '}
-                  <b>{mi.Score?.indice_transparencia.toFixed(2)}</b>
+                  <b>
+                    {mi.Score?.indice_transparencia == undefined
+                      ? 'Indisponível'
+                      : mi.Score?.indice_transparencia.toFixed(2)}
+                  </b>
                 </Typography>
                 <Grid container>
                   <Grid item xs={12} md={6}>
                     <List dense>
                       <ListItem>
                         <ListItemText
-                          primary={`Índice de completude: ${mi.Score?.indice_completude.toFixed(
-                            2,
-                          )}`}
+                          primary={`Índice de completude: ${
+                            mi.Score?.indice_completude == undefined
+                              ? 'Indisponível'
+                              : mi.Score?.indice_completude.toFixed(2)
+                          }`}
                           primaryTypographyProps={{
                             variant: 'h6',
                           }}
                         />
                       </ListItem>
                       <ListItem>
+                        {mi.Meta?.tem_lotacao == null ? (
+                          <ListItemIcon>
+                            <Close color="error" />
+                          </ListItemIcon>
+                        ) : (
+                          <ListItemIcon>
+                            <Done color="success" />
+                          </ListItemIcon>
+                        )}
                         <ListItemText
                           primary="Tem lotação"
                           sx={{
@@ -286,6 +397,15 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
+                        {mi.Meta?.tem_cargo == null ? (
+                          <ListItemIcon>
+                            <Close color="error" />
+                          </ListItemIcon>
+                        ) : (
+                          <ListItemIcon>
+                            <Done color="success" />
+                          </ListItemIcon>
+                        )}
                         <ListItemText
                           primary="Tem cargo"
                           sx={{
@@ -296,6 +416,15 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
+                        {mi.Meta?.tem_matricula == null ? (
+                          <ListItemIcon>
+                            <Close color="error" />
+                          </ListItemIcon>
+                        ) : (
+                          <ListItemIcon>
+                            <Done color="success" />
+                          </ListItemIcon>
+                        )}
                         <ListItemText
                           primary="Tem matrícula e nome"
                           sx={{
@@ -338,15 +467,24 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <List dense>
                       <ListItem>
                         <ListItemText
-                          primary={`Índice de facilidade: ${mi.Score?.indice_facilidade.toFixed(
-                            2,
-                          )}`}
+                          primary={`Índice de facilidade: ${
+                            mi.Score?.indice_facilidade == undefined
+                              ? 'Indisponível'
+                              : mi.Score?.indice_facilidade.toFixed(2)
+                          }`}
                           primaryTypographyProps={{
                             variant: 'h6',
                           }}
                         />
                       </ListItem>
                       <ListItem>
+                        <ListItemIcon>
+                          {mi.Meta?.login_nao_necessario == null ? (
+                            <Close color="error" />
+                          ) : (
+                            <Done color="success" />
+                          )}
+                        </ListItemIcon>
                         <ListItemText
                           primary="Não é necessário login"
                           sx={{
@@ -357,6 +495,13 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
+                        <ListItemIcon>
+                          {mi.Meta?.captcha_nao_necessario == null ? (
+                            <Close color="error" />
+                          ) : (
+                            <Done color="success" />
+                          )}
+                        </ListItemIcon>
                         <ListItemText
                           primary="Não é necessário captcha"
                           sx={{
@@ -372,6 +517,13 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
+                        <ListItemIcon>
+                          {mi.Meta?.manteve_consistencia_no_formato == null ? (
+                            <Close color="error" />
+                          ) : (
+                            <Done color="success" />
+                          )}
+                        </ListItemIcon>
                         <ListItemText
                           primary="Manteve consistência no formato"
                           sx={{
@@ -383,6 +535,13 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
+                        <ListItemIcon>
+                          {mi.Meta?.dados_estritamente_tabulares == null ? (
+                            <Close color="error" />
+                          ) : (
+                            <Done color="success" />
+                          )}
+                        </ListItemIcon>
                         <ListItemText
                           primary="Dados estritamente tabulares"
                           sx={{
