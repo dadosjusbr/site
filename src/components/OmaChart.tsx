@@ -316,7 +316,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={`Total de membros ${totalMembers}`}
+                      primary={`Total de membros: ${totalMembers}`}
                     />
                   </ListItem>
                 </List>
@@ -560,7 +560,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           </Grid>
           <Grid item xs={12}>
             <Paper elevation={0}>
-              <Box pt={4} py={4}>
+              <Box pt={4} py={4} px={2}>
                 <Typography variant="h6" textAlign="center">
                   Total de remunerações de membros por mês em {year}
                 </Typography>
