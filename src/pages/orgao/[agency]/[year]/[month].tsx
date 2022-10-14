@@ -22,6 +22,7 @@ import Header from '../../../../components/Header';
 import api from '../../../../services/api';
 import OMASummary from '../../../../components/OmaChart';
 import ErrorTable from '../../../../components/ErrorTable';
+import MonthPopover from '../../../../components/MonthPopover';
 
 function UnixToHumanDate(unix) {
   const d = new Date(unix * 1000);
@@ -133,9 +134,15 @@ export default function OmaPage({
               </IconButton>
             </Grid>
             <Grid item>
-              <Typography component="span" variant="h4">
-                {MONTHS[month]} {year}
-              </Typography>
+              <MonthPopover agency={agency} year={year}>
+                <Typography
+                  variant="h4"
+                  textAlign="center"
+                  sx={{ cursor: 'pointer' }}
+                >
+                  {MONTHS[month]} {year}
+                </Typography>
+              </MonthPopover>
             </Grid>
             <Grid item>
               <IconButton
