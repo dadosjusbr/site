@@ -39,6 +39,13 @@ export default function Team() {
       profileURL: 'https://github.com/jeffersonrpn',
       photoURL: 'https://github.com/jeffersonrpn.png',
     },
+    {
+      id: 5,
+      name: 'Jessé Oliveira',
+      role: 'Desenvolvedor',
+      profileURL: 'https://github.com/jezzdiego',
+      photoURL: 'https://github.com/jezzdiego.png',
+    },
     // {
     //   name: 'João Menezes',
     //   role: 'Desenvolvedor',
@@ -46,14 +53,14 @@ export default function Team() {
     //   profileURL: 'https://github.com/joaolgm',
     // },
     {
-      id: 5,
+      id: 6,
       name: 'Joellen Silva',
       role: 'Desenvolvedora',
       profileURL: 'https://github.com/Joellensilva',
       photoURL: 'https://github.com/Joellensilva.png',
     },
     {
-      id: 6,
+      id: 7,
       name: 'Juliana Sakai',
       role: 'Lider',
       profileURL: 'https://www.linkedin.com/in/julianasakai/',
@@ -66,14 +73,14 @@ export default function Team() {
     //   profileURL: 'https://github.com/marcos-inja',
     // },
     {
-      id: 7,
+      id: 8,
       name: 'Mariana Souto',
       role: 'Designer',
       profileURL: 'https://github.com/soutoam',
       photoURL: 'https://github.com/soutoam.png',
     },
     {
-      id: 8,
+      id: 9,
       name: 'Nazareno Andrade',
       role: 'Professor',
       profileURL: 'https://github.com/nazareno',
@@ -86,7 +93,7 @@ export default function Team() {
     //   photoURL: '/img/team/samara_sonale.jpg',
     // },
     {
-      id: 9,
+      id: 10,
       name: 'Raul Durlo',
       role: 'Cientista de Dados',
       profileURL: 'https://github.com/rdurl0',
@@ -113,14 +120,17 @@ export default function Team() {
   // ]);
   const [contribuitors] = useState([
     {
+      id: 1,
       name: 'TB',
       img: '/img/team/logo_transparencia_brasil.svg',
     },
     {
+      id: 2,
       name: 'UFCG',
       img: '/img/team/logo_ufcg.svg',
     },
     {
+      id: 3,
       name: 'IFAL',
       img: '/img/partners/IFAL.svg',
     },
@@ -214,6 +224,7 @@ export default function Team() {
             <Grid container spacing={2} display="flex" justifyContent="center">
               {contribuitors.map(c => (
                 <Grid
+                  key={c.id}
                   item
                   xs={4}
                   md={3}
