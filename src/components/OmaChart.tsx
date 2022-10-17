@@ -307,7 +307,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <Grid item xs={12} md={6}>
             <Paper elevation={0} sx={{ height: 208 }}>
               <Box p={2}>
-                <Typography variant="h6">Membros</Typography>
+                <Typography variant="h6">Membros ativos</Typography>
                 <List dense>
                   <ListItem>
                     <ListItemAvatar>
@@ -315,9 +315,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <EmojiPeopleIcon />
                       </Avatar>
                     </ListItemAvatar>
-                    <ListItemText
-                      primary={`Total de membros: ${totalMembers}`}
-                    />
+                    <ListItemText primary={`Total: ${totalMembers}`} />
                   </ListItem>
                 </List>
               </Box>
