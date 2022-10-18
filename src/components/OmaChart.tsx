@@ -241,7 +241,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <Grid item xs={12} md={20}>
             <Paper elevation={0}>
               <Div>
-                <Typography pt={2} variant="h6">
+                <Typography pt={2} px={2} variant="h6">
                   Resumo das remunerações de membros ativos
                 </Typography>
               </Div>
