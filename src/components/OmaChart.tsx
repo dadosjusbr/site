@@ -19,7 +19,6 @@ import {
   ThemeProvider,
   Tooltip,
   Typography,
-  Container,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -214,7 +213,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           startIcon={<ArrowBackIcon />}
           href={`/orgao/${agency}/${year}`}
         >
-          VOLTAR PARA EXPLORAR POR ANO
+          Voltar para explorar por ano
         </Button>
         <Button
           variant="outlined"
@@ -238,89 +237,98 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       </Stack>
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
-          <Grid item xs={12} md={20}>
+          <Grid item xs={12} md={6}>
             <Paper elevation={0}>
-              <Div>
-                <Typography pt={2} px={2} variant="h6">
-                  Resumo de remunerações de membros ativos
-                </Typography>
-              </Div>
-              <Box p={2} pb={4}>
-                <Grid xs={12} md={20}>
-                  <List
-                    dense
-                    sx={{
-                      display: 'flex',
-                      flexDirection: 'row',
-                      flexWrap: 'wrap',
-                      justifyContent: 'space-evenly',
-                    }}
+              <Box p={2}>
+                <Typography variant="h6">
+                  Remuneração
+                  <Tooltip
+                    placement="top"
+                    title={
+                      <Typography fontSize="0.8rem">
+                        <p>
+                          <b>Salário:</b> valor recebido de acordo com a
+                          prestação de serviços, em decorrência do contrato de
+                          trabalho.
+                        </p>
+                        <p>
+                          <b>Remuneração:</b> é a soma do salário mais outras
+                          vantagens (indenizações e benefícios). - Benefício:
+                          valores eventuais, por exemplo, auxílios alimentação,
+                          saúde, escolar... - Membro: é o integrante da carreira
+                          &apos;principal&apos; do órgão do sistema de justiça.
+                          Por exemplo, juízes, desembargadores, ministros,
+                          defensores, procuradores públicos, promotores de
+                          justiça, procuradores de justiça, etc...
+                        </p>
+                      </Typography>
+                    }
                   >
-                    <Grid item {...(matches && { width: '100%' })}>
-                      <ListItem sx={{ paddingTop: 1 }}>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <EmojiPeopleIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={`Quantidade de membros: ${totalMembers}`}
-                        />
-                      </ListItem>
-                    </Grid>
-                    <Grid item {...(matches && { width: '100%' })}>
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <AccountBalanceWalletIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={`Maior salário: R$ ${(
-                            maxWage / 1000
-                          ).toFixed(2)} mil`}
-                          secondary={`Total de salários: R$ ${(
-                            totalWage / 100000
-                          ).toFixed(2)}M`}
-                        />
-                      </ListItem>
-                    </Grid>
-                    <Grid item {...(matches && { width: '100%' })}>
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <CardGiftcardIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={`Maior benefício: R$ ${(
-                            maxPerk / 1000
-                          ).toFixed(2)} mil`}
-                          secondary={`Total de benefícios: R$ ${(
-                            totalPerks / 1000000
-                          ).toFixed(2)}M`}
-                        />
-                      </ListItem>
-                    </Grid>
-                  </List>
-                </Grid>
+                    <IconButton>
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>{' '}
+                </Typography>
+                <List dense>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <AccountBalanceWalletIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`Maior salário: R$ ${(maxWage / 1000).toFixed(
+                        2,
+                      )} mil`}
+                      secondary={`Total de salários: R$ ${(
+                        totalWage / 100000
+                      ).toFixed(2)}M`}
+                    />
+                  </ListItem>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <CardGiftcardIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={`Maior benefício: R$ ${(maxPerk / 1000).toFixed(
+                        2,
+                      )} mil`}
+                      secondary={`Total de benefícios: R$ ${(
+                        totalPerks / 1000000
+                      ).toFixed(2)}M`}
+                    />
+                  </ListItem>
+                </List>
               </Box>
             </Paper>
           </Grid>
-
+          <Grid item xs={12} md={6}>
+            <Paper elevation={0} sx={{ height: 208 }}>
+              <Box p={2}>
+                <Typography variant="h6">Membros ativos</Typography>
+                <List dense>
+                  <ListItem>
+                    <ListItemAvatar>
+                      <Avatar>
+                        <EmojiPeopleIcon />
+                      </Avatar>
+                    </ListItemAvatar>
+                    <ListItemText primary={`Total: ${totalMembers}`} />
+                  </ListItem>
+                </List>
+              </Box>
+            </Paper>
+          </Grid>
           <Grid item xs={12}>
             <Paper elevation={0}>
               <Box p={2}>
-                <Typography variant="h6" textAlign="center">
-                  Índice de transparência:{' '}
-                  <b>
-                    {mi.Score?.indice_transparencia == undefined
-                      ? 'Indisponível'
-                      : mi.Score?.indice_transparencia.toFixed(2)}
-                  </b>
+                <Typography variant="h6">
+                  Índice de transparência em <Sub>{MONTHS[month]}</Sub> de{' '}
+                  {year}
                   <Tooltip
                     placement="top"
-                    sx={{ mb: 0.5 }}
                     title={
                       <Typography fontSize="0.8rem">
                         <p>
@@ -344,7 +352,14 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     </IconButton>
                   </Tooltip>
                 </Typography>
-
+                <Typography variant="h6" textAlign="center">
+                  Índice de transparência:{' '}
+                  <b>
+                    {mi.Score?.indice_transparencia == undefined
+                      ? 'Indisponível'
+                      : mi.Score?.indice_transparencia.toFixed(2)}
+                  </b>
+                </Typography>
                 <Grid container>
                   <Grid item xs={12} md={6}>
                     <List dense>
@@ -545,7 +560,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <Paper elevation={0}>
               <Box pt={4} py={4} px={2}>
                 <Typography variant="h6" textAlign="center">
-                  Distribuição de remunerações de membros ativos
+                  Total de remunerações de membros por mês em {year}
                 </Typography>
                 <Box px={2}>
                   {!chartData.Members ? (
@@ -658,7 +673,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             startIcon={<ArrowBackIcon />}
             href={`/orgao/${agency}/${year}`}
           >
-            VOLTAR PARA EXPLORAR POR ANO
+            Voltar para explorar por ano
           </Button>
           <Button
             variant="outlined"
@@ -705,12 +720,6 @@ const ActivityIndicatorPlaceholder = styled.div`
 
 const Sub = styled.span`
   text-transform: lowercase;
-`;
-
-const Div = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
 `;
 
 export default OMASummary;
