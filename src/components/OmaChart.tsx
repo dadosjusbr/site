@@ -242,7 +242,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <Paper elevation={0}>
               <Div>
                 <Typography pt={2} variant="h6">
-                  Membros ativos
+                  Resumo das remunerações de membros ativos
                 </Typography>
               </Div>
               <Box p={2} pb={4}>
@@ -545,7 +545,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <Paper elevation={0}>
               <Box pt={4} py={4} px={2}>
                 <Typography variant="h6" textAlign="center">
-                  Distribuição de remunerações
+                  Distribuição de remunerações de membros ativos
                 </Typography>
                 <Box px={2}>
                   {!chartData.Members ? (
