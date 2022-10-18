@@ -214,7 +214,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           startIcon={<ArrowBackIcon />}
           href={`/orgao/${agency}/${year}`}
         >
-          Voltar para explorar por ano
+          VOLTAR PARA EXPLORAR POR ANO
         </Button>
         <Button
           variant="outlined"
@@ -242,7 +242,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             <Paper elevation={0}>
               <Div>
                 <Typography pt={2} variant="h6">
-                  Resumo
+                  Membros ativos
                 </Typography>
               </Div>
               <Box p={2} pb={4}>
@@ -256,6 +256,18 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       justifyContent: 'space-evenly',
                     }}
                   >
+                    <Grid item {...(matches && { width: '100%' })}>
+                      <ListItem sx={{ paddingTop: 1 }}>
+                        <ListItemAvatar>
+                          <Avatar>
+                            <EmojiPeopleIcon />
+                          </Avatar>
+                        </ListItemAvatar>
+                        <ListItemText
+                          primary={`Quantidade de membros: ${totalMembers}`}
+                        />
+                      </ListItem>
+                    </Grid>
                     <Grid item {...(matches && { width: '100%' })}>
                       <ListItem>
                         <ListItemAvatar>
@@ -287,18 +299,6 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                           secondary={`Total de benefícios: R$ ${(
                             totalPerks / 1000000
                           ).toFixed(2)}M`}
-                        />
-                      </ListItem>
-                    </Grid>
-                    <Grid item {...(matches && { width: '100%' })}>
-                      <ListItem>
-                        <ListItemAvatar>
-                          <Avatar>
-                            <EmojiPeopleIcon />
-                          </Avatar>
-                        </ListItemAvatar>
-                        <ListItemText
-                          primary={`Total de membros ativos: ${totalMembers}`}
                         />
                       </ListItem>
                     </Grid>
@@ -658,7 +658,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             startIcon={<ArrowBackIcon />}
             href={`/orgao/${agency}/${year}`}
           >
-            Voltar para explorar por ano
+            VOLTAR PARA EXPLORAR POR ANO
           </Button>
           <Button
             variant="outlined"
