@@ -113,7 +113,17 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   title={
                     <Typography fontSize="0.8rem">
                       <p>
-                        <b>Salário:</b> valor recebido de acordo com a prestação
+                        <b>Membros:</b> Participantes ativos do órgao, incluindo
+                        os servidores públicos, os militares e os membros do
+                        Poder Judiciário.
+                      </p>
+                      <p>
+                        <b>Servidor:</b> Funcionário público que exerce cargo ou
+                        função pública, com vínculo empregatício, e que recebe
+                        remuneração fixa ou variável.
+                      </p>
+                      <p>
+                        <b>Salário:</b> Valor recebido de acordo com a prestação
                         de serviços, em decorrência do contrato de trabalho.
                       </p>
                       <p>
