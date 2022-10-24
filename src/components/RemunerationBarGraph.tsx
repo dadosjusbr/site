@@ -291,7 +291,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               ) : (
                 <>
                   {data.length > 0 ? (
-                    <Box>
+                    <Box pr={2}>
                       <Chart
                         options={{
                           colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
