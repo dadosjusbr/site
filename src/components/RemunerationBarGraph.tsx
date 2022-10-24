@@ -23,15 +23,9 @@ import NotCollecting from './NotCollecting';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const SalarioButton = styled(IconButton)({
-  backgroundColor: '#2fbb95',
-});
-const BeneficiosButton = styled(IconButton)({
-  backgroundColor: '#96bb2f',
-});
-const SemDadosButton = styled(IconButton)({
-  backgroundColor: '#3E5363',
-});
+const SalarioButton = styled(IconButton)({});
+const BeneficiosButton = styled(IconButton)({});
+const SemDadosButton = styled(IconButton)({});
 
 export interface RemunerationBarGraphProps {
   year: number;
