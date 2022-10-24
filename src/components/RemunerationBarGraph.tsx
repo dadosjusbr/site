@@ -153,6 +153,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             >
               <Grid item textAlign="center">
                 <SalarioButton
+                  sx={{ backgroundColor: '#2fbb95' }}
                   onClick={e => {
                     if (hidingWage) {
                       e.currentTarget.classList.remove('active');
@@ -184,7 +185,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 {matches ? (
                   <>
                     <SemDadosButton
-                      sx={{ mt: 2 }}
+                      sx={{ mt: 2, backgroundColor: '#3E5363' }}
                       onClick={e => {
                         if (hidingNoData) {
                           e.currentTarget.classList.remove('active');
@@ -203,6 +204,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               </Grid>
               <Grid item textAlign="center">
                 <BeneficiosButton
+                  sx={{ backgroundColor: '#96bb2f' }}
                   onClick={e => {
                     if (hidingBenefits) {
                       e.currentTarget.classList.remove('active');
@@ -235,6 +237,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 <>
                   <Grid item textAlign="center">
                     <SemDadosButton
+                      sx={{ backgroundColor: '#3E5363' }}
                       onClick={e => {
                         if (hidingNoData) {
                           e.currentTarget.classList.remove('active');
