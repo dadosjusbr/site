@@ -301,7 +301,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               ) : (
                 <>
                   {data.length > 0 ? (
-                    <Box>
+                    <Box pr={2}>
                       <Chart
                         options={{
                           colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
@@ -315,7 +315,24 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             },
                             stacked: true,
                             toolbar: {
-                              show: false,
+                              show: true,
+                              export: {
+                                svg: {
+                                  filename: `remuneracoes-membros${
+                                    agency ? `- ${agency.aid}` : ''
+                                  }-${year}`,
+                                },
+                                png: {
+                                  filename: `remuneracoes-membros${
+                                    agency ? `- ${agency.aid}` : ''
+                                  }-${year}`,
+                                },
+                                csv: {
+                                  filename: `remuneracoes-membros${
+                                    agency ? `- ${agency.aid}` : ''
+                                  }-${year}`,
+                                },
+                              },
                             },
                             zoom: {
                               enabled: true,
@@ -386,6 +403,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             title: {
                               text: 'Total de Remunerações',
                               offsetY: 10,
+                              offsetX: -5.5,
                               style: {
                                 fontSize: '14px',
                                 fontWeight: 'bold',
@@ -399,7 +417,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               maxWidth: 160,
                               style: {
                                 colors: [],
-                                fontSize: '16px',
+                                fontSize: '11px',
                                 fontFamily: 'Roboto Condensed, sans-serif',
                                 fontWeight: 600,
                                 cssClass: 'apexcharts-yaxis-label',
