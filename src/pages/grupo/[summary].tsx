@@ -113,6 +113,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       setSummaryPackage(agency.SummaryPackage);
       setDataLoading(false);
     } catch (err) {
+      setDataLoading(false);
       console.log(err);
     }
   }

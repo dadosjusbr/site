@@ -37,7 +37,7 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
               href="mailto:contato@dadosjusbr.org"
             >
               contato@dadosjusbr.org
-            </Link>{' '}
+            </Link>
             , ou visite nosso{' '}
             <Link
               color="inherit"
