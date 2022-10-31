@@ -462,8 +462,20 @@ export default function Index({ ais }) {
                 getOptionLabel={option => option.aid}
                 value={selectedAgencies}
                 onChange={(event, newValue) => {
-                  setSelectedAgencies(newValue);
-                  insertUrlParam('orgaos', newValue);
+                  if (
+                    selectedAgencies.length < 3 &&
+                    event.target['localName'] == 'li'
+                  ) {
+                    setSelectedAgencies(newValue);
+                    insertUrlParam('orgaos', newValue);
+                  } else if (
+                    selectedAgencies.length <= 3 &&
+                    (event.target['localName'] == 'svg' ||
+                      event.target['localName'] == 'path')
+                  ) {
+                    setSelectedAgencies(newValue);
+                    insertUrlParam('orgaos', newValue);
+                  }
                 }}
                 isOptionEqualToValue={(option, value) =>
                   option.aid === value.aid
