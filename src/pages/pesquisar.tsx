@@ -83,7 +83,7 @@ export default function Index({ ais }) {
     { name: 'Dez', value: 12 },
   ];
 
-  const [selectedYears, setSelectedYears] = React.useState([2022]);
+  const [selectedYears, setSelectedYears] = React.useState(2022);
   const [selectedMonths, setSelectedMonths] = React.useState(months);
   const [selectedAgencies, setSelectedAgencies] = React.useState([]);
   const [agencies, setAgencies] = React.useState(ais);
@@ -98,7 +98,7 @@ export default function Index({ ais }) {
   const [query, setQuery] = React.useState('');
 
   const clearSearch = () => {
-    setSelectedYears([]);
+    setSelectedYears(2022);
     setSelectedMonths([]);
     setSelectedAgencies([]);
     setType('Tudo');
@@ -139,9 +139,11 @@ export default function Index({ ais }) {
     setShowResults(false);
     try {
       let q = '?';
-      const qSelectedYears = makeQueryFromList(
+      const qSelectedYears = makeQueryFromValue(
         'anos',
-        selectedYears.map(y => String(y)),
+        selectedYears.toString(),
+        years.map(y => y.toString()),
+        years.map(y => y.toString()),
       );
       const qSelectedMonths = makeQueryFromList(
         'meses',
@@ -198,15 +200,148 @@ export default function Index({ ais }) {
     } else {
       setAgencies(ais);
     }
+
+    insertUrlParam(
+      'tipo',
+      event.target.value
+        .toString()
+        .toLowerCase()
+        .split(' ')
+        .join('_')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, ''),
+    );
   };
 
   const categoryHandleChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value as string);
+    insertUrlParam(
+      'categoria',
+      event.target.value
+        .toString()
+        .toLowerCase()
+        .split(' ')
+        .join('_')
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, ''),
+    );
   };
 
   const agencyFilterOptions = createFilterOptions({
     stringify: (option: AgencyOptionType) => option.aid + option.name,
   });
+
+  function insertUrlParam(key, value) {
+    if (history.pushState) {
+      let searchParams = new URLSearchParams(window.location.search);
+      if (typeof value === 'object') {
+        if (key === 'meses') {
+          value = value
+            .map(v => v.value)
+            .join(',')
+            .split(',');
+          searchParams.set(key, value.toString());
+        } else if (key === 'orgaos') {
+          searchParams.set(key, value.map(v => v.aid).toString());
+        }
+      } else {
+        searchParams.set(key, value);
+      }
+      let newurl =
+        window.location.protocol +
+        '//' +
+        window.location.host +
+        window.location.pathname +
+        '?' +
+        searchParams.toString();
+      window.history.pushState({ path: newurl }, '', newurl);
+    }
+  }
+
+  function getUrlParameter(paramKey) {
+    const url = window.location.href;
+    var r = new URL(url);
+    switch (paramKey) {
+      case 'tipo':
+        switch (r.searchParams.get(paramKey)) {
+          case 'ministerios_publicos':
+            setType('Ministérios Públicos');
+            break;
+
+          case 'tribunais_de_justica':
+            setType('Tribunais de Justiça');
+            break;
+
+          case 'tudo':
+            setType('Tudo');
+            break;
+
+          default:
+            break;
+        }
+        break;
+
+      case 'ano':
+        setSelectedYears(
+          r.searchParams.get(paramKey)
+            ? parseInt(r.searchParams.get(paramKey), 10)
+            : 2022,
+        );
+        break;
+
+      case 'meses':
+        const meses = r.searchParams.get(paramKey)
+          ? r.searchParams.get(paramKey).split(',')
+          : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        const mesesSelecionados = meses.map(m => {
+          return { label: months[parseInt(m, 10) - 1] };
+        });
+
+        setSelectedMonths(mesesSelecionados.map(m => m.label));
+        break;
+
+      case 'categoria':
+        switch (r.searchParams.get(paramKey)) {
+          case 'remuneracao_base':
+            setCategory('Remuneração base');
+            break;
+
+          case 'outras_remuneracoes':
+            setCategory('Outras remunerações');
+            break;
+
+          case 'descontos':
+            setCategory('Descontos');
+            break;
+
+          case 'tudo':
+            setCategory('Tudo');
+            break;
+
+          default:
+            break;
+        }
+        break;
+
+      case 'orgaos':
+        const orgaos = r.searchParams.get(paramKey)
+          ? r.searchParams.get(paramKey).split(',')
+          : [];
+        const orgaosSelecionados = orgaos.map(o => {
+          return ais.find(a => a.aid === o);
+        });
+        setSelectedAgencies(orgaosSelecionados);
+        break;
+    }
+  }
+
+  React.useEffect(() => {
+    getUrlParameter('tipo');
+    getUrlParameter('ano');
+    getUrlParameter('meses');
+    getUrlParameter('categoria');
+    getUrlParameter('orgaos');
+  }, []);
 
   interface AgencyOptionType {
     aid: string;
@@ -240,25 +375,29 @@ export default function Index({ ais }) {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Autocomplete
-                multiple
                 id="autocomplete-anos"
                 options={years}
-                disableCloseOnSelect
                 getOptionLabel={option => `${option}`}
                 value={selectedYears}
-                onChange={(event, newValue) => setSelectedYears(newValue)}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
+                onChange={(event, newValue) => {
+                  setSelectedYears(newValue);
+                  insertUrlParam(
+                    'ano',
+                    newValue
+                      .toString()
+                      .toLowerCase()
+                      .split(' ')
+                      .join('_')
+                      .normalize('NFD')
+                      .replace(/[\u0300-\u036f]/g, ''),
+                  );
+                }}
+                renderOption={(props, option) => (
+                  <MenuItem key={option} {...props} value={option}>
                     {option}
-                  </li>
+                  </MenuItem>
                 )}
-                renderInput={params => <TextField {...params} label="Anos" />}
+                renderInput={params => <TextField {...params} label="Ano" />}
               />
             </Grid>
             <Grid item xs={12}>
@@ -269,7 +408,10 @@ export default function Index({ ais }) {
                 disableCloseOnSelect
                 getOptionLabel={option => option.name}
                 value={selectedMonths}
-                onChange={(event, newValue) => monthsHandleChange(newValue)}
+                onChange={(event, newValue) => {
+                  monthsHandleChange(newValue);
+                  insertUrlParam('meses', newValue);
+                }}
                 isOptionEqualToValue={(option, value) =>
                   option.value === value.value
                 }
@@ -319,7 +461,10 @@ export default function Index({ ais }) {
                 disableCloseOnSelect
                 getOptionLabel={option => option.aid}
                 value={selectedAgencies}
-                onChange={(event, newValue) => setSelectedAgencies(newValue)}
+                onChange={(event, newValue) => {
+                  setSelectedAgencies(newValue);
+                  insertUrlParam('orgaos', newValue);
+                }}
                 isOptionEqualToValue={(option, value) =>
                   option.aid === value.aid
                 }
@@ -339,8 +484,7 @@ export default function Index({ ais }) {
               />
               <Typography variant="body2" pt={1} pl={1}>
                 Listados apenas os{' '}
-                <Link href="/status">órgãos monitorados</Link> pelo
-                DadosJusBr.
+                <Link href="/status">órgãos monitorados</Link> pelo DadosJusBr.
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
