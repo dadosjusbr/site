@@ -23,6 +23,7 @@ import {
   AlertTitle,
 } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import IosShareIcon from '@mui/icons-material/IosShare';
 import { ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -37,6 +38,7 @@ import Nav from '../components/Header';
 import light from '../styles/theme-light';
 import api from '../services/api';
 import { monthsInQuarter } from 'date-fns/esm/fp';
+import ShareModal from '../components/ShareModal';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -96,6 +98,7 @@ export default function Index({ ais }) {
   const [downloadLimit, setDownloadLimit] = React.useState(100000);
   const [numRowsIfAvailable, setNumRowsIfAvailable] = React.useState(0);
   const [query, setQuery] = React.useState('');
+  const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
   const clearSearch = () => {
     setSelectedYears(2022);
@@ -202,7 +205,7 @@ export default function Index({ ais }) {
     }
 
     insertUrlParam(
-      'tipo',
+      'tipos',
       event.target.value
         .toString()
         .toLowerCase()
@@ -216,7 +219,7 @@ export default function Index({ ais }) {
   const categoryHandleChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value as string);
     insertUrlParam(
-      'categoria',
+      'categorias',
       event.target.value
         .toString()
         .toLowerCase()
@@ -262,7 +265,7 @@ export default function Index({ ais }) {
     const url = window.location.href;
     var r = new URL(url);
     switch (paramKey) {
-      case 'tipo':
+      case 'tipos':
         switch (r.searchParams.get(paramKey)) {
           case 'ministerios_publicos':
             setType('Ministérios Públicos');
@@ -281,7 +284,7 @@ export default function Index({ ais }) {
         }
         break;
 
-      case 'ano':
+      case 'anos':
         setSelectedYears(
           r.searchParams.get(paramKey)
             ? parseInt(r.searchParams.get(paramKey), 10)
@@ -300,7 +303,7 @@ export default function Index({ ais }) {
         setSelectedMonths(mesesSelecionados.map(m => m.label));
         break;
 
-      case 'categoria':
+      case 'categorias':
         switch (r.searchParams.get(paramKey)) {
           case 'remuneracao_base':
             setCategory('Remuneração base');
@@ -315,6 +318,18 @@ export default function Index({ ais }) {
             break;
 
           case 'tudo':
+            setCategory('Tudo');
+            break;
+
+          case 'base':
+            setCategory('Remuneração base');
+            break;
+
+          case 'outras':
+            setCategory('Outras remunerações');
+            break;
+
+          case '':
             setCategory('Tudo');
             break;
 
@@ -336,10 +351,10 @@ export default function Index({ ais }) {
   }
 
   React.useEffect(() => {
-    getUrlParameter('tipo');
-    getUrlParameter('ano');
+    getUrlParameter('tipos');
+    getUrlParameter('anos');
     getUrlParameter('meses');
-    getUrlParameter('categoria');
+    getUrlParameter('categorias');
     getUrlParameter('orgaos');
   }, []);
 
@@ -382,7 +397,7 @@ export default function Index({ ais }) {
                 onChange={(event, newValue) => {
                   setSelectedYears(newValue);
                   insertUrlParam(
-                    'ano',
+                    'anos',
                     newValue
                       .toString()
                       .toLowerCase()
@@ -606,6 +621,15 @@ export default function Index({ ais }) {
               </Box>
               <Box py={4} textAlign="right">
                 <Button
+                  sx={{ mr: 2 }}
+                  variant="outlined"
+                  color="info"
+                  endIcon={<IosShareIcon />}
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  COMPARTILHAR
+                </Button>
+                <Button
                   variant="outlined"
                   endIcon={<CloudDownloadIcon />}
                   disabled={!downloadAvailable}
@@ -652,6 +676,11 @@ export default function Index({ ais }) {
             </Box>
           )}
         </Box>
+        <ShareModal
+          isOpen={modalIsOpen}
+          url={`dadosjusbr.org/pesquisar${query}`}
+          onRequestClose={() => setModalIsOpen(false)}
+        />
       </Container>
       <Footer />
     </Page>
