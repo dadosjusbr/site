@@ -661,6 +661,15 @@ export default function Index({ ais }) {
               )}
               <Box py={4} textAlign="right">
                 <Button
+                  sx={{ mr: 2 }}
+                  variant="outlined"
+                  color="info"
+                  endIcon={<IosShareIcon />}
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  COMPARTILHAR
+                </Button>
+                <Button
                   variant="outlined"
                   endIcon={<CloudDownloadIcon />}
                   disabled={!downloadAvailable}
