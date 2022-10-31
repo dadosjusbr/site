@@ -552,22 +552,26 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       />
                     </Box>
                   ) : (
-                    <div>Não há dados para esse ano</div>
+                    <Typography variant="body1" mt={2} textAlign="center">
+                      Não há dados para esse ano.
+                    </Typography>
                   )}
                 </>
               )}
             </Box>
-            <Grid container display="flex" justifyContent="center">
-              <Grid
-                display="flex"
-                item
-                pb={4}
-                sx={{ width: '50%' }}
-                justifyContent="center"
-              >
-                <CrawlingDateTable data={data} dataLoading={dataLoading} />
+            {data && data.length > 0 && (
+              <Grid container display="flex" justifyContent="center">
+                <Grid
+                  display="flex"
+                  item
+                  pb={4}
+                  sx={{ width: '50%' }}
+                  justifyContent="center"
+                >
+                  <CrawlingDateTable data={data} dataLoading={dataLoading} />
+                </Grid>
               </Grid>
-            </Grid>
+            )}
           </Paper>
         </>
       )}
