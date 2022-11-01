@@ -203,31 +203,29 @@ export default function Index({ ais }) {
     } else {
       setAgencies(ais);
     }
-
-    insertUrlParam(
-      'tipos',
-      event.target.value
-        .toString()
-        .toLowerCase()
-        .split(' ')
-        .join('_')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, ''),
-    );
   };
 
   const categoryHandleChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value as string);
-    insertUrlParam(
-      'categorias',
-      event.target.value
-        .toString()
-        .toLowerCase()
-        .split(' ')
-        .join('_')
-        .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, ''),
-    );
+    switch (event.target.value) {
+      case 'Remuneração base':
+        insertUrlParam('categorias', 'base');
+        break;
+
+      case 'Outras remunerações':
+        insertUrlParam('categorias', 'outras');
+        break;
+
+      case 'Descontos':
+        insertUrlParam('categorias', 'descontos');
+        break;
+
+      case 'Tudo':
+        deleteUrlParam('categorias');
+
+      default:
+        break;
+    }
   };
 
   const agencyFilterOptions = createFilterOptions({
@@ -261,36 +259,56 @@ export default function Index({ ais }) {
     }
   }
 
+  const deleteUrlParam = key => {
+    if (history.pushState) {
+      let searchParams = new URLSearchParams(window.location.search);
+      searchParams.delete(key);
+      let newurl =
+        window.location.protocol +
+        '//' +
+        window.location.host +
+        window.location.pathname +
+        '?' +
+        searchParams.toString();
+      window.history.pushState({ path: newurl }, '', newurl);
+    }
+  };
+
+  const firstRequest = async () => {
+    setLoading(true);
+    setShowResults(false);
+    try {
+      setQuery(location.search);
+      const res = await api.ui.get(`/v2/pesquisar${location.search}`);
+      const data = res.data.result.map((d, i) => {
+        const item = d;
+        item.id = i + 1;
+        return item;
+      });
+      setResult(data);
+      setDownloadAvailable(res.data.download_available);
+      setDownloadLimit(res.data.download_limit);
+      setNumRowsIfAvailable(res.data.num_rows_if_available);
+      setShowResults(true);
+    } catch (error) {
+      setResult([]);
+      setDownloadAvailable(false);
+      setShowResults(false);
+    }
+    setLoading(false);
+  };
+
   function getUrlParameter(paramKey) {
     const url = window.location.href;
     var r = new URL(url);
     switch (paramKey) {
-      case 'tipos':
-        switch (r.searchParams.get(paramKey)) {
-          case 'ministerios_publicos':
-            setType('Ministérios Públicos');
-            break;
-
-          case 'tribunais_de_justica':
-            setType('Tribunais de Justiça');
-            break;
-
-          case 'tudo':
-            setType('Tudo');
-            break;
-
-          default:
-            break;
-        }
-        break;
-
       case 'anos':
         setSelectedYears(
           r.searchParams.get(paramKey)
             ? parseInt(r.searchParams.get(paramKey), 10)
             : 2022,
         );
-        break;
+        return +r.searchParams.get(paramKey);
 
       case 'meses':
         const meses = r.searchParams.get(paramKey)
@@ -301,37 +319,25 @@ export default function Index({ ais }) {
         });
 
         setSelectedMonths(mesesSelecionados.map(m => m.label));
-        break;
+        return mesesSelecionados.map(m => m.label.value);
 
       case 'categorias':
         switch (r.searchParams.get(paramKey)) {
-          case 'remuneracao_base':
-            setCategory('Remuneração base');
-            break;
-
-          case 'outras_remuneracoes':
-            setCategory('Outras remunerações');
-            break;
-
           case 'descontos':
             setCategory('Descontos');
-            break;
-
-          case 'tudo':
-            setCategory('Tudo');
-            break;
+            return 'descontos';
 
           case 'base':
             setCategory('Remuneração base');
-            break;
+            return 'base';
 
           case 'outras':
             setCategory('Outras remunerações');
-            break;
+            return 'outras';
 
-          case '':
+          case 'Tudo':
             setCategory('Tudo');
-            break;
+            return 'Tudo';
 
           default:
             break;
@@ -346,16 +352,17 @@ export default function Index({ ais }) {
           return ais.find(a => a.aid === o);
         });
         setSelectedAgencies(orgaosSelecionados);
-        break;
+        return orgaosSelecionados;
     }
   }
 
   React.useEffect(() => {
-    getUrlParameter('tipos');
     getUrlParameter('anos');
     getUrlParameter('meses');
     getUrlParameter('categorias');
     getUrlParameter('orgaos');
+
+    location.search != '' && firstRequest();
   }, []);
 
   interface AgencyOptionType {
@@ -482,14 +489,22 @@ export default function Index({ ais }) {
                     event.target['localName'] == 'li'
                   ) {
                     setSelectedAgencies(newValue);
-                    insertUrlParam('orgaos', newValue);
+                    if (newValue.length > 0) {
+                      insertUrlParam('orgaos', newValue);
+                    } else {
+                      deleteUrlParam('orgaos');
+                    }
                   } else if (
                     selectedAgencies.length <= 3 &&
                     (event.target['localName'] == 'svg' ||
                       event.target['localName'] == 'path')
                   ) {
                     setSelectedAgencies(newValue);
-                    insertUrlParam('orgaos', newValue);
+                    if (newValue.length > 0) {
+                      insertUrlParam('orgaos', newValue);
+                    } else {
+                      deleteUrlParam('orgaos');
+                    }
                   }
                 }}
                 isOptionEqualToValue={(option, value) =>
