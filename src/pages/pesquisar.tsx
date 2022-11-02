@@ -23,6 +23,7 @@ import {
   AlertTitle,
 } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
+import IosShareIcon from '@mui/icons-material/IosShare';
 import { ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
@@ -37,6 +38,7 @@ import Nav from '../components/Header';
 import light from '../styles/theme-light';
 import api from '../services/api';
 import { monthsInQuarter } from 'date-fns/esm/fp';
+import ShareModal from '../components/ShareModal';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -83,7 +85,7 @@ export default function Index({ ais }) {
     { name: 'Dez', value: 12 },
   ];
 
-  const [selectedYears, setSelectedYears] = React.useState([2022]);
+  const [selectedYears, setSelectedYears] = React.useState(2022);
   const [selectedMonths, setSelectedMonths] = React.useState(months);
   const [selectedAgencies, setSelectedAgencies] = React.useState([]);
   const [agencies, setAgencies] = React.useState(ais);
@@ -96,9 +98,10 @@ export default function Index({ ais }) {
   const [downloadLimit, setDownloadLimit] = React.useState(100000);
   const [numRowsIfAvailable, setNumRowsIfAvailable] = React.useState(0);
   const [query, setQuery] = React.useState('');
+  const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
   const clearSearch = () => {
-    setSelectedYears([]);
+    setSelectedYears(2022);
     setSelectedMonths([]);
     setSelectedAgencies([]);
     setType('Tudo');
@@ -139,9 +142,11 @@ export default function Index({ ais }) {
     setShowResults(false);
     try {
       let q = '?';
-      const qSelectedYears = makeQueryFromList(
+      const qSelectedYears = makeQueryFromValue(
         'anos',
-        selectedYears.map(y => String(y)),
+        selectedYears.toString(),
+        years.map(y => y.toString()),
+        years.map(y => y.toString()),
       );
       const qSelectedMonths = makeQueryFromList(
         'meses',
@@ -202,11 +207,163 @@ export default function Index({ ais }) {
 
   const categoryHandleChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value as string);
+    switch (event.target.value) {
+      case 'Remuneração base':
+        insertUrlParam('categorias', 'base');
+        break;
+
+      case 'Outras remunerações':
+        insertUrlParam('categorias', 'outras');
+        break;
+
+      case 'Descontos':
+        insertUrlParam('categorias', 'descontos');
+        break;
+
+      case 'Tudo':
+        deleteUrlParam('categorias');
+
+      default:
+        break;
+    }
   };
 
   const agencyFilterOptions = createFilterOptions({
     stringify: (option: AgencyOptionType) => option.aid + option.name,
   });
+
+  function insertUrlParam(key, value) {
+    if (history.pushState) {
+      let searchParams = new URLSearchParams(window.location.search);
+      if (typeof value === 'object') {
+        if (key === 'meses') {
+          value = value
+            .map(v => v.value)
+            .join(',')
+            .split(',');
+          searchParams.set(key, value.toString());
+        } else if (key === 'orgaos') {
+          searchParams.set(key, value.map(v => v.aid).toString());
+        }
+      } else {
+        searchParams.set(key, value);
+      }
+      let newurl =
+        window.location.protocol +
+        '//' +
+        window.location.host +
+        window.location.pathname +
+        '?' +
+        searchParams.toString();
+      window.history.pushState({ path: newurl }, '', newurl);
+    }
+  }
+
+  const deleteUrlParam = key => {
+    if (history.pushState) {
+      let searchParams = new URLSearchParams(window.location.search);
+      searchParams.delete(key);
+      let newurl =
+        window.location.protocol +
+        '//' +
+        window.location.host +
+        window.location.pathname +
+        '?' +
+        searchParams.toString();
+      window.history.pushState({ path: newurl }, '', newurl);
+    }
+  };
+
+  const firstRequest = async () => {
+    setLoading(true);
+    setShowResults(false);
+    try {
+      setQuery(location.search);
+      const res = await api.ui.get(`/v2/pesquisar${location.search}`);
+      const data = res.data.result.map((d, i) => {
+        const item = d;
+        item.id = i + 1;
+        return item;
+      });
+      setResult(data);
+      setDownloadAvailable(res.data.download_available);
+      setDownloadLimit(res.data.download_limit);
+      setNumRowsIfAvailable(res.data.num_rows_if_available);
+      setShowResults(true);
+    } catch (error) {
+      setResult([]);
+      setDownloadAvailable(false);
+      setShowResults(false);
+    }
+    setLoading(false);
+  };
+
+  function getUrlParameter(paramKey) {
+    const url = window.location.href;
+    var r = new URL(url);
+    switch (paramKey) {
+      case 'anos':
+        setSelectedYears(
+          r.searchParams.get(paramKey)
+            ? parseInt(r.searchParams.get(paramKey), 10)
+            : 2022,
+        );
+        return +r.searchParams.get(paramKey);
+
+      case 'meses':
+        const meses = r.searchParams.get(paramKey)
+          ? r.searchParams.get(paramKey).split(',')
+          : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+        const mesesSelecionados = meses.map(m => {
+          return { label: months[parseInt(m, 10) - 1] };
+        });
+
+        setSelectedMonths(mesesSelecionados.map(m => m.label));
+        return mesesSelecionados.map(m => m.label.value);
+
+      case 'categorias':
+        switch (r.searchParams.get(paramKey)) {
+          case 'descontos':
+            setCategory('Descontos');
+            return 'descontos';
+
+          case 'base':
+            setCategory('Remuneração base');
+            return 'base';
+
+          case 'outras':
+            setCategory('Outras remunerações');
+            return 'outras';
+
+          case 'Tudo':
+            setCategory('Tudo');
+            return 'Tudo';
+
+          default:
+            break;
+        }
+        break;
+
+      case 'orgaos':
+        const orgaos = r.searchParams.get(paramKey)
+          ? r.searchParams.get(paramKey).split(',')
+          : [];
+        const orgaosSelecionados = orgaos.map(o => {
+          return ais.find(a => a.aid === o);
+        });
+        setSelectedAgencies(orgaosSelecionados);
+        return orgaosSelecionados;
+    }
+  }
+
+  React.useEffect(() => {
+    getUrlParameter('anos');
+    getUrlParameter('meses');
+    getUrlParameter('categorias');
+    getUrlParameter('orgaos');
+
+    location.search != '' && firstRequest();
+  }, []);
 
   interface AgencyOptionType {
     aid: string;
@@ -240,25 +397,29 @@ export default function Index({ ais }) {
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Autocomplete
-                multiple
                 id="autocomplete-anos"
                 options={years}
-                disableCloseOnSelect
                 getOptionLabel={option => `${option}`}
                 value={selectedYears}
-                onChange={(event, newValue) => setSelectedYears(newValue)}
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
+                onChange={(event, newValue) => {
+                  setSelectedYears(newValue);
+                  insertUrlParam(
+                    'anos',
+                    newValue
+                      .toString()
+                      .toLowerCase()
+                      .split(' ')
+                      .join('_')
+                      .normalize('NFD')
+                      .replace(/[\u0300-\u036f]/g, ''),
+                  );
+                }}
+                renderOption={(props, option) => (
+                  <MenuItem key={option} {...props} value={option}>
                     {option}
-                  </li>
+                  </MenuItem>
                 )}
-                renderInput={params => <TextField {...params} label="Anos" />}
+                renderInput={params => <TextField {...params} label="Ano" />}
               />
             </Grid>
             <Grid item xs={12}>
@@ -269,7 +430,10 @@ export default function Index({ ais }) {
                 disableCloseOnSelect
                 getOptionLabel={option => option.name}
                 value={selectedMonths}
-                onChange={(event, newValue) => monthsHandleChange(newValue)}
+                onChange={(event, newValue) => {
+                  monthsHandleChange(newValue);
+                  insertUrlParam('meses', newValue);
+                }}
                 isOptionEqualToValue={(option, value) =>
                   option.value === value.value
                 }
@@ -319,7 +483,30 @@ export default function Index({ ais }) {
                 disableCloseOnSelect
                 getOptionLabel={option => option.aid}
                 value={selectedAgencies}
-                onChange={(event, newValue) => setSelectedAgencies(newValue)}
+                onChange={(event, newValue) => {
+                  if (
+                    selectedAgencies.length < 3 &&
+                    event.target['localName'] == 'li'
+                  ) {
+                    setSelectedAgencies(newValue);
+                    if (newValue.length > 0) {
+                      insertUrlParam('orgaos', newValue);
+                    } else {
+                      deleteUrlParam('orgaos');
+                    }
+                  } else if (
+                    selectedAgencies.length <= 3 &&
+                    (event.target['localName'] == 'svg' ||
+                      event.target['localName'] == 'path')
+                  ) {
+                    setSelectedAgencies(newValue);
+                    if (newValue.length > 0) {
+                      insertUrlParam('orgaos', newValue);
+                    } else {
+                      deleteUrlParam('orgaos');
+                    }
+                  }
+                }}
                 isOptionEqualToValue={(option, value) =>
                   option.aid === value.aid
                 }
@@ -339,8 +526,7 @@ export default function Index({ ais }) {
               />
               <Typography variant="body2" pt={1} pl={1}>
                 Listados apenas os{' '}
-                <Link href="/status">órgãos monitorados</Link> pelo
-                DadosJusBr.
+                <Link href="/status">órgãos monitorados</Link> pelo DadosJusBr.
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -450,6 +636,15 @@ export default function Index({ ais }) {
               </Box>
               <Box py={4} textAlign="right">
                 <Button
+                  sx={{ mr: 2 }}
+                  variant="outlined"
+                  color="info"
+                  endIcon={<IosShareIcon />}
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  COMPARTILHAR
+                </Button>
+                <Button
                   variant="outlined"
                   endIcon={<CloudDownloadIcon />}
                   disabled={!downloadAvailable}
@@ -481,6 +676,15 @@ export default function Index({ ais }) {
               )}
               <Box py={4} textAlign="right">
                 <Button
+                  sx={{ mr: 2 }}
+                  variant="outlined"
+                  color="info"
+                  endIcon={<IosShareIcon />}
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  COMPARTILHAR
+                </Button>
+                <Button
                   variant="outlined"
                   endIcon={<CloudDownloadIcon />}
                   disabled={!downloadAvailable}
@@ -496,6 +700,11 @@ export default function Index({ ais }) {
             </Box>
           )}
         </Box>
+        <ShareModal
+          isOpen={modalIsOpen}
+          url={`dadosjusbr.org/pesquisar${query}`}
+          onRequestClose={() => setModalIsOpen(false)}
+        />
       </Container>
       <Footer />
     </Page>
