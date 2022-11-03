@@ -461,40 +461,6 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
-                        <ListItemIcon>
-                          {mi.Meta?.login_nao_necessario == null ? (
-                            <Close color="error" />
-                          ) : (
-                            <Done color="success" />
-                          )}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="Não é necessário login"
-                          sx={{
-                            textDecoration: mi.Meta?.login_nao_necessario
-                              ? null
-                              : 'line-through',
-                          }}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemIcon>
-                          {mi.Meta?.captcha_nao_necessario == null ? (
-                            <Close color="error" />
-                          ) : (
-                            <Done color="success" />
-                          )}
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="Não é necessário captcha"
-                          sx={{
-                            textDecoration: mi.Meta?.captcha_nao_necessario
-                              ? null
-                              : 'line-through',
-                          }}
-                        />
-                      </ListItem>
-                      <ListItem>
                         <ListItemText
                           primary={<ShowAcesso>{mi.Meta?.acesso}</ShowAcesso>}
                         />
@@ -530,6 +496,25 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                           sx={{
                             textDecoration: mi.Meta
                               ?.dados_estritamente_tabulares
+                              ? null
+                              : 'line-through',
+                          }}
+                        />
+                      </ListItem>
+                      <ListItem>
+                        {mi.Meta?.formato_aberto == null || mi.Meta?.formato_aberto == false ? (
+                          <ListItemIcon>
+                            <Close color="error" />
+                          </ListItemIcon>
+                        ) : (
+                          <ListItemIcon>
+                            <Done color="success" />
+                          </ListItemIcon>
+                        )}
+                        <ListItemText
+                          primary="Possui formato aberto"
+                          sx={{
+                            textDecoration: mi.Meta?.formato_aberto
                               ? null
                               : 'line-through',
                           }}
