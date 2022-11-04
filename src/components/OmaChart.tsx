@@ -430,7 +430,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary={
                             <ShowTipoDado tipo={mi.Meta?.despesas}>
-                              despesas
+                              descontos
                             </ShowTipoDado>
                           }
                         />

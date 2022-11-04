@@ -67,7 +67,7 @@ export default function Index() {
                 moradia, natalidade;
               </li>
               <li>
-                <b>Detalhamento de Despesas</b>: valor correspondente a
+                <b>Detalhamento de Descontos</b>: valor correspondente a
                 descontos obrigatórios como: contribuição previdenciária,
                 imposto de renda e retenção por teto constitucional.
               </li>
@@ -117,7 +117,7 @@ export default function Index() {
             <Typography variant="body1">
               Na maioria dos critérios avaliados nas dimensões, o órgão pode
               pontuar 0 ou 1. Nos critérios remuneração básica, outras receitas,
-              detalhamento de despesas e formato de acesso, a escla é contínua
+              detalhamento de descontos e formato de acesso, a escla é contínua
               com pontuações entre 0 e 1. Ainda que haja seis critérios na
               dimensão de completude e cinco na de facilidade, cada dimensão tem
               peso idêntico.
