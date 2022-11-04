@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import ReactGA from 'react-ga';
 
 import {
@@ -196,6 +197,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const fileLink = useMemo(() => chartData.PackageURL, [chartData]);
   const matches = useMediaQuery('(max-width:500px)');
+  const router = useRouter();
   return (
     <>
       <Stack
@@ -212,7 +214,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           variant="outlined"
           color="info"
           startIcon={<ArrowBackIcon />}
-          href={`/orgao/${agency}/${year}`}
+          onClick={() => {
+            router.back();
+          }}
         >
           VOLTAR PARA EXPLORAR POR ANO
         </Button>
@@ -502,7 +506,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
-                        {mi.Meta?.formato_aberto == null || mi.Meta?.formato_aberto == false ? (
+                        {mi.Meta?.formato_aberto == null ||
+                        mi.Meta?.formato_aberto == false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -641,7 +646,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             variant="outlined"
             color="info"
             startIcon={<ArrowBackIcon />}
-            href={`/orgao/${agency}/${year}`}
+            onClick={() => {
+              router.back();
+            }}
           >
             VOLTAR PARA EXPLORAR POR ANO
           </Button>
