@@ -67,31 +67,25 @@ export default function Index() {
                 moradia, natalidade;
               </li>
               <li>
-                <b>Detalhamento de Descontos</b>: valor correspondente a
+                <b>Detalhamento de descontos</b>: valor correspondente a
                 descontos obrigatórios como: contribuição previdenciária,
                 imposto de renda e retenção por teto constitucional.
               </li>
             </ul>
             <Typography variant="body1">
-              Na dimensão de facilidade do Índice, há cinco critérios para
+              Na dimensão de facilidade do Índice, há quatro critérios para
               avaliar a dificuldade de acessar dados que estão disponíveis de
               forma automatizada. São elas:
             </Typography>
             <ul>
               <li>
-                <b>Necessidade de login</b>: a necessidade de fornecimento de
-                informações pessoais e autenticação para acesso dos dados;
-              </li>
-              <li>
-                <b>Necessário captcha</b>: verificação se o acesso está sendo
-                feito por humanos;
+                <b>Possui formato aberto</b>: se é baseado em padrões abertos e livre de qualquer extensão proprietária que impeça seu uso livre;
               </li>
               <li>
                 <b>Formato de acesso</b>: se é possível acessar os dados
                 programaticamente através de URLs que seguem boas práticas; se é
-                necessário raspar os dados de forma facilitada (por meio de
-                páginas e URLs com boas práticas de estrutura); se é necessário
-                raspagem complexa; ou se é necessário simular um usuário usando
+                necessário raspar os dados (por meio de
+                páginas e URLs com boas práticas de estrutura); ou se é necessário simular um usuário usando
                 um navegador (pior caso);
               </li>
               <li>
@@ -117,9 +111,9 @@ export default function Index() {
             <Typography variant="body1">
               Na maioria dos critérios avaliados nas dimensões, o órgão pode
               pontuar 0 ou 1. Nos critérios remuneração básica, outras receitas,
-              detalhamento de descontos e formato de acesso, a escla é contínua
+              detalhamento de descontos e formato de acesso, a escala é contínua
               com pontuações entre 0 e 1. Ainda que haja seis critérios na
-              dimensão de completude e cinco na de facilidade, cada dimensão tem
+              dimensão de completude e quatro na de facilidade, cada dimensão tem
               peso idêntico.
             </Typography>
             <Typography variant="body1">
