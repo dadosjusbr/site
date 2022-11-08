@@ -28,7 +28,17 @@ export default function Index({ ais }) {
       }
       return 0;
     });
-  const notCollecting = ais.filter(ag => ag.collecting !== null);
+  const notCollecting = ais
+    .filter(ag => ag.collecting !== null)
+    .sort((a, b) => {
+      if (a.uf > b.uf) {
+        return 1;
+      }
+      if (a.uf < b.uf) {
+        return -1;
+      }
+      return 0;
+    });
 
   const getReasons = ag => {
     if (
