@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
 import ReactGA from 'react-ga';
 import {
   Container,
@@ -14,6 +15,7 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import ShareModal from './ShareModal';
@@ -56,6 +58,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const [selectedMonth, setSelectedMonth] = useState<number>(m);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   const matches = useMediaQuery('(max-width:500px)');
+  const router = useRouter();
 
   return (
     <Container fixed>
@@ -133,6 +136,17 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
               >
                 EXPLORAR POR MÊS
               </Button>
+              <Button
+                variant="outlined"
+                color="info"
+                startIcon={<SearchIcon />}
+                onClick={() => {
+                  router.push(`/pesquisar?anos=${year}&orgaos=${agency.aid}`);
+                }}
+              >
+                PESQUISA AVANÇADA
+              </Button>
+              {console.log(agency)}
             </Stack>
           </>
         )}
