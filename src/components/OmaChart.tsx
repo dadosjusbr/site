@@ -29,6 +29,7 @@ import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import InfoIcon from '@mui/icons-material/Info';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Done, Close } from '@mui/icons-material';
 
@@ -238,6 +239,18 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           href={url.downloadURL(fileLink)}
         >
           BAIXAR DADOS
+        </Button>
+        <Button
+          variant="outlined"
+          color="info"
+          startIcon={<SearchIcon />}
+          onClick={() => {
+            router.push(
+              `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
+            );
+          }}
+        >
+          PESQUISA AVANÇADA
         </Button>
       </Stack>
       <ThemeProvider theme={light}>
