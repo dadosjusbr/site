@@ -18,6 +18,7 @@ import {
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import SearchIcon from '@mui/icons-material/Search';
 
 import Footer from '../components/Footer';
 import Header from '../components/Header';
@@ -79,7 +80,11 @@ export default function Index({
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
-  const [year, setYear] = useState(new Date().getDate() <= 17 && new Date().getMonth() + 1 == 1 ? new Date().getFullYear() - 1 : new Date().getFullYear());
+  const [year, setYear] = useState(
+    new Date().getDate() <= 17 && new Date().getMonth() + 1 == 1
+      ? new Date().getFullYear() - 1
+      : new Date().getFullYear(),
+  );
   const [loading, setLoading] = useState(true);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
@@ -175,7 +180,12 @@ export default function Index({
               </Typography>
             </Grid>
             <Grid item>
-              <Button variant="outlined" size="large" href="/pesquisar">
+              <Button
+                variant="outlined"
+                size="large"
+                href="/pesquisar"
+                startIcon={<SearchIcon />}
+              >
                 Pesquisa avançada
               </Button>
             </Grid>
@@ -222,20 +232,20 @@ export default function Index({
                     </Grid>
                   </Grid>
                   <TabPanel value={value} index={0}>
-                      <IndexChartLegend />
-                      <img
-                        src="/img/indice_tjs.png"
-                        alt="Índice de transparência"
-                        width="100%"
-                      />
+                    <IndexChartLegend />
+                    <img
+                      src="/img/indice_tjs.png"
+                      alt="Índice de transparência"
+                      width="100%"
+                    />
                   </TabPanel>
                   <TabPanel value={value} index={1}>
-                      <IndexChartLegend />
-                      <img
-                        src="/img/indice_mps.png"
-                        alt="Índice de transparência"
-                        width="100%"
-                      />
+                    <IndexChartLegend />
+                    <img
+                      src="/img/indice_mps.png"
+                      alt="Índice de transparência"
+                      width="100%"
+                    />
                   </TabPanel>
                 </Grid>
               </Grid>
