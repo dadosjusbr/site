@@ -201,8 +201,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   const fileLink = useMemo(() => chartData.PackageURL, [chartData]);
   const matches = useMediaQuery('(max-width:500px)');
   const router = useRouter();
-  return (
-    <>
+
+  function StackButtons() {
+    return (
       <Stack
         spacing={2}
         direction="row"
@@ -255,6 +256,12 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           PESQUISA AVANÇADA
         </Button>
       </Stack>
+    );
+  }
+
+  return (
+    <>
+      <StackButtons />
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={20}>
@@ -648,45 +655,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             </Paper>
           </Grid>
         </Grid>
-        <Stack
-          spacing={2}
-          direction="row"
-          {...(matches && {
-            direction: 'column',
-          })}
-          justifyContent="flex-end"
-          my={4}
-        >
-          <Button
-            variant="outlined"
-            color="info"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => {
-              router.back();
-            }}
-          >
-            VOLTAR PARA EXPLORAR POR ANO
-          </Button>
-          <Button
-            variant="outlined"
-            color="info"
-            endIcon={<IosShareIcon />}
-            onClick={() => setModalIsOpen(true)}
-          >
-            COMPARTILHAR
-          </Button>
-          <Button
-            variant="outlined"
-            color="info"
-            endIcon={<CloudDownloadIcon />}
-            onClick={() => {
-              ReactGA.pageview(url.downloadURL(fileLink));
-            }}
-            href={url.downloadURL(fileLink)}
-          >
-            BAIXAR DADOS
-          </Button>
-        </Stack>
+        <StackButtons />
       </ThemeProvider>
       <ShareModal
         isOpen={modalIsOpen}
