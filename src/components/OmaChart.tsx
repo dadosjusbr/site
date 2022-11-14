@@ -145,7 +145,9 @@ function ShowTipoDado(props) {
             alignItems: 'center',
           }}
         >
-          <Done color="success" />
+          <ListItemIcon>
+            <Done color="warning" />
+          </ListItemIcon>
           <span>Disponibiliza dados de {texto} sumarizados</span>
         </div>
       );
