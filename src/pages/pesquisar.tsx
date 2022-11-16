@@ -633,29 +633,32 @@ export default function Index({ ais }) {
                     )}
                   </Box>
                 )}
-              </Box>
-              <Box py={4} textAlign="right">
-                <Button
-                  sx={{ mr: 2 }}
-                  variant="outlined"
-                  color="info"
-                  endIcon={<IosShareIcon />}
-                  onClick={() => setModalIsOpen(true)}
-                >
-                  COMPARTILHAR
-                </Button>
-                <Button
-                  variant="outlined"
-                  endIcon={<CloudDownloadIcon />}
-                  disabled={!downloadAvailable}
-                  onClick={() => {
-                    ReactGA.pageview(`${process.env.API_BASE_URL}/v2/download`);
-                  }}
-                  href={`${process.env.API_BASE_URL}/v2/download${query}`}
-                  id="download-button"
-                >
-                  BAIXAR DADOS
-                </Button>
+
+                <Box py={4} textAlign="right">
+                  <Button
+                    sx={{ mr: 2 }}
+                    variant="outlined"
+                    color="info"
+                    endIcon={<IosShareIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    COMPARTILHAR
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    endIcon={<CloudDownloadIcon />}
+                    disabled={!downloadAvailable}
+                    onClick={() => {
+                      ReactGA.pageview(
+                        `${process.env.API_BASE_URL}/v2/download`,
+                      );
+                    }}
+                    href={`${process.env.API_BASE_URL}/v2/download${query}`}
+                    id="download-button"
+                  >
+                    BAIXAR DADOS
+                  </Button>
+                </Box>
               </Box>
               {numRowsIfAvailable > 0 && (
                 <ThemeProvider theme={light}>
@@ -674,29 +677,6 @@ export default function Index({ ais }) {
                   </Paper>
                 </ThemeProvider>
               )}
-              <Box py={4} textAlign="right">
-                <Button
-                  sx={{ mr: 2 }}
-                  variant="outlined"
-                  color="info"
-                  endIcon={<IosShareIcon />}
-                  onClick={() => setModalIsOpen(true)}
-                >
-                  COMPARTILHAR
-                </Button>
-                <Button
-                  variant="outlined"
-                  endIcon={<CloudDownloadIcon />}
-                  disabled={!downloadAvailable}
-                  onClick={() => {
-                    ReactGA.pageview(`${process.env.API_BASE_URL}/v2/download`);
-                  }}
-                  href={`${process.env.API_BASE_URL}/v2/download${query}`}
-                  id="download-button"
-                >
-                  BAIXAR DADOS
-                </Button>
-              </Box>
             </Box>
           )}
         </Box>
