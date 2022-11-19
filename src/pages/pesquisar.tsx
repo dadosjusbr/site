@@ -353,6 +353,9 @@ export default function Index({ ais }) {
         });
         setSelectedAgencies(orgaosSelecionados);
         return orgaosSelecionados;
+
+      default:
+        break;
     }
   }
 
@@ -363,6 +366,8 @@ export default function Index({ ais }) {
     getUrlParameter('orgaos');
 
     location.search != '' && firstRequest();
+
+    insertUrlParam('anos', selectedYears);
   }, []);
 
   interface AgencyOptionType {
