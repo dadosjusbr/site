@@ -107,6 +107,8 @@ export default function Index({ ais }) {
     setType('Tudo');
     setCategory('Tudo');
     setShowResults(false);
+    clearUrl();
+    insertUrlParam('anos', 2022);
   };
 
   const makeQueryFromList = (word: string, list: Array<string>) => {
@@ -270,6 +272,17 @@ export default function Index({ ais }) {
         window.location.pathname +
         '?' +
         searchParams.toString();
+      window.history.pushState({ path: newurl }, '', newurl);
+    }
+  };
+
+  const clearUrl = () => {
+    if (history.pushState) {
+      let newurl =
+        window.location.protocol +
+        '//' +
+        window.location.host +
+        window.location.pathname;
       window.history.pushState({ path: newurl }, '', newurl);
     }
   };
