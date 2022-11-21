@@ -108,7 +108,6 @@ export default function Index({ ais }) {
     setCategory('Tudo');
     setShowResults(false);
     clearUrl();
-    insertUrlParam('anos', 2022);
   };
 
   const makeQueryFromList = (word: string, list: Array<string>) => {
@@ -285,6 +284,8 @@ export default function Index({ ais }) {
         window.location.pathname;
       window.history.pushState({ path: newurl }, '', newurl);
     }
+
+    insertUrlParam('anos', 2022);
   };
 
   const firstRequest = async () => {
