@@ -146,7 +146,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
               >
                 PESQUISA AVANÇADA
               </Button>
-              {console.log(agency)}
             </Stack>
           </>
         )}
