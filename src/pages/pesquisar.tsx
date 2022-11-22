@@ -20,7 +20,6 @@ import {
   CircularProgress,
   Link,
   Alert,
-  AlertTitle,
 } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import IosShareIcon from '@mui/icons-material/IosShare';
@@ -37,7 +36,6 @@ import Footer from '../components/Footer';
 import Nav from '../components/Header';
 import light from '../styles/theme-light';
 import api from '../services/api';
-import { monthsInQuarter } from 'date-fns/esm/fp';
 import ShareModal from '../components/ShareModal';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -686,6 +684,7 @@ export default function Index({ ais }) {
           )}
         </Box>
         <ShareModal
+          pageTitle="Pesquisa"
           isOpen={modalIsOpen}
           url={`dadosjusbr.org/pesquisar${query}`}
           onRequestClose={() => setModalIsOpen(false)}
