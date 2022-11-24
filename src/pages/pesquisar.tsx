@@ -684,7 +684,7 @@ export default function Index({ ais }) {
           )}
         </Box>
         <ShareModal
-          pageTitle="Pesquisa"
+          pageTitle="Pesquisar"
           isOpen={modalIsOpen}
           url={`dadosjusbr.org/pesquisar${query}`}
           onRequestClose={() => setModalIsOpen(false)}

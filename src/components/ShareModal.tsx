@@ -139,7 +139,11 @@ const ShareModal: React.FC<ShareModalProps> = ({
             </Typography>
 
             <IconButton
-              sx={{ position: 'absolute', left: '87%', top: '35%' }}
+              sx={{
+                position: 'absolute',
+                left: '87%',
+                top: '30%',
+              }}
               onClick={handleClick}
             >
               <ContentCopy />
