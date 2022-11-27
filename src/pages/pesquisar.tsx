@@ -39,6 +39,7 @@ import light from '../styles/theme-light';
 import api from '../services/api';
 import { monthsInQuarter } from 'date-fns/esm/fp';
 import ShareModal from '../components/ShareModal';
+import { getCurrentYear } from '../functions/currentYear';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
@@ -67,7 +68,7 @@ const columns: GridColDef[] = [
 
 export default function Index({ ais }) {
   const years = [];
-  for (let i = 2022; i >= 2018; i--) {
+  for (let i = getCurrentYear(); i >= 2018; i--) {
     years.push(i);
   }
   const months = [
@@ -85,7 +86,7 @@ export default function Index({ ais }) {
     { name: 'Dez', value: 12 },
   ];
 
-  const [selectedYears, setSelectedYears] = React.useState(2022);
+  const [selectedYears, setSelectedYears] = React.useState(getCurrentYear());
   const [selectedMonths, setSelectedMonths] = React.useState(months);
   const [selectedAgencies, setSelectedAgencies] = React.useState([]);
   const [agencies, setAgencies] = React.useState(ais);
@@ -101,7 +102,7 @@ export default function Index({ ais }) {
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
 
   const clearSearch = () => {
-    setSelectedYears(2022);
+    setSelectedYears(getCurrentYear());
     setSelectedMonths([]);
     setSelectedAgencies([]);
     setType('Tudo');
@@ -281,11 +282,12 @@ export default function Index({ ais }) {
         window.location.protocol +
         '//' +
         window.location.host +
-        window.location.pathname;
+        window.location.pathname +
+        '?anos=' +
+        getCurrentYear();
       window.history.pushState({ path: newurl }, '', newurl);
+      console.log(newurl);
     }
-
-    insertUrlParam('anos', 2022);
   };
 
   const firstRequest = async () => {
@@ -320,7 +322,7 @@ export default function Index({ ais }) {
         setSelectedYears(
           r.searchParams.get(paramKey)
             ? parseInt(r.searchParams.get(paramKey), 10)
-            : 2022,
+            : getCurrentYear(),
         );
         return +r.searchParams.get(paramKey);
 
