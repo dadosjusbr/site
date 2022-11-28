@@ -119,9 +119,11 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                   color="info"
                   endIcon={<CloudDownloadIcon />}
                   onClick={() => {
-                    ReactGA.pageview(url.downloadURL(fileLink));
+                    ReactGA.pageview(
+                      url.downloadURL(summaryPackage.Package.url),
+                    );
                   }}
-                  href={url.downloadURL(fileLink)}
+                  href={url.downloadURL(summaryPackage.Package.url)}
                   id="download-button"
                 >
                   BAIXAR DADOS
