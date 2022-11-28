@@ -20,7 +20,6 @@ import {
   CircularProgress,
   Link,
   Alert,
-  AlertTitle,
 } from '@mui/material';
 import { createFilterOptions } from '@mui/material/Autocomplete';
 import IosShareIcon from '@mui/icons-material/IosShare';
@@ -108,7 +107,6 @@ export default function Index({ ais }) {
     setType('Tudo');
     setCategory('Tudo');
     setShowResults(false);
-    clearUrl();
   };
 
   const makeQueryFromList = (word: string, list: Array<string>) => {
@@ -209,86 +207,11 @@ export default function Index({ ais }) {
 
   const categoryHandleChange = (event: SelectChangeEvent) => {
     setCategory(event.target.value as string);
-    switch (event.target.value) {
-      case 'Remuneração base':
-        insertUrlParam('categorias', 'base');
-        break;
-
-      case 'Outras remunerações':
-        insertUrlParam('categorias', 'outras');
-        break;
-
-      case 'Descontos':
-        insertUrlParam('categorias', 'descontos');
-        break;
-
-      case 'Tudo':
-        deleteUrlParam('categorias');
-
-      default:
-        break;
-    }
   };
 
   const agencyFilterOptions = createFilterOptions({
     stringify: (option: AgencyOptionType) => option.aid + option.name,
   });
-
-  function insertUrlParam(key, value) {
-    if (history.pushState) {
-      let searchParams = new URLSearchParams(window.location.search);
-      if (typeof value === 'object') {
-        if (key === 'meses') {
-          value = value
-            .map(v => v.value)
-            .join(',')
-            .split(',');
-          searchParams.set(key, value.toString());
-        } else if (key === 'orgaos') {
-          searchParams.set(key, value.map(v => v.aid).toString());
-        }
-      } else {
-        searchParams.set(key, value);
-      }
-      let newurl =
-        window.location.protocol +
-        '//' +
-        window.location.host +
-        window.location.pathname +
-        '?' +
-        searchParams.toString();
-      window.history.pushState({ path: newurl }, '', newurl);
-    }
-  }
-
-  const deleteUrlParam = key => {
-    if (history.pushState) {
-      let searchParams = new URLSearchParams(window.location.search);
-      searchParams.delete(key);
-      let newurl =
-        window.location.protocol +
-        '//' +
-        window.location.host +
-        window.location.pathname +
-        '?' +
-        searchParams.toString();
-      window.history.pushState({ path: newurl }, '', newurl);
-    }
-  };
-
-  const clearUrl = () => {
-    if (history.pushState) {
-      let newurl =
-        window.location.protocol +
-        '//' +
-        window.location.host +
-        window.location.pathname +
-        '?anos=' +
-        getCurrentYear();
-      window.history.pushState({ path: newurl }, '', newurl);
-      console.log(newurl);
-    }
-  };
 
   const firstRequest = async () => {
     setLoading(true);
@@ -380,11 +303,24 @@ export default function Index({ ais }) {
     getUrlParameter('meses');
     getUrlParameter('categorias');
     getUrlParameter('orgaos');
-
     location.search != '' && firstRequest();
-
-    insertUrlParam('anos', selectedYears);
   }, []);
+
+  React.useEffect(() => {
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+    params.set('anos', selectedYears != null ? selectedYears.toString() : '');
+    params.set('meses', selectedMonths.map(m => String(m.value)).join(','));
+    params.set('orgaos', selectedAgencies.map(a => a.aid).join(','));
+    params.set(
+      'categorias',
+      category
+        .split(' ')
+        .at(category == 'Remuneração base' ? -1 : 0)
+        .toLowerCase(),
+    );
+    window.history.replaceState({}, '', `${url}`);
+  }, [selectedYears, selectedMonths, selectedAgencies, category]);
 
   interface AgencyOptionType {
     aid: string;
@@ -424,16 +360,6 @@ export default function Index({ ais }) {
                 value={selectedYears}
                 onChange={(event, newValue) => {
                   setSelectedYears(newValue);
-                  insertUrlParam(
-                    'anos',
-                    newValue
-                      .toString()
-                      .toLowerCase()
-                      .split(' ')
-                      .join('_')
-                      .normalize('NFD')
-                      .replace(/[\u0300-\u036f]/g, ''),
-                  );
                 }}
                 renderOption={(props, option) => (
                   <MenuItem key={option} {...props} value={option}>
@@ -453,7 +379,6 @@ export default function Index({ ais }) {
                 value={selectedMonths}
                 onChange={(event, newValue) => {
                   monthsHandleChange(newValue);
-                  insertUrlParam('meses', newValue);
                 }}
                 isOptionEqualToValue={(option, value) =>
                   option.value === value.value
@@ -507,25 +432,18 @@ export default function Index({ ais }) {
                 onChange={(event, newValue) => {
                   if (
                     selectedAgencies.length < 3 &&
-                    event.target['localName'] == 'li'
+                    (event.target['localName'] == 'li' ||
+                      event.target['localName'] == 'input')
                   ) {
                     setSelectedAgencies(newValue);
-                    if (newValue.length > 0) {
-                      insertUrlParam('orgaos', newValue);
-                    } else {
-                      deleteUrlParam('orgaos');
-                    }
                   } else if (
                     selectedAgencies.length <= 3 &&
                     (event.target['localName'] == 'svg' ||
-                      event.target['localName'] == 'path')
+                      event.target['localName'] == 'path' ||
+                      event.target['localName'] == 'li' ||
+                      event.target['localName'] == 'input')
                   ) {
                     setSelectedAgencies(newValue);
-                    if (newValue.length > 0) {
-                      insertUrlParam('orgaos', newValue);
-                    } else {
-                      deleteUrlParam('orgaos');
-                    }
                   }
                 }}
                 isOptionEqualToValue={(option, value) =>
