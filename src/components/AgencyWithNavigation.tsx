@@ -57,7 +57,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const m = navigableMonth || 1;
   const [selectedMonth, setSelectedMonth] = useState<number>(m);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
-  const fileLink = `${process.env.PACKAGE_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
+  const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
   const matches = useMediaQuery('(max-width:500px)');
   const router = useRouter();
 
