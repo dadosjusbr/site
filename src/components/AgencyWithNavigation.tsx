@@ -57,7 +57,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const m = navigableMonth || 1;
   const [selectedMonth, setSelectedMonth] = useState<number>(m);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
-  const fileLink = `${process.env.PACKAGE_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
   const matches = useMediaQuery('(max-width:500px)');
   const router = useRouter();
 
@@ -119,9 +118,11 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                   color="info"
                   endIcon={<CloudDownloadIcon />}
                   onClick={() => {
-                    ReactGA.pageview(url.downloadURL(fileLink));
+                    ReactGA.pageview(
+                      url.downloadURL(summaryPackage.Package.url),
+                    );
                   }}
-                  href={url.downloadURL(fileLink)}
+                  href={url.downloadURL(summaryPackage.Package.url)}
                   id="download-button"
                 >
                   BAIXAR DADOS
