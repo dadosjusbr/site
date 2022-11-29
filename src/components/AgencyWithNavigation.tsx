@@ -60,6 +60,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
   const matches = useMediaQuery('(max-width:500px)');
   const router = useRouter();
+  console.log(fileLink);
 
   return (
     <Container fixed>

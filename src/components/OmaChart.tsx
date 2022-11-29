@@ -241,6 +241,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           }}
           href={url.downloadURL(fileLink)}
         >
+          {console.log(fileLink)}
           BAIXAR DADOS
         </Button>
         <Button
