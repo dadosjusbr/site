@@ -198,7 +198,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   agency,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const fileLink = useMemo(() => chartData.PackageURL, [chartData]);
+  const fileLink = `${process.env.S3_REPO_URL}/${agency}/datapackage/${agency}-${year}-${month}.zip`;
   const matches = useMediaQuery('(max-width:500px)');
   const router = useRouter();
 

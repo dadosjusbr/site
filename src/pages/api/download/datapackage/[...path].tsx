@@ -6,7 +6,7 @@ import https from 'https';
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   // gets the the variable path from next spread param and uses the params array to map to the external path
   const params = (req.query.path as string[]).join('/');
-  const request = https.get(process.env.PACKAGE_REPO_URL + params, response => {
+  const request = https.get(process.env.S3_REPO_URL + params, response => {
     response.pipe(res);
   });
   request.on('close', () => {
