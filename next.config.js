@@ -1,10 +1,9 @@
-const withTM = require("next-transpile-modules")
-  ([
-    "react-modal",
-    "react-share",
-    "react-apexcharts",
-    "apexcharts",
-  ]);
+const withTM = require('next-transpile-modules')([
+  'react-modal',
+  'react-share',
+  'react-apexcharts',
+  'apexcharts',
+]);
 require('dotenv');
 module.exports = {
   // this line is used to allow nextjs to use this esModule in ssr
@@ -13,11 +12,11 @@ module.exports = {
   async redirects() {
     return [
       {
-        source: '/download/datapackage/:path*',
+        source: '/download/:path*',
         destination: '/api/download/datapackage/:path*',
         permanent: true,
       },
-    ]
+    ];
   },
   //the env variables are set here to access in browser
   env: {
@@ -27,6 +26,6 @@ module.exports = {
     PACKAGE_REPO_URL: process.env.PACKAGE_REPO_URL,
     S3_REPO_URL: process.env.S3_REPO_URL,
     NEW_RELIC_APP_NAME: process.env.NEW_RELIC_APP_NAME,
-    NEW_RELIC_LICENSE_KEY: process.env.NEW_RELIC_LICENSE_KEY
+    NEW_RELIC_LICENSE_KEY: process.env.NEW_RELIC_LICENSE_KEY,
   },
-}
+};
