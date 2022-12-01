@@ -41,7 +41,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
     setQuoteOpen(!quoteOpen);
   };
   const [text, setText] = React.useState(
-    `${pageTitle.toUpperCase()}. DadosJusBr, ${year}. Disponível em: <${url}>. Acesso em: ${date}.`,
+    `DADOSJUSBR, ${year}. Disponível em: <${url}>. Acesso em: ${date}.`,
   );
 
   const [open, setOpen] = React.useState(false);
@@ -149,10 +149,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               <ContentCopy />
             </IconButton>
 
-            <Typography>
-              {pageTitle.toUpperCase()}. DadosJusBr, {year}. Disponível em: &lt;
-              {url}&gt;. Acesso em: {date}.
-            </Typography>
+            <Typography>{text}</Typography>
 
             <Snackbar
               open={open}
