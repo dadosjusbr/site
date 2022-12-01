@@ -429,19 +429,10 @@ export default function Index({ ais }) {
                 getOptionLabel={option => option.aid}
                 value={selectedAgencies}
                 onChange={(event, newValue) => {
-                  if (
-                    selectedAgencies.length < 3 &&
-                    (event.target['localName'] == 'li' ||
-                      event.target['localName'] == 'input')
-                  ) {
+                  if (selectedAgencies.length < 3) {
                     setSelectedAgencies(newValue);
-                  } else if (
-                    selectedAgencies.length <= 3 &&
-                    (event.target['localName'] == 'svg' ||
-                      event.target['localName'] == 'path' ||
-                      event.target['localName'] == 'li' ||
-                      event.target['localName'] == 'input')
-                  ) {
+                  }
+                  if (selectedAgencies.includes(newValue.at(-1))) {
                     setSelectedAgencies(newValue);
                   }
                 }}
