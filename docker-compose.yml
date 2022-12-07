@@ -1,8 +1,10 @@
 version: '3'
 services:
   site:
-    build:
-      context: '.'
+    # Comment the image and uncomment the build fragment if you would like to build and run it locally.
+    image: 'ghcr.io/dadosjusbr/site:main'
+    #build:
+    #  context: '.'
     env_file:
       - .env
     ports:
