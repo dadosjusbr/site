@@ -7,7 +7,7 @@ const GATracker: React.FC = () => {
       <Script
         strategy="afterInteractive"
         async
-        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.ID_ANALYTICS}`}
+        src={`https://www.googletagmanager.com/gtag/js?id=${process.env.ID_ANALYTICS_GA4}`}
       ></Script>
       <Script
         strategy="afterInteractive"
@@ -16,7 +16,7 @@ const GATracker: React.FC = () => {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', '${process.env.ID_ANALYTICS}', {
+            gtag('config', '${process.env.ID_ANALYTICS_GA4}', {
               page_path: window.location.pathname,
             });
           `,
