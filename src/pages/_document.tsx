@@ -15,8 +15,8 @@ import Script from 'next/script';
  */
 
 type documentProps = {
-  browserTimingHeader: string
-}
+  browserTimingHeader: string;
+};
 export default class MyDocument extends Document<documentProps> {
   /**
    * The getInitialProps function is used in HOC (high order components)
@@ -80,7 +80,7 @@ export default class MyDocument extends Document<documentProps> {
           <NextScript />
           <Script
             dangerouslySetInnerHTML={{ __html: this.props.browserTimingHeader }}
-            strategy="beforeInteractive"
+            strategy="afterInteractive"
           ></Script>
         </body>
       </Html>
