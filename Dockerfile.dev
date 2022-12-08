@@ -6,6 +6,7 @@ FROM node:lts-alpine as dependencies
 WORKDIR /site
 COPY package.json package-lock.json ./
 RUN apk add --no-cache libc6-compat
+RUN npm install -save @swc/core-linux-arm64-gnu --legacy-peer-deps
 
 # about legacy-peer-deps flag: This flag isn't doing something new,rather it's telling NPM
 # not to do something new, since NPM v7 now installs peerDependencies by default.
