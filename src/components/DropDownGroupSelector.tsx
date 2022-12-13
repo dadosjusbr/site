@@ -55,6 +55,9 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
           return selected;
         }}
       >
+        <MenuItem key="-3" value="Eleitoral">
+          Justiça Eleitoral
+        </MenuItem>
         <MenuItem key="-2" value="Federal">
           Justiça Federal
         </MenuItem>
