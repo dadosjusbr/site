@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useMemo, useState } from 'react';
+import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import {
@@ -16,6 +17,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 
 import MONTHS from '../@types/MONTHS';
 import CrawlingDateTable from './CrawlingDateTable';
@@ -312,6 +314,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             },
                             stacked: true,
                             toolbar: {
+                              tools: {
+                                download:
+                                  '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
+                              },
                               show: true,
                               export: {
                                 svg: {
