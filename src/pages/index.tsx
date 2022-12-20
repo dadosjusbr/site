@@ -14,6 +14,7 @@ import {
   Tabs,
   Tab,
   Button,
+  tabsClasses,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -221,20 +222,27 @@ export default function Index({
                 <Grid item width={900}>
                   <Grid container justifyContent="center" pt={4} pb={2}>
                     <Grid item>
-                      <Tabs
-                        value={value}
-                        onChange={handleChange}
-                        aria-label="Gráfico do índice de transparêncai"
-                      >
-                        <Tab label="Tribunais de justiça" {...a11yProps(0)} />
-                        <Tab label="Ministérios públicos" {...a11yProps(1)} />
-                      </Tabs>
+                      <Box sx={{ maxWidth: { xs: 320, sm: 720 } }}>
+                        <Tabs
+                          value={value}
+                          onChange={handleChange}
+                          variant="scrollable"
+                          scrollButtons
+                          allowScrollButtonsMobile
+                          aria-label="Gráfico do índice de transparêncai"
+                        >
+                          <Tab label="Tribunais de justiça" {...a11yProps(0)} />
+                          <Tab label="Ministérios públicos" {...a11yProps(1)} />
+                          <Tab label="Justiça militar" {...a11yProps(2)} />
+                          <Tab label="Justiça do trabalho" {...a11yProps(3)} />
+                        </Tabs>
+                      </Box>
                     </Grid>
                   </Grid>
                   <TabPanel value={value} index={0}>
                     <IndexChartLegend />
                     <img
-                      src="/img/indice_tjs.png"
+                      src="/img/indice-transparencia-tj.svg"
                       alt="Índice de transparência"
                       width="100%"
                     />
@@ -242,7 +250,39 @@ export default function Index({
                   <TabPanel value={value} index={1}>
                     <IndexChartLegend />
                     <img
-                      src="/img/indice_mps.png"
+                      src="/img/indice-transparencia-mp.svg"
+                      alt="Índice de transparência"
+                      width="100%"
+                    />
+                  </TabPanel>
+                  {/* <TabPanel value={value} index={2}>
+                    <IndexChartLegend />
+                  </TabPanel>
+                  <TabPanel value={value} index={3}>
+                    <IndexChartLegend />
+                    <img
+                      src="/img/indice-transparencia-trf.svg"
+                      alt="Índice de transparência"
+                      width="100%"
+                    />
+                    <img
+                      src="/img/indice-transparencia-superiores.svg"
+                      alt="Índice de transparência"
+                      width="100%"
+                    />
+                  </TabPanel> */}
+                  <TabPanel value={value} index={2}>
+                    <IndexChartLegend />
+                    <img
+                      src="/img/indice-transparencia-tjm.svg"
+                      alt="Índice de transparência"
+                      width="100%"
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={3}>
+                    <IndexChartLegend />
+                    <img
+                      src="/img/indice-transparencia-trt.svg"
                       alt="Índice de transparência"
                       width="100%"
                     />
