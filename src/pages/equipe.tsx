@@ -172,7 +172,7 @@ export default function Team() {
           </Grid>
         </Container>
       </Box>
-      <Box py={12} sx={{ bgcolor: 'primary.main' }}>
+      <Box py={12}>
         <Container fixed>
           <Grid container spacing={2}>
             <Grid item md={6}>
