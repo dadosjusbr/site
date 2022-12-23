@@ -60,7 +60,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
         )
         .reverse()[0];
       // 10000 is used here as the min value of chart height
-      return found ? found.BaseRemuneration + found.OtherRemunerations : 10000;
+      return found
+        ? found.BaseRemuneration + found.OtherRemunerations + 1
+        : 10000;
     }
     return 10000;
   }, [data]);
