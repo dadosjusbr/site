@@ -113,7 +113,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     variant="outlined"
                     color="info"
                     startIcon={<ArrowBackIcon />}
-                    onClick={() => setModalIsOpen(true)}
+                    onClick={() => router.back()}
                   >
                     VOLTAR
                   </Button>

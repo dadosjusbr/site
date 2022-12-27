@@ -36,7 +36,7 @@ export interface RemunerationBarGraphProps {
   dataLoading: boolean;
   billion?: boolean;
   onMonthChange?: (month: number) => void;
-  selectedMonth: number;
+  selectedMonth?: number;
 }
 
 const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
@@ -287,6 +287,18 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               <Typography variant="h6" textAlign="center">
                 Total de remunerações de membros por mês em {year}
               </Typography>
+              {agency && (
+                <Grid display="flex" justifyContent="flex-end">
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    endIcon={<ArrowForwardIosIcon />}
+                    href={`/orgao/${agency.aid}/${year}/${selectedMonth}`}
+                  >
+                    EXPLORAR
+                  </Button>
+                </Grid>
+              )}
               {dataLoading ? (
                 <Box
                   m={4}
@@ -318,6 +330,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             },
                             stacked: true,
                             toolbar: {
+                              offsetY: 480,
                               tools: {
                                 download:
                                   '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
@@ -576,24 +589,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   item
                   pb={4}
                   sx={{ width: '50%' }}
-                  justifyContent="space-between"
-                  flexDirection="row-reverse"
-                  {...(matches && { flexDirection: 'column' })}
-                  alignItems="center"
+                  justifyContent="center"
+                  flexDirection="row"
                 >
-                  {agency && (
-                    <Grid item>
-                      <Button
-                        sx={{ mb: 2 }}
-                        variant="outlined"
-                        color="secondary"
-                        endIcon={<ArrowForwardIosIcon />}
-                        href={`/orgao/${agency.aid}/${year}/${selectedMonth}`}
-                      >
-                        EXPLORAR
-                      </Button>
-                    </Grid>
-                  )}
                   <CrawlingDateTable data={data} dataLoading={dataLoading} />
                 </Grid>
               </Grid>
