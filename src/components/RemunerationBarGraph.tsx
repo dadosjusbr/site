@@ -1,10 +1,10 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useMemo, useState } from 'react';
-import Image from 'next/image';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import {
   Box,
+  Button,
   CircularProgress,
   Grid,
   IconButton,
@@ -17,7 +17,7 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import MONTHS from '../@types/MONTHS';
 import CrawlingDateTable from './CrawlingDateTable';
@@ -36,6 +36,7 @@ export interface RemunerationBarGraphProps {
   dataLoading: boolean;
   billion?: boolean;
   onMonthChange?: (month: number) => void;
+  selectedMonth: number;
 }
 
 const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
@@ -45,6 +46,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   dataLoading = true,
   billion = false,
   onMonthChange,
+  selectedMonth,
 }) => {
   // this constant is used as an alx value to determine the max graph height
   const MaxMonthPlaceholder = useMemo(() => {
@@ -574,8 +576,24 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   item
                   pb={4}
                   sx={{ width: '50%' }}
-                  justifyContent="center"
+                  justifyContent="space-between"
+                  flexDirection="row-reverse"
+                  {...(matches && { flexDirection: 'column' })}
+                  alignItems="center"
                 >
+                  {agency && (
+                    <Grid item>
+                      <Button
+                        sx={{ mb: 2 }}
+                        variant="outlined"
+                        color="secondary"
+                        endIcon={<ArrowForwardIosIcon />}
+                        href={`/orgao/${agency.aid}/${year}/${selectedMonth}`}
+                      >
+                        EXPLORAR
+                      </Button>
+                    </Grid>
+                  )}
                   <CrawlingDateTable data={data} dataLoading={dataLoading} />
                 </Grid>
               </Grid>

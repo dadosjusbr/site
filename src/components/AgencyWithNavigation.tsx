@@ -13,6 +13,7 @@ import {
 } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
@@ -23,6 +24,7 @@ import RemunerationBarGraph from './RemunerationBarGraph';
 import * as url from '../url';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
+import styled from 'styled-components';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -58,7 +60,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const [selectedMonth, setSelectedMonth] = useState<number>(m);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
-  const matches = useMediaQuery('(max-width:500px)');
+  const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
   return (
@@ -98,54 +100,126 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                 </IconButton>
               </Grid>
             </Grid>
-            <Stack
-              spacing={2}
-              direction="row"
-              {...(matches && { direction: 'column', spacing: 1 })}
-              justifyContent="flex-end"
-              mt={4}
-            >
-              <Button
-                variant="outlined"
-                color="info"
-                endIcon={<IosShareIcon />}
-                onClick={() => setModalIsOpen(true)}
+
+            {!matches ? (
+              <Div>
+                <Stack
+                  spacing={2}
+                  direction="row"
+                  justifyContent="flex-start"
+                  mt={4}
+                >
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    VOLTAR
+                  </Button>
+                </Stack>
+
+                <Stack
+                  spacing={2}
+                  direction="row"
+                  justifyContent="flex-end"
+                  mt={4}
+                >
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<IosShareIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    COMPARTILHAR
+                  </Button>
+                  {summaryPackage && (
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      endIcon={<CloudDownloadIcon />}
+                      onClick={() => {
+                        ReactGA.pageview(url.downloadURL(fileLink));
+                      }}
+                      href={url.downloadURL(fileLink)}
+                      id="download-button"
+                    >
+                      BAIXAR
+                    </Button>
+                  )}
+
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    startIcon={<SearchIcon />}
+                    onClick={() => {
+                      router.push(
+                        `/pesquisar?anos=${year}&orgaos=${agency.aid}`,
+                      );
+                    }}
+                  >
+                    PESQUISAR
+                  </Button>
+                </Stack>
+              </Div>
+            ) : (
+              <Stack
+                direction="column"
+                spacing={1}
+                justifyContent="flex-start"
+                mt={1}
               >
-                COMPARTILHAR
-              </Button>
-              {summaryPackage && (
                 <Button
                   variant="outlined"
                   color="info"
-                  endIcon={<CloudDownloadIcon />}
-                  onClick={() => {
-                    ReactGA.pageview(url.downloadURL(fileLink));
-                  }}
-                  href={url.downloadURL(fileLink)}
-                  id="download-button"
+                  startIcon={<ArrowBackIcon />}
+                  onClick={() => setModalIsOpen(true)}
                 >
-                  BAIXAR DADOS
+                  VOLTAR
                 </Button>
-              )}
-              <Button
-                variant="outlined"
-                color="info"
-                endIcon={<ArrowForwardIosIcon />}
-                href={`/orgao/${id}/${year}/${selectedMonth}`}
-              >
-                EXPLORAR POR MÊS
-              </Button>
-              <Button
-                variant="outlined"
-                color="info"
-                startIcon={<SearchIcon />}
-                onClick={() => {
-                  router.push(`/pesquisar?anos=${year}&orgaos=${agency.aid}`);
-                }}
-              >
-                PESQUISA AVANÇADA
-              </Button>
-            </Stack>
+
+                <Button
+                  variant="outlined"
+                  color="info"
+                  endIcon={<IosShareIcon />}
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  COMPARTILHAR
+                </Button>
+                {summaryPackage && (
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<CloudDownloadIcon />}
+                    onClick={() => {
+                      ReactGA.pageview(url.downloadURL(fileLink));
+                    }}
+                    href={url.downloadURL(fileLink)}
+                    id="download-button"
+                  >
+                    BAIXAR
+                  </Button>
+                )}
+                <Button
+                  variant="outlined"
+                  color="info"
+                  endIcon={<ArrowForwardIosIcon />}
+                  href={`/orgao/${id}/${year}/${selectedMonth}`}
+                >
+                  EXPLORAR
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  startIcon={<SearchIcon />}
+                  onClick={() => {
+                    router.push(`/pesquisar?anos=${year}&orgaos=${agency.aid}`);
+                  }}
+                >
+                  PESQUISAR
+                </Button>
+              </Stack>
+            )}
           </>
         )}
       </Box>
@@ -159,6 +233,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                 setSelectedMonth(month);
               }
             }}
+            selectedMonth={selectedMonth}
             data={data}
             year={year}
             agency={agency}
@@ -176,5 +251,10 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     </Container>
   );
 };
+
+const Div = styled.div`
+  display: flex;
+  justify-content: space-between;
+`;
 
 export default AgencyPageWithNavigation;
