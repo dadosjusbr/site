@@ -237,8 +237,8 @@ export default function Index({
                   </p>
                   <p>
                     Este gráfico representa dados de <b>janeiro de 2018</b> até{' '}
-                    <b>junho de 2022</b> e foi gerado em{' '}
-                    <b>03 de agosto de 2022</b>
+                    <b>novembro de 2022</b> e foi gerado em{' '}
+                    <b>24 de dezembro de 2022</b>
                   </p>
                 </Grid>
                 <Grid item width={900}>
@@ -257,6 +257,8 @@ export default function Index({
                           <Tab label="Ministérios públicos" {...a11yProps(1)} />
                           <Tab label="Justiça militar" {...a11yProps(2)} />
                           <Tab label="Justiça do trabalho" {...a11yProps(3)} />
+                          <Tab label="Tribunais regionais" {...a11yProps(4)} />
+                          <Tab label="Órgãos superiores" {...a11yProps(5)} />
                         </Tabs>
                       </Box>
                     </Grid>
@@ -264,7 +266,7 @@ export default function Index({
                   <TabPanel value={value} index={0}>
                     <IndexChartLegend />
                     <img
-                      src="/img/indice-transparencia-tj.svg"
+                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-tj.svg"
                       alt="Índice de transparência"
                       width="100%"
                     />
@@ -272,31 +274,15 @@ export default function Index({
                   <TabPanel value={value} index={1}>
                     <IndexChartLegend />
                     <img
-                      src="/img/indice-transparencia-mp.svg"
+                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-mp.svg"
                       alt="Índice de transparência"
                       width="100%"
                     />
                   </TabPanel>
-                  {/* <TabPanel value={value} index={2}>
-                    <IndexChartLegend />
-                  </TabPanel>
-                  <TabPanel value={value} index={3}>
-                    <IndexChartLegend />
-                    <img
-                      src="/img/indice-transparencia-trf.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                    <img
-                      src="/img/indice-transparencia-superiores.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel> */}
                   <TabPanel value={value} index={2}>
                     <IndexChartLegend />
                     <img
-                      src="/img/indice-transparencia-tjm.svg"
+                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-tjm.svg"
                       alt="Índice de transparência"
                       width="100%"
                     />
@@ -304,7 +290,23 @@ export default function Index({
                   <TabPanel value={value} index={3}>
                     <IndexChartLegend />
                     <img
-                      src="/img/indice-transparencia-trt.svg"
+                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-trt.svg"
+                      alt="Índice de transparência"
+                      width="100%"
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={4}>
+                    <IndexChartLegend />
+                    <img
+                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-trf.svg"
+                      alt="Índice de transparência"
+                      width="100%"
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={5}>
+                    <IndexChartLegend />
+                    <img
+                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-superiores.svg"
                       alt="Índice de transparência"
                       width="100%"
                     />
