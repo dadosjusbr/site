@@ -29,6 +29,7 @@ import IndexChartLegend from '../components/IndexChartLegend';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
+import { getCurrentYear } from '../functions/currentYear';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -82,11 +83,7 @@ export default function Index({
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
-  const [year, setYear] = useState(
-    new Date().getDate() <= 17 && new Date().getMonth() + 1 == 1
-      ? new Date().getFullYear() - 1
-      : new Date().getFullYear(),
-  );
+  const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),

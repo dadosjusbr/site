@@ -9,6 +9,7 @@ import Header from '../../components/Header';
 import api from '../../services/api';
 import DropDownGroupSelector from '../../components/DropDownGroupSelector';
 import AgencyWithNavigation from '../../components/AgencyWithNavigation';
+import { getCurrentYear } from '../../functions/currentYear';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `Dados/${summary}`;
@@ -81,8 +82,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   // this state is used to store the api fetched data after fetch it
   const [data, setData] = useState<any[]>([]);
   const [summaryPackage, setSummaryPackage] = useState<any>();
-  // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
-  const [year, setYear] = useState(new Date().getDate() <= 17 && new Date().getMonth() + 1 == 1 ? new Date().getFullYear() - 1 : new Date().getFullYear());
+  const [year, setYear] = useState(getCurrentYear());
   const [agencyData, setAgencyData] = useState<any>();
   const [dataLoading, setDataLoading] = useState(true);
   // the useMemo hook is used to create an memoization (https://en.wikipedia.org/wiki/Memoization) with a state, it's used to avoid the need to recalculate values in screen rederization, here it's used to check if the date is valid to active the nextDate and the previousDate button using dates between 2018-2021 (https://pt-br.reactjs.org/docs/hooks-reference.html#usememo)
