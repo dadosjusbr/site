@@ -70,6 +70,7 @@ export default function Index({
   endDate,
   recordAmount,
   finalValue,
+  ais,
 }) {
   const formatedStartDate = useMemo<string>(() => {
     const d = new Date(startDate);
@@ -115,6 +116,19 @@ export default function Index({
     }
     setLoading(false);
   }
+
+  const collecting = ais
+    .filter(ag => ag.collecting === null)
+    .sort((a, b) => {
+      if (a.uf > b.uf) {
+        return 1;
+      }
+      if (a.uf < b.uf) {
+        return -1;
+      }
+      return 0;
+    });
+
   return (
     <Page>
       <Head>
@@ -138,7 +152,15 @@ export default function Index({
           <Box py={4}>
             <Typography component="p">
               Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
-              <Lowercase>{formatedEndDate}</Lowercase>. São{' '}
+              <Lowercase>{formatedEndDate}</Lowercase>. São dados de{' '}
+              <Typography
+                variant="inherit"
+                component="span"
+                color="success.main"
+              >
+                {collecting.length}
+              </Typography>{' '}
+              órgãos que compreendem{' '}
               <Typography
                 variant="inherit"
                 component="span"
@@ -338,6 +360,7 @@ export default function Index({
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
     const { data } = await api.ui.get('/v1/geral/resumo');
+    const res = await api.default.get('/orgaos');
     return {
       props: {
         agencyAmount: data.AgencyAmount,
@@ -346,6 +369,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         endDate: data.EndDate,
         recordAmount: `${data.RemunerationRecordsCount}`,
         finalValue: `${data.GeneralRemunerationValue}`,
+        ais: res.data,
       },
     };
   } catch (err) {
