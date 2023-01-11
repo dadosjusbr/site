@@ -280,7 +280,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               router.back();
             }}
           >
-            VOLTAR PARA EXPLORAR POR ANO
+            VOLTAR
           </Button>
           <Button
             variant="outlined"
@@ -299,19 +299,19 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             }}
             href={url.downloadURL(fileLink)}
           >
-            BAIXAR DADOS
+            BAIXAR
           </Button>
           <Button
             variant="outlined"
             color="info"
-            startIcon={<SearchIcon />}
+            endIcon={<SearchIcon />}
             onClick={() => {
               router.push(
                 `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
               );
             }}
           >
-            PESQUISA AVANÇADA
+            PESQUISAR
           </Button>
         </Stack>
       )}
@@ -784,7 +784,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 router.back();
               }}
             >
-              VOLTAR PARA EXPLORAR POR ANO
+              VOLTAR
             </Button>
             <Button
               variant="outlined"
@@ -803,19 +803,19 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               }}
               href={url.downloadURL(fileLink)}
             >
-              BAIXAR DADOS
+              BAIXAR
             </Button>
             <Button
               variant="outlined"
               color="info"
-              startIcon={<SearchIcon />}
+              endIcon={<SearchIcon />}
               onClick={() => {
                 router.push(
                   `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
                 );
               }}
             >
-              PESQUISA AVANÇADA
+              PESQUISAR
             </Button>
           </Stack>
         )}
