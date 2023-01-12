@@ -25,6 +25,7 @@ import * as url from '../url';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
 import styled from 'styled-components';
+import DownloadPopover from './DownloadPopover';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -62,6 +63,17 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
+  const [anchorEl, setAnchorEl] = React.useState<HTMLElement | null>(null);
+
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <Container fixed>
@@ -134,18 +146,27 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     COMPARTILHAR
                   </Button>
                   {summaryPackage && (
-                    <Button
-                      variant="outlined"
-                      color="info"
-                      endIcon={<CloudDownloadIcon />}
-                      onClick={() => {
-                        ReactGA.pageview(url.downloadURL(fileLink));
-                      }}
-                      href={url.downloadURL(fileLink)}
-                      id="download-button"
+                    <DownloadPopover
+                      anchorEl={anchorEl}
+                      handlePopoverClose={handlePopoverClose}
+                      open={open}
+                      downloadSize={summaryPackage.Package.size}
                     >
-                      BAIXAR
-                    </Button>
+                      <Button
+                        onMouseEnter={handlePopoverOpen}
+                        onMouseLeave={handlePopoverClose}
+                        variant="outlined"
+                        color="info"
+                        endIcon={<CloudDownloadIcon />}
+                        onClick={() => {
+                          ReactGA.pageview(url.downloadURL(fileLink));
+                        }}
+                        href={url.downloadURL(fileLink)}
+                        id="download-button"
+                      >
+                        BAIXAR
+                      </Button>
+                    </DownloadPopover>
                   )}
 
                   <Button

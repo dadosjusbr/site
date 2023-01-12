@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
@@ -20,7 +20,6 @@ import {
   ThemeProvider,
   Tooltip,
   Typography,
-  Container,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
@@ -37,6 +36,7 @@ import * as url from '../url';
 import ShareModal from './ShareModal';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
+import DownloadPopover from './DownloadPopover';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -201,6 +201,17 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   const fileLink = `${process.env.S3_REPO_URL}/${agency}/datapackage/${agency}-${year}-${month}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
+  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
+
+  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handlePopoverClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <>
@@ -239,17 +250,26 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             >
               COMPARTILHAR
             </Button>
-            <Button
-              variant="outlined"
-              color="info"
-              endIcon={<CloudDownloadIcon />}
-              onClick={() => {
-                ReactGA.pageview(url.downloadURL(fileLink));
-              }}
-              href={url.downloadURL(fileLink)}
+            <DownloadPopover
+              anchorEl={anchorEl}
+              handlePopoverClose={handlePopoverClose}
+              open={open}
+              downloadSize={mi.pacote_de_dados.size}
             >
-              BAIXAR
-            </Button>
+              <Button
+                onMouseEnter={handlePopoverOpen}
+                onMouseLeave={handlePopoverClose}
+                variant="outlined"
+                color="info"
+                endIcon={<CloudDownloadIcon />}
+                onClick={() => {
+                  ReactGA.pageview(url.downloadURL(fileLink));
+                }}
+                href={url.downloadURL(fileLink)}
+              >
+                BAIXAR
+              </Button>
+            </DownloadPopover>
             <Button
               variant="outlined"
               color="info"
@@ -743,17 +763,26 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               >
                 COMPARTILHAR
               </Button>
-              <Button
-                variant="outlined"
-                color="info"
-                endIcon={<CloudDownloadIcon />}
-                onClick={() => {
-                  ReactGA.pageview(url.downloadURL(fileLink));
-                }}
-                href={url.downloadURL(fileLink)}
+              <DownloadPopover
+                anchorEl={anchorEl}
+                handlePopoverClose={handlePopoverClose}
+                open={open}
+                downloadSize={mi.pacote_de_dados.size}
               >
-                BAIXAR
-              </Button>
+                <Button
+                  onMouseEnter={handlePopoverOpen}
+                  onMouseLeave={handlePopoverClose}
+                  variant="outlined"
+                  color="info"
+                  endIcon={<CloudDownloadIcon />}
+                  onClick={() => {
+                    ReactGA.pageview(url.downloadURL(fileLink));
+                  }}
+                  href={url.downloadURL(fileLink)}
+                >
+                  BAIXAR
+                </Button>
+              </DownloadPopover>
               <Button
                 variant="outlined"
                 color="info"
