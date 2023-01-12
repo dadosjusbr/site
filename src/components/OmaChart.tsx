@@ -199,69 +199,122 @@ const OMASummary: React.FC<OMASummaryProps> = ({
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const fileLink = `${process.env.S3_REPO_URL}/${agency}/datapackage/${agency}-${year}-${month}.zip`;
-  const matches = useMediaQuery('(max-width:500px)');
+  const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
-
-  function StackButtons() {
-    return (
-      <Stack
-        spacing={2}
-        direction="row"
-        {...(matches && {
-          direction: 'column',
-        })}
-        justifyContent="flex-end"
-        mt={2}
-        mb={4}
-      >
-        <Button
-          variant="outlined"
-          color="info"
-          startIcon={<ArrowBackIcon />}
-          onClick={() => {
-            router.back();
-          }}
-        >
-          VOLTAR PARA EXPLORAR POR ANO
-        </Button>
-        <Button
-          variant="outlined"
-          color="info"
-          endIcon={<IosShareIcon />}
-          onClick={() => setModalIsOpen(true)}
-        >
-          COMPARTILHAR
-        </Button>
-        <Button
-          variant="outlined"
-          color="info"
-          endIcon={<CloudDownloadIcon />}
-          onClick={() => {
-            ReactGA.pageview(url.downloadURL(fileLink));
-          }}
-          href={url.downloadURL(fileLink)}
-        >
-          BAIXAR DADOS
-        </Button>
-        <Button
-          variant="outlined"
-          color="info"
-          startIcon={<SearchIcon />}
-          onClick={() => {
-            router.push(
-              `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
-            );
-          }}
-        >
-          PESQUISA AVANÇADA
-        </Button>
-      </Stack>
-    );
-  }
 
   return (
     <>
-      <StackButtons />
+      {!matches ? (
+        <ButtonBox>
+          <Stack
+            spacing={2}
+            direction="row"
+            justifyContent="flex-start"
+            mt={2}
+            mb={4}
+          >
+            <Button
+              variant="outlined"
+              color="info"
+              startIcon={<ArrowBackIcon />}
+              onClick={() => {
+                router.back();
+              }}
+            >
+              VOLTAR
+            </Button>
+          </Stack>
+          <Stack
+            spacing={2}
+            direction="row"
+            justifyContent="flex-end"
+            mt={2}
+            mb={4}
+          >
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<IosShareIcon />}
+              onClick={() => setModalIsOpen(true)}
+            >
+              COMPARTILHAR
+            </Button>
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<CloudDownloadIcon />}
+              onClick={() => {
+                ReactGA.pageview(url.downloadURL(fileLink));
+              }}
+              href={url.downloadURL(fileLink)}
+            >
+              BAIXAR
+            </Button>
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<SearchIcon />}
+              onClick={() => {
+                router.push(
+                  `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
+                );
+              }}
+            >
+              PESQUISAR
+            </Button>
+          </Stack>
+        </ButtonBox>
+      ) : (
+        <Stack
+          spacing={2}
+          direction="column"
+          justifyContent="center"
+          mt={2}
+          mb={4}
+        >
+          <Button
+            variant="outlined"
+            color="info"
+            startIcon={<ArrowBackIcon />}
+            onClick={() => {
+              router.back();
+            }}
+          >
+            VOLTAR
+          </Button>
+          <Button
+            variant="outlined"
+            color="info"
+            endIcon={<IosShareIcon />}
+            onClick={() => setModalIsOpen(true)}
+          >
+            COMPARTILHAR
+          </Button>
+          <Button
+            variant="outlined"
+            color="info"
+            endIcon={<CloudDownloadIcon />}
+            onClick={() => {
+              ReactGA.pageview(url.downloadURL(fileLink));
+            }}
+            href={url.downloadURL(fileLink)}
+          >
+            BAIXAR
+          </Button>
+          <Button
+            variant="outlined"
+            color="info"
+            endIcon={<SearchIcon />}
+            onClick={() => {
+              router.push(
+                `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
+              );
+            }}
+          >
+            PESQUISAR
+          </Button>
+        </Stack>
+      )}
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
           <Grid item xs={12} md={20}>
@@ -655,7 +708,117 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             </Paper>
           </Grid>
         </Grid>
-        <StackButtons />
+        {!matches ? (
+          <ButtonBox>
+            <Stack
+              spacing={2}
+              direction="row"
+              justifyContent="flex-start"
+              mt={2}
+              mb={4}
+            >
+              <Button
+                variant="outlined"
+                color="info"
+                startIcon={<ArrowBackIcon />}
+                onClick={() => {
+                  router.back();
+                }}
+              >
+                VOLTAR
+              </Button>
+            </Stack>
+            <Stack
+              spacing={2}
+              direction="row"
+              justifyContent="flex-end"
+              mt={2}
+              mb={4}
+            >
+              <Button
+                variant="outlined"
+                color="info"
+                endIcon={<IosShareIcon />}
+                onClick={() => setModalIsOpen(true)}
+              >
+                COMPARTILHAR
+              </Button>
+              <Button
+                variant="outlined"
+                color="info"
+                endIcon={<CloudDownloadIcon />}
+                onClick={() => {
+                  ReactGA.pageview(url.downloadURL(fileLink));
+                }}
+                href={url.downloadURL(fileLink)}
+              >
+                BAIXAR
+              </Button>
+              <Button
+                variant="outlined"
+                color="info"
+                endIcon={<SearchIcon />}
+                onClick={() => {
+                  router.push(
+                    `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
+                  );
+                }}
+              >
+                PESQUISAR
+              </Button>
+            </Stack>
+          </ButtonBox>
+        ) : (
+          <Stack
+            spacing={2}
+            direction="column"
+            justifyContent="center"
+            mt={2}
+            mb={4}
+          >
+            <Button
+              variant="outlined"
+              color="info"
+              startIcon={<ArrowBackIcon />}
+              onClick={() => {
+                router.back();
+              }}
+            >
+              VOLTAR
+            </Button>
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<IosShareIcon />}
+              onClick={() => setModalIsOpen(true)}
+            >
+              COMPARTILHAR
+            </Button>
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<CloudDownloadIcon />}
+              onClick={() => {
+                ReactGA.pageview(url.downloadURL(fileLink));
+              }}
+              href={url.downloadURL(fileLink)}
+            >
+              BAIXAR
+            </Button>
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<SearchIcon />}
+              onClick={() => {
+                router.push(
+                  `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
+                );
+              }}
+            >
+              PESQUISAR
+            </Button>
+          </Stack>
+        )}
       </ThemeProvider>
       <ShareModal
         url={`https://dadosjusbr.org/orgao/${agency}/${year}/${month}`}
@@ -689,6 +852,11 @@ const Div = styled.div`
   width: 100%;
   display: flex;
   justify-content: center;
+`;
+
+const ButtonBox = styled.div`
+  display: flex;
+  justify-content: space-between;
 `;
 
 export default OMASummary;

@@ -151,7 +151,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                   <Button
                     variant="outlined"
                     color="info"
-                    startIcon={<SearchIcon />}
+                    endIcon={<SearchIcon />}
                     onClick={() => {
                       router.push(
                         `/pesquisar?anos=${year}&orgaos=${agency.aid}`,
@@ -203,15 +203,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                 <Button
                   variant="outlined"
                   color="info"
-                  endIcon={<ArrowForwardIosIcon />}
-                  href={`/orgao/${id}/${year}/${selectedMonth}`}
-                >
-                  EXPLORAR
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="info"
-                  startIcon={<SearchIcon />}
+                  endIcon={<SearchIcon />}
                   onClick={() => {
                     router.push(`/pesquisar?anos=${year}&orgaos=${agency.aid}`);
                   }}
