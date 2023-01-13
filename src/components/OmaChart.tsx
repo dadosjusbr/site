@@ -36,7 +36,7 @@ import * as url from '../url';
 import ShareModal from './ShareModal';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
-import DownloadPopover from './DownloadPopover';
+import Drawer from './Drawer';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -201,94 +201,25 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   const fileLink = `${process.env.S3_REPO_URL}/${agency}/datapackage/${agency}-${year}-${month}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
-  const handlePopoverOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
+  function formatBytes(bytes: number, decimals = 2) {
+    if (!+bytes) return '0 Bytes';
 
-  const handlePopoverClose = () => {
-    setAnchorEl(null);
-  };
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB'];
 
-  const open = Boolean(anchorEl);
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
 
-  return (
-    <>
-      {!matches ? (
-        <ButtonBox>
-          <Stack
-            spacing={2}
-            direction="row"
-            justifyContent="flex-start"
-            mt={2}
-            mb={4}
-          >
-            <Button
-              variant="outlined"
-              color="info"
-              startIcon={<ArrowBackIcon />}
-              onClick={() => {
-                router.back();
-              }}
-            >
-              VOLTAR
-            </Button>
-          </Stack>
-          <Stack
-            spacing={2}
-            direction="row"
-            justifyContent="flex-end"
-            mt={2}
-            mb={4}
-          >
-            <Button
-              variant="outlined"
-              color="info"
-              endIcon={<IosShareIcon />}
-              onClick={() => setModalIsOpen(true)}
-            >
-              COMPARTILHAR
-            </Button>
-            <DownloadPopover
-              anchorEl={anchorEl}
-              handlePopoverClose={handlePopoverClose}
-              open={open}
-              downloadSize={mi.pacote_de_dados.size}
-            >
-              <Button
-                onMouseEnter={handlePopoverOpen}
-                onMouseLeave={handlePopoverClose}
-                variant="outlined"
-                color="info"
-                endIcon={<CloudDownloadIcon />}
-                onClick={() => {
-                  ReactGA.pageview(url.downloadURL(fileLink));
-                }}
-                href={url.downloadURL(fileLink)}
-              >
-                BAIXAR
-              </Button>
-            </DownloadPopover>
-            <Button
-              variant="outlined"
-              color="info"
-              endIcon={<SearchIcon />}
-              onClick={() => {
-                router.push(
-                  `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
-                );
-              }}
-            >
-              PESQUISAR
-            </Button>
-          </Stack>
-        </ButtonBox>
-      ) : (
+    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(dm))} ${sizes[i]}`;
+  }
+
+  function StackButton() {
+    return (
+      <ButtonBox>
         <Stack
           spacing={2}
-          direction="column"
-          justifyContent="center"
+          direction="row"
+          justifyContent="flex-start"
           mt={2}
           mb={4}
         >
@@ -302,6 +233,14 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           >
             VOLTAR
           </Button>
+        </Stack>
+        <Stack
+          spacing={2}
+          direction="row"
+          justifyContent="flex-end"
+          mt={2}
+          mb={4}
+        >
           <Button
             variant="outlined"
             color="info"
@@ -319,7 +258,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             }}
             href={url.downloadURL(fileLink)}
           >
-            BAIXAR
+            BAIXAR{' '}
+            <GreenColor>{formatBytes(mi.pacote_de_dados.size)}</GreenColor>
           </Button>
           <Button
             variant="outlined"
@@ -334,6 +274,51 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             PESQUISAR
           </Button>
         </Stack>
+      </ButtonBox>
+    );
+  }
+
+  return (
+    <>
+      {!matches ? (
+        <StackButton />
+      ) : (
+        <Drawer>
+          <Stack spacing={2} direction="column" mt={3} mx={6}>
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<IosShareIcon />}
+              onClick={() => setModalIsOpen(true)}
+            >
+              COMPARTILHAR
+            </Button>
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<CloudDownloadIcon />}
+              onClick={() => {
+                ReactGA.pageview(url.downloadURL(fileLink));
+              }}
+              href={url.downloadURL(fileLink)}
+            >
+              BAIXAR{' '}
+              <GreenColor>{formatBytes(mi.pacote_de_dados.size)}</GreenColor>
+            </Button>
+            <Button
+              variant="outlined"
+              color="info"
+              endIcon={<SearchIcon />}
+              onClick={() => {
+                router.push(
+                  `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
+                );
+              }}
+            >
+              PESQUISAR
+            </Button>
+          </Stack>
+        </Drawer>
       )}
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
@@ -729,92 +714,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           </Grid>
         </Grid>
         {!matches ? (
-          <ButtonBox>
-            <Stack
-              spacing={2}
-              direction="row"
-              justifyContent="flex-start"
-              mt={2}
-              mb={4}
-            >
-              <Button
-                variant="outlined"
-                color="info"
-                startIcon={<ArrowBackIcon />}
-                onClick={() => {
-                  router.back();
-                }}
-              >
-                VOLTAR
-              </Button>
-            </Stack>
-            <Stack
-              spacing={2}
-              direction="row"
-              justifyContent="flex-end"
-              mt={2}
-              mb={4}
-            >
-              <Button
-                variant="outlined"
-                color="info"
-                endIcon={<IosShareIcon />}
-                onClick={() => setModalIsOpen(true)}
-              >
-                COMPARTILHAR
-              </Button>
-              <DownloadPopover
-                anchorEl={anchorEl}
-                handlePopoverClose={handlePopoverClose}
-                open={open}
-                downloadSize={mi.pacote_de_dados.size}
-              >
-                <Button
-                  onMouseEnter={handlePopoverOpen}
-                  onMouseLeave={handlePopoverClose}
-                  variant="outlined"
-                  color="info"
-                  endIcon={<CloudDownloadIcon />}
-                  onClick={() => {
-                    ReactGA.pageview(url.downloadURL(fileLink));
-                  }}
-                  href={url.downloadURL(fileLink)}
-                >
-                  BAIXAR
-                </Button>
-              </DownloadPopover>
-              <Button
-                variant="outlined"
-                color="info"
-                endIcon={<SearchIcon />}
-                onClick={() => {
-                  router.push(
-                    `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
-                  );
-                }}
-              >
-                PESQUISAR
-              </Button>
-            </Stack>
-          </ButtonBox>
+          <StackButton />
         ) : (
-          <Stack
-            spacing={2}
-            direction="column"
-            justifyContent="center"
-            mt={2}
-            mb={4}
-          >
-            <Button
-              variant="outlined"
-              color="info"
-              startIcon={<ArrowBackIcon />}
-              onClick={() => {
-                router.back();
-              }}
-            >
-              VOLTAR
-            </Button>
+          <Stack spacing={2} direction="column" my={2} mx={6}>
             <Button
               variant="outlined"
               color="info"
@@ -832,7 +734,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               }}
               href={url.downloadURL(fileLink)}
             >
-              BAIXAR
+              BAIXAR{' '}
+              <GreenColor>{formatBytes(mi.pacote_de_dados.size)}</GreenColor>
             </Button>
             <Button
               variant="outlined"
@@ -873,8 +776,9 @@ const ActivityIndicatorPlaceholder = styled.div`
   align-items: center;
 `;
 
-const Sub = styled.span`
-  text-transform: lowercase;
+export const GreenColor = styled.span`
+  margin-left: 0.5em;
+  color: #00bfa6;
 `;
 
 const Div = styled.div`
