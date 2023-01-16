@@ -25,6 +25,8 @@ import * as url from '../url';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
 import styled from 'styled-components';
+import Drawer from './Drawer';
+import { GreenColor } from './OmaChart';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -63,9 +65,20 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
+  function formatBytes(bytes: number, decimals = 2) {
+    if (!+bytes) return '0 Bytes';
+
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB'];
+
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(dm))} ${sizes[i]}`;
+  }
+
   return (
     <Container fixed>
-      <Box pb={4}>
+      <Box>
         <Typography variant="h2" textAlign="center">
           {title} ({formatAgency(id.toLocaleUpperCase('pt'), title)})
         </Typography>
@@ -107,7 +120,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                   spacing={2}
                   direction="row"
                   justifyContent="flex-start"
-                  mt={4}
+                  my={4}
                 >
                   <Button
                     variant="outlined"
@@ -123,7 +136,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                   spacing={2}
                   direction="row"
                   justifyContent="flex-end"
-                  mt={4}
+                  my={4}
                 >
                   <Button
                     variant="outlined"
@@ -144,7 +157,10 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       href={url.downloadURL(fileLink)}
                       id="download-button"
                     >
-                      BAIXAR
+                      BAIXAR{' '}
+                      <GreenColor>
+                        {formatBytes(summaryPackage.Package.size)}
+                      </GreenColor>
                     </Button>
                   )}
 
@@ -163,54 +179,62 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                 </Stack>
               </Div>
             ) : (
-              <Stack
-                direction="column"
-                spacing={1}
-                justifyContent="flex-start"
-                mt={1}
-              >
-                <Button
-                  variant="outlined"
-                  color="info"
-                  startIcon={<ArrowBackIcon />}
-                  onClick={() => setModalIsOpen(true)}
+              <Drawer>
+                <Stack
+                  direction="column"
+                  spacing={1}
+                  justifyContent="flex-start"
+                  mt={3}
+                  mx={6}
                 >
-                  VOLTAR
-                </Button>
-
-                <Button
-                  variant="outlined"
-                  color="info"
-                  endIcon={<IosShareIcon />}
-                  onClick={() => setModalIsOpen(true)}
-                >
-                  COMPARTILHAR
-                </Button>
-                {summaryPackage && (
                   <Button
                     variant="outlined"
                     color="info"
-                    endIcon={<CloudDownloadIcon />}
-                    onClick={() => {
-                      ReactGA.pageview(url.downloadURL(fileLink));
-                    }}
-                    href={url.downloadURL(fileLink)}
-                    id="download-button"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => setModalIsOpen(true)}
                   >
-                    BAIXAR
+                    VOLTAR
                   </Button>
-                )}
-                <Button
-                  variant="outlined"
-                  color="info"
-                  endIcon={<SearchIcon />}
-                  onClick={() => {
-                    router.push(`/pesquisar?anos=${year}&orgaos=${agency.aid}`);
-                  }}
-                >
-                  PESQUISAR
-                </Button>
-              </Stack>
+
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<IosShareIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    COMPARTILHAR
+                  </Button>
+                  {summaryPackage && (
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      endIcon={<CloudDownloadIcon />}
+                      onClick={() => {
+                        ReactGA.pageview(url.downloadURL(fileLink));
+                      }}
+                      href={url.downloadURL(fileLink)}
+                      id="download-button"
+                    >
+                      BAIXAR{' '}
+                      <GreenColor>
+                        {formatBytes(summaryPackage.Package.size)}
+                      </GreenColor>
+                    </Button>
+                  )}
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<SearchIcon />}
+                    onClick={() => {
+                      router.push(
+                        `/pesquisar?anos=${year}&orgaos=${agency.aid}`,
+                      );
+                    }}
+                  >
+                    PESQUISAR
+                  </Button>
+                </Stack>
+              </Drawer>
             )}
           </>
         )}
