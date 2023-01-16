@@ -190,15 +190,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                   <Button
                     variant="outlined"
                     color="info"
-                    startIcon={<ArrowBackIcon />}
-                    onClick={() => setModalIsOpen(true)}
-                  >
-                    VOLTAR
-                  </Button>
-
-                  <Button
-                    variant="outlined"
-                    color="info"
                     endIcon={<IosShareIcon />}
                     onClick={() => setModalIsOpen(true)}
                   >
