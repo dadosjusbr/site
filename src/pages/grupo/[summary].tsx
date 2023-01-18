@@ -12,6 +12,7 @@ import {
   MenuItem,
   OutlinedInput,
   Select,
+  Typography,
 } from '@mui/material';
 
 import Footer from '../../components/Footer';
@@ -23,6 +24,7 @@ import { getCurrentYear } from '../../functions/currentYear';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `Dados/${summary}`;
+  const [value, setValue] = useState('');
   return (
     <Page>
       <Head>
@@ -39,26 +41,30 @@ export default function SummaryPage({ dataList, summary }) {
       </Head>
       <Header />
       <Container>
-        <Grid container display="flex" flexDirection="column" py={4} my={4}>
+        <Grid
+          container
+          display="flex"
+          justifyContent="space-between"
+          py={4}
+          my={4}
+        >
           <Grid item pb={4}>
-            Selecione tipo e o órgão específico que você deseja explorar.
-          </Grid>
-          <Grid
-            item
-            pb={4}
-            sx={{
-              width: 250,
-              display: 'flex',
-              justifyContent: 'space-between',
-            }}
-          >
+            <Typography>Selecione o tipo do órgão.</Typography>
+
             <DropDownGroupSelector value={summary} />
-            <FormControl fullWidth sx={{ m: 1, minWidth: 240 }}>
+          </Grid>
+          <Grid item pb={4}>
+            <Typography>
+              Selecione o órgãos que você deseja explorar.
+            </Typography>
+
+            <FormControl fullWidth sx={{ m: 1, minWidth: 240, maxWidth: 250 }}>
               <Select
                 id="orgaos-select"
                 labelId="orgaos-select-label"
                 defaultValue="Selecione um órgão"
-                value=""
+                value={value}
+                onChange={e => setValue(e.target.value.toUpperCase())}
                 label="Estados"
                 displayEmpty
                 inputProps={{ 'aria-label': 'Dados por órgão' }}
