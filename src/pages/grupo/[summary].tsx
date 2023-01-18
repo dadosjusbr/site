@@ -2,7 +2,17 @@ import { GetServerSideProps } from 'next';
 import Head from 'next/head';
 import React, { useEffect, useMemo, useState } from 'react';
 import styled from 'styled-components';
-import { Box, CircularProgress, Container, Grid } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  Container,
+  FormControl,
+  Grid,
+  ListSubheader,
+  MenuItem,
+  OutlinedInput,
+  Select,
+} from '@mui/material';
 
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
@@ -31,10 +41,46 @@ export default function SummaryPage({ dataList, summary }) {
       <Container>
         <Grid container display="flex" flexDirection="column" py={4} my={4}>
           <Grid item pb={4}>
-            Selecione os órgãos que você deseja explorar.
+            Selecione tipo do órgão e o órgão específico que você deseja
+            explorar.
           </Grid>
-          <Grid item pb={4} sx={{ width: 250 }}>
+          <Grid
+            item
+            pb={4}
+            sx={{
+              width: 250,
+              display: 'flex',
+              justifyContent: 'space-between',
+            }}
+          >
             <DropDownGroupSelector value={summary} />
+            <FormControl fullWidth sx={{ m: 1, minWidth: 240 }}>
+              <Select
+                id="orgaos-select"
+                labelId="orgaos-select-label"
+                defaultValue="Selecione um órgão"
+                value=""
+                label="Estados"
+                displayEmpty
+                inputProps={{ 'aria-label': 'Dados por órgão' }}
+                input={<OutlinedInput />}
+                renderValue={selected => {
+                  if (selected.length === 0) {
+                    return <em>Selecione</em>;
+                  }
+                  return selected;
+                }}
+              >
+                <ListSubheader>
+                  <em>Órgãos disponíveis em {`Dados/${summary}`}</em>
+                </ListSubheader>
+                {dataList.map(ag => (
+                  <MenuItem key={ag.Name} value={ag.Name}>
+                    <LinkTo href={`#${ag.Name}`}>{ag.FullName}</LinkTo>
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </Grid>
         </Grid>
         <div>
@@ -118,19 +164,21 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     }
   }
   return (
-    <AgencyWithNavigation
-      data={data}
-      dataLoading={dataLoading}
-      id={id}
-      navigableMonth={navigableMonth}
-      nextDateIsNavigable={nextDateIsNavigable}
-      previousDateIsNavigable={previousDateIsNavigable}
-      setYear={setYear}
-      title={title}
-      year={year}
-      agency={agencyData}
-      summaryPackage={summaryPackage && summaryPackage}
-    />
+    <div id={id}>
+      <AgencyWithNavigation
+        data={data}
+        dataLoading={dataLoading}
+        id={id}
+        navigableMonth={navigableMonth}
+        nextDateIsNavigable={nextDateIsNavigable}
+        previousDateIsNavigable={previousDateIsNavigable}
+        setYear={setYear}
+        title={title}
+        year={year}
+        agency={agencyData}
+        summaryPackage={summaryPackage && summaryPackage}
+      />
+    </div>
   );
 };
 
@@ -145,6 +193,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
       // context.res.end();
       return { props: {} };
     }
+    console.log(data.Agency);
     return {
       props: {
         dataList: data.Agency,
@@ -161,4 +210,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
 };
 const Page = styled.div`
   background: #3e5363;
+`;
+const LinkTo = styled.a`
+  text-decoration: none;
+  color: #fff;
 `;

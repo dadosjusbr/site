@@ -64,7 +64,7 @@ export default class MyDocument extends Document<documentProps> {
    */
   render() {
     return (
-      <Html lang="pt">
+      <Html lang="pt" style={{ scrollBehavior: 'smooth' }}>
         <Head>
           <link rel="preconnect" href="https://fonts.gstatic.com" />
           <link
