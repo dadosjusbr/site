@@ -1,5 +1,5 @@
 function getCurrentYear(): number {
-  if (new Date().getDate() <= 17 && new Date().getMonth() == 1) {
+  if (new Date() < new Date(new Date().getFullYear(), 1, 17)) {
     return new Date().getFullYear() - 1;
   } else {
     return new Date().getFullYear();
