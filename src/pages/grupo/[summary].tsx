@@ -41,8 +41,7 @@ export default function SummaryPage({ dataList, summary }) {
       <Container>
         <Grid container display="flex" flexDirection="column" py={4} my={4}>
           <Grid item pb={4}>
-            Selecione tipo do órgão e o órgão específico que você deseja
-            explorar.
+            Selecione tipo e o órgão específico que você deseja explorar.
           </Grid>
           <Grid
             item
@@ -193,7 +192,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
       // context.res.end();
       return { props: {} };
     }
-    console.log(data.Agency);
     return {
       props: {
         dataList: data.Agency,
