@@ -26,9 +26,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   }));
 
   const router = useRouter();
-  const [agencyName, setAgencyName] = React.useState(
-    value || '',
-  );
+  const [agencyName, setAgencyName] = React.useState(value || '');
 
   const handleChange = (event: SelectChangeEvent) => {
     const v = event.target.value as string;
@@ -55,6 +53,12 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
           return selected;
         }}
       >
+        <MenuItem key="-5" value="Conselho">
+          Conselhos de Justiça
+        </MenuItem>
+        <MenuItem key="-4" value="Superior">
+          Tribunais Superiores
+        </MenuItem>
         <MenuItem key="-3" value="Eleitoral">
           Justiça Eleitoral
         </MenuItem>
