@@ -49,7 +49,7 @@ export default function SummaryPage({ dataList, summary }) {
           my={4}
         >
           <Grid item pb={4}>
-            <Typography>Selecione o tipo do órgão.</Typography>
+            <Typography>Selecione o grupo</Typography>
 
             <DropDownGroupSelector value={summary} />
           </Grid>
