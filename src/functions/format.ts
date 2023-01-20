@@ -7,7 +7,8 @@ function formatAgency(aid: string, name: string): string {
   } else if (
     name.split(' ').includes('Federal') ||
     name.split(' ').includes('Superior') ||
-    name.split(' ').includes('Trabalho')
+    name.split(' ').includes('Trabalho') ||
+    name.split(' ').includes('Conselho')
   ) {
     return aid;
   } else
