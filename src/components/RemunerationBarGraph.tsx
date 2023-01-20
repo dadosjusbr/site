@@ -287,7 +287,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               <Typography variant="h6" textAlign="center">
                 Total de remunerações de membros por mês em {year}
               </Typography>
-              {agency && (
+              {agency && data.length > 0 ? (
                 <Grid display="flex" justifyContent="flex-end" sx={{ mt: 3 }}>
                   <Button
                     variant="outlined"
@@ -298,7 +298,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                     EXPLORAR
                   </Button>
                 </Grid>
-              )}
+              ) : null}
               {dataLoading ? (
                 <Box
                   m={4}
