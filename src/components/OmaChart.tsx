@@ -445,7 +445,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
-                        {mi.Meta?.tem_lotacao == null ? (
+                        {mi.Meta?.tem_lotacao == null ||
+                        mi.Meta?.tem_lotacao == false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -464,7 +465,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
-                        {mi.Meta?.tem_cargo == null ? (
+                        {mi.Meta?.tem_cargo == null ||
+                        mi.Meta?.tem_cargo == false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -483,7 +485,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
-                        {mi.Meta?.tem_matricula == null ? (
+                        {mi.Meta?.tem_matricula == null ||
+                        mi.Meta?.tem_matricula == false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
