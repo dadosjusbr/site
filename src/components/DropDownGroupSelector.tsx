@@ -26,9 +26,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   }));
 
   const router = useRouter();
-  const [agencyName, setAgencyName] = React.useState(
-    value || '',
-  );
+  const [agencyName, setAgencyName] = React.useState(value || '');
 
   const handleChange = (event: SelectChangeEvent) => {
     const v = event.target.value as string;
@@ -37,7 +35,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   };
 
   return (
-    <FormControl fullWidth sx={{ m: 1, minWidth: 240 }}>
+    <FormControl fullWidth sx={{ m: 1, minWidth: 240, maxWidth: 250 }}>
       <Select
         id="orgaos-select"
         labelId="orgaos-select-label"
