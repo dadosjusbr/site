@@ -55,7 +55,7 @@ export default function SummaryPage({ dataList, summary }) {
           </Grid>
           <Grid item pb={4}>
             <Typography>
-              Selecione o órgãos que você deseja explorar.
+              Selecione o órgão
             </Typography>
 
             <FormControl fullWidth sx={{ m: 1, minWidth: 240, maxWidth: 250 }}>
