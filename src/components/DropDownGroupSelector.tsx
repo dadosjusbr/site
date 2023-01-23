@@ -19,15 +19,8 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   value,
   ...rest
 }) => {
-  const stateAgencies = Object.keys(STATE_AGENCIES).map((name, i) => ({
-    id: i,
-    name,
-    value: STATE_AGENCIES[name as keyof typeof STATE_AGENCIES],
-  }));
-
   const router = useRouter();
   const [agencyName, setAgencyName] = React.useState(value || '');
-
   const handleChange = (event: SelectChangeEvent) => {
     const v = event.target.value as string;
     setAgencyName(v);
@@ -50,35 +43,33 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
           if (selected.length === 0) {
             return <em>Selecione</em>;
           }
-          return selected;
+          return formatToAgency(selected);
         }}
       >
-        <MenuItem key="-5" value="Conselho">
-          Conselhos de Justiça
+        <MenuItem key="0" value="justica-estadual">
+          Justiça Estadual
         </MenuItem>
-        <MenuItem key="-4" value="Superior">
-          Tribunais Superiores
+        <MenuItem key="1" value="ministerios-publicos">
+          Minitérios Públicos
         </MenuItem>
-        <MenuItem key="-3" value="Eleitoral">
-          Justiça Eleitoral
-        </MenuItem>
-        <MenuItem key="-2" value="Federal">
-          Justiça Federal
-        </MenuItem>
-        <MenuItem key="-1" value="Militar">
-          Justiça Militar
-        </MenuItem>
-        <MenuItem key="0" value="Trabalho">
+        <MenuItem key="2" value="justica-do-trabalho">
           Justiça do Trabalho
         </MenuItem>
-        <ListSubheader>
-          <em>Justiça Estadual e do Distrito Federal</em>
-        </ListSubheader>
-        {stateAgencies.map(ag => (
-          <MenuItem key={ag.id} value={ag.value}>
-            {formatToAgency(ag.name)}
-          </MenuItem>
-        ))}
+        <MenuItem key="3" value="justica-militar">
+          Justiça Militar
+        </MenuItem>
+        <MenuItem key="4" value="justica-federal">
+          Justiça Federal
+        </MenuItem>
+        <MenuItem key="5" value="justica-eleitoral">
+          Justiça Eleitoral
+        </MenuItem>
+        <MenuItem key="6" value="justica-superior">
+          Tribunais Superiores
+        </MenuItem>
+        <MenuItem key="7" value="conselhos-de-justica">
+          Conselhos de Justiça
+        </MenuItem>
       </Select>
     </FormControl>
   );
@@ -90,7 +81,7 @@ function formatToAgency(agency: string) {
   if (agency === '') {
     return '';
   }
-  const sub = agency.split('_');
+  const sub = agency.split('-');
   const formatedSubs = sub.map(s => {
     const a = s.toLowerCase();
     const newString = a.split('');
@@ -98,5 +89,9 @@ function formatToAgency(agency: string) {
     return newString.join('');
   });
   const a = formatedSubs.join(' ');
-  return a;
+  return a.includes('Justica')
+    ? a.replace('Justica', 'Justiça')
+    : a.includes('Ministerios Publicos')
+    ? a.replace('Ministerios Publicos', 'Ministérios Públicos')
+    : a;
 }
