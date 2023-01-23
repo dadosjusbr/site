@@ -250,12 +250,12 @@ export default function Index({
                           allowScrollButtonsMobile
                           aria-label="Gráfico do índice de transparêncai"
                         >
-                          <Tab label="Tribunais de justiça" {...a11yProps(0)} />
+                          <Tab label="Justiça estadual" {...a11yProps(0)} />
                           <Tab label="Ministérios públicos" {...a11yProps(1)} />
-                          <Tab label="Justiça militar" {...a11yProps(2)} />
-                          <Tab label="Justiça do trabalho" {...a11yProps(3)} />
-                          <Tab label="Tribunais regionais" {...a11yProps(4)} />
-                          <Tab label="Órgãos superiores" {...a11yProps(5)} />
+                          <Tab label="Justiça do trabalho" {...a11yProps(2)} />
+                          <Tab label="Justiça militar" {...a11yProps(3)} />
+                          <Tab label="Justiça federal" {...a11yProps(4)} />
+                          <Tab label="Justiça Superior" {...a11yProps(5)} />
                         </Tabs>
                       </Box>
                     </Grid>
@@ -279,7 +279,7 @@ export default function Index({
                   <TabPanel value={value} index={2}>
                     <IndexChartLegend />
                     <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-tjm.svg"
+                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-trt.svg"
                       alt="Índice de transparência"
                       width="100%"
                     />
@@ -287,7 +287,7 @@ export default function Index({
                   <TabPanel value={value} index={3}>
                     <IndexChartLegend />
                     <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-trt.svg"
+                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-tjm.svg"
                       alt="Índice de transparência"
                       width="100%"
                     />

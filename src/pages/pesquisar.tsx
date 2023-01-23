@@ -196,9 +196,21 @@ export default function Index({ ais }) {
   const typeHandleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
     if (event.target.value === 'Ministérios Públicos') {
-      setAgencies(ais.filter(a => a.entity === 'Ministério'));
-    } else if (event.target.value === 'Tribunais de Justiça') {
-      setAgencies(ais.filter(a => a.entity === 'Tribunal'));
+      setAgencies(ais.filter(a => a.type === 'Ministério'));
+    } else if (event.target.value === 'Justiça Estadual') {
+      setAgencies(ais.filter(a => a.type === 'Estadual'));
+    } else if (event.target.value === 'Justiça Militar') {
+      setAgencies(ais.filter(a => a.type === 'Militar'));
+    } else if (event.target.value === 'Justiça do Trabalho') {
+      setAgencies(ais.filter(a => a.type === 'Trabalho'));
+    } else if (event.target.value === 'Justiça Superior') {
+      setAgencies(ais.filter(a => a.type === 'Superior'));
+    } else if (event.target.value === 'Justiça Federal') {
+      setAgencies(ais.filter(a => a.type === 'Federal'));
+    } else if (event.target.value === 'Justiça Eleitoral') {
+      setAgencies(ais.filter(a => a.type === 'Eleitoral'));
+    } else if (event.target.value === 'Conselhos de Justiça') {
+      setAgencies(ais.filter(a => a.type === 'Conselho'));
     } else {
       setAgencies(ais);
     }
@@ -411,11 +423,21 @@ export default function Index({ ais }) {
                   <MenuItem value="Tudo" selected>
                     Tudo
                   </MenuItem>
+                  <MenuItem value="Justiça Estadual">Justiça Estadual</MenuItem>
                   <MenuItem value="Ministérios Públicos">
                     Ministérios Públicos
                   </MenuItem>
-                  <MenuItem value="Tribunais de Justiça">
-                    Tribunais de Justiça
+                  <MenuItem value="Justiça do Trabalho">
+                    Justiça do Trabalho
+                  </MenuItem>
+                  <MenuItem value="Justiça Militar">Justiça Militar</MenuItem>
+                  <MenuItem value="Justiça Federal">Justiça Federal</MenuItem>
+                  <MenuItem value="Justiça Eleitoral">
+                    Justiça Eleitoral
+                  </MenuItem>
+                  <MenuItem value="Justiça Superior">Justiça Superior</MenuItem>
+                  <MenuItem value="Conselhos de Justiça">
+                    Conselhos de Justiça
                   </MenuItem>
                 </Select>
               </FormControl>
