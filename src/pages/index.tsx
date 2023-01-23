@@ -255,7 +255,7 @@ export default function Index({
                           <Tab label="Justiça do trabalho" {...a11yProps(2)} />
                           <Tab label="Justiça militar" {...a11yProps(3)} />
                           <Tab label="Justiça federal" {...a11yProps(4)} />
-                          <Tab label="Tribunais superiores" {...a11yProps(5)} />
+                          <Tab label="Justiça Superior" {...a11yProps(5)} />
                         </Tabs>
                       </Box>
                     </Grid>
