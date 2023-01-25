@@ -68,6 +68,18 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     }
     return 10000;
   }, [data]);
+  const TotalMembers = useMemo(() => {
+    let object = {};
+    if (data) {
+      data.forEach(element => {
+        object = {
+          ...object,
+          [MONTHS[element.Month]]: element.TotalMembers,
+        };
+      });
+    }
+    return object;
+  }, [data]);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
@@ -448,6 +460,16 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                 return !billion
                                   ? `R$ ${(value / 1000000).toFixed(2)}M`
                                   : `R$ ${(value / 1000000000).toFixed(2)}B`;
+                              },
+                            },
+                          },
+                          tooltip: {
+                            enabled: true,
+                            x: {
+                              formatter(val, opts) {
+                                return TotalMembers[val] === undefined
+                                  ? 'Sem Dados'
+                                  : `${TotalMembers[val]} Membros`;
                               },
                             },
                           },
