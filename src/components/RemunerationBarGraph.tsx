@@ -466,10 +466,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           tooltip: {
                             enabled: true,
                             x: {
-                              formatter(val, opts) {
+                              formatter(val) {
                                 return TotalMembers[val] === undefined
                                   ? 'Sem Dados'
-                                  : `${TotalMembers[val]} Membros`;
+                                  : `${val}: ${TotalMembers[val]} membros`;
                               },
                             },
                           },
