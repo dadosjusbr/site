@@ -468,6 +468,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               enabled: true,
                               shared: true,
                               intersect: false,
+                              enabledOnSeries: [0, 1, 2],
                               x: {
                                 formatter(val) {
                                   if (MonthlyInfo[val] === undefined) {
