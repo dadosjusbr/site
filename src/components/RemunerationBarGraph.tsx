@@ -463,63 +463,44 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               },
                             },
                           },
-                          ...(agency != null && {
-                            tooltip: {
-                              enabled: true,
-                              shared: true,
-                              intersect: false,
-                              enabledOnSeries: [0, 1, 2],
-                              x: {
-                                formatter(val) {
-                                  if (MonthlyInfo[val] === undefined) {
-                                    return 'Sem Dados';
-                                  }
-                                  return `${val}: R$ ${MonthlyInfo[val]
-                                    .toFixed(2)
-                                    .replace('.', ',')
-                                    .replace(
-                                      /(\d)(?=(\d{3})+\,)/g,
-                                      '$1.',
-                                    )} gastos`;
-                                },
-                              },
-                              y: {
-                                title: {
-                                  formatter(seriesName) {
-                                    if (seriesName === 'Sem Dados') {
-                                      return `Meses com dados faltantes: `;
-                                    } else if (
-                                      seriesName === 'Problema na coleta'
-                                    ) {
-                                      return `Meses com problemas na coleta: `;
-                                    } else {
-                                      return `${seriesName}`;
-                                    }
-                                  },
-                                },
-                                formatter(val, opts) {
-                                  switch (
-                                    opts.w.globals.seriesNames[opts.seriesIndex]
-                                  ) {
-                                    case 'Sem Dados':
-                                      return `${12 - data.length}`;
 
-                                    case 'Problema na coleta':
-                                      return `0`;
-
-                                    case 'Membros: ':
-                                      return `${val}`;
-                                    default:
-                                      return !billion
-                                        ? `R$ ${(val / 1000000).toFixed(2)}M`
-                                        : `R$ ${(val / 1000000000).toFixed(
-                                            2,
-                                          )}B`;
-                                  }
-                                },
+                          tooltip: {
+                            enabled: true,
+                            shared: true,
+                            intersect: false,
+                            ...(agency != null
+                              ? { enabledOnSeries: [0, 1, 2] }
+                              : { enabledOnSeries: [0, 1] }),
+                            x: {
+                              formatter(val) {
+                                if (MonthlyInfo[val] === undefined) {
+                                  return 'Sem Dados';
+                                }
+                                return `${val}: R$ ${MonthlyInfo[val]
+                                  .toFixed(2)
+                                  .replace('.', ',')
+                                  .replace(
+                                    /(\d)(?=(\d{3})+\,)/g,
+                                    '$1.',
+                                  )} gastos`;
                               },
                             },
-                          }),
+                            y: {
+                              formatter(val, opts) {
+                                if (
+                                  opts.w.globals.seriesNames[
+                                    opts.seriesIndex
+                                  ] == 'Membros'
+                                ) {
+                                  return `${val * 100}`;
+                                }
+                                return !billion
+                                  ? `R$ ${(val / 1000000).toFixed(2)}M`
+                                  : `R$ ${(val / 1000000000).toFixed(2)}B`;
+                              },
+                            },
+                          },
+
                           xaxis: {
                             crosshairs: {
                               show: false,
@@ -561,7 +542,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         }}
                         series={[
                           {
-                            name: 'Benefícios: ',
+                            name: 'Benefícios',
                             data: (() => {
                               if (!hidingBenefits) {
                                 return createArrayFilledWithValue(12, 0).map(
@@ -578,7 +559,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             })(),
                           },
                           {
-                            name: 'Salário: ',
+                            name: 'Salário',
                             data: (() => {
                               if (!hidingWage) {
                                 return createArrayFilledWithValue(
@@ -594,14 +575,14 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             })(),
                           },
                           {
-                            name: 'Membros: ',
+                            name: 'Membros',
                             data: (() => {
                               return createArrayFilledWithValue(
                                 12,
                                 0,
                               ).map((v, i) =>
                                 fixYearDataArray(data)[i]
-                                  ? fixYearDataArray(data)[i].TotalMembers
+                                  ? fixYearDataArray(data)[i].TotalMembers / 100
                                   : v,
                               );
                             })(),
