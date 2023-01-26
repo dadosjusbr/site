@@ -68,13 +68,14 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     }
     return 10000;
   }, [data]);
-  const TotalMembers = useMemo(() => {
+  const MonthlyInfo = useMemo(() => {
     let object = {};
     if (data) {
       data.forEach(element => {
         object = {
           ...object,
-          [MONTHS[element.Month]]: element.TotalMembers,
+          [MONTHS[element.Month]]:
+            element.BaseRemuneration + element.OtherRemunerations,
         };
       });
     }
@@ -331,7 +332,13 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                     <Box pr={2}>
                       <Chart
                         options={{
-                          colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
+                          colors: [
+                            '#97BB2F',
+                            '#2FBB96',
+                            '#7f3d8b',
+                            '#2c3236',
+                            '#ffab00',
+                          ],
                           chart: {
                             events: {
                               click(__, _, config) {
@@ -405,13 +412,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                       fontWeight: 600,
                                       cssClass: 'apexcharts-yaxis-label',
                                     },
-                                    formatter(value) {
-                                      return !billion
-                                        ? `R$ ${(value / 1000000).toFixed(1)}M`
-                                        : `R$ ${(value / 1000000000).toFixed(
-                                            2,
-                                          )}B`;
-                                    },
                                   },
                                 },
                                 xaxis: {
@@ -463,17 +463,67 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               },
                             },
                           },
-                          tooltip: {
-                            enabled: true,
-                            x: {
-                              formatter(val) {
-                                return TotalMembers[val] === undefined
-                                  ? 'Sem Dados'
-                                  : `${val}: ${TotalMembers[val]} membros`;
+                          ...(agency != null && {
+                            tooltip: {
+                              enabled: true,
+                              shared: true,
+                              intersect: false,
+                              x: {
+                                formatter(val) {
+                                  if (MonthlyInfo[val] === undefined) {
+                                    return 'Sem Dados';
+                                  }
+                                  return `${val}: R$ ${MonthlyInfo[val]
+                                    .toFixed(2)
+                                    .replace('.', ',')
+                                    .replace(
+                                      /(\d)(?=(\d{3})+\,)/g,
+                                      '$1.',
+                                    )} gastos`;
+                                },
+                              },
+                              y: {
+                                title: {
+                                  formatter(seriesName) {
+                                    if (seriesName === 'Sem Dados') {
+                                      return `Meses com dados faltantes: `;
+                                    } else if (
+                                      seriesName === 'Problema na coleta'
+                                    ) {
+                                      return `Meses com problemas na coleta: `;
+                                    } else {
+                                      return `${seriesName}`;
+                                    }
+                                  },
+                                },
+                                formatter(val, opts) {
+                                  switch (
+                                    opts.w.globals.seriesNames[opts.seriesIndex]
+                                  ) {
+                                    case 'Sem Dados':
+                                      return `${12 - data.length}`;
+
+                                    case 'Problema na coleta':
+                                      return `0`;
+
+                                    case 'Membros: ':
+                                      return `${val}`;
+                                    default:
+                                      return !billion
+                                        ? `R$ ${(val / 1000000).toFixed(2)}M`
+                                        : `R$ ${(val / 1000000000).toFixed(
+                                            2,
+                                          )}B`;
+                                  }
+                                },
                               },
                             },
-                          },
+                          }),
                           xaxis: {
+                            crosshairs: {
+                              show: false,
+                              width: 1,
+                            },
                             labels: {
                               style: {
                                 fontSize: '12px',
@@ -510,7 +560,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         }}
                         series={[
                           {
-                            name: 'Benefícios',
+                            name: 'Benefícios: ',
                             data: (() => {
                               if (!hidingBenefits) {
                                 return createArrayFilledWithValue(12, 0).map(
@@ -527,7 +577,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             })(),
                           },
                           {
-                            name: 'Salário',
+                            name: 'Salário: ',
                             data: (() => {
                               if (!hidingWage) {
                                 return createArrayFilledWithValue(
@@ -540,6 +590,19 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                 );
                               }
                               return createArrayFilledWithValue(12, 0);
+                            })(),
+                          },
+                          {
+                            name: 'Membros: ',
+                            data: (() => {
+                              return createArrayFilledWithValue(
+                                12,
+                                0,
+                              ).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? fixYearDataArray(data)[i].TotalMembers
+                                  : v,
+                              );
                             })(),
                           },
                           {
