@@ -54,9 +54,7 @@ export default function SummaryPage({ dataList, summary }) {
             <DropDownGroupSelector value={summary} />
           </Grid>
           <Grid item pb={4}>
-            <Typography>
-              Selecione o órgão
-            </Typography>
+            <Typography>Selecione o órgão</Typography>
 
             <FormControl fullWidth sx={{ m: 1, minWidth: 240, maxWidth: 250 }}>
               <Select
@@ -64,7 +62,7 @@ export default function SummaryPage({ dataList, summary }) {
                 labelId="orgaos-select-label"
                 defaultValue="Selecione um órgão"
                 value={value}
-                onChange={e => setValue(e.target.value.toUpperCase())}
+                onChange={e => setValue(e.target.value)}
                 label="Estados"
                 displayEmpty
                 inputProps={{ 'aria-label': 'Dados por órgão' }}
@@ -77,13 +75,23 @@ export default function SummaryPage({ dataList, summary }) {
                 }}
               >
                 <ListSubheader>
-                  <em>Órgãos disponíveis em {`Dados/${summary}`}</em>
+                  <em>Órgãos disponíveis</em>
                 </ListSubheader>
-                {dataList.map(ag => (
-                  <MenuItem key={ag.Name} value={ag.Name}>
-                    <LinkTo href={`#${ag.Name}`}>{ag.FullName}</LinkTo>
-                  </MenuItem>
-                ))}
+
+                {dataList
+                  .sort((a, b) => {
+                    if (a.Name < b.Name) {
+                      return -1;
+                    }
+                    if (a.Name > b.Name) {
+                      return 1;
+                    }
+                  })
+                  .map(ag => (
+                    <MenuItem key={ag.Name} value={ag.Name.toUpperCase()}>
+                      <LinkTo href={`#${ag.Name}`}>{ag.FullName}</LinkTo>
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
