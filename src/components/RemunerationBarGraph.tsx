@@ -333,9 +333,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       <Chart
                         options={{
                           colors: [
+                            'trasnparent',
+                            'trasnparent',
                             '#97BB2F',
                             '#2FBB96',
-                            '#7f3d8b',
                             '#2c3236',
                             '#ffab00',
                           ],
@@ -468,21 +469,16 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             enabled: true,
                             shared: true,
                             intersect: false,
+                            inverseOrder: true,
                             ...(agency != null
-                              ? { enabledOnSeries: [0, 1, 2] }
-                              : { enabledOnSeries: [0, 1] }),
+                              ? { enabledOnSeries: [0, 1, 2, 3] }
+                              : { enabledOnSeries: [0, 2, 3] }),
                             x: {
                               formatter(val) {
                                 if (MonthlyInfo[val] === undefined) {
                                   return 'Sem Dados';
                                 }
-                                return `${val}: R$ ${MonthlyInfo[val]
-                                  .toFixed(2)
-                                  .replace('.', ',')
-                                  .replace(
-                                    /(\d)(?=(\d{3})+\,)/g,
-                                    '$1.',
-                                  )} gastos`;
+                                return `${val}`;
                               },
                             },
                             y: {
@@ -493,6 +489,14 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                   ] == 'Membros'
                                 ) {
                                   return `${val * 100}`;
+                                } else if (
+                                  opts.w.globals.seriesNames[
+                                    opts.seriesIndex
+                                  ] == 'Total de remunerações'
+                                ) {
+                                  return !billion
+                                    ? `R$ ${(val * 10).toFixed(2)}M`
+                                    : `R$ ${(val / 100).toFixed(2)}B`;
                                 }
                                 return !billion
                                   ? `R$ ${(val / 1000000).toFixed(2)}M`
@@ -500,7 +504,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               },
                             },
                           },
-
                           xaxis: {
                             crosshairs: {
                               show: false,
@@ -542,6 +545,36 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         }}
                         series={[
                           {
+                            name: 'Total de remunerações',
+                            data: (() => {
+                              return createArrayFilledWithValue(
+                                12,
+                                0,
+                              ).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? fixYearDataArray(data)[i].BaseRemuneration /
+                                      10000000 +
+                                    fixYearDataArray(data)[i]
+                                      .OtherRemunerations /
+                                      10000000
+                                  : v,
+                              );
+                            })(),
+                          },
+                          {
+                            name: 'Membros',
+                            data: (() => {
+                              return createArrayFilledWithValue(
+                                12,
+                                0,
+                              ).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? fixYearDataArray(data)[i].TotalMembers / 100
+                                  : v,
+                              );
+                            })(),
+                          },
+                          {
                             name: 'Benefícios',
                             data: (() => {
                               if (!hidingBenefits) {
@@ -572,19 +605,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                 );
                               }
                               return createArrayFilledWithValue(12, 0);
-                            })(),
-                          },
-                          {
-                            name: 'Membros',
-                            data: (() => {
-                              return createArrayFilledWithValue(
-                                12,
-                                0,
-                              ).map((v, i) =>
-                                fixYearDataArray(data)[i]
-                                  ? fixYearDataArray(data)[i].TotalMembers / 100
-                                  : v,
-                              );
                             })(),
                           },
                           {
