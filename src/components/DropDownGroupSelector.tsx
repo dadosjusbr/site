@@ -46,6 +46,9 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
           return formatToAgency(selected);
         }}
       >
+        <ListSubheader>
+          <em>Grupos disponíveis</em>
+        </ListSubheader>
         <MenuItem key="0" value="justica-estadual">
           Justiça Estadual
         </MenuItem>
