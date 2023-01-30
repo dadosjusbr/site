@@ -3,8 +3,12 @@ import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Avatar,
   Box,
   Button,
@@ -434,11 +438,10 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <List dense>
                       <ListItem>
                         <ListItemText
-                          primary={`Índice de completude: ${
-                            mi.Score?.indice_completude == undefined
-                              ? 'Indisponível'
-                              : mi.Score?.indice_completude.toFixed(2)
-                          }`}
+                          primary={`Índice de completude: ${mi.Score?.indice_completude == undefined
+                            ? 'Indisponível'
+                            : mi.Score?.indice_completude.toFixed(2)
+                            }`}
                           primaryTypographyProps={{
                             variant: 'h6',
                           }}
@@ -446,7 +449,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         {mi.Meta?.tem_lotacao == null ||
-                        mi.Meta?.tem_lotacao == false ? (
+                          mi.Meta?.tem_lotacao == false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -466,7 +469,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         {mi.Meta?.tem_cargo == null ||
-                        mi.Meta?.tem_cargo == false ? (
+                          mi.Meta?.tem_cargo == false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -486,7 +489,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         {mi.Meta?.tem_matricula == null ||
-                        mi.Meta?.tem_matricula == false ? (
+                          mi.Meta?.tem_matricula == false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -537,11 +540,10 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <List dense>
                       <ListItem>
                         <ListItemText
-                          primary={`Índice de facilidade: ${
-                            mi.Score?.indice_facilidade == undefined
-                              ? 'Indisponível'
-                              : mi.Score?.indice_facilidade.toFixed(2)
-                          }`}
+                          primary={`Índice de facilidade: ${mi.Score?.indice_facilidade == undefined
+                            ? 'Indisponível'
+                            : mi.Score?.indice_facilidade.toFixed(2)
+                            }`}
                           primaryTypographyProps={{
                             variant: 'h6',
                           }}
@@ -590,7 +592,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         {mi.Meta?.formato_aberto == null ||
-                        mi.Meta?.formato_aberto == false ? (
+                          mi.Meta?.formato_aberto == false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -714,6 +716,84 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 </Box>
               </Box>
             </Paper>
+          </Grid>
+          <Grid item xs={12}>
+              <Accordion
+            sx={{
+                minWidth: 230,
+            }}
+        >
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+            >
+                <Typography align='center' variant="h6">Mais informações sobre a coleta</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+                <Box>
+                    <Grid item xs={12} md={6}>
+                            <List dense>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={`Repositório do Coletor: ${mi.Collect?.repositorio_coletor == undefined
+                                            ? 'Indisponível'
+                                            : mi.Collect?.repositorio_coletor
+                                            }`}
+                                        primaryTypographyProps={{
+                                            variant: 'h6',
+                                        }}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={`Versão do Coletor: ${mi.Collect?.versao_coletor == undefined
+                                            ? null
+                                            : mi.Collect?.versao_coletor
+                                            }`}
+                                        primaryTypographyProps={{
+                                            variant: 'h6',
+                                        }}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={`Repositório do Parser: ${mi.Collect?.repositorio_parser == undefined
+                                            ? 'Indisponível'
+                                            : mi.Collect?.repositorio_parser
+                                            }`}
+                                        primaryTypographyProps={{
+                                            variant: 'h6',
+                                        }}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={`Versão do Parser: ${mi.Collect?.versao_parser == undefined
+                                            ? null
+                                            : mi.Collect?.versao_parser
+                                            }`}
+                                        primaryTypographyProps={{
+                                            variant: 'h6',
+                                        }}
+                                    />
+                                </ListItem>
+                                <ListItem>
+                                    <ListItemText
+                                        primary={`Duração da Coleta: ${mi.Collect?.duracao_segundos == undefined
+                                            ? 'Indisponível'
+                                            : mi.Collect?.duracao_segundos.toFixed(2)
+                                            }`}
+                                        primaryTypographyProps={{
+                                            variant: 'h6',
+                                        }}
+                                    />
+                                </ListItem>
+                            </List>
+                    </Grid>
+                </Box>
+            </AccordionDetails>
+        </Accordion>
           </Grid>
         </Grid>
         {!matches ? (
