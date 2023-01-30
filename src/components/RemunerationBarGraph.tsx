@@ -68,6 +68,19 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     }
     return 10000;
   }, [data]);
+  const MonthlyInfo = useMemo(() => {
+    let object = {};
+    if (data) {
+      data.forEach(element => {
+        object = {
+          ...object,
+          [MONTHS[element.Month]]:
+            element.BaseRemuneration + element.OtherRemunerations,
+        };
+      });
+    }
+    return object;
+  }, [data]);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
@@ -319,7 +332,14 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                     <Box pr={2}>
                       <Chart
                         options={{
-                          colors: ['#97BB2F', '#2FBB96', '#2c3236', '#ffab00'],
+                          colors: [
+                            'trasnparent',
+                            'trasnparent',
+                            '#97BB2F',
+                            '#2FBB96',
+                            '#2c3236',
+                            '#ffab00',
+                          ],
                           chart: {
                             events: {
                               click(__, _, config) {
@@ -393,13 +413,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                       fontWeight: 600,
                                       cssClass: 'apexcharts-yaxis-label',
                                     },
-                                    formatter(value) {
-                                      return !billion
-                                        ? `R$ ${(value / 1000000).toFixed(1)}M`
-                                        : `R$ ${(value / 1000000000).toFixed(
-                                            2,
-                                          )}B`;
-                                    },
                                   },
                                 },
                                 xaxis: {
@@ -451,7 +464,51 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               },
                             },
                           },
+
+                          tooltip: {
+                            enabled: true,
+                            shared: true,
+                            intersect: false,
+                            inverseOrder: true,
+                            ...(agency != null
+                              ? { enabledOnSeries: [0, 1, 2, 3] }
+                              : { enabledOnSeries: [0, 2, 3] }),
+                            x: {
+                              formatter(val) {
+                                if (MonthlyInfo[val] === undefined) {
+                                  return 'Sem Dados';
+                                }
+                                return `${val}`;
+                              },
+                            },
+                            y: {
+                              formatter(val, opts) {
+                                if (
+                                  opts.w.globals.seriesNames[
+                                    opts.seriesIndex
+                                  ] == 'Membros'
+                                ) {
+                                  return `${val * 100}`;
+                                } else if (
+                                  opts.w.globals.seriesNames[
+                                    opts.seriesIndex
+                                  ] == 'Total de remunerações'
+                                ) {
+                                  return !billion
+                                    ? `R$ ${(val * 10).toFixed(2)}M`
+                                    : `R$ ${(val / 100).toFixed(2)}B`;
+                                }
+                                return !billion
+                                  ? `R$ ${(val / 1000000).toFixed(2)}M`
+                                  : `R$ ${(val / 1000000000).toFixed(2)}B`;
+                              },
+                            },
+                          },
                           xaxis: {
+                            crosshairs: {
+                              show: false,
+                              width: 1,
+                            },
                             labels: {
                               style: {
                                 fontSize: '12px',
@@ -487,6 +544,36 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           },
                         }}
                         series={[
+                          {
+                            name: 'Total de remunerações',
+                            data: (() => {
+                              return createArrayFilledWithValue(
+                                12,
+                                0,
+                              ).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? fixYearDataArray(data)[i].BaseRemuneration /
+                                      10000000 +
+                                    fixYearDataArray(data)[i]
+                                      .OtherRemunerations /
+                                      10000000
+                                  : v,
+                              );
+                            })(),
+                          },
+                          {
+                            name: 'Membros',
+                            data: (() => {
+                              return createArrayFilledWithValue(
+                                12,
+                                0,
+                              ).map((v, i) =>
+                                fixYearDataArray(data)[i]
+                                  ? fixYearDataArray(data)[i].TotalMembers / 100
+                                  : v,
+                              );
+                            })(),
+                          },
                           {
                             name: 'Benefícios',
                             data: (() => {
