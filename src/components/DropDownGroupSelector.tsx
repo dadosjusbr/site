@@ -77,7 +77,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
 
 export default DropDownGroupSelector;
 
-function formatToAgency(agency: string) {
+export function formatToAgency(agency: string) {
   if (agency === '') {
     return '';
   }
@@ -89,9 +89,17 @@ function formatToAgency(agency: string) {
     return newString.join('');
   });
   const a = formatedSubs.join(' ');
-  return a.includes('Justica')
+  const final = a.includes('Justica')
     ? a.replace('Justica', 'Justiça')
     : a.includes('Ministerios Publicos')
     ? a.replace('Ministerios Publicos', 'Ministérios Públicos')
     : a;
+
+  return final.split(' ').length > 2
+    ? final.split(' ')[0] +
+        ' ' +
+        final.split(' ')[1].toLowerCase() +
+        ' ' +
+        final.split(' ')[2]
+    : final;
 }

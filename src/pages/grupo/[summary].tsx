@@ -21,9 +21,10 @@ import api from '../../services/api';
 import DropDownGroupSelector from '../../components/DropDownGroupSelector';
 import AgencyWithNavigation from '../../components/AgencyWithNavigation';
 import { getCurrentYear } from '../../functions/currentYear';
+import { formatToAgency } from '../../components/DropDownGroupSelector';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
-  const pageTitle = `Dados/${summary}`;
+  const pageTitle = `${formatToAgency(summary)}`;
   const [value, setValue] = useState('');
   return (
     <Page>
@@ -32,7 +33,7 @@ export default function SummaryPage({ dataList, summary }) {
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta
           property="og:title"
-          content={`Veja os dados do estado: ${summary}`}
+          content={`Veja os dados sobre ${formatToAgency(summary)}`}
         />
         <meta
           property="og:description"
@@ -54,9 +55,7 @@ export default function SummaryPage({ dataList, summary }) {
             <DropDownGroupSelector value={summary} />
           </Grid>
           <Grid item pb={4}>
-            <Typography>
-              Selecione o órgão
-            </Typography>
+            <Typography>Selecione o órgão</Typography>
 
             <FormControl fullWidth sx={{ m: 1, minWidth: 240, maxWidth: 250 }}>
               <Select
