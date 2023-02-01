@@ -4,6 +4,9 @@ import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CodeIcon from '@mui/icons-material/Code';
+import HistoryIcon from '@mui/icons-material/History';
+import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 
 import {
   Accordion,
@@ -280,6 +283,17 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         </Stack>
       </ButtonBox>
     );
+  }
+
+  function formatLinkVersion(version: string, repository: string) {
+    if (version.includes("sha256")) {
+      var p, ag;
+      repository.includes("coletor") ? p = "coletor" : p = "parser";
+      repository.includes("cnj") ? ag = "cnj" : ag = agency;
+      return `${repository}/pkgs/container/${p}-${ag}/${version}`
+    } else {
+      return `${repository}/commit/${version}`
+    }
   }
 
   return (
@@ -718,82 +732,116 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             </Paper>
           </Grid>
           <Grid item xs={12}>
-              <Accordion
-            sx={{
+            <Accordion
+              sx={{
                 minWidth: 230,
-            }}
-        >
-            <AccordionSummary
+              }}
+            >
+              <AccordionSummary
                 expandIcon={<ExpandMoreIcon />}
                 aria-controls="panel1a-content"
                 id="panel1a-header"
-            >
-                <Typography align='center' variant="h6">Mais informações sobre a coleta</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
+              >
+                <Typography align='center' variant="h6">
+                  Mais informações sobre a coleta
+                  <Tooltip
+                    placement="top"
+                    sx={{ mb: 0.5 }}
+                    title={
+                      <Typography fontSize="0.8rem">
+                        <p>
+                          <b>Repositório do Coletor:</b> Repositório utilizado para a
+                          realização da coleta de dados do respectivo órgão -
+                          baixando os dados diretamente, realizando a raspagem do HTML ou ainda simulando um usuário.
+                        </p>
+                        <p>
+                          <b>Repositório do Parser:</b> Repositório utilizado para o tratamento dos dados
+                          obtidos pelo coletor - organizando, detalhando e unificando esses dados.
+                          Alguns órgãos recebem o tratamento de dados ainda no coletor, não possuindo parser.
+                        </p>
+                        <p>
+                          <b>Versão do Coletor e do Parser:</b> Versão utilizada desses repositórios, disponíveis no
+                          GitHub, sendo a versão do container utilizado ou da última modificação.
+                        </p>
+                        <p>
+                          <b>Duração da Coleta:</b> Tempo total do processo de coleta - considerando a coleta, o tratamento dos
+                          dados, a validação, o empacotamento e o armazenamento.
+                        </p>
+                      </Typography>
+                    }
+                  >
+                    <IconButton>
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
                 <Box>
+                  <Grid container>
                     <Grid item xs={12} md={6}>
-                            <List dense>
-                                <ListItem>
-                                    <ListItemText
-                                        primary={`Repositório do Coletor: ${mi.Collect?.repositorio_coletor == undefined
-                                            ? 'Indisponível'
-                                            : mi.Collect?.repositorio_coletor
-                                            }`}
-                                        primaryTypographyProps={{
-                                            variant: 'h6',
-                                        }}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText
-                                        primary={`Versão do Coletor: ${mi.Collect?.versao_coletor == undefined
-                                            ? null
-                                            : mi.Collect?.versao_coletor
-                                            }`}
-                                        primaryTypographyProps={{
-                                            variant: 'h6',
-                                        }}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText
-                                        primary={`Repositório do Parser: ${mi.Collect?.repositorio_parser == undefined
-                                            ? 'Indisponível'
-                                            : mi.Collect?.repositorio_parser
-                                            }`}
-                                        primaryTypographyProps={{
-                                            variant: 'h6',
-                                        }}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText
-                                        primary={`Versão do Parser: ${mi.Collect?.versao_parser == undefined
-                                            ? null
-                                            : mi.Collect?.versao_parser
-                                            }`}
-                                        primaryTypographyProps={{
-                                            variant: 'h6',
-                                        }}
-                                    />
-                                </ListItem>
-                                <ListItem>
-                                    <ListItemText
-                                        primary={`Duração da Coleta: ${mi.Collect?.duracao_segundos == undefined
-                                            ? 'Indisponível'
-                                            : mi.Collect?.duracao_segundos.toFixed(2)
-                                            }`}
-                                        primaryTypographyProps={{
-                                            variant: 'h6',
-                                        }}
-                                    />
-                                </ListItem>
-                            </List>
+                      <List dense>
+                        {mi.Collect?.repositorio_coletor != undefined ? (
+                          <ListItem button component="a" href={mi.Collect?.repositorio_coletor}>
+                            <ListItemIcon>
+                              <CodeIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={`Repositório do Coletor`}
+                            />
+                          </ListItem>
+                        ) : ''}
+                        {mi.Collect?.repositorio_parser != undefined ? (
+                          <ListItem button component="a" href={mi.Collect?.repositorio_parser}>
+                            <ListItemIcon>
+                              <CodeIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={`Repositório do Parser`}
+                            />
+                          </ListItem>
+                        ) : ''}
+                        <ListItem>
+                          <ListItemIcon>
+                            <AlarmOnIcon />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={`Duração da Coleta: ${mi.Collect?.duracao_segundos == undefined
+                              ? 'Indisponível'
+                              : new Date(mi.Collect?.duracao_segundos * 1000).toISOString().slice(11, 19)
+                              }`}
+                          />
+                        </ListItem>
+                      </List>
                     </Grid>
+                    <Grid item xs={12} md={6}>
+                      <List dense>
+                        {mi.Collect?.versao_coletor != undefined && mi.Collect?.versao_coletor != 'unspecified' ? (
+                          <ListItem button component="a" href={formatLinkVersion(mi.Collect?.versao_coletor, mi.Collect?.repositorio_coletor)}>
+                            <ListItemIcon>
+                              <HistoryIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={`Versão do Coletor`}
+                            />
+                          </ListItem>
+                        ) : ''}
+                        {mi.Collect?.versao_parser != undefined && mi.Collect?.versao_parser != 'unspecified' ? (
+                          <ListItem button component="a" href={formatLinkVersion(mi.Collect?.versao_parser, mi.Collect?.repositorio_parser)}>
+                            <ListItemIcon>
+                              <HistoryIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={`Versão do Parser`}
+                            />
+                          </ListItem>
+                        ) : ''}
+                      </List>
+                    </Grid>
+                  </Grid>
                 </Box>
-            </AccordionDetails>
-        </Accordion>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         </Grid>
         {!matches ? (
