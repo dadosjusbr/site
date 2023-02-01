@@ -292,7 +292,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       repository.includes("cnj") ? ag = "cnj" : ag = agency;
       return `${repository}/pkgs/container/${p}-${ag}/${version}`
     } else {
-      return `${repository}/commit/${version}`
+      return `${repository}/tree/${version}`
     }
   }
 
