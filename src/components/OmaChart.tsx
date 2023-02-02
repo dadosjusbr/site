@@ -789,7 +789,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <Grid item xs={12} md={6}>
                       <List dense>
                         {mi.Collect?.repositorio_coletor != undefined ? (
-                          <ListItem button component="a" href={formatLink(mi.Collect?.versao_coletor, mi.Collect?.repositorio_coletor)}>
+                          <ListItem button component="a" target="_blank" href={formatLink(mi.Collect?.versao_coletor, mi.Collect?.repositorio_coletor)}>
                             <ListItemIcon>
                               <CodeIcon />
                             </ListItemIcon>
@@ -814,7 +814,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     <Grid item xs={12} md={6}>
                       <List dense>
                         {mi.Collect?.repositorio_parser != undefined ? (
-                          <ListItem button component="a" href={formatLink(mi.Collect?.versao_parser, mi.Collect?.repositorio_parser)}>
+                          <ListItem button component="a" target="_blank" href={formatLink(mi.Collect?.versao_parser, mi.Collect?.repositorio_parser)}>
                             <ListItemIcon>
                               <CodeIcon />
                             </ListItemIcon>
