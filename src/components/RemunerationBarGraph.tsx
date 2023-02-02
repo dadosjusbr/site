@@ -495,7 +495,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                     opts.seriesIndex
                                   ] == 'Membros'
                                 ) {
-                                  return `${(val * 100).toFixed(0)}`;
+                                  return `${val}`;
                                 } else if (
                                   opts.w.globals.seriesNames[
                                     opts.seriesIndex
@@ -576,7 +576,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                 0,
                               ).map((v, i) =>
                                 fixYearDataArray(data)[i]
-                                  ? fixYearDataArray(data)[i].TotalMembers / 100
+                                  ? fixYearDataArray(data)[i].TotalMembers
                                   : v,
                               );
                             })(),
