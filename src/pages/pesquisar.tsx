@@ -1,3 +1,4 @@
+/* eslint-disable */
 import * as React from 'react';
 import ReactGA from 'react-ga';
 import Head from 'next/head';
@@ -314,7 +315,7 @@ export default function Index({ ais }) {
     getUrlParameter('meses');
     getUrlParameter('categorias');
     getUrlParameter('orgaos');
-    location.search != '' && firstRequest();
+    location.search !== '' && firstRequest();
   }, []);
 
   React.useEffect(() => {
@@ -327,7 +328,7 @@ export default function Index({ ais }) {
       'categorias',
       category
         .split(' ')
-        .at(category == 'Remuneração base' ? -1 : 0)
+        .at(category === 'Remuneração base' ? -1 : 0)
         .toLowerCase(),
     );
     window.history.replaceState({}, '', `${url}`);

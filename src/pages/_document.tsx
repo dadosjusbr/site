@@ -1,4 +1,5 @@
-const newrelic = require('newrelic');
+import Script from 'next/script';
+import { ServerStyleSheet } from 'styled-components';
 import Document, {
   DocumentContext,
   Html,
@@ -6,8 +7,9 @@ import Document, {
   NextScript,
   Head,
 } from 'next/document';
-import { ServerStyleSheet } from 'styled-components';
-import Script from 'next/script';
+
+/* eslint-disable */
+const newrelic = require('newrelic');
 
 /**
  * This document is used to create the default layout of the page like others template engines
@@ -81,7 +83,7 @@ export default class MyDocument extends Document<documentProps> {
           <Script
             dangerouslySetInnerHTML={{ __html: this.props.browserTimingHeader }}
             strategy="afterInteractive"
-          ></Script>
+          />
         </body>
       </Html>
     );

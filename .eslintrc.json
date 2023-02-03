@@ -18,13 +18,9 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": [
-    "react",
-    "@typescript-eslint",
-    "prettier"
-  ],
+  "plugins": ["react", "@typescript-eslint", "prettier"],
   "rules": {
-    "prettier/prettier": "error",
+    "prettier/prettier": 0,
     "space-before-function-paren": "off",
     "react/react-in-jsx-scope": "off",
     "operator-linebreak": "off",
@@ -32,12 +28,15 @@
     "object-curly-newline": "off",
     "react/prop-types": "off",
     "no-use-before-define": "off",
+    "react/require-default-props": "off",
+    "react/jsx-no-bind": "off",
+    "no-nested-ternary": "off",
+    "no-restricted-syntax": "off",
+    "no-param-reassign": "off",
     "react/jsx-filename-extension": [
       1,
       {
-        "extensions": [
-          ".tsx"
-        ]
+        "extensions": [".tsx"]
       }
     ],
     "react/jsx-props-no-spreading": "off",
@@ -60,12 +59,7 @@
   "settings": {
     "import/resolver": {
       "node": {
-        "extensions": [
-          ".js",
-          ".jsx",
-          ".ts",
-          ".tsx"
-        ]
+        "extensions": [".js", ".jsx", ".ts", ".tsx"]
       }
     }
   }

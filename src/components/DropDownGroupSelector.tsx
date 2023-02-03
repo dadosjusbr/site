@@ -17,7 +17,6 @@ export interface DropDownGroupSelectorProps
 
 const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   value,
-  ...rest
 }) => {
   const router = useRouter();
   const [agencyName, setAgencyName] = React.useState(value || '');
@@ -99,10 +98,8 @@ export function formatToAgency(agency: string) {
     : a;
 
   return final.split(' ').length > 2
-    ? final.split(' ')[0] +
-        ' ' +
-        final.split(' ')[1].toLowerCase() +
-        ' ' +
-        final.split(' ')[2]
+    ? `${final.split(' ')[0]} 
+    ${final.split(' ')[1].toLowerCase()} 
+    ${final.split(' ')[2]}`
     : final;
 }

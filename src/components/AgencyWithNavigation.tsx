@@ -19,12 +19,12 @@ import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
+import styled from 'styled-components';
 import ShareModal from './ShareModal';
 import RemunerationBarGraph from './RemunerationBarGraph';
 import * as url from '../url';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
-import styled from 'styled-components';
 import Drawer from './Drawer';
 import { GreenColor } from './OmaChart';
 
@@ -73,7 +73,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
 
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
 
-    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(dm))} ${sizes[i]}`;
+    return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
   }
 
   return (
