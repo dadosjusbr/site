@@ -3,8 +3,15 @@ import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import CodeIcon from '@mui/icons-material/Code';
+import HistoryIcon from '@mui/icons-material/History';
+import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 
 import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Avatar,
   Box,
   Button,
@@ -276,6 +283,28 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         </Stack>
       </ButtonBox>
     );
+  }
+
+  function formatLink(version: string, repository: string) {
+    // Caso tenhamos a versão, o link redirecionará para o repositório na versão utilizada.
+    // Caso contrário, retornará o link do próprio repositório (versão atual).
+    // Tbm verificamos se a versão refere-se ao id de um container ou commit.
+    if (version != undefined && version != 'unspecified') {
+      if (version.includes("sha256")) {
+        var p, ag;
+
+        repository.includes("coletor") ? p = "coletor" : p = "parser";
+        repository.includes("cnj") ? ag = "cnj" : ag = agency;
+
+        return `${repository}/pkgs/container/${p}-${ag}/${version}`
+      }
+      else {
+        return `${repository}/tree/${version}`
+      }
+    }
+    else {
+      return repository
+    }
   }
 
   return (
@@ -714,6 +743,94 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 </Box>
               </Box>
             </Paper>
+          </Grid>
+          <Grid item xs={12}>
+            <Accordion
+              sx={{
+                minWidth: 230,
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                aria-controls="panel1a-content"
+                id="panel1a-header"
+              >
+                <Typography align='center' variant="h6">
+                  Mais informações sobre a coleta
+                  <Tooltip
+                    placement="top"
+                    sx={{ mb: 0.5 }}
+                    title={
+                      <Typography fontSize="0.8rem">
+                        <p>
+                          <b>Repositório do Coletor:</b> Link para o repositório de código aberto utilizado para a
+                          realização da coleta de dados do respectivo órgão -
+                          baixando os dados diretamente, realizando a raspagem do HTML ou ainda simulando um usuário.
+                        </p>
+                        <p>
+                          <b>Repositório para Tratamento dos Dados:</b> Link para o repositório de código aberto utilizado para o tratamento dos dados
+                          obtidos pelo coletor - organizando, detalhando e unificando esses dados.
+                          Alguns órgãos recebem o tratamento de dados ainda no coletor, não possuindo esse estágio.
+                        </p>
+                        <p>
+                          <b>Duração da Coleta:</b> Tempo total do processo de coleta - considerando a coleta, o tratamento,
+                          a validação, o empacotamento e o armazenamento desses dados.
+                        </p>
+                      </Typography>
+                    }
+                  >
+                    <IconButton>
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Box>
+                  <Grid container>
+                    <Grid item xs={12} md={6}>
+                      <List dense>
+                        {mi.Collect?.repositorio_coletor != undefined ? (
+                          <ListItem button component="a" target="_blank" href={formatLink(mi.Collect?.versao_coletor, mi.Collect?.repositorio_coletor)}>
+                            <ListItemIcon>
+                              <CodeIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={`Repositório do Coletor`}
+                            />
+                          </ListItem>
+                        ) : ''}
+                        <ListItem>
+                          <ListItemIcon>
+                            <AlarmOnIcon />
+                          </ListItemIcon>
+                          <ListItemText
+                            primary={`Duração da Coleta: ${mi.Collect?.duracao_segundos == undefined
+                              ? 'Indisponível'
+                              : new Date(mi.Collect?.duracao_segundos * 1000).toISOString().slice(11, 19)
+                              }`}
+                          />
+                        </ListItem>
+                      </List>
+                    </Grid>
+                    <Grid item xs={12} md={6}>
+                      <List dense>
+                        {mi.Collect?.repositorio_parser != undefined ? (
+                          <ListItem button component="a" target="_blank" href={formatLink(mi.Collect?.versao_parser, mi.Collect?.repositorio_parser)}>
+                            <ListItemIcon>
+                              <CodeIcon />
+                            </ListItemIcon>
+                            <ListItemText
+                              primary={`Repositório para Tratamento dos Dados`}
+                            />
+                          </ListItem>
+                        ) : ''}
+                      </List>
+                    </Grid>
+                  </Grid>
+                </Box>
+              </AccordionDetails>
+            </Accordion>
           </Grid>
         </Grid>
         {!matches ? (
