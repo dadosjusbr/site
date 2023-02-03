@@ -18,10 +18,11 @@ import {
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
-import DropDownGroupSelector from '../../components/DropDownGroupSelector';
+import DropDownGroupSelector, {
+  formatToAgency,
+} from '../../components/DropDownGroupSelector';
 import AgencyWithNavigation from '../../components/AgencyWithNavigation';
 import { getCurrentYear } from '../../functions/currentYear';
-import { formatToAgency } from '../../components/DropDownGroupSelector';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `${formatToAgency(summary)}`;
@@ -87,6 +88,7 @@ export default function SummaryPage({ dataList, summary }) {
                     if (a.Name > b.Name) {
                       return 1;
                     }
+                    return 1;
                   })
                   .map(ag => (
                     <MenuItem key={ag.Name} value={ag.Name.toUpperCase()}>

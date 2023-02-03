@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import styled from 'styled-components';
-import { Container, Box, Grid, Typography, Link } from '@mui/material';
+import { Container, Grid, Typography, Link } from '@mui/material';
 
 import Footer from '../components/Footer';
 import Nav from '../components/Header';
@@ -79,14 +79,16 @@ export default function Index() {
             </Typography>
             <ul>
               <li>
-                <b>Possui formato aberto</b>: se é baseado em padrões abertos e livre de qualquer extensão proprietária que impeça seu uso livre;
+                <b>Possui formato aberto</b>: se é baseado em padrões abertos e
+                livre de qualquer extensão proprietária que impeça seu uso
+                livre;
               </li>
               <li>
                 <b>Formato de acesso</b>: se é possível acessar os dados
                 programaticamente através de URLs que seguem boas práticas; se é
-                necessário raspar os dados (por meio de
-                páginas e URLs com boas práticas de estrutura); ou se é necessário simular um usuário usando
-                um navegador (pior caso);
+                necessário raspar os dados (por meio de páginas e URLs com boas
+                práticas de estrutura); ou se é necessário simular um usuário
+                usando um navegador (pior caso);
               </li>
               <li>
                 <b>Manteve consistência no formato</b>: essa métrica captura se
@@ -113,8 +115,8 @@ export default function Index() {
               pontuar 0 ou 1. Nos critérios remuneração básica, outras receitas,
               detalhamento de descontos e formato de acesso, a escala é contínua
               com pontuações entre 0 e 1. Ainda que haja seis critérios na
-              dimensão de completude e quatro na de facilidade, cada dimensão tem
-              peso idêntico.
+              dimensão de completude e quatro na de facilidade, cada dimensão
+              tem peso idêntico.
             </Typography>
             <Typography variant="body1">
               A{' '}

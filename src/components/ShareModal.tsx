@@ -63,7 +63,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
   };
 
   const action = (
-    <React.Fragment>
+    <>
       <IconButton
         size="small"
         aria-label="close"
@@ -72,7 +72,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
       >
         <CloseIcon fontSize="small" />
       </IconButton>
-    </React.Fragment>
+    </>
   );
 
   return (

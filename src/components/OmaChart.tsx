@@ -54,7 +54,7 @@ export interface OMASummaryProps {
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 function ShowAcesso(props) {
-  const acesso = props.children;
+  const { children: acesso } = props;
   switch (acesso) {
     case 'ACESSO_DIRETO':
       return (
@@ -134,8 +134,8 @@ function ShowAcesso(props) {
   }
 }
 function ShowTipoDado(props) {
-  const texto = props.children;
-  const tipo = props.tipo;
+  const { children: texto } = props;
+  const { tipo } = props;
   switch (tipo) {
     case 'SUMARIZADO':
       return (
@@ -210,7 +210,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
 
     const i = Math.floor(Math.log(bytes) / Math.log(1024));
 
-    return `${parseFloat((bytes / Math.pow(1024, i)).toFixed(dm))} ${sizes[i]}`;
+    return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
   }
 
   function StackButton() {
@@ -398,7 +398,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 <Typography variant="h6" textAlign="center">
                   Índice de transparência:{' '}
                   <b>
-                    {mi.Score?.indice_transparencia == undefined
+                    {mi.Score?.indice_transparencia === undefined
                       ? 'Indisponível'
                       : mi.Score?.indice_transparencia.toFixed(2)}
                   </b>
@@ -435,7 +435,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={`Índice de completude: ${
-                            mi.Score?.indice_completude == undefined
+                            mi.Score?.indice_completude === undefined
                               ? 'Indisponível'
                               : mi.Score?.indice_completude.toFixed(2)
                           }`}
@@ -446,7 +446,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         {mi.Meta?.tem_lotacao == null ||
-                        mi.Meta?.tem_lotacao == false ? (
+                        mi.Meta?.tem_lotacao === false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -466,7 +466,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         {mi.Meta?.tem_cargo == null ||
-                        mi.Meta?.tem_cargo == false ? (
+                        mi.Meta?.tem_cargo === false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -486,7 +486,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         {mi.Meta?.tem_matricula == null ||
-                        mi.Meta?.tem_matricula == false ? (
+                        mi.Meta?.tem_matricula === false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -538,7 +538,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={`Índice de facilidade: ${
-                            mi.Score?.indice_facilidade == undefined
+                            mi.Score?.indice_facilidade === undefined
                               ? 'Indisponível'
                               : mi.Score?.indice_facilidade.toFixed(2)
                           }`}
@@ -590,7 +590,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         {mi.Meta?.formato_aberto == null ||
-                        mi.Meta?.formato_aberto == false ? (
+                        mi.Meta?.formato_aberto === false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>

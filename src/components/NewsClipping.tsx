@@ -3,7 +3,7 @@ import React from 'react';
 import NewsClip from './NewsClip';
 
 function NewsClipping({ news }) {
-  const formated = news.map(n => {
+  const formated = news.map((n: any) => {
     n.formatedDate = new Date(n.date * 1000);
     return n;
   });

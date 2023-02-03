@@ -493,13 +493,14 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                 if (
                                   opts.w.globals.seriesNames[
                                     opts.seriesIndex
-                                  ] == 'Membros'
+                                  ] === 'Membros'
                                 ) {
                                   return `${val}`;
-                                } else if (
+                                }
+                                if (
                                   opts.w.globals.seriesNames[
                                     opts.seriesIndex
-                                  ] == 'Total de remunerações'
+                                  ] === 'Total de remunerações'
                                 ) {
                                   return !billion
                                     ? `R$ ${(val * 10).toFixed(2)}M`
@@ -553,11 +554,8 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         series={[
                           {
                             name: 'Total de remunerações',
-                            data: (() => {
-                              return createArrayFilledWithValue(
-                                12,
-                                0,
-                              ).map((v, i) =>
+                            data: (() =>
+                              createArrayFilledWithValue(12, 0).map((v, i) =>
                                 fixYearDataArray(data)[i]
                                   ? fixYearDataArray(data)[i].BaseRemuneration /
                                       10000000 +
@@ -565,21 +563,16 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                       .OtherRemunerations /
                                       10000000
                                   : v,
-                              );
-                            })(),
+                              ))(),
                           },
                           {
                             name: 'Membros',
-                            data: (() => {
-                              return createArrayFilledWithValue(
-                                12,
-                                0,
-                              ).map((v, i) =>
+                            data: (() =>
+                              createArrayFilledWithValue(12, 0).map((v, i) =>
                                 fixYearDataArray(data)[i]
                                   ? fixYearDataArray(data)[i].TotalMembers
                                   : v,
-                              );
-                            })(),
+                              ))(),
                           },
                           {
                             name: 'Benefícios',
