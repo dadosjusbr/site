@@ -1,0 +1,164 @@
+[
+  {
+    "state": "AC",
+    "region": "Norte",
+    "agency": "MPAC",
+    "url": "https://www.mpac.mp.br/ouvidoria/"
+  },
+  {
+    "state": "AP",
+    "region": "Norte",
+    "agency": "MPAP",
+    "url": "https://mpap.mp.br/ouvidoria/"
+  },
+  {
+    "state": "AM",
+    "region": "Norte",
+    "agency": "MPAM",
+    "url": "https://www.mpam.mp.br/consulta-de-processo/cadastro-de-manifestacao-ouvidoria/"
+  },
+  {
+    "state": "PA",
+    "region": "Norte",
+    "agency": "MPPA",
+    "url": "https://www2.mppa.mp.br/areas/institucional/ouvidoria/ouvidoria-geral.htm"
+  },
+  {
+    "state": "RO",
+    "region": "Norte",
+    "agency": "MPRO",
+    "url": "https://www.mpro.mp.br/pages/nossos-contatos/ouvidoria/formulario"
+  },
+  {
+    "state": "RR",
+    "region": "Norte",
+    "agency": "MPRR",
+    "url": "https://www.mprr.mp.br/web/ocorrencias"
+  },
+  {
+    "state": "TO",
+    "region": "Norte",
+    "agency": "MPTO",
+    "url": "https://mpto.mp.br/ouvidoria/citizen-manifestation/"
+  },
+  {
+    "state": "AL",
+    "region": "Nordeste",
+    "agency": "MPAL",
+    "url": "https://www.mpal.mp.br/?page_id=1782"
+  },
+  {
+    "state": "BA",
+    "region": "Nordeste",
+    "agency": "MPBA",
+    "url": "https://tag.sistemas.mpba.mp.br/tag/TagHub20220303.dll/"
+  },
+  {
+    "state": "CE",
+    "region": "Nordeste",
+    "agency": "MPCE",
+    "url": "http://www.mpce.mp.br/institucional/ouvidoria-geral/manifestacoes-online/"
+  },
+  {
+    "state": "MA",
+    "region": "Nordeste",
+    "agency": "MPMA",
+    "url": "https://ouvidoria.mpma.mp.br/sistema/manifestacao/cadastrar"
+  },
+  {
+    "state": "PB",
+    "region": "Nordeste",
+    "agency": "MPPB",
+    "url": "https://ouvidoria.mppb.mp.br/public/manifestacao/cadastrar"
+  },
+  {
+    "state": "PE",
+    "region": "Nordeste",
+    "agency": "MPPE",
+    "url": "https://portal.mppe.mp.br/formul%C3%A1rio-de-ouvidoria"
+  },
+  {
+    "state": "PI",
+    "region": "Nordeste",
+    "agency": "MPPI",
+    "url": "http://aplicativos3.mppi.mp.br/ouvidoria/publico/formularioOuvidoria.xhtml"
+  },
+  {
+    "state": "RN",
+    "region": "Nordeste",
+    "agency": "MPRN",
+    "url": "https://ouvidoria.mprn.mp.br/ouvidoria/cidadao/acesso.do#"
+  },
+  {
+    "state": "SE",
+    "region": "Nordeste",
+    "agency": "MPSE",
+    "url": "https://sistemas.mpse.mp.br/4.5/Ouvidoria/Manifestacao/Ouvidoria.aspx"
+  },
+  {
+    "state": "DF",
+    "region": "Centro-oeste",
+    "agency": "MPDFT",
+    "url": "https://www.mpdft.mp.br/ouvidoriainternet/#/ouvidoria"
+  },
+  {
+    "state": "GO",
+    "region": "Centro-oeste",
+    "agency": "MPGO",
+    "url": "https://www.mpgo.mp.br/denuncia/"
+  },
+  {
+    "state": "MT",
+    "region": "Centro-oeste",
+    "agency": "MPMT",
+    "url": "https://www.mpmt.mp.br/ouvidoria/ouvidoria-client/cad_manifest.php"
+  },
+  {
+    "state": "MS",
+    "region": "Centro-oeste",
+    "agency": "MPMS",
+    "url": "https://www.mpms.mp.br/ouvidoria/cadastro-manifestacao"
+  },
+  {
+    "state": "ES",
+    "region": "Sudeste",
+    "agency": "MPES",
+    "url": "https://ouvidoria.mpes.mp.br/#/"
+  },
+  {
+    "state": "MG",
+    "region": "Sudeste",
+    "agency": "MPMG",
+    "url": "https://aplicacao.mpmg.mp.br/ouvidoria/"
+  },
+  {
+    "state": "RJ",
+    "region": "Sudeste",
+    "agency": "MPRJ",
+    "url": "https://www.mprj.mp.br/comunicacao/ouvidoria/formulario"
+  },
+  {
+    "state": "SP",
+    "region": "Sudeste",
+    "agency": "MPSP",
+    "url": "https://sis.mpsp.mp.br/atendimentocidadao/Ouvidoria/Manifestacao/EscolherTipoDeIdentificacao"
+  },
+  {
+    "state": "PR",
+    "region": "Sul",
+    "agency": "MPPR",
+    "url": "https://mppr.sigo.pr.gov.br/cidadao/1"
+  },
+  {
+    "state": "SC",
+    "region": "Sul",
+    "agency": "MPSC",
+    "url": "https://www.mpsc.mp.br/ouvidoria/cadastro-de-manifestacoes"
+  },
+  {
+    "state": "RS",
+    "region": "Sul",
+    "agency": "MPRS",
+    "url": "https://www.mprs.mp.br/ouvidoria/formulario/"
+  }
+]
