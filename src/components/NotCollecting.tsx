@@ -11,12 +11,9 @@ import {
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import notCollecting from '../../public/not_collecting.json';
-
 const NotCollecting: React.FC<{
   agency: any;
 }> = ({ agency }) => {
-  const [url, setUrl] = useState('');
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -81,7 +78,7 @@ const NotCollecting: React.FC<{
                 <Button
                   variant="outlined"
                   color="info"
-                  href={url}
+                  href={agency.ombudsman_url}
                   target="_blank"
                   endIcon={<ArrowForwardIosIcon />}
                 >
@@ -94,14 +91,6 @@ const NotCollecting: React.FC<{
       </div>
     );
   }
-
-  useEffect(() => {
-    notCollecting.map(item => {
-      if (item.agency.toLowerCase() === agency.aid) {
-        setUrl(item.url);
-      }
-    });
-  }, [agency]);
 
   return (
     <Paper elevation={0}>
