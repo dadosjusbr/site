@@ -285,26 +285,22 @@ const OMASummary: React.FC<OMASummaryProps> = ({
     );
   }
 
-  function formatLink(version: string, repository: string) {
+  function formatLink(version: string, repository: string): string {
     // Caso tenhamos a versão, o link redirecionará para o repositório na versão utilizada.
     // Caso contrário, retornará o link do próprio repositório (versão atual).
     // Tbm verificamos se a versão refere-se ao id de um container ou commit.
-    if (version != undefined && version != 'unspecified') {
-      if (version.includes("sha256")) {
-        var p, ag;
+    if (version !== undefined && version !== 'unspecified') {
+      if (version.includes('sha256')) {
+        const p = repository.includes('coletor') ? 'coletor' : 'parser';
+        const ag = repository.includes('cnj') ? 'cnj' : agency;
 
-        repository.includes("coletor") ? p = "coletor" : p = "parser";
-        repository.includes("cnj") ? ag = "cnj" : ag = agency;
+        return `${repository}/pkgs/container/${p}-${ag}/${version}`;
+      }
 
-        return `${repository}/pkgs/container/${p}-${ag}/${version}`
-      }
-      else {
-        return `${repository}/tree/${version}`
-      }
+      return `${repository}/tree/${version}`;
     }
-    else {
-      return repository
-    }
+
+    return `${repository}`;
   }
 
   return (
@@ -755,7 +751,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 aria-controls="panel1a-content"
                 id="panel1a-header"
               >
-                <Typography align='center' variant="h6">
+                <Typography align="center" variant="h6">
                   Mais informações sobre a coleta
                   <Tooltip
                     placement="top"
@@ -763,18 +759,25 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     title={
                       <Typography fontSize="0.8rem">
                         <p>
-                          <b>Repositório do Coletor:</b> Link para o repositório de código aberto utilizado para a
-                          realização da coleta de dados do respectivo órgão -
-                          baixando os dados diretamente, realizando a raspagem do HTML ou ainda simulando um usuário.
+                          <b>Repositório do Coletor:</b> Link para o repositório
+                          de código aberto utilizado para a realização da coleta
+                          de dados do respectivo órgão - baixando os dados
+                          diretamente, realizando a raspagem do HTML ou ainda
+                          simulando um usuário.
                         </p>
                         <p>
-                          <b>Repositório para Tratamento dos Dados:</b> Link para o repositório de código aberto utilizado para o tratamento dos dados
-                          obtidos pelo coletor - organizando, detalhando e unificando esses dados.
-                          Alguns órgãos recebem o tratamento de dados ainda no coletor, não possuindo esse estágio.
+                          <b>Repositório para Tratamento dos Dados:</b> Link
+                          para o repositório de código aberto utilizado para o
+                          tratamento dos dados obtidos pelo coletor -
+                          organizando, detalhando e unificando esses dados.
+                          Alguns órgãos recebem o tratamento de dados ainda no
+                          coletor, não possuindo esse estágio.
                         </p>
                         <p>
-                          <b>Duração da Coleta:</b> Tempo total do processo de coleta - considerando a coleta, o tratamento,
-                          a validação, o empacotamento e o armazenamento desses dados.
+                          <b>Duração da Coleta:</b> Tempo total do processo de
+                          coleta - considerando a coleta, o tratamento, a
+                          validação, o empacotamento e o armazenamento desses
+                          dados.
                         </p>
                       </Typography>
                     }
@@ -790,41 +793,60 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                   <Grid container>
                     <Grid item xs={12} md={6}>
                       <List dense>
-                        {mi.Collect?.repositorio_coletor != undefined ? (
-                          <ListItem button component="a" target="_blank" href={formatLink(mi.Collect?.versao_coletor, mi.Collect?.repositorio_coletor)}>
+                        {mi.Collect?.repositorio_coletor !== undefined ? (
+                          <ListItem
+                            button
+                            component="a"
+                            target="_blank"
+                            href={formatLink(
+                              mi.Collect?.versao_coletor,
+                              mi.Collect?.repositorio_coletor,
+                            )}
+                          >
                             <ListItemIcon>
                               <CodeIcon />
                             </ListItemIcon>
-                            <ListItemText
-                              primary={`Repositório do Coletor`}
-                            />
+                            <ListItemText primary="Repositório do Coletor" />
                           </ListItem>
-                        ) : ''}
+                        ) : (
+                          ''
+                        )}
                         <ListItem>
                           <ListItemIcon>
                             <AlarmOnIcon />
                           </ListItemIcon>
                           <ListItemText
-                            primary={`Duração da Coleta: ${mi.Collect?.duracao_segundos == undefined
-                              ? 'Indisponível'
-                              : new Date(mi.Collect?.duracao_segundos * 1000).toISOString().slice(11, 19)
-                              }`}
+                            primary={`Duração da Coleta: ${
+                              mi.Collect?.duracao_segundos === undefined
+                                ? 'Indisponível'
+                                : new Date(mi.Collect?.duracao_segundos * 1000)
+                                    .toISOString()
+                                    .slice(11, 19)
+                            }`}
                           />
                         </ListItem>
                       </List>
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <List dense>
-                        {mi.Collect?.repositorio_parser != undefined ? (
-                          <ListItem button component="a" target="_blank" href={formatLink(mi.Collect?.versao_parser, mi.Collect?.repositorio_parser)}>
+                        {mi.Collect?.repositorio_parser !== undefined ? (
+                          <ListItem
+                            button
+                            component="a"
+                            target="_blank"
+                            href={formatLink(
+                              mi.Collect?.versao_parser,
+                              mi.Collect?.repositorio_parser,
+                            )}
+                          >
                             <ListItemIcon>
                               <CodeIcon />
                             </ListItemIcon>
-                            <ListItemText
-                              primary={`Repositório para Tratamento dos Dados`}
-                            />
+                            <ListItemText primary="Repositório para Tratamento dos Dados" />
                           </ListItem>
-                        ) : ''}
+                        ) : (
+                          ''
+                        )}
                       </List>
                     </Grid>
                   </Grid>
