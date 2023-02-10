@@ -118,7 +118,7 @@ const NotCollecting: React.FC<{
           <Grid item mx={2}>
             <TransitionsModal>
               <Button onClick={handleOpen} variant="outlined" color="secondary">
-                AJUDE-NOS A INCLUIR OS DADOS
+                AJUDE-NOS A ABRIR OS DADOS
               </Button>
             </TransitionsModal>
           </Grid>
