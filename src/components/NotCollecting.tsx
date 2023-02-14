@@ -18,7 +18,7 @@ const NotCollecting: React.FC<{
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const style = {
-    position: 'absolute' as 'absolute',
+    position: 'absolute',
     top: '50%',
     left: '50%',
     transform: 'translate(-50%, -50%)',
@@ -52,13 +52,13 @@ const NotCollecting: React.FC<{
                 variant="h6"
                 component="h2"
               >
-                Ajude na inclusão de dados do {agency.name}
+                Ajude na inclusão de dados do {agency.nome}
               </Typography>
               <Typography id="transition-modal-description" sx={{ mt: 2 }}>
                 Para ajudar a incluir os dados deste tribunal no DadosJusBr,
                 você pode protocolar um requerimento na ouvidoria solicitando
                 mudanças na
-                {agency.collecting[0].description.map(
+                {agency.coletando[0].descricao.map(
                   (desc: string, index: number) => (
                     <span>{` ${desc
                       .split(' ')
@@ -67,7 +67,7 @@ const NotCollecting: React.FC<{
                       .split(' ')
                       .at(2)}
                     ${
-                      agency.collecting[0].description.length > 1 && index == 0
+                      agency.coletando[0].descricao.length > 1 && index === 0
                         ? 'e'
                         : ''
                     }`}</span>
@@ -78,7 +78,7 @@ const NotCollecting: React.FC<{
                 <Button
                   variant="outlined"
                   color="info"
-                  href={agency.ombudsman_url}
+                  href={agency.ouvidoria}
                   target="_blank"
                   endIcon={<ArrowForwardIosIcon />}
                 >
@@ -97,16 +97,16 @@ const NotCollecting: React.FC<{
       <Box p={4}>
         <Grid display="flex" justifyContent="space-between">
           <Grid item>
-            {agency.collecting &&
-            agency.collecting.length > 0 &&
-            agency.collecting[0].description ? (
+            {agency.coletando &&
+            agency.coletando.length > 0 &&
+            agency.coletando[0].descricao ? (
               <>
                 <p>
                   Não foi possível realizar a coleta de dados deste órgão pelos
                   seguintes motivos:
                 </p>
                 <ul>
-                  {agency.collecting[0].description.map(desc => (
+                  {agency.coletando[0].descricao.map(desc => (
                     <li>{desc}</li>
                   ))}
                 </ul>

@@ -22,7 +22,7 @@ export default function AgencyPage({
   function navigateToGivenYear(y: number) {
     router.push(`/orgao/${id}/${y}`);
   }
-  const pageTitle = `Dados/${id}`;
+  const pageTitle = `${id.toUpperCase()} - ${year}`;
   return (
     <Page>
       <Head>

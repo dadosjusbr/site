@@ -114,17 +114,7 @@ export default function Index({
     setLoading(false);
   }
 
-  const collecting = ais
-    .filter(ag => ag.collecting === null)
-    .sort((a, b) => {
-      if (a.uf > b.uf) {
-        return 1;
-      }
-      if (a.uf < b.uf) {
-        return -1;
-      }
-      return 0;
-    });
+  const collecting = ais.filter(ag => ag.collecting === undefined);
 
   return (
     <Page>

@@ -23,6 +23,7 @@ import DropDownGroupSelector, {
 } from '../../components/DropDownGroupSelector';
 import AgencyWithNavigation from '../../components/AgencyWithNavigation';
 import { getCurrentYear } from '../../functions/currentYear';
+import AgencyWithoutNavigation from '../../components/AgencyWithoutNavigation';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `${formatToAgency(summary)}`;
@@ -143,36 +144,19 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
 }) => {
   // this state is used to store the api fetched data after fetch it
   const [data, setData] = useState<any[]>([]);
-  const [summaryPackage, setSummaryPackage] = useState<any>();
   const [year, setYear] = useState(getCurrentYear());
   const [agencyData, setAgencyData] = useState<any>();
   const [dataLoading, setDataLoading] = useState(true);
-  // the useMemo hook is used to create an memoization (https://en.wikipedia.org/wiki/Memoization) with a state, it's used to avoid the need to recalculate values in screen rederization, here it's used to check if the date is valid to active the nextDate and the previousDate button using dates between 2018-2021 (https://pt-br.reactjs.org/docs/hooks-reference.html#usememo)
-  const nextDateIsNavigable = useMemo<boolean>(
-    () => year !== new Date().getFullYear(),
-    [year],
-  );
-  const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
-  const [navigableMonth, setNavigableMonth] = useState<any>();
-  // this state is used to determine the last month navigable in the given year, to allows to use th "see months" button to navigate to it
+
   useEffect(() => {
     setDataLoading(true);
     fetchAgencyData();
   }, [year]);
   async function fetchAgencyData() {
     try {
-      const { data: agency } = await api.ui.get(
-        `/v1/orgao/totais/${id}/${year}`,
-      );
-      setData(agency.MonthTotals ? agency.MonthTotals : []);
-      // sets the navigable month in the application state to the last navigable month for the given year
-      setNavigableMonth(
-        agency.MonthTotals
-          ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
-          : 1,
-      );
-      setAgencyData(agency.Agency);
-      setSummaryPackage(agency.SummaryPackage);
+      const { data: agency } = await api.ui.get(`/v1/orgao/resumo/${id}`);
+      setData(agency.dados_anuais);
+      setAgencyData(agency.orgao);
       setDataLoading(false);
     } catch (err) {
       setDataLoading(false);
@@ -181,18 +165,13 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   }
   return (
     <div id={id}>
-      <AgencyWithNavigation
+      <AgencyWithoutNavigation
         data={data}
         dataLoading={dataLoading}
         id={id}
-        navigableMonth={navigableMonth}
-        nextDateIsNavigable={nextDateIsNavigable}
-        previousDateIsNavigable={previousDateIsNavigable}
-        setYear={setYear}
         title={title}
         year={year}
         agency={agencyData}
-        summaryPackage={summaryPackage && summaryPackage}
       />
     </div>
   );
