@@ -427,7 +427,6 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       ? 'Indisponível'
                       : mi.indice_transparencia.indice_transparencia.toFixed(2)}
                   </b>
-                  {console.log(mi)}
                   <Tooltip
                     placement="top"
                     sx={{ mb: 0.5 }}
