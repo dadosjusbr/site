@@ -423,10 +423,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 <Typography variant="h6" textAlign="center">
                   Índice de transparência:{' '}
                   <b>
-                    {mi.Score?.indice_transparencia === undefined
+                    {mi.indice_transparencia.indice_transparencia === undefined
                       ? 'Indisponível'
-                      : mi.Score?.indice_transparencia.toFixed(2)}
+                      : mi.indice_transparencia.indice_transparencia.toFixed(2)}
                   </b>
+                  {console.log(mi)}
                   <Tooltip
                     placement="top"
                     sx={{ mb: 0.5 }}
@@ -460,9 +461,12 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={`Índice de completude: ${
-                            mi.Score?.indice_completude === undefined
+                            mi.indice_transparencia.indice_completude ===
+                            undefined
                               ? 'Indisponível'
-                              : mi.Score?.indice_completude.toFixed(2)
+                              : mi.indice_transparencia.indice_completude.toFixed(
+                                  2,
+                                )
                           }`}
                           primaryTypographyProps={{
                             variant: 'h6',
@@ -470,8 +474,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         />
                       </ListItem>
                       <ListItem>
-                        {mi.Meta?.tem_lotacao == null ||
-                        mi.Meta?.tem_lotacao === false ? (
+                        {mi.metadados.tem_lotacao == null ||
+                        mi.metadados.tem_lotacao === false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -483,15 +487,15 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Tem lotação"
                           sx={{
-                            textDecoration: mi.Meta?.tem_lotacao
+                            textDecoration: mi.metadados.tem_lotacao
                               ? null
                               : 'line-through',
                           }}
                         />
                       </ListItem>
                       <ListItem>
-                        {mi.Meta?.tem_cargo == null ||
-                        mi.Meta?.tem_cargo === false ? (
+                        {mi.metadados.tem_cargo == null ||
+                        mi.metadados.tem_cargo === false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -503,15 +507,15 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Tem cargo"
                           sx={{
-                            textDecoration: mi.Meta?.tem_cargo
+                            textDecoration: mi.metadados.tem_cargo
                               ? null
                               : 'line-through',
                           }}
                         />
                       </ListItem>
                       <ListItem>
-                        {mi.Meta?.tem_matricula == null ||
-                        mi.Meta?.tem_matricula === false ? (
+                        {mi.metadados.tem_matricula == null ||
+                        mi.metadados.tem_matricula === false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -523,7 +527,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Tem matrícula e nome"
                           sx={{
-                            textDecoration: mi.Meta?.tem_matricula
+                            textDecoration: mi.metadados.tem_matricula
                               ? null
                               : 'line-through',
                           }}
@@ -532,7 +536,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado tipo={mi.Meta?.remuneracao_basica}>
+                            <ShowTipoDado
+                              tipo={mi.metadados.remuneracao_basica}
+                            >
                               remuneração básica
                             </ShowTipoDado>
                           }
@@ -541,7 +547,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado tipo={mi.Meta?.despesas}>
+                            <ShowTipoDado tipo={mi.metadados.despesas}>
                               descontos
                             </ShowTipoDado>
                           }
@@ -550,7 +556,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado tipo={mi.Meta?.outras_receitas}>
+                            <ShowTipoDado tipo={mi.metadados.outras_receitas}>
                               outras receitas
                             </ShowTipoDado>
                           }
@@ -563,9 +569,12 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={`Índice de facilidade: ${
-                            mi.Score?.indice_facilidade === undefined
+                            mi.indice_transparencia.indice_facilidade ===
+                            undefined
                               ? 'Indisponível'
-                              : mi.Score?.indice_facilidade.toFixed(2)
+                              : mi.indice_transparencia.indice_facilidade.toFixed(
+                                  2,
+                                )
                           }`}
                           primaryTypographyProps={{
                             variant: 'h6',
@@ -574,12 +583,17 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         <ListItemText
-                          primary={<ShowAcesso>{mi.Meta?.acesso}</ShowAcesso>}
+                          primary={
+                            <ShowAcesso>{mi.metadados.acesso}</ShowAcesso>
+                          }
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemIcon>
-                          {mi.Meta?.manteve_consistencia_no_formato == null ? (
+                          {mi.metadados.manteve_consistencia_no_formato ==
+                            null ||
+                          mi.metadados.manteve_consistencia_no_formato ===
+                            false ? (
                             <Close color="error" />
                           ) : (
                             <Done color="success" />
@@ -588,8 +602,8 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Manteve consistência no formato"
                           sx={{
-                            textDecoration: mi.Meta
-                              ?.manteve_consistencia_no_formato
+                            textDecoration: mi.metadados
+                              .manteve_consistencia_no_formato
                               ? null
                               : 'line-through',
                           }}
@@ -597,7 +611,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         <ListItemIcon>
-                          {mi.Meta?.dados_estritamente_tabulares == null ? (
+                          {mi.metadados.dados_estritamente_tabulares == null ||
+                          mi.metadados.dados_estritamente_tabulares ===
+                            false ? (
                             <Close color="error" />
                           ) : (
                             <Done color="success" />
@@ -606,16 +622,16 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Dados estritamente tabulares"
                           sx={{
-                            textDecoration: mi.Meta
-                              ?.dados_estritamente_tabulares
+                            textDecoration: mi.metadados
+                              .dados_estritamente_tabulares
                               ? null
                               : 'line-through',
                           }}
                         />
                       </ListItem>
                       <ListItem>
-                        {mi.Meta?.formato_aberto == null ||
-                        mi.Meta?.formato_aberto === false ? (
+                        {mi.metadados.formato_aberto == null ||
+                        mi.metadados.formato_aberto === false ? (
                           <ListItemIcon>
                             <Close color="error" />
                           </ListItemIcon>
@@ -627,7 +643,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         <ListItemText
                           primary="Possui formato aberto"
                           sx={{
-                            textDecoration: mi.Meta?.formato_aberto
+                            textDecoration: mi.metadados.formato_aberto
                               ? null
                               : 'line-through',
                           }}
@@ -793,14 +809,14 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                   <Grid container>
                     <Grid item xs={12} md={6}>
                       <List dense>
-                        {mi.Collect?.repositorio_coletor !== undefined ? (
+                        {mi.dados_coleta.repositorio_coletor !== undefined ? (
                           <ListItem
                             button
                             component="a"
                             target="_blank"
                             href={formatLink(
-                              mi.Collect?.versao_coletor,
-                              mi.Collect?.repositorio_coletor,
+                              mi.dados_coleta.versao_coletor,
+                              mi.dados_coleta.repositorio_coletor,
                             )}
                           >
                             <ListItemIcon>
@@ -817,9 +833,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                           </ListItemIcon>
                           <ListItemText
                             primary={`Duração da Coleta: ${
-                              mi.Collect?.duracao_segundos === undefined
+                              mi.dados_coleta.duracao_segundos === undefined
                                 ? 'Indisponível'
-                                : new Date(mi.Collect?.duracao_segundos * 1000)
+                                : new Date(
+                                    mi.dados_coleta.duracao_segundos * 1000,
+                                  )
                                     .toISOString()
                                     .slice(11, 19)
                             }`}
@@ -829,14 +847,14 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                     </Grid>
                     <Grid item xs={12} md={6}>
                       <List dense>
-                        {mi.Collect?.repositorio_parser !== undefined ? (
+                        {mi.dados_coleta.repositorio_parser !== undefined ? (
                           <ListItem
                             button
                             component="a"
                             target="_blank"
                             href={formatLink(
-                              mi.Collect?.versao_parser,
-                              mi.Collect?.repositorio_parser,
+                              mi.dados_coleta.versao_parser,
+                              mi.dados_coleta.repositorio_parser,
                             )}
                           >
                             <ListItemIcon>

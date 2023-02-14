@@ -42,13 +42,15 @@ function DateTable(props) {
       <AccordionDetails>
         <Box>
           <table>
-            {data.map(d => (
-              <TableRow
-                key={d.Month}
-                month={d.Month}
-                crawlingtimeseconds={d.CrawlingTimestamp.seconds}
-              />
-            ))}
+            <tbody>
+              {data.map(d => (
+                <TableRow
+                  key={d.Month}
+                  month={d.Month}
+                  crawlingtimeseconds={d.CrawlingTimestamp.seconds}
+                />
+              ))}
+            </tbody>
           </table>
         </Box>
       </AccordionDetails>
