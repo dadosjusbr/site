@@ -568,7 +568,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             </Box>
             {data && data.length > 0 && (
               <Grid container display="flex" justifyContent="center">
-                {console.log(data)}
                 <Grid
                   display="flex"
                   item

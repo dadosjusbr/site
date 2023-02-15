@@ -60,7 +60,7 @@ const NotCollecting: React.FC<{
                 mudanças na
                 {agency.coletando[0].descricao.map(
                   (desc: string, index: number) => (
-                    <span>{` ${desc
+                    <span key={index}>{` ${desc
                       .split(' ')
                       .at(0)
                       .toLowerCase()} ${desc.split(' ').at(1)} ${desc
@@ -106,9 +106,11 @@ const NotCollecting: React.FC<{
                   seguintes motivos:
                 </p>
                 <ul>
-                  {agency.coletando[0].descricao.map(desc => (
-                    <li>{desc}</li>
-                  ))}
+                  {agency.coletando[0].descricao.map(
+                    (desc: string, index: number) => (
+                      <li key={index}>{desc}</li>
+                    ),
+                  )}
                 </ul>
               </>
             ) : (
