@@ -155,7 +155,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   async function fetchAgencyData() {
     try {
       const { data: agency } = await api.ui.get(`/v1/orgao/resumo/${id}`);
-      setData(agency.dados_anuais);
+      setData(agency.dados_anuais ? agency.dados_anuais : null);
       setAgencyData(agency.orgao);
       setDataLoading(false);
     } catch (err) {
