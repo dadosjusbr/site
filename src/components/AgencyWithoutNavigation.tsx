@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
-import ReactGA from 'react-ga';
 import {
   Container,
   Box,
@@ -8,21 +7,17 @@ import {
   Button,
   ThemeProvider,
   Stack,
-  Tooltip,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import styled from 'styled-components';
 import ShareModal from './ShareModal';
-import * as url from '../url';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
 import Drawer from './Drawer';
-import { GreenColor } from './OmaChart';
 import AnualRemunerationGraph from './AnualRemunerationGraph';
 
 export interface AgencyPageWithoutNavigationProps {
@@ -105,44 +100,12 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
                   >
                     COMPARTILHAR
                   </Button>
-                  {data && data.length > 0 && (
-                    <Tooltip
-                      arrow
-                      title={
-                        <Typography fontSize="0.8rem" mt={1}>
-                          Selecione no gráfico o ano que deseja baixar os dados.
-                        </Typography>
-                      }
-                    >
-                      <Button
-                        variant="outlined"
-                        color="info"
-                        endIcon={<CloudDownloadIcon />}
-                        onClick={() => {
-                          ReactGA.pageview(url.downloadURL(fileLink));
-                        }}
-                        href={url.downloadURL(fileLink)}
-                        id="download-button"
-                      >
-                        BAIXAR{' '}
-                        <GreenColor>
-                          {formatBytes(
-                            data.find(d => d.ano === selectedYear)
-                              ? data.find(d => d.ano === selectedYear).package
-                                  .size
-                              : 0,
-                          )}
-                        </GreenColor>
-                      </Button>
-                    </Tooltip>
-                  )}
-
                   <Button
                     variant="outlined"
                     color="info"
                     endIcon={<SearchIcon />}
                     onClick={() => {
-                      router.push(`/pesquisar?orgaos=${agency.aid}`);
+                      router.push(`/pesquisar?orgaos=${agency.id_orgao}`);
                     }}
                   >
                     PESQUISAR
@@ -166,43 +129,12 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
                   >
                     COMPARTILHAR
                   </Button>
-                  {data && data.length > 0 && (
-                    <Tooltip
-                      arrow
-                      title={
-                        <Typography fontSize="0.8rem" mt={1}>
-                          Selecione no gráfico o ano que deseja baixar os dados.
-                        </Typography>
-                      }
-                    >
-                      <Button
-                        variant="outlined"
-                        color="info"
-                        endIcon={<CloudDownloadIcon />}
-                        onClick={() => {
-                          ReactGA.pageview(url.downloadURL(fileLink));
-                        }}
-                        href={url.downloadURL(fileLink)}
-                        id="download-button"
-                      >
-                        BAIXAR{' '}
-                        <GreenColor>
-                          {formatBytes(
-                            data.find(d => d.ano === selectedYear)
-                              ? data.find(d => d.ano === selectedYear).package
-                                  .size
-                              : 0,
-                          )}
-                        </GreenColor>
-                      </Button>
-                    </Tooltip>
-                  )}
                   <Button
                     variant="outlined"
                     color="info"
                     endIcon={<SearchIcon />}
                     onClick={() => {
-                      router.push(`/pesquisar?orgaos=${agency.aid}`);
+                      router.push(`/pesquisar?orgaos=${agency.id_orgao}`);
                     }}
                   >
                     PESQUISAR
@@ -234,7 +166,7 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
       <ShareModal
         pageTitle={title}
         isOpen={modalIsOpen}
-        url={`https://dadosjusbr.org/orgao/${id}/${year}`}
+        url={`https://dadosjusbr.org/orgao/${id}`}
         onRequestClose={() => setModalIsOpen(false)}
       />
     </Container>

@@ -81,199 +81,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         <NotCollecting agency={agency} />
       ) : (
         <>
-          <Paper
-            elevation={0}
-            sx={{
-              ...(matches && {
-                paddingBottom: 4,
-              }),
-            }}
-          >
-            <Box py={4} textAlign="center" padding={4}>
-              <Typography
-                variant="h5"
-                {...(matches && { variant: 'h6' })}
-                textAlign="center"
-              >
-                Remunerações de membros entre{' '}
-                {!dataLoading && data
-                  ? `${data.at(0).ano} e ${data.at(-1).ano}`
-                  : ''}
-                <Tooltip
-                  placement="top"
-                  title={
-                    <Typography fontSize="0.8rem">
-                      <p>
-                        <b>Membros:</b> Participantes ativos do órgao, incluindo
-                        os servidores públicos, os militares e os membros do
-                        Poder Judiciário.
-                      </p>
-                      <p>
-                        <b>Servidor:</b> Funcionário público que exerce cargo ou
-                        função pública, com vínculo empregatício, e que recebe
-                        remuneração fixa ou variável.
-                      </p>
-                      <p>
-                        <b>Salário:</b> Valor recebido de acordo com a prestação
-                        de serviços, em decorrência do contrato de trabalho.
-                      </p>
-                      <p>
-                        <b>Benefícios:</b> Qualquer remuneração recebida por um
-                        funcionário que não seja proveniente de salário.
-                        Exemplos de benefícios são: diárias, gratificações,
-                        remuneração por função de confiança, benefícios pessoais
-                        ou eventuais, auxílios alimentação, saúde, escolar...
-                      </p>
-                    </Typography>
-                  }
-                >
-                  <IconButton>
-                    <InfoIcon />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-            </Box>
-            <Grid
-              pb={8}
-              container
-              spacing={8}
-              justifyContent="center"
-              {...(matches && {
-                justifyContent: 'space-evenly',
-                pb: 0,
-                rowSpacing: 4,
-              })}
-            >
-              <Grid item textAlign="center">
-                <SalarioButton
-                  sx={{ backgroundColor: '#2fbb95' }}
-                  onClick={e => {
-                    if (hidingWage) {
-                      e.currentTarget.classList.remove('active');
-                      setHidingWage(false);
-                    } else {
-                      e.currentTarget.classList.add('active');
-                      setHidingWage(true);
-                    }
-                  }}
-                >
-                  <AccountBalanceWalletIcon />
-                </SalarioButton>
-                <Typography pt={1}>
-                  Salário:
-                  {matches ? <br /> : ' '}
-                  R${' '}
-                  {(() => {
-                    let total = 0;
-                    const wages = data.map(d =>
-                      d.remuneracao_base === undefined ? 0 : d.remuneracao_base,
-                    );
-                    wages.forEach(w => {
-                      total += w;
-                    });
-                    return !billion
-                      ? `${(total / 1000000).toFixed(1)}M`
-                      : `${(total / 1000000000).toFixed(1)}B`;
-                  })()}
-                </Typography>
-
-                {matches ? (
-                  <>
-                    <SemDadosButton
-                      sx={{ mt: 2, backgroundColor: '#3E5363' }}
-                      onClick={e => {
-                        if (hidingNoData) {
-                          e.currentTarget.classList.remove('active');
-                          setHidingNoData(false);
-                        } else {
-                          e.currentTarget.classList.add('active');
-                          setHidingNoData(true);
-                        }
-                      }}
-                    >
-                      <CropSquareIcon />
-                    </SemDadosButton>
-                    <Typography pt={1}>Sem dados</Typography>
-                  </>
-                ) : null}
-              </Grid>
-              <Grid item textAlign="center">
-                <BeneficiosButton
-                  sx={{ backgroundColor: '#96bb2f' }}
-                  onClick={e => {
-                    if (hidingBenefits) {
-                      e.currentTarget.classList.remove('active');
-                      setHidingBenefits(false);
-                    } else {
-                      e.currentTarget.classList.add('active');
-                      setHidingBenefits(true);
-                    }
-                  }}
-                >
-                  <CardGiftcardIcon />
-                </BeneficiosButton>
-                <Typography pt={1}>
-                  Benefícios:
-                  {matches ? <br /> : ' '}
-                  R${' '}
-                  {(() => {
-                    let total = 0;
-                    const monthlyTotals = data.map(d =>
-                      d.outras_remuneracoes === undefined
-                        ? 0
-                        : d.outras_remuneracoes,
-                    );
-                    monthlyTotals.forEach(w => {
-                      total += w;
-                    });
-                    return !billion
-                      ? `${(total / 1000000).toFixed(1)}M`
-                      : `${(total / 1000000000).toFixed(1)}B`;
-                  })()}
-                </Typography>
-              </Grid>
-              {!matches ? (
-                <>
-                  <Grid item textAlign="center">
-                    <SemDadosButton
-                      sx={{ backgroundColor: '#3E5363' }}
-                      onClick={e => {
-                        if (hidingNoData) {
-                          e.currentTarget.classList.remove('active');
-                          setHidingNoData(false);
-                        } else {
-                          e.currentTarget.classList.add('active');
-                          setHidingNoData(true);
-                        }
-                      }}
-                    >
-                      <CropSquareIcon />
-                    </SemDadosButton>
-                    <Typography pt={1}>Sem dados</Typography>
-                  </Grid>
-                </>
-              ) : null}
-              {/* <Grid item textAlign="center">
-          <IconButton
-            onClick={e => {
-              if (hidingErrors) {
-                e.currentTarget.classList.remove('active');
-                setHidingErrors(false);
-              } else {
-                e.currentTarget.classList.add('active');
-                setHidingErrors(true);
-              }
-            }}
-          >
-            <SquareIcon />
-          </IconButton>
-          <Typography>Problemas na coleta</Typography>
-        </Grid> */}
-            </Grid>
-          </Paper>
           <Paper elevation={0}>
-            <Box my={4} pt={2} padding={4}>
-              <Typography variant="h6" textAlign="center">
+            <Box pt={2} padding={4}>
+              <Typography variant="h5" textAlign="center">
                 Total de remunerações de membros por ano
               </Typography>
               {agency && data && !dataLoading ? (
@@ -469,7 +279,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                 if (
                                   opts.w.globals.seriesNames[
                                     opts.seriesIndex
-                                  ] === 'Membros'
+                                  ] === 'Média mensal de membros'
                                 ) {
                                   return `${val}`;
                                 }
@@ -531,7 +341,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             data: (() => totalWaste())(),
                           },
                           {
-                            name: 'Membros',
+                            name: 'Média mensal de membros',
                             data: (() => createDataArray('num_membros'))(),
                           },
                           {

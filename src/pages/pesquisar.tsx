@@ -647,7 +647,7 @@ export default function Index({ ais }) {
 export async function getServerSideProps() {
   try {
     const res = await api.default.get('/orgaos');
-    const agencies = res.data.filter(ag => ag.collecting === null);
+    const agencies = res.data.filter(ag => ag.collecting == null);
     return {
       props: {
         ais: agencies,
