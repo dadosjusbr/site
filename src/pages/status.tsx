@@ -18,7 +18,7 @@ import { formatAgency } from '../functions/format';
 
 export default function Index({ ais }) {
   const collecting = ais
-    .filter(ag => ag.collecting === null)
+    .filter(ag => ag.collecting === undefined)
     .sort((a, b) => {
       if (a.uf > b.uf) {
         return 1;
@@ -29,7 +29,7 @@ export default function Index({ ais }) {
       return 0;
     });
   const notCollecting = ais
-    .filter(ag => ag.collecting !== null)
+    .filter(ag => ag.collecting !== undefined)
     .sort((a, b) => {
       if (a.uf > b.uf) {
         return 1;
