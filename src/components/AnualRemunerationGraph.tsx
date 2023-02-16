@@ -1,32 +1,22 @@
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import styled from 'styled-components';
 import {
   Box,
   Button,
   CircularProgress,
   Grid,
-  IconButton,
   Paper,
   Typography,
   Tooltip,
 } from '@mui/material';
-import InfoIcon from '@mui/icons-material/Info';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import CropSquareIcon from '@mui/icons-material/CropSquare';
-import useMediaQuery from '@mui/material/useMediaQuery';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import CrawlingDateTable from './CrawlingDateTable';
 import NotCollecting from './NotCollecting';
+import { getCurrentYear } from '../functions/currentYear';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-const SalarioButton = styled(IconButton)({});
-const BeneficiosButton = styled(IconButton)({});
-const SemDadosButton = styled(IconButton)({});
 
 export interface AnualRemunerationGraphProps {
   year: number;
@@ -46,12 +36,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   onYearChange,
 }) => {
   // this constant is used as an alx value to determine the max graph height
-  const [hidingWage, setHidingWage] = useState(false);
-  const [hidingBenefits, setHidingBenefits] = useState(false);
-  const [hidingNoData, setHidingNoData] = useState(false);
   const [selectedYear, setSelectedYear] = useState(year);
-  const [hidingErrors, setHidingErrors] = useState(false);
-  const matches = useMediaQuery('(max-width:500px)');
 
   function createDataArray(tipoRemuneracao: string) {
     const a = data.map(d =>
@@ -60,13 +45,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return a;
   }
 
-  function totalWaste() {
+  function totalWaste(addicional = 0) {
     const a = data.map(
       d =>
         (d.remuneracao_base === undefined ? 0 : d.remuneracao_base / 1000000) +
         (d.outras_remuneracoes === undefined
           ? 0
-          : d.outras_remuneracoes / 1000000),
+          : d.outras_remuneracoes / 1000000) +
+        addicional,
     );
     return a;
   }
@@ -128,6 +114,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                       <Chart
                         options={{
                           colors: [
+                            '#2c3236',
                             'trasnparent',
                             'trasnparent',
                             '#97BB2F',
@@ -271,9 +258,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             shared: true,
                             intersect: false,
                             inverseOrder: true,
-                            ...(agency != null
-                              ? { enabledOnSeries: [0, 1, 2, 3] }
-                              : { enabledOnSeries: [0, 2, 3] }),
+                            enabledOnSeries: [1, 2, 3, 4],
                             y: {
                               formatter(val, opts) {
                                 if (
@@ -310,9 +295,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             },
                             categories: (() => {
                               const list = [];
-                              data.forEach(item => {
-                                list.push(item.ano);
-                              });
+                              for (let i = 2018; i <= getCurrentYear(); i++) {
+                                list.push(i);
+                              }
                               return list;
                             })(),
                             title: {
@@ -337,6 +322,10 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                         }}
                         series={[
                           {
+                            name: 'Sem Dados',
+                            data: (() => totalWaste(1))(),
+                          },
+                          {
                             name: 'Total de remunerações',
                             data: (() => totalWaste())(),
                           },
@@ -347,19 +336,13 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                           {
                             name: 'Benefícios',
                             data: (() => {
-                              if (!hidingBenefits) {
-                                return createDataArray('outras_remuneracoes');
-                              }
-                              return [];
+                              return createDataArray('outras_remuneracoes');
                             })(),
                           },
                           {
                             name: 'Salário',
                             data: (() => {
-                              if (!hidingWage) {
-                                return createDataArray('remuneracao_base');
-                              }
-                              return [];
+                              return createDataArray('remuneracao_base');
                             })(),
                           },
                         ]}
@@ -398,3 +381,18 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
 };
 
 export default AnualRemunerationGraph;
+
+function createArrayFilledWithValue<T>(size: number, value: T): T[] {
+  const array = [];
+  for (let i = 0; i < size; i += 1) {
+    array.push(value);
+  }
+  return array;
+}
+function fixYearDataArray(array: any[]) {
+  const a = createArrayFilledWithValue(5, undefined);
+  array.forEach(v => {
+    a[v.Month - 1] = v;
+  });
+  return a;
+}
