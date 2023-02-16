@@ -10,7 +10,7 @@ function NewsClipping({ news }) {
 
   const list = formated
     .sort((a, b) => b.date - a.date)
-    .map((n, i) => <NewsClip id={i} news={n} />);
+    .map((n, i) => <NewsClip key={i} id={i} news={n} />);
   return list;
 }
 export default NewsClipping;
