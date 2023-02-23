@@ -37,25 +37,83 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
 }) => {
   // this constant is used as an alx value to determine the max graph height
   const [selectedYear, setSelectedYear] = useState(year);
+  const yearList = () => {
+    let list = [];
+    for (let i = 2018; i <= getCurrentYear(); i++) {
+      list.push(i);
+    }
+    return list;
+  };
 
-  function createDataArray(tipoRemuneracao: string) {
-    const a = data.map(d =>
-      d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao],
-    );
-    return a;
-  }
+  const noData = () => {
+    const a = data.map(d => d.ano).sort((a, b) => a - b);
+    let noData = [];
 
-  function totalWaste(addicional = 0) {
+    for (let i = 2018; i <= getCurrentYear(); i++) {
+      if (a.includes(i)) {
+        noData.push(0);
+      } else if (!a.includes(i)) {
+        noData.push(MaxMonthPlaceholder);
+      }
+    }
+    return noData;
+  };
+
+  const totalWaste = () => {
+    const years = data.map(d => d.ano).sort((a, b) => a - b);
     const a = data.map(
       d =>
         (d.remuneracao_base === undefined ? 0 : d.remuneracao_base / 1000000) +
         (d.outras_remuneracoes === undefined
           ? 0
-          : d.outras_remuneracoes / 1000000) +
-        addicional,
+          : d.outras_remuneracoes / 1000000),
     );
-    return a;
-  }
+    let dataArray = [];
+
+    for (let i = 2018; i <= getCurrentYear(); i++) {
+      if (years.includes(i)) {
+        dataArray.push(a[years.indexOf(i)]);
+      } else if (!years.includes(i)) {
+        dataArray.push(0);
+      }
+    }
+
+    return dataArray;
+  };
+
+  const createDataArray = (tipoRemuneracao: string) => {
+    const years = data.map(d => d.ano).sort((a, b) => a - b);
+    const incomingData = data.map(d =>
+      d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao],
+    );
+    let dataArray = [];
+
+    for (let i = 2018; i <= getCurrentYear(); i++) {
+      if (years.includes(i)) {
+        dataArray.push(incomingData[years.indexOf(i)]);
+      } else if (!years.includes(i)) {
+        dataArray.push(0);
+      }
+    }
+
+    return dataArray;
+  };
+
+  const MaxMonthPlaceholder = useMemo(() => {
+    if (data) {
+      const max = data
+        .sort(
+          (a, b) =>
+            a.remuneracao_base +
+            a.outras_remuneracoes -
+            (b.remuneracao_base + b.outras_remuneracoes),
+        )
+        .reverse()[0];
+
+      return max ? max.remuneracao_base + max.outras_remuneracoes + 1 : 10000;
+    }
+    return 10000;
+  }, [data]);
 
   useEffect(() => {
     setSelectedYear(!dataLoading && data ? data.at(-1).ano : year);
@@ -114,19 +172,21 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                       <Chart
                         options={{
                           colors: [
-                            '#2c3236',
-                            'trasnparent',
-                            'trasnparent',
+                            'transparent',
+                            'transparent',
                             '#97BB2F',
                             '#2FBB96',
+                            '#2c3236',
                           ],
                           chart: {
                             events: {
                               click(__, _, config) {
                                 if (config.dataPointIndex >= 0) {
-                                  onYearChange(data[config.dataPointIndex].ano);
+                                  onYearChange(
+                                    yearList()[config.dataPointIndex],
+                                  );
                                   setSelectedYear(
-                                    data[config.dataPointIndex].ano,
+                                    yearList()[config.dataPointIndex],
                                   );
                                 }
                               },
@@ -258,7 +318,15 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             shared: true,
                             intersect: false,
                             inverseOrder: true,
-                            enabledOnSeries: [1, 2, 3, 4],
+                            enabledOnSeries: [0, 1, 2, 3],
+                            x: {
+                              formatter(val) {
+                                if (!data.map(d => d.ano).includes(val)) {
+                                  return 'Sem Dados';
+                                }
+                                return `${val}`;
+                              },
+                            },
                             y: {
                               formatter(val, opts) {
                                 if (
@@ -273,6 +341,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                     opts.seriesIndex
                                   ] === 'Total de remunerações'
                                 ) {
+                                  if (val === undefined) {
+                                    return `R$ 0.00M`;
+                                  }
                                   return !billion
                                     ? `R$ ${val.toFixed(2)}M`
                                     : `R$ ${val.toFixed(2)}B`;
@@ -294,11 +365,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               },
                             },
                             categories: (() => {
-                              const list = [];
-                              for (let i = 2018; i <= getCurrentYear(); i++) {
-                                list.push(i);
-                              }
-                              return list;
+                              return yearList();
                             })(),
                             title: {
                               text: 'Anos',
@@ -322,10 +389,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                         }}
                         series={[
                           {
-                            name: 'Sem Dados',
-                            data: (() => totalWaste(1))(),
-                          },
-                          {
                             name: 'Total de remunerações',
                             data: (() => totalWaste())(),
                           },
@@ -343,6 +406,12 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             name: 'Salário',
                             data: (() => {
                               return createDataArray('remuneracao_base');
+                            })(),
+                          },
+                          {
+                            name: 'Sem Dados',
+                            data: (() => {
+                              return noData();
                             })(),
                           },
                         ]}
@@ -381,18 +450,3 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
 };
 
 export default AnualRemunerationGraph;
-
-function createArrayFilledWithValue<T>(size: number, value: T): T[] {
-  const array = [];
-  for (let i = 0; i < size; i += 1) {
-    array.push(value);
-  }
-  return array;
-}
-function fixYearDataArray(array: any[]) {
-  const a = createArrayFilledWithValue(5, undefined);
-  array.forEach(v => {
-    a[v.Month - 1] = v;
-  });
-  return a;
-}
