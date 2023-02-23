@@ -9,14 +9,26 @@ import {
   Paper,
   Typography,
   Tooltip,
+  useMediaQuery,
+  IconButton,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
+import InfoIcon from '@mui/icons-material/Info';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import CropSquareIcon from '@mui/icons-material/CropSquare';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
 import CrawlingDateTable from './CrawlingDateTable';
 import NotCollecting from './NotCollecting';
 import { getCurrentYear } from '../functions/currentYear';
+import styled from 'styled-components';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+const SalarioButton = styled(IconButton)({});
+const BeneficiosButton = styled(IconButton)({});
+const SemDadosButton = styled(IconButton)({});
 
 export interface AnualRemunerationGraphProps {
   year: number;
@@ -36,6 +48,10 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   onYearChange,
 }) => {
   // this constant is used as an alx value to determine the max graph height
+  const matches = useMediaQuery('(max-width:500px)');
+  const [hidingWage, setHidingWage] = useState(false);
+  const [hidingBenefits, setHidingBenefits] = useState(false);
+  const [hidingNoData, setHidingNoData] = useState(false);
   const [selectedYear, setSelectedYear] = useState(year);
   const yearList = () => {
     let list = [];
@@ -123,8 +139,216 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         <NotCollecting agency={agency} />
       ) : (
         <>
+          <Paper
+            elevation={0}
+            sx={{
+              ...(matches && {
+                paddingBottom: 4,
+              }),
+            }}
+          >
+            <Box py={4} textAlign="center" padding={4}>
+              <Typography
+                variant="h5"
+                {...(matches && { variant: 'h6' })}
+                textAlign="center"
+              >
+                Total de remunerações de membros R${' '}
+                {(() => {
+                  // this function is used to sum the data from all money arrays and generate the last remuneration value
+                  let total = 0;
+                  const monthlyTotals = data.map(
+                    d => d.remuneracao_base + d.outras_remuneracoes,
+                  );
+                  monthlyTotals.forEach(w => {
+                    total += w;
+                  });
+                  // here we return the final value to millions showing 2 decimal places
+                  if (total.toFixed(0).toString().length > 9) {
+                    return `${(total / 1000000000).toFixed(1)}B`;
+                  }
+                  if (total.toFixed(0).toString().length > 6) {
+                    return `${(total / 1000000).toFixed(1)}M`;
+                  }
+                  if (total.toFixed(0).toString().length > 3) {
+                    return `${(total / 1000).toFixed(1)} mil`;
+                  }
+                  return total.toFixed(0);
+                })()}
+                <Tooltip
+                  placement="top"
+                  title={
+                    <Typography fontSize="0.8rem">
+                      <p>
+                        <b>Membros:</b> Participantes ativos do órgao, incluindo
+                        os servidores públicos, os militares e os membros do
+                        Poder Judiciário.
+                      </p>
+                      <p>
+                        <b>Servidor:</b> Funcionário público que exerce cargo ou
+                        função pública, com vínculo empregatício, e que recebe
+                        remuneração fixa ou variável.
+                      </p>
+                      <p>
+                        <b>Salário:</b> Valor recebido de acordo com a prestação
+                        de serviços, em decorrência do contrato de trabalho.
+                      </p>
+                      <p>
+                        <b>Benefícios:</b> Qualquer remuneração recebida por um
+                        funcionário que não seja proveniente de salário.
+                        Exemplos de benefícios são: diárias, gratificações,
+                        remuneração por função de confiança, benefícios pessoais
+                        ou eventuais, auxílios alimentação, saúde, escolar...
+                      </p>
+                      <p>
+                        <b>Sem dados:</b> Quando um órgão não disponibiliza os
+                        dados de um determinado mês
+                      </p>
+                      {/* <p>
+                  <b>Problemas na coleta:</b> Quando existe um problema na coleta
+                  de um determinado mês
+                </p> */}
+                    </Typography>
+                  }
+                >
+                  <IconButton>
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+            </Box>
+            <Grid
+              pb={8}
+              container
+              spacing={8}
+              justifyContent="center"
+              {...(matches && {
+                justifyContent: 'space-evenly',
+                pb: 0,
+                rowSpacing: 4,
+              })}
+            >
+              <Grid item textAlign="center">
+                <SalarioButton
+                  sx={{ backgroundColor: '#2fbb95' }}
+                  onClick={e => {
+                    if (hidingWage) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingWage(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingWage(true);
+                    }
+                  }}
+                >
+                  <AccountBalanceWalletIcon />
+                </SalarioButton>
+                <Typography pt={1}>
+                  Salário:
+                  {matches ? <br /> : ' '}
+                  R${' '}
+                  {(() => {
+                    let total = 0;
+                    const monthlyTotals = data.map(d => d.remuneracao_base);
+                    monthlyTotals.forEach(w => {
+                      total += w;
+                    });
+                    if (total.toFixed(0).toString().length > 9) {
+                      return `${(total / 1000000000).toFixed(1)}B`;
+                    }
+                    if (total.toFixed(0).toString().length > 6) {
+                      return `${(total / 1000000).toFixed(1)}M`;
+                    }
+                    if (total.toFixed(0).toString().length > 3) {
+                      return `${(total / 1000).toFixed(1)} mil`;
+                    }
+                    return total.toFixed(0);
+                  })()}
+                </Typography>
+
+                {matches ? (
+                  <>
+                    <SemDadosButton
+                      sx={{ mt: 2, backgroundColor: '#3E5363' }}
+                      onClick={e => {
+                        if (hidingNoData) {
+                          e.currentTarget.classList.remove('active');
+                          setHidingNoData(false);
+                        } else {
+                          e.currentTarget.classList.add('active');
+                          setHidingNoData(true);
+                        }
+                      }}
+                    >
+                      <CropSquareIcon />
+                    </SemDadosButton>
+                    <Typography pt={1}>Sem dados</Typography>
+                  </>
+                ) : null}
+              </Grid>
+              <Grid item textAlign="center">
+                <BeneficiosButton
+                  sx={{ backgroundColor: '#96bb2f' }}
+                  onClick={e => {
+                    if (hidingBenefits) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingBenefits(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingBenefits(true);
+                    }
+                  }}
+                >
+                  <CardGiftcardIcon />
+                </BeneficiosButton>
+                <Typography pt={1}>
+                  Benefícios:
+                  {matches ? <br /> : ' '}
+                  R${' '}
+                  {(() => {
+                    let total = 0;
+                    const monthlyTotals = data.map(d => d.outras_remuneracoes);
+                    monthlyTotals.forEach(w => {
+                      total += w;
+                    });
+                    if (total.toFixed(0).toString().length > 9) {
+                      return `${(total / 1000000000).toFixed(1)}B`;
+                    }
+                    if (total.toFixed(0).toString().length > 6) {
+                      return `${(total / 1000000).toFixed(1)}M`;
+                    }
+                    if (total.toFixed(0).toString().length > 3) {
+                      return `${(total / 1000).toFixed(1)} mil`;
+                    }
+                    return total.toFixed(0);
+                  })()}
+                </Typography>
+              </Grid>
+              {!matches ? (
+                <>
+                  <Grid item textAlign="center">
+                    <SemDadosButton
+                      sx={{ backgroundColor: '#3E5363' }}
+                      onClick={e => {
+                        if (hidingNoData) {
+                          e.currentTarget.classList.remove('active');
+                          setHidingNoData(false);
+                        } else {
+                          e.currentTarget.classList.add('active');
+                          setHidingNoData(true);
+                        }
+                      }}
+                    >
+                      <CropSquareIcon />
+                    </SemDadosButton>
+                    <Typography pt={1}>Sem dados</Typography>
+                  </Grid>
+                </>
+              ) : null}
+            </Grid>
+          </Paper>
           <Paper elevation={0}>
-            <Box pt={2} padding={4}>
+            <Box my={4} pt={2} padding={4}>
               <Typography variant="h5" textAlign="center">
                 Total de remunerações de membros por ano
               </Typography>
@@ -397,19 +621,28 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                           {
                             name: 'Benefícios',
                             data: (() => {
-                              return createDataArray('outras_remuneracoes');
+                              if (!hidingBenefits) {
+                                return createDataArray('outras_remuneracoes');
+                              }
+                              return [];
                             })(),
                           },
                           {
                             name: 'Salário',
                             data: (() => {
-                              return createDataArray('remuneracao_base');
+                              if (!hidingWage) {
+                                return createDataArray('remuneracao_base');
+                              }
+                              return [];
                             })(),
                           },
                           {
                             name: 'Sem Dados',
                             data: (() => {
-                              return noData();
+                              if (!hidingNoData) {
+                                return noData();
+                              }
+                              return [];
                             })(),
                           },
                         ]}
@@ -428,6 +661,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             </Box>
             {data && data.length > 0 && (
               <Grid container display="flex" justifyContent="center">
+                {console.log(data)}
                 <Grid
                   display="flex"
                   item
