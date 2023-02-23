@@ -44,15 +44,15 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     }
     return list;
   };
+  const yearsWithData = data.map(d => d.ano).sort((a, b) => a - b);
 
   const noData = () => {
-    const a = data.map(d => d.ano).sort((a, b) => a - b);
     let noData = [];
 
     for (let i = 2018; i <= getCurrentYear(); i++) {
-      if (a.includes(i)) {
+      if (yearsWithData.includes(i)) {
         noData.push(0);
-      } else if (!a.includes(i)) {
+      } else if (!yearsWithData.includes(i)) {
         noData.push(MaxMonthPlaceholder);
       }
     }
@@ -60,7 +60,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const totalWaste = () => {
-    const years = data.map(d => d.ano).sort((a, b) => a - b);
     const a = data.map(
       d =>
         (d.remuneracao_base === undefined ? 0 : d.remuneracao_base / 1000000) +
@@ -71,9 +70,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     let dataArray = [];
 
     for (let i = 2018; i <= getCurrentYear(); i++) {
-      if (years.includes(i)) {
-        dataArray.push(a[years.indexOf(i)]);
-      } else if (!years.includes(i)) {
+      if (yearsWithData.includes(i)) {
+        dataArray.push(a[yearsWithData.indexOf(i)]);
+      } else if (!yearsWithData.includes(i)) {
         dataArray.push(0);
       }
     }
@@ -82,16 +81,15 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const createDataArray = (tipoRemuneracao: string) => {
-    const years = data.map(d => d.ano).sort((a, b) => a - b);
     const incomingData = data.map(d =>
       d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao],
     );
     let dataArray = [];
 
     for (let i = 2018; i <= getCurrentYear(); i++) {
-      if (years.includes(i)) {
-        dataArray.push(incomingData[years.indexOf(i)]);
-      } else if (!years.includes(i)) {
+      if (yearsWithData.includes(i)) {
+        dataArray.push(incomingData[yearsWithData.indexOf(i)]);
+      } else if (!yearsWithData.includes(i)) {
         dataArray.push(0);
       }
     }
