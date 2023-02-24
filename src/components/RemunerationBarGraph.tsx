@@ -310,7 +310,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       width: 'fit-content',
                     }}
                   >
-                    Este órgão tem{' '}
+                    Este órgão conta com
                     {(() => {
                       let months = [];
                       for (let i = 1; i <= 12; i++) {
@@ -322,7 +322,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         months.length > 1 ? 'meses' : 'mês'
                       }`;
                     })()}{' '}
-                    com dados não publicados.
+                    onde seus dados não foram publicados.
                   </Alert>
                 </Box>
               ) : null}
