@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import {
+  Alert,
   Box,
   Button,
   CircularProgress,
@@ -297,7 +298,43 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
           </Paper>
           <Paper elevation={0}>
             <Box my={4} pt={2} padding={4}>
-              <Typography variant="h6" textAlign="center">
+              {data.length < 12 &&
+              data.length > 0 &&
+              data.length != new Date().getMonth() ? (
+                <Box display="flex" justifyContent="center">
+                  <Alert
+                    severity="warning"
+                    variant="outlined"
+                    sx={{
+                      alignItems: 'center',
+                      width: 'fit-content',
+                    }}
+                  >
+                    Este órgão não publicou os dados em{' '}
+                    {(() => {
+                      let months = [];
+                      let a = [];
+                      for (let i = 1; i <= 12; i++) {
+                        if (!data.find(d => d.Month === i)) {
+                          months.push(MONTHS[i].toLowerCase());
+                        }
+                      }
+
+                      months.forEach((d, i) => {
+                        if (i == months.length - 1) {
+                          return a.push(d + '.');
+                        } else if (i == months.length - 2) {
+                          return a.push(d + ' e ');
+                        }
+                        return a.push(d + ', ');
+                      });
+
+                      return a;
+                    })()}
+                  </Alert>
+                </Box>
+              ) : null}
+              <Typography mt={2} variant="h6" textAlign="center">
                 Total de remunerações de membros por mês em {year}
               </Typography>
               {agency && data.length > 0 && !dataLoading ? (
