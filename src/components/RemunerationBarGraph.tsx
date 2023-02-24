@@ -310,27 +310,19 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       width: 'fit-content',
                     }}
                   >
-                    Este órgão não publicou os dados em{' '}
+                    Este órgão tem{' '}
                     {(() => {
                       let months = [];
-                      let a = [];
                       for (let i = 1; i <= 12; i++) {
                         if (!data.find(d => d.Month === i)) {
-                          months.push(MONTHS[i].toLowerCase());
+                          months.push(i);
                         }
                       }
-
-                      months.forEach((d, i) => {
-                        if (i == months.length - 1) {
-                          return a.push(d + '.');
-                        } else if (i == months.length - 2) {
-                          return a.push(d + ' e ');
-                        }
-                        return a.push(d + ', ');
-                      });
-
-                      return a;
-                    })()}
+                      return `${months.length} ${
+                        months.length > 1 ? 'meses' : 'mês'
+                      }`;
+                    })()}{' '}
+                    com dados não publicados.
                   </Alert>
                 </Box>
               ) : null}

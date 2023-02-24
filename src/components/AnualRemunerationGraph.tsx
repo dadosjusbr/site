@@ -54,6 +54,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [selectedYear, setSelectedYear] = useState(year);
+
   const calculateValue = (value: number, decimal_places = 1): string => {
     if (value.toFixed(0).toString().length > 9) {
       return `${(value / 1000000000).toFixed(decimal_places)}B`;
@@ -74,10 +75,22 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     }
     return list;
   };
-  const yearsWithData = data && data.map(d => d.ano).sort((a, b) => a - b);
-  const yearWithoutData = yearList().filter(
-    year => !yearsWithData.includes(year),
-  );
+
+  const yearsWithData = useMemo(() => {
+    if (data) {
+      return data.map(d => d.ano).sort((a, b) => a - b);
+    }
+    return [];
+  }, [data]);
+
+  const yearsWithoutData = useMemo(() => {
+    if (yearsWithData) {
+      return yearList().filter(
+        returnedYear => !yearsWithData.includes(returnedYear),
+      );
+    }
+    return [];
+  }, [data]);
 
   const noData = () => {
     let noData = [];
@@ -345,19 +358,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                       width: 'fit-content',
                     }}
                   >
-                    Este órgão não publicou os dados em{' '}
-                    {(() => {
-                      let a = [];
-                      yearWithoutData.forEach((d, i) => {
-                        if (i == yearWithoutData.length - 1) {
-                          return a.push(d + '.');
-                        } else if (i == yearWithoutData.length - 2) {
-                          return a.push(d + ' e ');
-                        }
-                        return a.push(d + ', ');
-                      });
-                      return a;
-                    })()}
+                    Este órgão tem {yearsWithoutData.length}{' '}
+                    {yearsWithoutData.length > 1 ? 'anos' : 'ano'} com dados não
+                    publicados.
                   </Alert>
                 </Box>
               ) : null}
