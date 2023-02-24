@@ -1,26 +1,28 @@
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import dynamic from 'next/dynamic';
-import styled from 'styled-components';
 import {
   Box,
   Button,
   CircularProgress,
   Grid,
-  IconButton,
   Paper,
   Typography,
   Tooltip,
+  useMediaQuery,
+  IconButton,
 } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+
 import InfoIcon from '@mui/icons-material/Info';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
 import CrawlingDateTable from './CrawlingDateTable';
 import NotCollecting from './NotCollecting';
+import { getCurrentYear } from '../functions/currentYear';
+import styled from 'styled-components';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -46,21 +48,34 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   onYearChange,
 }) => {
   // this constant is used as an alx value to determine the max graph height
+  const matches = useMediaQuery('(max-width:500px)');
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [selectedYear, setSelectedYear] = useState(year);
-  const [hidingErrors, setHidingErrors] = useState(false);
-  const matches = useMediaQuery('(max-width:500px)');
+  const yearList = () => {
+    let list = [];
+    for (let i = 2018; i <= getCurrentYear(); i++) {
+      list.push(i);
+    }
+    return list;
+  };
+  const yearsWithData = data.map(d => d.ano).sort((a, b) => a - b);
 
-  function createDataArray(tipoRemuneracao: string) {
-    const a = data.map(d =>
-      d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao],
-    );
-    return a;
-  }
+  const noData = () => {
+    let noData = [];
 
-  function totalWaste() {
+    for (let i = 2018; i <= getCurrentYear(); i++) {
+      if (yearsWithData.includes(i)) {
+        noData.push(0);
+      } else if (!yearsWithData.includes(i)) {
+        noData.push(MaxMonthPlaceholder);
+      }
+    }
+    return noData;
+  };
+
+  const totalWaste = () => {
     const a = data.map(
       d =>
         (d.remuneracao_base === undefined ? 0 : d.remuneracao_base / 1000000) +
@@ -68,8 +83,51 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
           ? 0
           : d.outras_remuneracoes / 1000000),
     );
-    return a;
-  }
+    let dataArray = [];
+
+    for (let i = 2018; i <= getCurrentYear(); i++) {
+      if (yearsWithData.includes(i)) {
+        dataArray.push(a[yearsWithData.indexOf(i)]);
+      } else if (!yearsWithData.includes(i)) {
+        dataArray.push(0);
+      }
+    }
+
+    return dataArray;
+  };
+
+  const createDataArray = (tipoRemuneracao: string) => {
+    const incomingData = data.map(d =>
+      d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao],
+    );
+    let dataArray = [];
+
+    for (let i = 2018; i <= getCurrentYear(); i++) {
+      if (yearsWithData.includes(i)) {
+        dataArray.push(incomingData[yearsWithData.indexOf(i)]);
+      } else if (!yearsWithData.includes(i)) {
+        dataArray.push(0);
+      }
+    }
+
+    return dataArray;
+  };
+
+  const MaxMonthPlaceholder = useMemo(() => {
+    if (data) {
+      const max = data
+        .sort(
+          (a, b) =>
+            a.remuneracao_base +
+            a.outras_remuneracoes -
+            (b.remuneracao_base + b.outras_remuneracoes),
+        )
+        .reverse()[0];
+
+      return max ? max.remuneracao_base + max.outras_remuneracoes + 1 : 10000;
+    }
+    return 10000;
+  }, [data]);
 
   useEffect(() => {
     setSelectedYear(!dataLoading && data ? data.at(-1).ano : year);
@@ -81,8 +139,216 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         <NotCollecting agency={agency} />
       ) : (
         <>
+          <Paper
+            elevation={0}
+            sx={{
+              ...(matches && {
+                paddingBottom: 4,
+              }),
+            }}
+          >
+            <Box py={4} textAlign="center" padding={4}>
+              <Typography
+                variant="h5"
+                {...(matches && { variant: 'h6' })}
+                textAlign="center"
+              >
+                Total de remunerações de membros R${' '}
+                {(() => {
+                  // this function is used to sum the data from all money arrays and generate the last remuneration value
+                  let total = 0;
+                  const monthlyTotals = data.map(
+                    d => d.remuneracao_base + d.outras_remuneracoes,
+                  );
+                  monthlyTotals.forEach(w => {
+                    total += w;
+                  });
+                  // here we return the final value to millions showing 2 decimal places
+                  if (total.toFixed(0).toString().length > 9) {
+                    return `${(total / 1000000000).toFixed(1)}B`;
+                  }
+                  if (total.toFixed(0).toString().length > 6) {
+                    return `${(total / 1000000).toFixed(1)}M`;
+                  }
+                  if (total.toFixed(0).toString().length > 3) {
+                    return `${(total / 1000).toFixed(1)} mil`;
+                  }
+                  return total.toFixed(0);
+                })()}
+                <Tooltip
+                  placement="top"
+                  title={
+                    <Typography fontSize="0.8rem">
+                      <p>
+                        <b>Membros:</b> Participantes ativos do órgao, incluindo
+                        os servidores públicos, os militares e os membros do
+                        Poder Judiciário.
+                      </p>
+                      <p>
+                        <b>Servidor:</b> Funcionário público que exerce cargo ou
+                        função pública, com vínculo empregatício, e que recebe
+                        remuneração fixa ou variável.
+                      </p>
+                      <p>
+                        <b>Salário:</b> Valor recebido de acordo com a prestação
+                        de serviços, em decorrência do contrato de trabalho.
+                      </p>
+                      <p>
+                        <b>Benefícios:</b> Qualquer remuneração recebida por um
+                        funcionário que não seja proveniente de salário.
+                        Exemplos de benefícios são: diárias, gratificações,
+                        remuneração por função de confiança, benefícios pessoais
+                        ou eventuais, auxílios alimentação, saúde, escolar...
+                      </p>
+                      <p>
+                        <b>Sem dados:</b> Quando um órgão não disponibiliza os
+                        dados de um determinado mês
+                      </p>
+                      {/* <p>
+                  <b>Problemas na coleta:</b> Quando existe um problema na coleta
+                  de um determinado mês
+                </p> */}
+                    </Typography>
+                  }
+                >
+                  <IconButton>
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+            </Box>
+            <Grid
+              pb={8}
+              container
+              spacing={8}
+              justifyContent="center"
+              {...(matches && {
+                justifyContent: 'space-evenly',
+                pb: 0,
+                rowSpacing: 4,
+              })}
+            >
+              <Grid item textAlign="center">
+                <SalarioButton
+                  sx={{ backgroundColor: '#2fbb95' }}
+                  onClick={e => {
+                    if (hidingWage) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingWage(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingWage(true);
+                    }
+                  }}
+                >
+                  <AccountBalanceWalletIcon />
+                </SalarioButton>
+                <Typography pt={1}>
+                  Salário:
+                  {matches ? <br /> : ' '}
+                  R${' '}
+                  {(() => {
+                    let total = 0;
+                    const monthlyTotals = data.map(d => d.remuneracao_base);
+                    monthlyTotals.forEach(w => {
+                      total += w;
+                    });
+                    if (total.toFixed(0).toString().length > 9) {
+                      return `${(total / 1000000000).toFixed(1)}B`;
+                    }
+                    if (total.toFixed(0).toString().length > 6) {
+                      return `${(total / 1000000).toFixed(1)}M`;
+                    }
+                    if (total.toFixed(0).toString().length > 3) {
+                      return `${(total / 1000).toFixed(1)} mil`;
+                    }
+                    return total.toFixed(0);
+                  })()}
+                </Typography>
+
+                {matches ? (
+                  <>
+                    <SemDadosButton
+                      sx={{ mt: 2, backgroundColor: '#3E5363' }}
+                      onClick={e => {
+                        if (hidingNoData) {
+                          e.currentTarget.classList.remove('active');
+                          setHidingNoData(false);
+                        } else {
+                          e.currentTarget.classList.add('active');
+                          setHidingNoData(true);
+                        }
+                      }}
+                    >
+                      <CropSquareIcon />
+                    </SemDadosButton>
+                    <Typography pt={1}>Sem dados</Typography>
+                  </>
+                ) : null}
+              </Grid>
+              <Grid item textAlign="center">
+                <BeneficiosButton
+                  sx={{ backgroundColor: '#96bb2f' }}
+                  onClick={e => {
+                    if (hidingBenefits) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingBenefits(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingBenefits(true);
+                    }
+                  }}
+                >
+                  <CardGiftcardIcon />
+                </BeneficiosButton>
+                <Typography pt={1}>
+                  Benefícios:
+                  {matches ? <br /> : ' '}
+                  R${' '}
+                  {(() => {
+                    let total = 0;
+                    const monthlyTotals = data.map(d => d.outras_remuneracoes);
+                    monthlyTotals.forEach(w => {
+                      total += w;
+                    });
+                    if (total.toFixed(0).toString().length > 9) {
+                      return `${(total / 1000000000).toFixed(1)}B`;
+                    }
+                    if (total.toFixed(0).toString().length > 6) {
+                      return `${(total / 1000000).toFixed(1)}M`;
+                    }
+                    if (total.toFixed(0).toString().length > 3) {
+                      return `${(total / 1000).toFixed(1)} mil`;
+                    }
+                    return total.toFixed(0);
+                  })()}
+                </Typography>
+              </Grid>
+              {!matches ? (
+                <>
+                  <Grid item textAlign="center">
+                    <SemDadosButton
+                      sx={{ backgroundColor: '#3E5363' }}
+                      onClick={e => {
+                        if (hidingNoData) {
+                          e.currentTarget.classList.remove('active');
+                          setHidingNoData(false);
+                        } else {
+                          e.currentTarget.classList.add('active');
+                          setHidingNoData(true);
+                        }
+                      }}
+                    >
+                      <CropSquareIcon />
+                    </SemDadosButton>
+                    <Typography pt={1}>Sem dados</Typography>
+                  </Grid>
+                </>
+              ) : null}
+            </Grid>
+          </Paper>
           <Paper elevation={0}>
-            <Box pt={2} padding={4}>
+            <Box my={4} pt={2} padding={4}>
               <Typography variant="h5" textAlign="center">
                 Total de remunerações de membros por ano
               </Typography>
@@ -128,18 +394,21 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                       <Chart
                         options={{
                           colors: [
-                            'trasnparent',
-                            'trasnparent',
+                            'transparent',
+                            'transparent',
                             '#97BB2F',
                             '#2FBB96',
+                            '#2c3236',
                           ],
                           chart: {
                             events: {
                               click(__, _, config) {
                                 if (config.dataPointIndex >= 0) {
-                                  onYearChange(data[config.dataPointIndex].ano);
+                                  onYearChange(
+                                    yearList()[config.dataPointIndex],
+                                  );
                                   setSelectedYear(
-                                    data[config.dataPointIndex].ano,
+                                    yearList()[config.dataPointIndex],
                                   );
                                 }
                               },
@@ -271,9 +540,15 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             shared: true,
                             intersect: false,
                             inverseOrder: true,
-                            ...(agency != null
-                              ? { enabledOnSeries: [0, 1, 2, 3] }
-                              : { enabledOnSeries: [0, 2, 3] }),
+                            enabledOnSeries: [0, 1, 2, 3],
+                            x: {
+                              formatter(val) {
+                                if (!data.map(d => d.ano).includes(val)) {
+                                  return 'Sem Dados';
+                                }
+                                return `${val}`;
+                              },
+                            },
                             y: {
                               formatter(val, opts) {
                                 if (
@@ -288,6 +563,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                     opts.seriesIndex
                                   ] === 'Total de remunerações'
                                 ) {
+                                  if (val === undefined) {
+                                    return `R$ 0.00M`;
+                                  }
                                   return !billion
                                     ? `R$ ${val.toFixed(2)}M`
                                     : `R$ ${val.toFixed(2)}B`;
@@ -309,11 +587,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               },
                             },
                             categories: (() => {
-                              const list = [];
-                              data.forEach(item => {
-                                list.push(item.ano);
-                              });
-                              return list;
+                              return yearList();
                             })(),
                             title: {
                               text: 'Anos',
@@ -358,6 +632,15 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             data: (() => {
                               if (!hidingWage) {
                                 return createDataArray('remuneracao_base');
+                              }
+                              return [];
+                            })(),
+                          },
+                          {
+                            name: 'Sem Dados',
+                            data: (() => {
+                              if (!hidingNoData) {
+                                return noData();
                               }
                               return [];
                             })(),
