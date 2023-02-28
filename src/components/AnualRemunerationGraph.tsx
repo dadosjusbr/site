@@ -552,10 +552,21 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             enabledOnSeries: [0, 1, 2, 3],
                             x: {
                               formatter(val) {
+                                let noDataMonths =
+                                  12 -
+                                  (data.find(d => d.ano === val) &&
+                                    data.find(d => d.ano === val)
+                                      .meses_com_dados);
+
                                 if (!data.map(d => d.ano).includes(val)) {
-                                  return 'Sem Dados';
+                                  return `${val} (12 meses sem dados)`;
                                 }
-                                return `${val}`;
+
+                                if (noDataMonths === 0) {
+                                  return `${val}`;
+                                }
+
+                                return `${val} (${noDataMonths} meses sem dados)`;
                               },
                             },
                             y: {
