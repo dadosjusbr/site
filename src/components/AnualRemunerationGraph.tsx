@@ -11,6 +11,7 @@ import {
   Tooltip,
   useMediaQuery,
   IconButton,
+  Alert,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -53,6 +54,20 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [selectedYear, setSelectedYear] = useState(year);
+
+  const calculateValue = (value: number, decimal_places = 1): string => {
+    if (value.toFixed(0).toString().length > 9) {
+      return `${(value / 1000000000).toFixed(decimal_places)}B`;
+    }
+    if (value.toFixed(0).toString().length > 6) {
+      return `${(value / 1000000).toFixed(decimal_places)}M`;
+    }
+    if (value.toFixed(0).toString().length > 3) {
+      return `${(value / 1000).toFixed(decimal_places)} mil`;
+    }
+    return value.toFixed(0);
+  };
+
   const yearList = () => {
     let list = [];
     for (let i = 2018; i <= getCurrentYear(); i++) {
@@ -60,7 +75,22 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     }
     return list;
   };
-  const yearsWithData = data.map(d => d.ano).sort((a, b) => a - b);
+
+  const yearsWithData = useMemo(() => {
+    if (data) {
+      return data.map(d => d.ano).sort((a, b) => a - b);
+    }
+    return [];
+  }, [data]);
+
+  const yearsWithoutData = useMemo(() => {
+    if (yearsWithData) {
+      return yearList().filter(
+        returnedYear => !yearsWithData.includes(returnedYear),
+      );
+    }
+    return [];
+  }, [data]);
 
   const noData = () => {
     let noData = [];
@@ -135,7 +165,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
 
   return (
     <>
-      {agency && agency.coletando ? (
+      {agency && agency.coletando && !data ? (
         <NotCollecting agency={agency} />
       ) : (
         <>
@@ -164,16 +194,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                     total += w;
                   });
                   // here we return the final value to millions showing 2 decimal places
-                  if (total.toFixed(0).toString().length > 9) {
-                    return `${(total / 1000000000).toFixed(1)}B`;
-                  }
-                  if (total.toFixed(0).toString().length > 6) {
-                    return `${(total / 1000000).toFixed(1)}M`;
-                  }
-                  if (total.toFixed(0).toString().length > 3) {
-                    return `${(total / 1000).toFixed(1)} mil`;
-                  }
-                  return total.toFixed(0);
+                  return calculateValue(total);
                 })()}
                 <Tooltip
                   placement="top"
@@ -204,10 +225,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                         <b>Sem dados:</b> Quando um órgão não disponibiliza os
                         dados de um determinado mês
                       </p>
-                      {/* <p>
-                  <b>Problemas na coleta:</b> Quando existe um problema na coleta
-                  de um determinado mês
-                </p> */}
                     </Typography>
                   }
                 >
@@ -253,16 +270,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                     monthlyTotals.forEach(w => {
                       total += w;
                     });
-                    if (total.toFixed(0).toString().length > 9) {
-                      return `${(total / 1000000000).toFixed(1)}B`;
-                    }
-                    if (total.toFixed(0).toString().length > 6) {
-                      return `${(total / 1000000).toFixed(1)}M`;
-                    }
-                    if (total.toFixed(0).toString().length > 3) {
-                      return `${(total / 1000).toFixed(1)} mil`;
-                    }
-                    return total.toFixed(0);
+                    return calculateValue(total);
                   })()}
                 </Typography>
 
@@ -311,16 +319,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                     monthlyTotals.forEach(w => {
                       total += w;
                     });
-                    if (total.toFixed(0).toString().length > 9) {
-                      return `${(total / 1000000000).toFixed(1)}B`;
-                    }
-                    if (total.toFixed(0).toString().length > 6) {
-                      return `${(total / 1000000).toFixed(1)}M`;
-                    }
-                    if (total.toFixed(0).toString().length > 3) {
-                      return `${(total / 1000).toFixed(1)} mil`;
-                    }
-                    return total.toFixed(0);
+                    return calculateValue(total);
                   })()}
                 </Typography>
               </Grid>
@@ -349,7 +348,23 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
           </Paper>
           <Paper elevation={0}>
             <Box my={4} pt={2} padding={4}>
-              <Typography variant="h5" textAlign="center">
+              {!dataLoading && noData().find(d => d != 0) ? (
+                <Box display="flex" justifyContent="center">
+                  <Alert
+                    severity="warning"
+                    variant="outlined"
+                    sx={{
+                      alignItems: 'center',
+                      width: 'fit-content',
+                    }}
+                  >
+                    Este órgão conta com {yearsWithoutData.length}{' '}
+                    {yearsWithoutData.length > 1 ? 'anos' : 'ano'} onde seus
+                    dados não foram publicados.
+                  </Alert>
+                </Box>
+              ) : null}
+              <Typography mt={2} variant="h5" textAlign="center">
                 Total de remunerações de membros por ano
               </Typography>
               {agency && data && !dataLoading ? (
@@ -478,12 +493,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                       fontWeight: 600,
                                       cssClass: 'apexcharts-yaxis-label',
                                     },
-                                    formatter(value) {
-                                      return !billion
-                                        ? `R$ ${(value / 1000000).toFixed(2)}M`
-                                        : `R$ ${(value / 1000000000).toFixed(
-                                            2,
-                                          )}B`;
+                                    formatter(value: number) {
+                                      return `R$ ${calculateValue(value, 0)}`;
                                     },
                                   },
                                 },
@@ -508,7 +519,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             title: {
                               text: 'Total de Remunerações',
                               offsetY: 10,
-                              offsetX: -5.5,
+                              offsetX: 7,
                               style: {
                                 fontSize: '14px',
                                 fontWeight: 'bold',
@@ -528,9 +539,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                 cssClass: 'apexcharts-yaxis-label',
                               },
                               formatter(value) {
-                                return !billion
-                                  ? `R$ ${(value / 1000000).toFixed(2)}M`
-                                  : `R$ ${(value / 1000000000).toFixed(2)}B`;
+                                return `R$ ${calculateValue(value)}`;
                               },
                             },
                           },

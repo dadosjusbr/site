@@ -3,6 +3,7 @@ import React, { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
 import styled from 'styled-components';
 import {
+  Alert,
   Box,
   Button,
   CircularProgress,
@@ -297,7 +298,35 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
           </Paper>
           <Paper elevation={0}>
             <Box my={4} pt={2} padding={4}>
-              <Typography variant="h6" textAlign="center">
+              {data.length < 12 &&
+              data.length > 0 &&
+              data.length != new Date().getMonth() ? (
+                <Box display="flex" justifyContent="center">
+                  <Alert
+                    severity="warning"
+                    variant="outlined"
+                    sx={{
+                      alignItems: 'center',
+                      width: 'fit-content',
+                    }}
+                  >
+                    Este órgão conta com{' '}
+                    {(() => {
+                      let months = [];
+                      for (let i = 1; i <= 12; i++) {
+                        if (!data.find(d => d.Month === i)) {
+                          months.push(i);
+                        }
+                      }
+                      return `${months.length} ${
+                        months.length > 1 ? 'meses' : 'mês'
+                      }`;
+                    })()}{' '}
+                    onde seus dados não foram publicados.
+                  </Alert>
+                </Box>
+              ) : null}
+              <Typography mt={2} variant="h6" textAlign="center">
                 Total de remunerações de membros por mês em {year}
               </Typography>
               {agency && data.length > 0 && !dataLoading ? (
