@@ -82,7 +82,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         <Typography variant="h2" textAlign="center">
           {title} ({formatAgency(id.toLocaleUpperCase('pt'), title)})
         </Typography>
-        {agency && agency.collecting ? (
+        {agency && agency.collecting && !data ? (
           <></>
         ) : (
           <>
