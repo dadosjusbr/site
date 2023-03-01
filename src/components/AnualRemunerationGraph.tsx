@@ -566,7 +566,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                   return `${val}`;
                                 }
 
-                                return `${val} (${noDataMonths} meses sem dados)`;
+                                return `${val} (${noDataMonths} ${
+                                  noDataMonths > 1 ? 'meses' : 'mês'
+                                } sem dados)`;
                               },
                             },
                             y: {

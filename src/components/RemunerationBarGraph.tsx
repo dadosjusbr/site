@@ -298,7 +298,8 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
           </Paper>
           <Paper elevation={0}>
             <Box my={4} pt={2} padding={4}>
-              {data.length < 12 &&
+              {agency != null &&
+              data.length < 12 &&
               data.length > 0 &&
               data.length != new Date().getMonth() ? (
                 <Box display="flex" justifyContent="center">
