@@ -89,7 +89,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const matches = useMediaQuery('(max-width:500px)');
   return (
     <>
-      {agency && agency.collecting ? (
+      {agency && agency.collecting && !data ? (
         <NotCollecting agency={agency} />
       ) : (
         <>

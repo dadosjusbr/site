@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import {
   Paper,
   Box,
@@ -58,21 +58,39 @@ const NotCollecting: React.FC<{
                 Para ajudar a incluir os dados deste tribunal no DadosJusBr,
                 você pode protocolar um requerimento na ouvidoria solicitando
                 mudanças na
-                {agency.coletando[0].descricao.map(
-                  (desc: string, index: number) => (
-                    <span key={index}>{` ${desc
-                      .split(' ')
-                      .at(0)
-                      .toLowerCase()} ${desc.split(' ').at(1)} ${desc
-                      .split(' ')
-                      .at(2)}
+                {agency.coletando
+                  ? agency.coletando[0].descricao.map(
+                      (desc: string, index: number) => (
+                        <span key={desc}>
+                          {` ${desc
+                            .split(' ')
+                            .at(0)
+                            .toLowerCase()} ${desc
+                            .split(' ')
+                            .at(1)} ${desc.split(' ').at(2)}
                     ${
                       agency.coletando[0].descricao.length > 1 && index === 0
                         ? 'e'
                         : ''
+                    }`}
+                        </span>
+                      ),
+                    )
+                  : agency.collecting[0].description.map(
+                      (desc: string, index: number) => (
+                        <span key={desc}>{` ${desc
+                          .split(' ')
+                          .at(0)
+                          .toLowerCase()} ${desc.split(' ').at(1)} ${desc
+                          .split(' ')
+                          .at(2)}
+                    ${
+                      agency.collecting[0].description.length > 1 && index === 0
+                        ? 'e'
+                        : ''
                     }`}</span>
-                  ),
-                )}
+                      ),
+                    )}
               </Typography>
               <Box display="flex" justifyContent="center" mt={2}>
                 <Button
@@ -106,11 +124,9 @@ const NotCollecting: React.FC<{
                   seguintes motivos:
                 </p>
                 <ul>
-                  {agency.coletando[0].descricao.map(
-                    (desc: string, index: number) => (
-                      <li key={index}>{desc}</li>
-                    ),
-                  )}
+                  {agency.coletando[0].descricao.map((desc: string) => (
+                    <li key={desc}>{desc}</li>
+                  ))}
                 </ul>
               </>
             ) : (
