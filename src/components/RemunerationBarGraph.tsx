@@ -23,6 +23,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import MONTHS from '../@types/MONTHS';
 import CrawlingDateTable from './CrawlingDateTable';
 import NotCollecting from './NotCollecting';
+import { getCurrentYear } from '../functions/currentYear';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -298,10 +299,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
           </Paper>
           <Paper elevation={0}>
             <Box my={4} pt={2} padding={4}>
-              {agency != null &&
-              data.length < 12 &&
-              data.length > 0 &&
-              data.length != new Date().getMonth() ? (
+              {agency != null && data.length < 12 && data.length > 0 ? (
                 <Box display="flex" justifyContent="center">
                   <Alert
                     severity="warning"
@@ -313,9 +311,16 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   >
                     Este órgão conta com{' '}
                     {(() => {
-                      let months = [];
-                      for (let i = 1; i <= 12; i++) {
-                        if (!data.find(d => d.Month === i)) {
+                      const months = [];
+                      for (let i = 1; i <= 12; i += 1) {
+                        if (year === getCurrentYear()) {
+                          if (
+                            !data.find(d => d.Month === i) &&
+                            i <= new Date().getMonth()
+                          ) {
+                            months.push(i);
+                          }
+                        } else if (!data.find(d => d.Month === i)) {
                           months.push(i);
                         }
                       }
