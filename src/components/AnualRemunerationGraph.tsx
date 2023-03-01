@@ -1,5 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useState, useEffect, useMemo } from 'react';
+import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import {
   Box,
@@ -23,7 +24,6 @@ import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CrawlingDateTable from './CrawlingDateTable';
 import NotCollecting from './NotCollecting';
 import { getCurrentYear } from '../functions/currentYear';
-import styled from 'styled-components';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -69,8 +69,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const yearList = () => {
-    let list = [];
-    for (let i = 2018; i <= getCurrentYear(); i++) {
+    const list = [];
+    for (let i = 2018; i <= getCurrentYear(); i += 1) {
       list.push(i);
     }
     return list;
@@ -93,16 +93,15 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   }, [data]);
 
   const noData = () => {
-    let noData = [];
-
-    for (let i = 2018; i <= getCurrentYear(); i++) {
+    const noDataArr = [];
+    for (let i = 2018; i <= getCurrentYear(); i += 1) {
       if (yearsWithData.includes(i)) {
-        noData.push(0);
+        noDataArr.push(0);
       } else if (!yearsWithData.includes(i)) {
-        noData.push(MaxMonthPlaceholder);
+        noDataArr.push(MaxMonthPlaceholder);
       }
     }
-    return noData;
+    return noDataArr;
   };
 
   const totalWaste = () => {
@@ -113,9 +112,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
           ? 0
           : d.outras_remuneracoes / 1000000),
     );
-    let dataArray = [];
 
-    for (let i = 2018; i <= getCurrentYear(); i++) {
+    const dataArray = [];
+    for (let i = 2018; i <= getCurrentYear(); i += 1) {
       if (yearsWithData.includes(i)) {
         dataArray.push(a[yearsWithData.indexOf(i)]);
       } else if (!yearsWithData.includes(i)) {
@@ -130,9 +129,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     const incomingData = data.map(d =>
       d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao],
     );
-    let dataArray = [];
 
-    for (let i = 2018; i <= getCurrentYear(); i++) {
+    const dataArray = [];
+    for (let i = 2018; i <= getCurrentYear(); i += 1) {
       if (yearsWithData.includes(i)) {
         dataArray.push(incomingData[yearsWithData.indexOf(i)]);
       } else if (!yearsWithData.includes(i)) {
@@ -348,7 +347,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
           </Paper>
           <Paper elevation={0}>
             <Box my={4} pt={2} padding={4}>
-              {!dataLoading && noData().find(d => d != 0) ? (
+              {!dataLoading && noData().find(d => d !== 0) ? (
                 <Box display="flex" justifyContent="center">
                   <Alert
                     severity="warning"
@@ -552,10 +551,23 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             enabledOnSeries: [0, 1, 2, 3],
                             x: {
                               formatter(val) {
+                                const noDataMonths =
+                                  12 -
+                                  (data.find(d => d.ano === val) &&
+                                    data.find(d => d.ano === val)
+                                      .meses_com_dados);
+
                                 if (!data.map(d => d.ano).includes(val)) {
-                                  return 'Sem Dados';
+                                  return `${val} (12 meses sem dados)`;
                                 }
-                                return `${val}`;
+
+                                if (noDataMonths === 0) {
+                                  return `${val}`;
+                                }
+
+                                return `${val} (${noDataMonths} ${
+                                  noDataMonths > 1 ? 'meses' : 'mês'
+                                } sem dados)`;
                               },
                             },
                             y: {
@@ -595,9 +607,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                 fontSize: '12px',
                               },
                             },
-                            categories: (() => {
-                              return yearList();
-                            })(),
+                            categories: (() => yearList())(),
                             title: {
                               text: 'Anos',
                               offsetX: -25,
