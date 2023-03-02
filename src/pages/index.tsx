@@ -100,9 +100,9 @@ export default function Index({
       const { data } = await api.ui.get(`/v2/geral/remuneracao/${year}`);
       setCompleteChartData(
         data.map(d => ({
-          BaseRemuneration: d.remuneracao_base,
-          OtherRemunerations: d.outras_remuneracoes,
-          Month: d.mes,
+          remuneracao_base: d.remuneracao_base,
+          outras_remuneracoes: d.outras_remuneracoes,
+          mes: d.mes,
         })),
       );
     } catch (error) {
