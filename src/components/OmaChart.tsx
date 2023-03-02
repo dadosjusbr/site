@@ -661,7 +661,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                   Distribuição de remunerações de membros ativos
                 </Typography>
                 <Box px={2}>
-                  {!chartData.Members ? (
+                  {!chartData.histograma ? (
                     <ActivityIndicatorPlaceholder fontColor="#3e5363">
                       <span>Não há dados de membros para esse mês</span>
                     </ActivityIndicatorPlaceholder>
@@ -737,12 +737,12 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                         {
                           name: 'Membros',
                           data: [
-                            chartData.Members['-1'],
-                            chartData.Members['50000'],
-                            chartData.Members['40000'],
-                            chartData.Members['30000'],
-                            chartData.Members['20000'],
-                            chartData.Members['10000'],
+                            chartData.histograma['-1'],
+                            chartData.histograma['50000'],
+                            chartData.histograma['40000'],
+                            chartData.histograma['30000'],
+                            chartData.histograma['20000'],
+                            chartData.histograma['10000'],
                           ],
                         },
                       ]}
