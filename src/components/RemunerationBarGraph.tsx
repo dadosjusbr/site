@@ -36,9 +36,9 @@ export interface RemunerationBarGraphProps {
   agency: any;
   data: any[];
   dataLoading: boolean;
+  selectedMonth: number;
   billion?: boolean;
   onMonthChange?: (month: number) => void;
-  selectedMonth?: number;
 }
 
 const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
@@ -336,23 +336,14 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               </Typography>
               {agency && data.length > 0 && !dataLoading ? (
                 <Grid display="flex" justifyContent="flex-end" sx={{ mt: 3 }}>
-                  <Tooltip
-                    arrow
-                    title={
-                      <Typography fontSize="0.8rem" mt={1}>
-                        Selecione no gráfico o mês que deseja explorar.
-                      </Typography>
-                    }
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    endIcon={<ArrowForwardIosIcon />}
+                    href={`/orgao/${agency.aid}/${year}/${selectedMonth}`}
                   >
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      endIcon={<ArrowForwardIosIcon />}
-                      href={`/orgao/${agency.aid}/${year}/${selectedMonth}`}
-                    >
-                      EXPLORAR
-                    </Button>
-                  </Tooltip>
+                    EXPLORAR
+                  </Button>
                 </Grid>
               ) : null}
               {dataLoading ? (
