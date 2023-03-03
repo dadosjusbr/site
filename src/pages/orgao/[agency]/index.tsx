@@ -11,13 +11,14 @@ import { getCurrentYear } from '../../../functions/currentYear';
 export default function AnualAgencyPage({ id, agency, data, fullName }) {
   const [year, setYear] = useState(getCurrentYear());
   useEffect(() => {
-    data &&
-      setYear(
-        data
-          .map(d => d.ano)
-          .sort((a, b) => b - a)
-          .find(d => d <= getCurrentYear()),
-      );
+    const yearData: number =
+      data &&
+      data
+        .map(d => d.ano)
+        .sort((a, b) => b - a)
+        .find(d => d <= getCurrentYear());
+
+    setYear(yearData);
   }, [year]);
   return (
     <Page>

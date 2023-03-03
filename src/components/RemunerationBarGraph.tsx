@@ -36,7 +36,7 @@ export interface RemunerationBarGraphProps {
   agency: any;
   data: any[];
   dataLoading: boolean;
-  selectedMonth: number;
+  selectedMonth?: number;
   billion?: boolean;
   onMonthChange?: (month: number) => void;
 }
