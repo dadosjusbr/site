@@ -357,9 +357,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                       width: 'fit-content',
                     }}
                   >
-                    Este órgão conta com {yearsWithoutData.length}{' '}
-                    {yearsWithoutData.length > 1 ? 'anos' : 'ano'} onde seus
-                    dados não foram publicados.
+                    Este órgão não publicou dados de {yearsWithoutData.length}{' '}
+                    {yearsWithoutData.length > 1 ? 'anos.' : 'ano.'}
                   </Alert>
                 </Box>
               ) : null}
