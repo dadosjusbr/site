@@ -48,28 +48,28 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         <ListSubheader>
           <em>Grupos disponíveis</em>
         </ListSubheader>
-        <MenuItem key="0" value="JUSTICA-ESTADUAL">
+        <MenuItem key="0" value="justica-estadual">
           Justiça Estadual
         </MenuItem>
-        <MenuItem key="1" value="MINISTERIOS-PUBLICOS">
+        <MenuItem key="1" value="ministerios-publicos">
           Ministérios Públicos
         </MenuItem>
-        <MenuItem key="2" value="JUSTICA-DO-TRABALHO">
+        <MenuItem key="2" value="justica-do-trabalho">
           Justiça do Trabalho
         </MenuItem>
-        <MenuItem key="3" value="JUSTICA-MILITAR">
+        <MenuItem key="3" value="justica-militar">
           Justiça Militar
         </MenuItem>
-        <MenuItem key="4" value="JUSTICA-FEDERAL">
+        <MenuItem key="4" value="justica-federal">
           Justiça Federal
         </MenuItem>
-        <MenuItem key="5" value="JUSTICA-ELEITORAL">
+        <MenuItem key="5" value="justica-eleitoral">
           Justiça Eleitoral
         </MenuItem>
-        <MenuItem key="6" value="JUSTICA-SUPERIOR">
+        <MenuItem key="6" value="justica-superior">
           Justiça Superior
         </MenuItem>
-        <MenuItem key="7" value="CONSELHOS-DE-JUSTICA">
+        <MenuItem key="7" value="conselhos-de-justica">
           Conselhos de Justiça
         </MenuItem>
       </Select>
