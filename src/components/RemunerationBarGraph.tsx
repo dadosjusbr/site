@@ -55,17 +55,17 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     if (data) {
       // first we sorts the array to get the max chart size (using the sum of BaseRemuneration and OtherRemunerations), and return the max value if it exists
       const found = data
-        .filter(d => !d.error)
+        .filter(d => !d.Error)
         .sort(
           (a, b) =>
-            a.remuneracao_base +
-            a.outras_remuneracoes -
-            (b.remuneracao_base + b.outras_remuneracoes),
+            a.BaseRemuneration +
+            a.OtherRemunerations -
+            (b.BaseRemuneration + b.OtherRemunerations),
         )
         .reverse()[0];
       // 10000 is used here as the min value of chart height
       return found
-        ? found.remuneracao_base + found.outras_remuneracoes + 1
+        ? found.BaseRemuneration + found.OtherRemunerations + 1
         : 10000;
     }
     return 10000;
@@ -76,8 +76,8 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
       data.forEach(element => {
         object = {
           ...object,
-          [MONTHS[element.mes]]:
-            element.remuneracao_base + element.outras_remuneracoes,
+          [MONTHS[element.Month]]:
+            element.BaseRemuneration + element.OtherRemunerations,
         };
       });
     }
@@ -90,7 +90,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const matches = useMediaQuery('(max-width:500px)');
   return (
     <>
-      {agency && agency.coletando && !data ? (
+      {agency && agency.collecting && !data ? (
         <NotCollecting agency={agency} />
       ) : (
         <>
@@ -113,7 +113,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
                   const monthlyTotals = data.map(
-                    d => d.remuneracao_base + d.outras_remuneracoes,
+                    d => d.BaseRemuneration + d.OtherRemunerations,
                   );
                   monthlyTotals.forEach(w => {
                     total += w;
@@ -197,7 +197,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   R${' '}
                   {(() => {
                     let total = 0;
-                    const wages = data.map(d => d.remuneracao_base);
+                    const wages = data.map(d => d.BaseRemuneration);
                     wages.forEach(w => {
                       total += w;
                     });
@@ -248,7 +248,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   R${' '}
                   {(() => {
                     let total = 0;
-                    const monthlyTotals = data.map(d => d.outras_remuneracoes);
+                    const monthlyTotals = data.map(d => d.OtherRemunerations);
                     monthlyTotals.forEach(w => {
                       total += w;
                     });
@@ -315,12 +315,12 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       for (let i = 1; i <= 12; i += 1) {
                         if (year === getCurrentYear()) {
                           if (
-                            !data.find(d => d.mes === i) &&
+                            !data.find(d => d.Month === i) &&
                             i <= new Date().getMonth()
                           ) {
                             months.push(i);
                           }
-                        } else if (!data.find(d => d.mes === i)) {
+                        } else if (!data.find(d => d.Month === i)) {
                           months.push(i);
                         }
                       }
@@ -348,7 +348,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       variant="outlined"
                       color="secondary"
                       endIcon={<ArrowForwardIosIcon />}
-                      href={`/orgao/${agency.id_orgao}/${year}/${selectedMonth}`}
+                      href={`/orgao/${agency.aid}/${year}/${selectedMonth}`}
                     >
                       EXPLORAR
                     </Button>
@@ -402,17 +402,17 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               export: {
                                 svg: {
                                   filename: `remuneracoes-membros${
-                                    agency ? `- ${agency.id_orgao}` : ''
+                                    agency ? `- ${agency.aid}` : ''
                                   }-${year}`,
                                 },
                                 png: {
                                   filename: `remuneracoes-membros${
-                                    agency ? `- ${agency.id_orgao}` : ''
+                                    agency ? `- ${agency.aid}` : ''
                                   }-${year}`,
                                 },
                                 csv: {
                                   filename: `remuneracoes-membros${
-                                    agency ? `- ${agency.id_orgao}` : ''
+                                    agency ? `- ${agency.aid}` : ''
                                   }-${year}`,
                                 },
                               },
@@ -600,10 +600,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             data: (() =>
                               createArrayFilledWithValue(12, 0).map((v, i) =>
                                 fixYearDataArray(data)[i]
-                                  ? fixYearDataArray(data)[i].remuneracao_base /
+                                  ? fixYearDataArray(data)[i].BaseRemuneration /
                                       10000000 +
                                     fixYearDataArray(data)[i]
-                                      .outras_remuneracoes /
+                                      .OtherRemunerations /
                                       10000000
                                   : v,
                               ))(),
@@ -613,7 +613,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             data: (() =>
                               createArrayFilledWithValue(12, 0).map((v, i) =>
                                 fixYearDataArray(data)[i]
-                                  ? fixYearDataArray(data)[i].total_membros
+                                  ? fixYearDataArray(data)[i].TotalMembers
                                   : v,
                               ))(),
                           },
@@ -625,7 +625,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                   (v, i) => {
                                     if (fixYearDataArray(data)[i]) {
                                       return fixYearDataArray(data)[i]
-                                        .outras_remuneracoes;
+                                        .OtherRemunerations;
                                     }
                                     return v;
                                   },
@@ -643,7 +643,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                   0,
                                 ).map((v, i) =>
                                   fixYearDataArray(data)[i]
-                                    ? fixYearDataArray(data)[i].remuneracao_base
+                                    ? fixYearDataArray(data)[i].BaseRemuneration
                                     : v,
                                 );
                               }
@@ -687,7 +687,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                     // fills the chart data if theres an error in given month
                                     if (
                                       fixYearDataArray(data)[i] &&
-                                      fixYearDataArray(data)[i].error
+                                      fixYearDataArray(data)[i].Error
                                     ) {
                                       return MaxMonthPlaceholder;
                                     }
@@ -745,7 +745,7 @@ function createArrayFilledWithValue<T>(size: number, value: T): T[] {
 function fixYearDataArray(array: any[]) {
   const a = createArrayFilledWithValue(12, undefined);
   array.forEach(v => {
-    a[v.mes - 1] = v;
+    a[v.Month - 1] = v;
   });
   return a;
 }

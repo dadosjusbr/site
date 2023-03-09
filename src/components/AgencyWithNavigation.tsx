@@ -82,7 +82,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         <Typography variant="h2" textAlign="center">
           {title} ({formatAgency(id.toLocaleUpperCase('pt'), title)})
         </Typography>
-        {agency && agency.coletando && !data ? (
+        {agency && agency.collecting && !data ? (
           <></>
         ) : (
           <>
@@ -159,7 +159,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     >
                       BAIXAR{' '}
                       <GreenColor>
-                        {formatBytes(summaryPackage.size)}
+                        {formatBytes(summaryPackage.Package.size)}
                       </GreenColor>
                     </Button>
                   )}
@@ -170,7 +170,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     endIcon={<SearchIcon />}
                     onClick={() => {
                       router.push(
-                        `/pesquisar?anos=${year}&orgaos=${agency.id_orgao}`,
+                        `/pesquisar?anos=${year}&orgaos=${agency.aid}`,
                       );
                     }}
                   >
@@ -208,7 +208,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     >
                       BAIXAR{' '}
                       <GreenColor>
-                        {formatBytes(summaryPackage.size)}
+                        {formatBytes(summaryPackage.Package.size)}
                       </GreenColor>
                     </Button>
                   )}
@@ -218,7 +218,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     endIcon={<SearchIcon />}
                     onClick={() => {
                       router.push(
-                        `/pesquisar?anos=${year}&orgaos=${agency.id_orgao}`,
+                        `/pesquisar?anos=${year}&orgaos=${agency.aid}`,
                       );
                     }}
                   >
