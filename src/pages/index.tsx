@@ -139,7 +139,7 @@ export default function Index({
           <Box py={4}>
             <Typography component="p">
               Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
-              <Lowercase>{formatedEndDate}</Lowercase>. São dados de{' '}
+              <Lowercase>{formatedEndDate}</Lowercase>. São dados de{' '}<Link href="/status">
               <Typography
                 variant="inherit"
                 component="span"
@@ -147,7 +147,7 @@ export default function Index({
               >
                 {collecting.length}
               </Typography>{' '}
-              órgãos que compreendem{' '}
+              órgãos</Link> que compreendem{' '}
               <Typography
                 variant="inherit"
                 component="span"
