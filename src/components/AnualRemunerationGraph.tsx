@@ -37,7 +37,6 @@ export interface AnualRemunerationGraphProps {
   data: any[];
   dataLoading: boolean;
   billion?: boolean;
-  onYearChange?: (year: number) => void;
 }
 
 const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
@@ -46,7 +45,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   data,
   dataLoading = true,
   billion = false,
-  onYearChange,
 }) => {
   // this constant is used as an alx value to determine the max graph height
   const matches = useMediaQuery('(max-width:500px)');
@@ -400,15 +398,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             '#2c3236',
                           ],
                           chart: {
-                            events: {
-                              click(__, _, config) {
-                                if (config.dataPointIndex >= 0) {
-                                  onYearChange(
-                                    yearList()[config.dataPointIndex],
-                                  );
-                                }
-                              },
-                            },
                             stacked: true,
                             toolbar: {
                               offsetY: 480,

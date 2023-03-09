@@ -38,7 +38,6 @@ export interface RemunerationBarGraphProps {
   dataLoading: boolean;
   selectedMonth?: number;
   billion?: boolean;
-  onMonthChange?: (month: number) => void;
 }
 
 const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
@@ -47,7 +46,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   data,
   dataLoading = true,
   billion = false,
-  onMonthChange,
   selectedMonth,
 }) => {
   // this constant is used as an alx value to determine the max graph height
@@ -375,13 +373,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             '#ffab00',
                           ],
                           chart: {
-                            events: {
-                              click(__, _, config) {
-                                if (config.dataPointIndex >= 0) {
-                                  onMonthChange(config.dataPointIndex + 1);
-                                }
-                              },
-                            },
                             stacked: true,
                             toolbar: {
                               offsetY: 480,
