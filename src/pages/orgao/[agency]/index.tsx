@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
@@ -10,6 +10,16 @@ import { getCurrentYear } from '../../../functions/currentYear';
 
 export default function AnualAgencyPage({ id, agency, data, fullName }) {
   const [year, setYear] = useState(getCurrentYear());
+  useEffect(() => {
+    const yearData: number =
+      data &&
+      data
+        .map(d => d.ano)
+        .sort((a, b) => b - a)
+        .find(d => d <= getCurrentYear());
+
+    setYear(yearData);
+  }, [year]);
   return (
     <Page>
       <Head>

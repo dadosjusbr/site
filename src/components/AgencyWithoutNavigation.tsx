@@ -38,25 +38,8 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
   dataLoading,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [selectedYear, setSelectedYear] = useState<number>(year);
-  const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${selectedYear}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
-
-  function formatBytes(bytes: number, decimals = 2) {
-    if (!+bytes) return '0 Bytes';
-
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB'];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-
-    return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
-  }
-
-  useEffect(() => {
-    setSelectedYear(!dataLoading && data ? data.at(-1).ano : year);
-  }, [dataLoading]);
 
   return (
     <Container fixed>
@@ -148,13 +131,6 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
       <ThemeProvider theme={light}>
         <Box mb={12}>
           <AnualRemunerationGraph
-            onYearChange={requiredYear => {
-              if (selectedYear === requiredYear) {
-                setSelectedYear(requiredYear);
-              } else {
-                setSelectedYear(requiredYear);
-              }
-            }}
             data={data}
             year={year}
             agency={agency}

@@ -36,9 +36,8 @@ export interface RemunerationBarGraphProps {
   agency: any;
   data: any[];
   dataLoading: boolean;
-  billion?: boolean;
-  onMonthChange?: (month: number) => void;
   selectedMonth?: number;
+  billion?: boolean;
 }
 
 const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
@@ -47,7 +46,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   data,
   dataLoading = true,
   billion = false,
-  onMonthChange,
   selectedMonth,
 }) => {
   // this constant is used as an alx value to determine the max graph height
@@ -336,23 +334,14 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               </Typography>
               {agency && data.length > 0 && !dataLoading ? (
                 <Grid display="flex" justifyContent="flex-end" sx={{ mt: 3 }}>
-                  <Tooltip
-                    arrow
-                    title={
-                      <Typography fontSize="0.8rem" mt={1}>
-                        Selecione no gráfico o mês que deseja explorar.
-                      </Typography>
-                    }
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    endIcon={<ArrowForwardIosIcon />}
+                    href={`/orgao/${agency.aid}/${year}/${selectedMonth}`}
                   >
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      endIcon={<ArrowForwardIosIcon />}
-                      href={`/orgao/${agency.aid}/${year}/${selectedMonth}`}
-                    >
-                      EXPLORAR
-                    </Button>
-                  </Tooltip>
+                    EXPLORAR
+                  </Button>
                 </Grid>
               ) : null}
               {dataLoading ? (
@@ -384,13 +373,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                             '#ffab00',
                           ],
                           chart: {
-                            events: {
-                              click(__, _, config) {
-                                if (config.dataPointIndex >= 0) {
-                                  onMonthChange(config.dataPointIndex + 1);
-                                }
-                              },
-                            },
                             stacked: true,
                             toolbar: {
                               offsetY: 480,
