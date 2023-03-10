@@ -37,7 +37,6 @@ export interface AnualRemunerationGraphProps {
   data: any[];
   dataLoading: boolean;
   billion?: boolean;
-  onYearChange?: (year: number) => void;
 }
 
 const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
@@ -46,14 +45,12 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   data,
   dataLoading = true,
   billion = false,
-  onYearChange,
 }) => {
   // this constant is used as an alx value to determine the max graph height
   const matches = useMediaQuery('(max-width:500px)');
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
-  const [selectedYear, setSelectedYear] = useState(year);
 
   const calculateValue = (value: number, decimal_places = 1): string => {
     if (value.toFixed(0).toString().length > 9) {
@@ -157,10 +154,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     }
     return 10000;
   }, [data]);
-
-  useEffect(() => {
-    setSelectedYear(!dataLoading && data ? data.at(-1).ano : year);
-  }, [dataLoading]);
 
   return (
     <>
@@ -357,9 +350,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                       width: 'fit-content',
                     }}
                   >
-                    Este órgão conta com {yearsWithoutData.length}{' '}
-                    {yearsWithoutData.length > 1 ? 'anos' : 'ano'} onde seus
-                    dados não foram publicados.
+                    Este órgão não publicou dados de {yearsWithoutData.length}{' '}
+                    {yearsWithoutData.length > 1 ? 'anos.' : 'ano.'}
                   </Alert>
                 </Box>
               ) : null}
@@ -368,23 +360,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               </Typography>
               {agency && data && !dataLoading ? (
                 <Grid display="flex" justifyContent="flex-end" sx={{ mt: 3 }}>
-                  <Tooltip
-                    arrow
-                    title={
-                      <Typography fontSize="0.8rem" mt={1}>
-                        Selecione no gráfico o ano que deseja explorar.
-                      </Typography>
-                    }
+                  <Button
+                    variant="outlined"
+                    color="secondary"
+                    endIcon={<ArrowForwardIosIcon />}
+                    href={`/orgao/${agency.id_orgao}/${year}`}
                   >
-                    <Button
-                      variant="outlined"
-                      color="secondary"
-                      endIcon={<ArrowForwardIosIcon />}
-                      href={`/orgao/${agency.id_orgao}/${selectedYear}`}
-                    >
-                      EXPLORAR
-                    </Button>
-                  </Tooltip>
+                    EXPLORAR
+                  </Button>
                 </Grid>
               ) : null}
               {dataLoading ? (
@@ -415,18 +398,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             '#2c3236',
                           ],
                           chart: {
-                            events: {
-                              click(__, _, config) {
-                                if (config.dataPointIndex >= 0) {
-                                  onYearChange(
-                                    yearList()[config.dataPointIndex],
-                                  );
-                                  setSelectedYear(
-                                    yearList()[config.dataPointIndex],
-                                  );
-                                }
-                              },
-                            },
                             stacked: true,
                             toolbar: {
                               offsetY: 480,

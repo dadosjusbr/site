@@ -64,6 +64,8 @@ function a11yProps(index: number) {
 }
 
 export default function Index({
+  agencyAmount,
+  monthAmount,
   startDate,
   endDate,
   recordAmount,
@@ -96,12 +98,13 @@ export default function Index({
   };
   async function fetchGeneralChartData() {
     try {
-      const { data } = await api.ui.get(`/v2/geral/remuneracao/${year}`);
+      const { data } = await api.ui.get(`/v1/geral/remuneracao/${year}`);
       setCompleteChartData(
         data.map(d => ({
-          remuneracao_base: d.remuneracao_base,
-          outras_remuneracoes: d.outras_remuneracoes,
-          mes: d.mes,
+          BaseRemuneration: d.base_remuneration,
+          OtherRemunerations: d.other_remunerations,
+          // eslint-disable-next-line no-underscore-dangle
+          Month: d._id,
         })),
       );
     } catch (error) {
@@ -135,7 +138,7 @@ export default function Index({
           <Box py={4}>
             <Typography component="p">
               Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
-              <Lowercase>{formatedEndDate}</Lowercase>. São dados de{' '}
+              <Lowercase>{formatedEndDate}</Lowercase>. São dados de{' '}<Link href="/status">
               <Typography
                 variant="inherit"
                 component="span"
@@ -143,7 +146,7 @@ export default function Index({
               >
                 {collecting.length}
               </Typography>{' '}
-              órgãos que compreendem{' '}
+              órgãos</Link> que compreendem{' '}
               <Typography
                 variant="inherit"
                 component="span"
@@ -344,15 +347,16 @@ export default function Index({
 }
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
-    const { data } = await api.ui.get('/v2/geral/resumo');
+    const { data } = await api.ui.get('/v1/geral/resumo');
     const res = await api.default.get('/orgaos');
     return {
       props: {
-        agencyAmount: data.num_orgaos,
-        startDate: data.data_inicio,
-        endDate: data.data_fim,
-        recordAmount: `${data.num_meses_coletados}`,
-        finalValue: `${data.remuneracao_total}`,
+        agencyAmount: data.AgencyAmount,
+        monthAmount: data.MonthlyTotalsAmount,
+        startDate: data.StartDate,
+        endDate: data.EndDate,
+        recordAmount: `${data.RemunerationRecordsCount}`,
+        finalValue: `${data.GeneralRemunerationValue}`,
         ais: res.data,
       },
     };

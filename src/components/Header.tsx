@@ -37,6 +37,11 @@ function Header() {
       anchor: '/equipe',
     },
     {
+      key: 'status',
+      title: 'Status',
+      anchor: '/status',
+    },
+    {
       key: 'sobre',
       title: 'Sobre',
       anchor: '/sobre',

@@ -63,21 +63,21 @@ const Page = styled.div`
 export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id, year } = context.params;
   try {
-    const { data: agency } = await api.ui.get(`/v2/orgao/totais/${id}/${year}`);
+    const { data: agency } = await api.ui.get(`/v1/orgao/totais/${id}/${year}`);
     return {
       props: {
         id,
-        data: agency.meses ? agency.meses : [],
+        data: agency.MonthTotals ? agency.MonthTotals : [],
         year: parseInt(year as string, 10),
-        agency: agency.orgao,
+        agency: agency.Agency,
         nextDateIsNavigable:
           parseInt(year as string, 10) !== new Date().getFullYear(),
         previousDateIsNavigable: parseInt(year as string, 10) !== 2018,
-        navigableMonth: agency.meses
-          ? agency.meses[agency.meses.length - 1].mes
+        navigableMonth: agency.MonthTotals
+          ? agency.MonthTotals[agency.MonthTotals.length - 1].Month
           : 1,
-        fullName: agency.orgao.nome,
-        summaryPackage: agency.package || null,
+        fullName: agency.AgencyFullName,
+        summaryPackage: agency.SummaryPackage || null,
       },
     };
   } catch (err) {

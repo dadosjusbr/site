@@ -58,8 +58,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     () => year !== new Date().getFullYear(),
     [year],
   );
-  const m = navigableMonth || 1;
-  const [selectedMonth, setSelectedMonth] = useState<number>(m);
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
@@ -82,7 +80,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         <Typography variant="h2" textAlign="center">
           {title} ({formatAgency(id.toLocaleUpperCase('pt'), title)})
         </Typography>
-        {agency && agency.coletando && !data ? (
+        {agency && agency.collecting && !data ? (
           <></>
         ) : (
           <>
@@ -159,7 +157,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     >
                       BAIXAR{' '}
                       <GreenColor>
-                        {formatBytes(summaryPackage.size)}
+                        {formatBytes(summaryPackage.Package.size)}
                       </GreenColor>
                     </Button>
                   )}
@@ -170,7 +168,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     endIcon={<SearchIcon />}
                     onClick={() => {
                       router.push(
-                        `/pesquisar?anos=${year}&orgaos=${agency.id_orgao}`,
+                        `/pesquisar?anos=${year}&orgaos=${agency.aid}`,
                       );
                     }}
                   >
@@ -208,7 +206,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     >
                       BAIXAR{' '}
                       <GreenColor>
-                        {formatBytes(summaryPackage.size)}
+                        {formatBytes(summaryPackage.Package.size)}
                       </GreenColor>
                     </Button>
                   )}
@@ -218,7 +216,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     endIcon={<SearchIcon />}
                     onClick={() => {
                       router.push(
-                        `/pesquisar?anos=${year}&orgaos=${agency.id_orgao}`,
+                        `/pesquisar?anos=${year}&orgaos=${agency.aid}`,
                       );
                     }}
                   >
@@ -233,18 +231,11 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
       <ThemeProvider theme={light}>
         <Box mb={12}>
           <RemunerationBarGraph
-            onMonthChange={month => {
-              if (selectedMonth === month) {
-                setSelectedMonth(navigableMonth);
-              } else {
-                setSelectedMonth(month);
-              }
-            }}
-            selectedMonth={selectedMonth}
             data={data}
             year={year}
             agency={agency}
             dataLoading={dataLoading}
+            selectedMonth={navigableMonth}
           />
         </Box>
       </ThemeProvider>
