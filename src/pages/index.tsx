@@ -14,7 +14,6 @@ import {
   Tabs,
   Tab,
   Button,
-  tabsClasses,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
