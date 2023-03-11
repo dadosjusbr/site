@@ -1,6 +1,6 @@
 import { GetServerSideProps } from 'next';
 import Head from 'next/head';
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   Box,
@@ -21,7 +21,6 @@ import api from '../../services/api';
 import DropDownGroupSelector, {
   formatToAgency,
 } from '../../components/DropDownGroupSelector';
-import AgencyWithNavigation from '../../components/AgencyWithNavigation';
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AgencyWithoutNavigation';
 // this constant is used to placehold the max value of a chart data
@@ -83,17 +82,20 @@ export default function SummaryPage({ dataList, summary }) {
 
                 {dataList
                   .sort((a, b) => {
-                    if (a.Name < b.Name) {
+                    if (a.id_orgao < b.id_orgao) {
                       return -1;
                     }
-                    if (a.Name > b.Name) {
+                    if (a.id_orgao > b.id_orgao) {
                       return 1;
                     }
                     return 1;
                   })
                   .map(ag => (
-                    <MenuItem key={ag.Name} value={ag.Name.toUpperCase()}>
-                      <LinkTo href={`#${ag.Name}`}>{ag.FullName}</LinkTo>
+                    <MenuItem
+                      key={ag.id_orgao}
+                      value={ag.id_orgao.toUpperCase()}
+                    >
+                      <LinkTo href={`#${ag.id_orgao}`}>{ag.nome}</LinkTo>
                     </MenuItem>
                   ))}
               </Select>
@@ -105,9 +107,9 @@ export default function SummaryPage({ dataList, summary }) {
             if (typeof dataList !== 'undefined' && dataList.length > 0) {
               return dataList.map(agency => (
                 <GraphWithNavigation
-                  key={agency.Name}
-                  title={agency.FullName}
-                  id={agency.Name}
+                  key={agency.id_orgao}
+                  title={agency.nome}
+                  id={agency.id_orgao}
                 />
               ));
             }
@@ -181,8 +183,8 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
 export const getServerSideProps: GetServerSideProps = async context => {
   const { summary } = context.params;
   try {
-    const { data } = await api.ui.get(`/v1/orgao/${summary}`);
-    if (!data.Agency) {
+    const { data } = await api.ui.get(`/v2/orgao/${summary}`);
+    if (!data.orgaos) {
       // context.res.writeHead(301, {
       //   Location: `/404`,
       // });
@@ -191,8 +193,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
     }
     return {
       props: {
-        dataList: data.Agency,
-        summary: data.Name,
+        dataList: data.orgaos,
+        summary: data.grupo,
       },
     };
   } catch (error) {
@@ -207,6 +209,7 @@ const Page = styled.div`
   background: #3e5363;
 `;
 const LinkTo = styled.a`
+  width: 100%;
   text-decoration: none;
   color: #fff;
 `;
