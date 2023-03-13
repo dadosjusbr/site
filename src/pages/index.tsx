@@ -30,6 +30,7 @@ import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
 import { getCurrentYear } from '../functions/currentYear';
+import IndexTabGraph from '../components/IndexTabGraph';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -48,11 +49,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -139,15 +136,18 @@ export default function Index({
           <Box py={4}>
             <Typography component="p">
               Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
-              <Lowercase>{formatedEndDate}</Lowercase>. São dados de{' '}<Link href="/status">
-              <Typography
-                variant="inherit"
-                component="span"
-                color="success.main"
-              >
-                {collecting.length}
-              </Typography>{' '}
-              órgãos</Link> que compreendem{' '}
+              <Lowercase>{formatedEndDate}</Lowercase>. São dados de{' '}
+              <Link href="/status">
+                <Typography
+                  variant="inherit"
+                  component="span"
+                  color="success.main"
+                >
+                  {collecting.length}
+                </Typography>{' '}
+                órgãos
+              </Link>{' '}
+              que compreendem{' '}
               <Typography
                 variant="inherit"
                 component="span"
@@ -252,11 +252,7 @@ export default function Index({
                   </Grid>
                   <TabPanel value={value} index={0}>
                     <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-tj.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
+                    <IndexTabGraph />
                   </TabPanel>
                   <TabPanel value={value} index={1}>
                     <IndexChartLegend />
