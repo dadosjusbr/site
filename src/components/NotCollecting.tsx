@@ -58,39 +58,20 @@ const NotCollecting: React.FC<{
                 Para ajudar a incluir os dados deste tribunal no DadosJusBr,
                 você pode protocolar um requerimento na ouvidoria solicitando
                 mudanças na
-                {agency.coletando
-                  ? agency.coletando[0].descricao.map(
-                      (desc: string, index: number) => (
-                        <span key={desc}>
-                          {` ${desc
-                            .split(' ')
-                            .at(0)
-                            .toLowerCase()} ${desc
-                            .split(' ')
-                            .at(1)} ${desc.split(' ').at(2)}
+                {agency.coletando[0].descricao.map(
+                  (desc: string, index: number) => (
+                    <span key={desc}>
+                      {` ${desc.split(' ').at(0).toLowerCase()} ${desc
+                        .split(' ')
+                        .at(1)} ${desc.split(' ').at(2)}
                     ${
                       agency.coletando[0].descricao.length > 1 && index === 0
                         ? 'e'
                         : ''
                     }`}
-                        </span>
-                      ),
-                    )
-                  : agency.collecting[0].description.map(
-                      (desc: string, index: number) => (
-                        <span key={desc}>{` ${desc
-                          .split(' ')
-                          .at(0)
-                          .toLowerCase()} ${desc.split(' ').at(1)} ${desc
-                          .split(' ')
-                          .at(2)}
-                    ${
-                      agency.collecting[0].description.length > 1 && index === 0
-                        ? 'e'
-                        : ''
-                    }`}</span>
-                      ),
-                    )}
+                    </span>
+                  ),
+                )}
               </Typography>
               <Box display="flex" justifyContent="center" mt={2}>
                 <Button
