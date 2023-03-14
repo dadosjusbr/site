@@ -180,10 +180,9 @@ export default function OmaPage({
                     alignItems: 'center',
                   }}
                 >
-                  <div>
-                    <CircularProgress color="info" />
-                  </div>
-                  <p>Não há dados para esse mês</p>
+                  <Typography variant="h6">
+                    Não há dados para esse mês
+                  </Typography>
                 </Box>
               ) : (
                 oma.crawlingTime && (
@@ -260,12 +259,24 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
+  if (month > 12 || month < 1) {
+    return {
+      redirect: {
+        destination: '/404',
+      },
+      props: {},
+    };
+  }
+
   let mi = [];
-  const { data: d3 } = await api.default.get(
-    `/dados/${agency}/${year}/${month}`,
-  );
-  if (d3) {
+  try {
+    const { data: d3 } = await api.default.get(
+      `/dados/${agency}/${year}/${month}`,
+    );
+
     mi = d3.at(0);
+  } catch (err) {
+    mi = [];
   }
 
   try {
