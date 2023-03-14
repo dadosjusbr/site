@@ -57,6 +57,7 @@ export default function MonthPopover({ children, agency, year }) {
         <Typography sx={{ p: 2 }}>
           {list.map(month => (
             <Typography
+              key={month}
               sx={{
                 width: 145,
                 cursor: 'pointer',
