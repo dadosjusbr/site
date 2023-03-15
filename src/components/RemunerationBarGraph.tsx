@@ -81,6 +81,21 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     }
     return object;
   }, [data]);
+  const monthsWithouData = useMemo(() => {
+    let months = [];
+    if (data) {
+      for (let i = 1; i <= 12; i += 1) {
+        if (year === getCurrentYear()) {
+          if (!data.find(d => d.mes === i) && i < new Date().getMonth()) {
+            months.push(i);
+          }
+        } else if (!data.find(d => d.mes === i)) {
+          months.push(i);
+        }
+      }
+    }
+    return months;
+  }, [data]);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
@@ -297,7 +312,10 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
           </Paper>
           <Paper elevation={0}>
             <Box my={4} pt={2} padding={4}>
-              {agency != null && data.length < 12 && data.length > 0 ? (
+              {agency != null &&
+              data.length < 12 &&
+              data.length > 0 &&
+              monthsWithouData.length > 0 ? (
                 <Box display="flex" justifyContent="center">
                   <Alert
                     severity="warning"
@@ -308,24 +326,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                     }}
                   >
                     Este órgão não publicou dados de{' '}
-                    {(() => {
-                      const months = [];
-                      for (let i = 1; i <= 12; i += 1) {
-                        if (year === getCurrentYear()) {
-                          if (
-                            !data.find(d => d.mes === i) &&
-                            i <= new Date().getMonth()
-                          ) {
-                            months.push(i);
-                          }
-                        } else if (!data.find(d => d.mes === i)) {
-                          months.push(i);
-                        }
-                      }
-                      return `${months.length} ${
-                        months.length > 1 ? 'meses.' : 'mês.'
-                      }`;
-                    })()}{' '}
+                    {`${monthsWithouData.length} ${
+                      monthsWithouData.length > 1 ? 'meses.' : 'mês.'
+                    }`}{' '}
                   </Alert>
                 </Box>
               ) : null}
@@ -646,8 +649,11 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                                     }
                                     // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
                                     const date = new Date();
-                                    if (year === date.getFullYear()) {
-                                      if (i < date.getMonth()) {
+                                    if (year === getCurrentYear()) {
+                                      if (
+                                        new Date(getCurrentYear(), i + 1, 17) <
+                                        date
+                                      ) {
                                         return MaxMonthPlaceholder;
                                       }
                                     } else {
