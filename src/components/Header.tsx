@@ -68,7 +68,8 @@ function Header() {
             <Link href="/">
               <img
                 src="/img/header/icon_dadosjusbr_default.svg"
-                width="80%"
+                width="130"
+                height="108"
                 alt="DadosjusBR"
               />
             </Link>
