@@ -1,0 +1,7 @@
+User-agent: *
+Allow: /
+Disallow: /equipe
+Disallow: /orgao
+Disallow: /grupo
+
+Sitemap: https://dadosjusbr.org/sitemap.xml
