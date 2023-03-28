@@ -82,7 +82,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     return object;
   }, [data]);
   const monthsWithouData = useMemo(() => {
-    let months = [];
+    const months = [];
     if (data) {
       for (let i = 1; i <= 12; i += 1) {
         if (year === getCurrentYear()) {
@@ -172,7 +172,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                     </Typography>
                   }
                 >
-                  <IconButton>
+                  <IconButton aria-label="Botão de informações">
                     <InfoIcon />
                   </IconButton>
                 </Tooltip>
@@ -192,6 +192,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               <Grid item textAlign="center">
                 <SalarioButton
                   sx={{ backgroundColor: '#2fbb95' }}
+                  aria-label="salario"
                   onClick={e => {
                     if (hidingWage) {
                       e.currentTarget.classList.remove('active');
@@ -224,6 +225,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   <>
                     <SemDadosButton
                       sx={{ mt: 2, backgroundColor: '#3E5363' }}
+                      aria-label="semDados"
                       onClick={e => {
                         if (hidingNoData) {
                           e.currentTarget.classList.remove('active');
@@ -243,6 +245,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               <Grid item textAlign="center">
                 <BeneficiosButton
                   sx={{ backgroundColor: '#96bb2f' }}
+                  aria-label="beneficios"
                   onClick={e => {
                     if (hidingBenefits) {
                       e.currentTarget.classList.remove('active');
@@ -276,6 +279,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   <Grid item textAlign="center">
                     <SemDadosButton
                       sx={{ backgroundColor: '#3E5363' }}
+                      aria-label="semDados"
                       onClick={e => {
                         if (hidingNoData) {
                           e.currentTarget.classList.remove('active');
@@ -292,22 +296,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                   </Grid>
                 </>
               ) : null}
-              {/* <Grid item textAlign="center">
-          <IconButton
-            onClick={e => {
-              if (hidingErrors) {
-                e.currentTarget.classList.remove('active');
-                setHidingErrors(false);
-              } else {
-                e.currentTarget.classList.add('active');
-                setHidingErrors(true);
-              }
-            }}
-          >
-            <SquareIcon />
-          </IconButton>
-          <Typography>Problemas na coleta</Typography>
-        </Grid> */}
             </Grid>
           </Paper>
           <Paper elevation={0}>
@@ -381,7 +369,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                               offsetY: 480,
                               tools: {
                                 download:
-                                  '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
+                                  '<Image src="/img/cloud_download_black_24dp.svg" width="24px" height="24px" alt="Download Icon"></Image>',
                               },
                               show: true,
                               export: {

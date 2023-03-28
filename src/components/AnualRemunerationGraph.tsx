@@ -108,19 +108,23 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   }, [data]);
 
   const monthsWithoutData = useMemo(() => {
-    let a: number = 0;
+    let a = 0;
     if (data) {
       data
         .map(d => {
-          if (
-            d.ano === getCurrentYear() &&
-            new Date() < new Date(getCurrentYear(), new Date().getMonth(), 17)
-          ) {
-            return new Date().getMonth() - (d.meses_com_dados + 1);
+          if (d.ano === getCurrentYear()) {
+            if (
+              new Date() < new Date(getCurrentYear(), new Date().getMonth(), 17)
+            ) {
+              return new Date().getMonth() - (d.meses_com_dados + 1);
+            }
+            return new Date().getMonth() - d.meses_com_dados;
           }
           return 12 - d.meses_com_dados;
         })
-        .forEach(d => (a += d));
+        .forEach(d => {
+          a += d;
+        });
       return a;
     }
     return [];
@@ -192,7 +196,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return 10000;
   }, [data]);
 
-  function TransitionsModal({ children, data }) {
+  function TransitionsModal({ children, agencyData }) {
     return (
       <div>
         {children}
@@ -214,7 +218,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 variant="h6"
                 component="h2"
               >
-                Ajude na inclusão de dados do {data.nome}
+                Ajude na inclusão de dados do {agencyData?.nome}
               </Typography>
               <Typography
                 id="transition-modal-description"
@@ -228,7 +232,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 <Button
                   variant="outlined"
                   color="info"
-                  href={data.ouvidoria}
+                  href={agencyData?.ouvidoria}
                   target="_blank"
                   endIcon={<ArrowForwardIosIcon />}
                 >
@@ -429,7 +433,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             <Box my={4} pt={2} padding={4}>
               {!dataLoading && noData().find(d => d !== 0) ? (
                 <Box display="flex" justifyContent="center">
-                  <TransitionsModal data={agency}>
+                  <TransitionsModal agencyData={agency}>
                     <Alert
                       severity="warning"
                       variant="outlined"
@@ -447,7 +451,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                         : '.'}{' '}
                       {monthsWithoutData > 1
                         ? 'meses.'
-                        : monthsWithoutData == 1
+                        : monthsWithoutData === 1
                         ? 'mês.'
                         : ''}
                     </Alert>
@@ -458,7 +462,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               monthsWithoutData > 0 &&
               !noData().find(d => d !== 0) ? (
                 <Box display="flex" justifyContent="center">
-                  <TransitionsModal data={agency}>
+                  <TransitionsModal agencyData={agency}>
                     <Alert
                       severity="warning"
                       variant="outlined"
@@ -472,7 +476,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                       Este órgão não publicou dados de {monthsWithoutData}{' '}
                       {monthsWithoutData > 1
                         ? 'meses.'
-                        : monthsWithoutData == 1
+                        : monthsWithoutData === 1
                         ? 'mês.'
                         : ''}
                     </Alert>
