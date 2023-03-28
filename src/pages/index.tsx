@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import styled from 'styled-components';
 import {
@@ -20,15 +21,19 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import SearchIcon from '@mui/icons-material/Search';
 
-import Footer from '../components/Footer';
 import Header from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
-import RemunerationBarGraph from '../components/RemunerationBarGraph';
 import IndexChartLegend from '../components/IndexChartLegend';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
 import { getCurrentYear } from '../functions/currentYear';
+
+const RemunerationBarGraph = dynamic(
+  () => import('../components/RemunerationBarGraph'),
+  { loading: () => <p>Carregando...</p> },
+);
+const Footer = dynamic(() => import('../components/Footer'));
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -168,16 +173,6 @@ export default function Index({
             </Typography>
           </Box>
           <Grid container spacing={2} display="flex" alignItems="center">
-            {/* <Grid item xs={4} textAlign="center">
-              <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
-                Índice de transparência
-              </Button>
-            </Grid>
-            <Grid item xs={4} textAlign="center">
-              <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
-                Dados gerais
-              </Button>
-            </Grid> */}
             <Grid item>
               <Typography variant="h6">Navegue pelos dados</Typography>
             </Grid>

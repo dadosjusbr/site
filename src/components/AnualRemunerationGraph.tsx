@@ -90,19 +90,23 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   }, [data]);
 
   const monthsWithoutData = useMemo(() => {
-    let a: number = 0;
+    let a = 0;
     if (data) {
       data
         .map(d => {
-          if (
-            d.ano === getCurrentYear() &&
-            new Date() < new Date(getCurrentYear(), new Date().getMonth(), 17)
-          ) {
-            return new Date().getMonth() - (d.meses_com_dados + 1);
+          if (d.ano === getCurrentYear()) {
+            if (
+              new Date() < new Date(getCurrentYear(), new Date().getMonth(), 17)
+            ) {
+              return new Date().getMonth() - (d.meses_com_dados + 1);
+            }
+            return new Date().getMonth() - d.meses_com_dados;
           }
           return 12 - d.meses_com_dados;
         })
-        .forEach(d => (a += d));
+        .forEach(d => {
+          a += d;
+        });
       return a;
     }
     return [];
@@ -376,7 +380,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                       : '.'}{' '}
                     {monthsWithoutData > 1
                       ? 'meses.'
-                      : monthsWithoutData == 1
+                      : monthsWithoutData === 1
                       ? 'mês.'
                       : ''}
                   </Alert>
@@ -397,7 +401,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                     Este órgão não publicou dados de {monthsWithoutData}{' '}
                     {monthsWithoutData > 1
                       ? 'meses.'
-                      : monthsWithoutData == 1
+                      : monthsWithoutData === 1
                       ? 'mês.'
                       : ''}
                   </Alert>
