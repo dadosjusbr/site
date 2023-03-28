@@ -54,7 +54,10 @@ const NotCollecting: React.FC<{
               >
                 Ajude na inclusão de dados do {agency.nome}
               </Typography>
-              <Typography id="transition-modal-description" sx={{ mt: 2 }}>
+              <Typography
+                id="transition-modal-description"
+                sx={{ mt: 2, textAlign: 'justify' }}
+              >
                 Para ajudar a incluir os dados deste tribunal no DadosJusBr,
                 você pode protocolar um requerimento na ouvidoria solicitando
                 mudanças na
