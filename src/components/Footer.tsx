@@ -24,7 +24,8 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
                 ? '/img/footer/icon_dadosjusbr_dafault.svg'
                 : '/img/footer/icon_dadosjusbr_light.svg'
             }
-            width="100%"
+            width="130"
+            height="108"
             alt="DadosjusBR"
           />
         </Grid>

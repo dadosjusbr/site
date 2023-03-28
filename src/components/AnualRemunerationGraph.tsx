@@ -89,6 +89,29 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return [];
   }, [data]);
 
+  const monthsWithoutData = useMemo(() => {
+    let a = 0;
+    if (data) {
+      data
+        .map(d => {
+          if (d.ano === getCurrentYear()) {
+            if (
+              new Date() < new Date(getCurrentYear(), new Date().getMonth(), 17)
+            ) {
+              return new Date().getMonth() - (d.meses_com_dados + 1);
+            }
+            return new Date().getMonth() - d.meses_com_dados;
+          }
+          return 12 - d.meses_com_dados;
+        })
+        .forEach(d => {
+          a += d;
+        });
+      return a;
+    }
+    return [];
+  }, [data]);
+
   const noData = () => {
     const noDataArr = [];
     for (let i = 2018; i <= getCurrentYear(); i += 1) {
@@ -351,7 +374,36 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                     }}
                   >
                     Este órgão não publicou dados de {yearsWithoutData.length}{' '}
-                    {yearsWithoutData.length > 1 ? 'anos.' : 'ano.'}
+                    {yearsWithoutData.length > 1 ? 'anos' : 'ano'}
+                    {monthsWithoutData > 0
+                      ? ` e ${monthsWithoutData}`
+                      : '.'}{' '}
+                    {monthsWithoutData > 1
+                      ? 'meses.'
+                      : monthsWithoutData === 1
+                      ? 'mês.'
+                      : ''}
+                  </Alert>
+                </Box>
+              ) : null}
+              {!dataLoading &&
+              monthsWithoutData > 0 &&
+              !noData().find(d => d !== 0) ? (
+                <Box display="flex" justifyContent="center">
+                  <Alert
+                    severity="warning"
+                    variant="outlined"
+                    sx={{
+                      alignItems: 'center',
+                      width: 'fit-content',
+                    }}
+                  >
+                    Este órgão não publicou dados de {monthsWithoutData}{' '}
+                    {monthsWithoutData > 1
+                      ? 'meses.'
+                      : monthsWithoutData === 1
+                      ? 'mês.'
+                      : ''}
                   </Alert>
                 </Box>
               ) : null}

@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps } from 'next';
+import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import styled from 'styled-components';
 import {
@@ -14,23 +15,26 @@ import {
   Tabs,
   Tab,
   Button,
-  tabsClasses,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import SearchIcon from '@mui/icons-material/Search';
 
-import Footer from '../components/Footer';
 import Header from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
-import RemunerationBarGraph from '../components/RemunerationBarGraph';
 import IndexChartLegend from '../components/IndexChartLegend';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
 import { getCurrentYear } from '../functions/currentYear';
 import IndexTabGraph from '../components/IndexTabGraph';
+
+const RemunerationBarGraph = dynamic(
+  () => import('../components/RemunerationBarGraph'),
+  { loading: () => <p>Carregando...</p> },
+);
+const Footer = dynamic(() => import('../components/Footer'));
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -62,8 +66,6 @@ function a11yProps(index: number) {
 }
 
 export default function Index({
-  agencyAmount,
-  monthAmount,
   startDate,
   endDate,
   recordAmount,
@@ -96,13 +98,13 @@ export default function Index({
   };
   async function fetchGeneralChartData() {
     try {
-      const { data } = await api.ui.get(`/v1/geral/remuneracao/${year}`);
+      const { data } = await api.ui.get(`/v2/geral/remuneracao/${year}`);
       setCompleteChartData(
         data.map(d => ({
-          BaseRemuneration: d.base_remuneration,
-          OtherRemunerations: d.other_remunerations,
+          remuneracao_base: d.remuneracao_base,
+          outras_remuneracoes: d.outras_remuneracoes,
           // eslint-disable-next-line no-underscore-dangle
-          Month: d._id,
+          mes: d.mes,
         })),
       );
     } catch (error) {
@@ -168,16 +170,6 @@ export default function Index({
             </Typography>
           </Box>
           <Grid container spacing={2} display="flex" alignItems="center">
-            {/* <Grid item xs={4} textAlign="center">
-              <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
-                Índice de transparência
-              </Button>
-            </Grid>
-            <Grid item xs={4} textAlign="center">
-              <Button color="info" size="large" endIcon={<ArrowDownwardIcon />}>
-                Dados gerais
-              </Button>
-            </Grid> */}
             <Grid item>
               <Typography variant="h6">Navegue pelos dados</Typography>
             </Grid>
@@ -344,16 +336,15 @@ export default function Index({
 }
 export const getServerSideProps: GetServerSideProps = async context => {
   try {
-    const { data } = await api.ui.get('/v1/geral/resumo');
+    const { data } = await api.ui.get('/v2/geral/resumo');
     const res = await api.default.get('/orgaos');
     return {
       props: {
-        agencyAmount: data.AgencyAmount,
-        monthAmount: data.MonthlyTotalsAmount,
-        startDate: data.StartDate,
-        endDate: data.EndDate,
-        recordAmount: `${data.RemunerationRecordsCount}`,
-        finalValue: `${data.GeneralRemunerationValue}`,
+        agencyAmount: data.num_orgaos,
+        startDate: data.data_inicio,
+        endDate: data.data_fim,
+        recordAmount: `${data.num_meses_coletados}`,
+        finalValue: `${data.remuneracao_total}`,
         ais: res.data,
       },
     };
