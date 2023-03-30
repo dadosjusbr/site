@@ -273,8 +273,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     const { data: d3 } = await api.default.get(
       `/dados/${agency}/${year}/${month}`,
     );
-
-    mi = d3.at(0);
+    mi = d3;
   } catch (err) {
     mi = [];
   }

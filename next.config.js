@@ -21,7 +21,7 @@ module.exports = {
   //the env variables are set here to access in browser
   env: {
     API_BASE_URL: process.env.API_BASE_URL,
-    DEFAULT_API_BASE_URL: process.env.DEFAULT_API_BASE_URL,
+    DEFAULT_API_BASE_URL_V2: process.env.DEFAULT_API_BASE_URL_V2,
     ID_ANALYTICS_GA4: process.env.ID_ANALYTICS_GA4,
     S3_REPO_URL: process.env.S3_REPO_URL,
     NEW_RELIC_APP_NAME: process.env.NEW_RELIC_APP_NAME,
