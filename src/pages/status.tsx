@@ -18,7 +18,7 @@ import { formatAgency } from '../functions/format';
 
 export default function Index({ ais }) {
   const collecting = ais
-    .filter(ag => ag.collecting === undefined)
+    .filter(ag => ag.coletando === undefined)
     .sort((a, b) => {
       if (a.uf > b.uf) {
         return 1;
@@ -29,7 +29,7 @@ export default function Index({ ais }) {
       return 0;
     });
   const notCollecting = ais
-    .filter(ag => ag.collecting !== undefined)
+    .filter(ag => ag.coletando !== undefined)
     .sort((a, b) => {
       if (a.uf > b.uf) {
         return 1;
@@ -41,12 +41,8 @@ export default function Index({ ais }) {
     });
 
   const getReasons = ag => {
-    if (
-      ag.collecting &&
-      ag.collecting.length > 0 &&
-      ag.collecting[0].description
-    ) {
-      return ag.collecting[0].description.map(desc => `${desc}. `);
+    if (ag.coletando && ag.coletando.length > 0 && ag.coletando[0].descricao) {
+      return ag.coletando[0].descricao.map(desc => `${desc}. `);
     }
     return '';
   };
@@ -74,11 +70,11 @@ export default function Index({ ais }) {
             </Typography>
             <List dense>
               {collecting.map(ag => (
-                <ListItem key={ag.aid}>
+                <ListItem key={ag.id_orgao}>
                   <ListItemIcon>
-                    <Upper>{formatAgency(ag.aid, ag.name)}</Upper>
+                    <Upper>{formatAgency(ag.id_orgao, ag.nome)}</Upper>
                   </ListItemIcon>
-                  <ListItemText>{ag.name}</ListItemText>
+                  <ListItemText>{ag.nome}</ListItemText>
                 </ListItem>
               ))}
             </List>
@@ -87,12 +83,12 @@ export default function Index({ ais }) {
             </Typography>
             <List dense>
               {notCollecting.map(ag => (
-                <ListItem key={ag.aid}>
+                <ListItem key={ag.id_orgao}>
                   <ListItemIcon>
-                    <Upper>{formatAgency(ag.aid, ag.name)}</Upper>
+                    <Upper>{formatAgency(ag.id_orgao, ag.nome)}</Upper>
                   </ListItemIcon>
                   <ListItemText secondary={getReasons(ag)}>
-                    {ag.name}
+                    {ag.nome}
                   </ListItemText>
                 </ListItem>
               ))}
