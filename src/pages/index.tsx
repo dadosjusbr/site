@@ -15,6 +15,7 @@ import {
   Tabs,
   Tab,
   Button,
+  CircularProgress,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -28,12 +29,14 @@ import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
 import { getCurrentYear } from '../functions/currentYear';
-import IndexTabGraph from '../components/IndexTabGraph';
 
 const RemunerationBarGraph = dynamic(
   () => import('../components/RemunerationBarGraph'),
   { loading: () => <p>Carregando...</p> },
 );
+const IndexTabGraph = dynamic(() => import('../components/IndexTabGraph'), {
+  loading: () => <p>Carregando...</p>,
+});
 const Footer = dynamic(() => import('../components/Footer'));
 
 interface TabPanelProps {
@@ -83,6 +86,7 @@ export default function Index({
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
   const [year, setYear] = useState(getCurrentYear());
+  const [plotData, setPlotData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
@@ -93,12 +97,34 @@ export default function Index({
     fetchGeneralChartData();
   }, [year]);
   const [value, setValue] = React.useState(0);
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = async (
+    event: React.SyntheticEvent,
+    newValue: number,
+  ) => {
     setValue(newValue);
   };
   async function fetchGeneralChartData() {
     try {
       const { data } = await api.ui.get(`/v2/geral/remuneracao/${year}`);
+      const estadual = await api.default.get(
+        `indice/grupo/justica-estadual?agregado=true`,
+      );
+      const ministerios = await api.default.get(
+        `indice/grupo/ministerios-publicos?agregado=true`,
+      );
+      const trabalho = await api.default.get(
+        `indice/grupo/justica-do-trabalho?agregado=true`,
+      );
+      const militar = await api.default.get(
+        `indice/grupo/justica-militar?agregado=true`,
+      );
+      const federal = await api.default.get(
+        `indice/grupo/justica-federal?agregado=true`,
+      );
+      const superior = await api.default.get(
+        `indice/grupo/justica-superior?agregado=true`,
+      );
+
       setCompleteChartData(
         data.map(d => ({
           remuneracao_base: d.remuneracao_base,
@@ -107,6 +133,14 @@ export default function Index({
           mes: d.mes,
         })),
       );
+      setPlotData([
+        estadual.data,
+        ministerios.data,
+        trabalho.data,
+        militar.data,
+        federal.data,
+        superior.data,
+      ]);
     } catch (error) {
       setCompleteChartData([]);
     }
@@ -242,50 +276,40 @@ export default function Index({
                       </Box>
                     </Grid>
                   </Grid>
-                  <TabPanel value={value} index={0}>
-                    <IndexChartLegend />
-                    <IndexTabGraph />
-                  </TabPanel>
-                  <TabPanel value={value} index={1}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-mp.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={2}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-trt.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={3}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-tjm.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={4}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-trf.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={5}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-superiores.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
+                  {loading ? (
+                    <Grid container justifyContent="center">
+                      <Grid item>
+                        <CircularProgress />
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <>
+                      <TabPanel value={value} index={0}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData?.at(0)} />
+                      </TabPanel>
+                      <TabPanel value={value} index={1}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData?.at(1)} />
+                      </TabPanel>
+                      <TabPanel value={value} index={2}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData?.at(2)} />
+                      </TabPanel>
+                      <TabPanel value={value} index={3}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData?.at(3)} />
+                      </TabPanel>
+                      <TabPanel value={value} index={4}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData?.at(4)} />
+                      </TabPanel>
+                      <TabPanel value={value} index={5}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData?.at(5)} />
+                      </TabPanel>
+                    </>
+                  )}
                 </Grid>
               </Grid>
             </Box>
@@ -335,6 +359,10 @@ export default function Index({
   );
 }
 export const getServerSideProps: GetServerSideProps = async context => {
+  context.res.setHeader(
+    'Cache-Control',
+    'public, s-maxage=1296000, stale-while-revalidate=2160000',
+  );
   try {
     const { data } = await api.ui.get('/v2/geral/resumo');
     const res = await api.default.get('/orgaos');
