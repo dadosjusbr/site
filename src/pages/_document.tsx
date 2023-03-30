@@ -76,6 +76,10 @@ export default class MyDocument extends Document<documentProps> {
           <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
           <link rel="icon" href="/favicon.ico" type="image/x-icon" />
           <meta charSet="utf-8" />
+          <meta
+            name="description"
+            content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
+          />
         </Head>
         <body>
           <Main />

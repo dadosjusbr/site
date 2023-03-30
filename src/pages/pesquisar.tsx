@@ -161,7 +161,7 @@ export default function Index({ ais }) {
       // );
       const qSelectedAgencies = makeQueryFromList(
         'orgaos',
-        selectedAgencies.map(m => m.aid),
+        selectedAgencies.map(m => m.id_orgao),
       );
       const qCategories = makeQueryFromValue(
         'categorias',
@@ -197,21 +197,21 @@ export default function Index({ ais }) {
   const typeHandleChange = (event: SelectChangeEvent) => {
     setType(event.target.value as string);
     if (event.target.value === 'Ministérios Públicos') {
-      setAgencies(ais.filter(a => a.type === 'Ministério'));
+      setAgencies(ais.filter(a => a.jurisdicao === 'Ministério'));
     } else if (event.target.value === 'Justiça Estadual') {
-      setAgencies(ais.filter(a => a.type === 'Estadual'));
+      setAgencies(ais.filter(a => a.jurisdicao === 'Estadual'));
     } else if (event.target.value === 'Justiça Militar') {
-      setAgencies(ais.filter(a => a.type === 'Militar'));
+      setAgencies(ais.filter(a => a.jurisdicao === 'Militar'));
     } else if (event.target.value === 'Justiça do Trabalho') {
-      setAgencies(ais.filter(a => a.type === 'Trabalho'));
+      setAgencies(ais.filter(a => a.jurisdicao === 'Trabalho'));
     } else if (event.target.value === 'Justiça Superior') {
-      setAgencies(ais.filter(a => a.type === 'Superior'));
+      setAgencies(ais.filter(a => a.jurisdicao === 'Superior'));
     } else if (event.target.value === 'Justiça Federal') {
-      setAgencies(ais.filter(a => a.type === 'Federal'));
+      setAgencies(ais.filter(a => a.jurisdicao === 'Federal'));
     } else if (event.target.value === 'Justiça Eleitoral') {
-      setAgencies(ais.filter(a => a.type === 'Eleitoral'));
+      setAgencies(ais.filter(a => a.jurisdicao === 'Eleitoral'));
     } else if (event.target.value === 'Conselhos de Justiça') {
-      setAgencies(ais.filter(a => a.type === 'Conselho'));
+      setAgencies(ais.filter(a => a.jurisdicao === 'Conselho'));
     } else {
       setAgencies(ais);
     }
@@ -222,7 +222,7 @@ export default function Index({ ais }) {
   };
 
   const agencyFilterOptions = createFilterOptions({
-    stringify: (option: AgencyOptionType) => option.aid + option.name,
+    stringify: (option: AgencyOptionType) => option.id_orgao + option.nome,
   });
 
   const firstRequest = async () => {
@@ -300,7 +300,7 @@ export default function Index({ ais }) {
           ? r.searchParams.get(paramKey).split(',')
           : [];
         const orgaosSelecionados = orgaos.map(o => {
-          return ais.find(a => a.aid === o);
+          return ais.find(a => a.id_orgao === o);
         });
         setSelectedAgencies(orgaosSelecionados);
         return orgaosSelecionados;
@@ -323,7 +323,7 @@ export default function Index({ ais }) {
     const params = url.searchParams;
     params.set('anos', selectedYears != null ? selectedYears.toString() : '');
     params.set('meses', selectedMonths.map(m => String(m.value)).join(','));
-    params.set('orgaos', selectedAgencies.map(a => a.aid).join(','));
+    params.set('orgaos', selectedAgencies.map(a => a.id_orgao).join(','));
     params.set(
       'categorias',
       category
@@ -335,8 +335,8 @@ export default function Index({ ais }) {
   }, [selectedYears, selectedMonths, selectedAgencies, category]);
 
   interface AgencyOptionType {
-    aid: string;
-    name: string;
+    id_orgao: string;
+    nome: string;
   }
 
   return (
@@ -449,7 +449,7 @@ export default function Index({ ais }) {
                 id="autocomplete-orgaos"
                 options={agencies}
                 disableCloseOnSelect
-                getOptionLabel={option => option.aid}
+                getOptionLabel={option => option.id_orgao}
                 value={selectedAgencies}
                 onChange={(event, newValue) => {
                   if (selectedAgencies.length < 3) {
@@ -460,7 +460,7 @@ export default function Index({ ais }) {
                   }
                 }}
                 isOptionEqualToValue={(option, value) =>
-                  option.aid === value.aid
+                  option.id_orgao === value.id_orgao
                 }
                 renderOption={(props, option, { selected }) => (
                   <li {...props}>
@@ -470,7 +470,7 @@ export default function Index({ ais }) {
                       style={{ marginRight: 8 }}
                       checked={selected}
                     />
-                    {option.name}
+                    {option.nome}
                   </li>
                 )}
                 renderInput={params => <TextField {...params} label="Órgãos" />}
@@ -647,7 +647,9 @@ export default function Index({ ais }) {
 export async function getServerSideProps() {
   try {
     const res = await api.default.get('/orgaos');
-    const agencies = res.data.filter(ag => ag.collecting == null);
+    const agencies = res.data.filter(
+      ag => ag.collecting == null || ag.collecting[0].collecting == true,
+    );
     return {
       props: {
         ais: agencies,

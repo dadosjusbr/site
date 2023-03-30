@@ -77,7 +77,7 @@ export default function OmaPage({
       // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
       setLoading(true);
       const { data } = await api.ui.get(
-        `/v1/orgao/salario/${agency}/${year}/${month}`,
+        `/v2/orgao/salario/${agency}/${year}/${month}`,
       );
       // after get the data from api the state is updated with the chart data
       setChartData(data);
@@ -180,10 +180,9 @@ export default function OmaPage({
                     alignItems: 'center',
                   }}
                 >
-                  <div>
-                    <CircularProgress color="info" />
-                  </div>
-                  <p>Não há dados para esse mês</p>
+                  <Typography variant="h6">
+                    Não há dados para esse mês
+                  </Typography>
                 </Box>
               ) : (
                 oma.crawlingTime && (
@@ -218,7 +217,7 @@ export default function OmaPage({
                 </Box>
               );
             }
-            if (!chartData.ProcInfo) {
+            if (!chartData.proc_info) {
               return (
                 <OMASummary
                   agency={agency}
@@ -260,17 +259,28 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
+  if (month > 12 || month < 1) {
+    return {
+      redirect: {
+        destination: '/404',
+      },
+      props: {},
+    };
+  }
+
   let mi = [];
-  const { data: d3 } = await api.default.get(
-    `/dados/${agency}/${year}/${month}`,
-  );
-  if (d3) {
-    mi = d3.at(0);
+  try {
+    const { data: d3 } = await api.default.get(
+      `/dados/${agency}/${year}/${month}`,
+    );
+    mi = d3;
+  } catch (err) {
+    mi = [];
   }
 
   try {
     const { data: d2 } = await api.ui.get(
-      `/v1/orgao/resumo/${agency}/${year}/${month}`,
+      `/v2/orgao/resumo/${agency}/${year}/${month}`,
     );
     return {
       props: {
@@ -278,16 +288,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
         year,
         month,
         mi,
-        previousButtonActive: d2.HasPrevious,
-        nextButtonActive: d2.HasNext,
+        previousButtonActive: d2.tem_anterior,
+        nextButtonActive: d2.tem_proximo,
         oma: {
-          fullName: d2.FullName,
-          totalMembers: d2.TotalMembers,
-          maxWage: d2.MaxWage,
-          totalWage: d2.TotalWage,
-          maxPerk: d2.MaxPerk,
-          totalPerks: d2.TotalPerks,
-          crawlingTime: d2.CrawlingTime && d2.CrawlingTime.seconds,
+          fullName: d2.orgao,
+          totalMembers: d2.total_membros,
+          maxWage: d2.max_remuneracao_base,
+          totalWage: d2.total_remuneracao,
+          maxPerk: d2.max_outras_remuneracoes,
+          totalPerks: d2.outras_remuneracoes,
+          crawlingTime: d2.timestamp && d2.timestamp.seconds,
         },
       },
     };

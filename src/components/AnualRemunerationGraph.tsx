@@ -13,6 +13,9 @@ import {
   useMediaQuery,
   IconButton,
   Alert,
+  Modal,
+  Fade,
+  Backdrop,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -51,6 +54,21 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+  const style = {
+    position: 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 400,
+    bgcolor: '#3e5363',
+    border: '1px solid white',
+    borderRadius: 2,
+    boxShadow: 24,
+    p: 4,
+  };
 
   const calculateValue = (value: number, decimal_places = 1): string => {
     if (value.toFixed(0).toString().length > 9) {
@@ -85,6 +103,29 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
       return yearList().filter(
         returnedYear => !yearsWithData.includes(returnedYear),
       );
+    }
+    return [];
+  }, [data]);
+
+  const monthsWithoutData = useMemo(() => {
+    let a = 0;
+    if (data) {
+      data
+        .map(d => {
+          if (d.ano === getCurrentYear()) {
+            if (
+              new Date() < new Date(getCurrentYear(), new Date().getMonth(), 17)
+            ) {
+              return new Date().getMonth() - (d.meses_com_dados + 1);
+            }
+            return new Date().getMonth() - d.meses_com_dados;
+          }
+          return 12 - d.meses_com_dados;
+        })
+        .forEach(d => {
+          a += d;
+        });
+      return a;
     }
     return [];
   }, [data]);
@@ -154,6 +195,56 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     }
     return 10000;
   }, [data]);
+
+  function TransitionsModal({ children, agencyData }) {
+    return (
+      <div>
+        {children}
+        <Modal
+          aria-labelledby="transition-modal-title"
+          aria-describedby="transition-modal-description"
+          open={open}
+          onClose={handleClose}
+          closeAfterTransition
+          BackdropComponent={Backdrop}
+          BackdropProps={{
+            timeout: 800,
+          }}
+        >
+          <Fade in={open}>
+            <Box sx={style}>
+              <Typography
+                id="transition-modal-title"
+                variant="h6"
+                component="h2"
+              >
+                Ajude na inclusão de dados do {agencyData?.nome}
+              </Typography>
+              <Typography
+                id="transition-modal-description"
+                sx={{ mt: 2, textAlign: 'justify' }}
+              >
+                Este órgão não conta com todos os dados de remunerações. Você
+                pode ajudar o DadosJusBr fazendo um requerimento na ouvidoria
+                deste órgão solicitando a publicação recorrente de todos gastos.
+              </Typography>
+              <Box display="flex" justifyContent="center" mt={2}>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  href={agencyData?.ouvidoria}
+                  target="_blank"
+                  endIcon={<ArrowForwardIosIcon />}
+                >
+                  Ir para a ouvidoria
+                </Button>
+              </Box>
+            </Box>
+          </Fade>
+        </Modal>
+      </div>
+    );
+  }
 
   return (
     <>
@@ -342,17 +433,54 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             <Box my={4} pt={2} padding={4}>
               {!dataLoading && noData().find(d => d !== 0) ? (
                 <Box display="flex" justifyContent="center">
-                  <Alert
-                    severity="warning"
-                    variant="outlined"
-                    sx={{
-                      alignItems: 'center',
-                      width: 'fit-content',
-                    }}
-                  >
-                    Este órgão não publicou dados de {yearsWithoutData.length}{' '}
-                    {yearsWithoutData.length > 1 ? 'anos.' : 'ano.'}
-                  </Alert>
+                  <TransitionsModal agencyData={agency}>
+                    <Alert
+                      severity="warning"
+                      variant="outlined"
+                      sx={{
+                        alignItems: 'center',
+                        width: 'fit-content',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => handleOpen()}
+                    >
+                      Este órgão não publicou dados de {yearsWithoutData.length}{' '}
+                      {yearsWithoutData.length > 1 ? 'anos' : 'ano'}
+                      {monthsWithoutData > 0
+                        ? ` e ${monthsWithoutData}`
+                        : '.'}{' '}
+                      {monthsWithoutData > 1
+                        ? 'meses.'
+                        : monthsWithoutData === 1
+                        ? 'mês.'
+                        : ''}
+                    </Alert>
+                  </TransitionsModal>
+                </Box>
+              ) : null}
+              {!dataLoading &&
+              monthsWithoutData > 0 &&
+              !noData().find(d => d !== 0) ? (
+                <Box display="flex" justifyContent="center">
+                  <TransitionsModal agencyData={agency}>
+                    <Alert
+                      severity="warning"
+                      variant="outlined"
+                      sx={{
+                        alignItems: 'center',
+                        width: 'fit-content',
+                        cursor: 'pointer',
+                      }}
+                      onClick={() => handleOpen()}
+                    >
+                      Este órgão não publicou dados de {monthsWithoutData}{' '}
+                      {monthsWithoutData > 1
+                        ? 'meses.'
+                        : monthsWithoutData === 1
+                        ? 'mês.'
+                        : ''}
+                    </Alert>
+                  </TransitionsModal>
                 </Box>
               ) : null}
               <Typography mt={2} variant="h5" textAlign="center">

@@ -3,7 +3,7 @@ import axios from 'axios';
 
 const api = {
   default: axios.create({
-    baseURL: process.env.DEFAULT_API_BASE_URL,
+    baseURL: process.env.DEFAULT_API_BASE_URL_V2,
   }),
   ui: axios.create({
     baseURL: process.env.API_BASE_URL,
