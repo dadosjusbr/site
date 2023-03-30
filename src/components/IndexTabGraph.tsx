@@ -2,106 +2,21 @@ import { useRef, useEffect } from 'react';
 import * as Plot from '@observablehq/plot';
 import styled from 'styled-components';
 
-export default function IndexTabGraph() {
+export default function IndexTabGraph({ plotData }) {
   const ref = useRef(null);
-  const data = [
-    {
-      nome: 'TJSC',
-      transparencia: 0.6,
-      completude: 0.59,
-      facilidade: 0.61,
-    },
-    {
-      nome: 'TJSP',
-      transparencia: 0.3,
-      completude: 0.2,
-      facilidade: 0.4,
-    },
-    {
-      nome: 'TJMG',
-      transparencia: 0.8,
-      completude: 0.7,
-      facilidade: 0.9,
-    },
-    {
-      nome: 'TJRS',
-      transparencia: 0.1,
-      completude: 0,
-      facilidade: 0.2,
-    },
-    {
-      nome: 'TJPR',
-      transparencia: 0.7,
-      completude: 0.7,
-      facilidade: 0.75,
-    },
-    {
-      nome: 'TJMT',
-      transparencia: 0.5,
-      completude: 0.5,
-      facilidade: 0.6,
-    },
-    {
-      nome: 'TJGO',
-      transparencia: 0.4,
-      completude: 0.4,
-      facilidade: 0.5,
-    },
-    {
-      nome: 'TJBA',
-      transparencia: 0.2,
-      completude: 0.1,
-      facilidade: 0.3,
-    },
-    {
-      nome: 'TJPE',
-      transparencia: 0.9,
-      completude: 0.8,
-      facilidade: 0.95,
-    },
-    {
-      nome: 'TJCE',
-      transparencia: 0.3,
-      completude: 0.2,
-      facilidade: 0.4,
-    },
-    {
-      nome: 'TJRN',
-      transparencia: 0.6,
-      completude: 0.5,
-      facilidade: 0.7,
-    },
-    {
-      nome: 'TJMA',
-      transparencia: 0.8,
-      completude: 0.7,
-      facilidade: 0.9,
-    },
-    {
-      nome: 'TJAL',
-      transparencia: 0.1,
-      completude: 0,
-      facilidade: 0.2,
-    },
-    {
-      nome: 'TJPI',
-      transparencia: 0.7,
-      completude: 0.6,
-      facilidade: 0.75,
-    },
-    {
-      nome: 'TJDFT',
-      transparente: 0.5,
-      completude: 0.5,
-      facilidade: 0.6,
-    },
-  ];
 
   useEffect(() => {
+    const data = plotData.map((item: any) => ({
+      nome: item.id_orgao.toUpperCase(),
+      facilidade: item.agregado.indice_facilidade,
+      completude: item.agregado.indice_completude,
+      transparencia: item.agregado.indice_transparencia,
+    }));
+
     const barChart = Plot.plot({
       grid: true,
       width: 1000,
-      height: 600,
+      height: 800,
       margin: 55,
       y: {
         label: '',
@@ -148,7 +63,7 @@ export default function IndexTabGraph() {
         Plot.dot(data, {
           x: 'transparencia',
           y: 'nome',
-          r: 9,
+          r: 10,
           fill: '#3edbb1',
           opacity: 0.65,
         }),
