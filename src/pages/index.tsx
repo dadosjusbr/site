@@ -84,10 +84,11 @@ export default function Index({
     return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
+  const [plotData, setPlotData] = useState<any>({});
   // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
   const [year, setYear] = useState(getCurrentYear());
-  const [plotData, setPlotData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [plotLoading, setPlotLoading] = useState(true);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -101,29 +102,57 @@ export default function Index({
     event: React.SyntheticEvent,
     newValue: number,
   ) => {
+    const agencyIndexes = [
+      'estadual',
+      'ministerios',
+      'trabalho',
+      'militar',
+      'federal',
+      'eleitoral',
+      'superior',
+    ];
+
+    if (
+      !Object.prototype.hasOwnProperty.call(plotData, agencyIndexes[newValue])
+    ) {
+      const agencyTypes = [
+        'justica-estadual',
+        'ministerios-publicos',
+        'justica-do-trabalho',
+        'justica-militar',
+        'justica-federal',
+        'justica-eleitoral',
+        'justica-superior',
+      ];
+
+      try {
+        setPlotLoading(true);
+        const { data } = await api.default.get(
+          `indice/grupo/${agencyTypes[newValue]}?agregado=true`,
+        );
+
+        setPlotData({
+          ...plotData,
+          [agencyIndexes[newValue]]: data,
+        });
+        setPlotLoading(false);
+      } catch (error) {
+        setPlotData({ error });
+      }
+    }
+
     setValue(newValue);
   };
   async function fetchGeneralChartData() {
     try {
       const { data } = await api.ui.get(`/v2/geral/remuneracao/${year}`);
-      const estadual = await api.default.get(
-        `indice/grupo/justica-estadual?agregado=true`,
+      const tabGraph = await api.default.get(
+        'indice/grupo/justica-estadual?agregado=true',
       );
-      const ministerios = await api.default.get(
-        `indice/grupo/ministerios-publicos?agregado=true`,
-      );
-      const trabalho = await api.default.get(
-        `indice/grupo/justica-do-trabalho?agregado=true`,
-      );
-      const militar = await api.default.get(
-        `indice/grupo/justica-militar?agregado=true`,
-      );
-      const federal = await api.default.get(
-        `indice/grupo/justica-federal?agregado=true`,
-      );
-      const superior = await api.default.get(
-        `indice/grupo/justica-superior?agregado=true`,
-      );
+
+      setPlotData({
+        estadual: tabGraph.data,
+      });
 
       setCompleteChartData(
         data.map(d => ({
@@ -133,21 +162,14 @@ export default function Index({
           mes: d.mes,
         })),
       );
-      setPlotData([
-        estadual.data,
-        ministerios.data,
-        trabalho.data,
-        militar.data,
-        federal.data,
-        superior.data,
-      ]);
     } catch (error) {
       setCompleteChartData([]);
     }
     setLoading(false);
+    setPlotLoading(false);
   }
 
-  const collecting = ais.filter(ag => ag.collecting === undefined);
+  const collecting = ais.filter(ag => ag.coletando === undefined);
 
   return (
     <Page>
@@ -264,19 +286,20 @@ export default function Index({
                           variant="scrollable"
                           scrollButtons
                           allowScrollButtonsMobile
-                          aria-label="Gráfico do índice de transparêncai"
+                          aria-label="Gráfico do índice de transparência"
                         >
                           <Tab label="Justiça estadual" {...a11yProps(0)} />
                           <Tab label="Ministérios públicos" {...a11yProps(1)} />
                           <Tab label="Justiça do trabalho" {...a11yProps(2)} />
                           <Tab label="Justiça militar" {...a11yProps(3)} />
                           <Tab label="Justiça federal" {...a11yProps(4)} />
-                          <Tab label="Justiça Superior" {...a11yProps(5)} />
+                          <Tab label="Justiça eleitoral" {...a11yProps(5)} />
+                          <Tab label="Justiça Superior" {...a11yProps(6)} />
                         </Tabs>
                       </Box>
                     </Grid>
                   </Grid>
-                  {loading ? (
+                  {plotLoading ? (
                     <Grid container justifyContent="center">
                       <Grid item>
                         <CircularProgress />
@@ -286,27 +309,31 @@ export default function Index({
                     <>
                       <TabPanel value={value} index={0}>
                         <IndexChartLegend />
-                        <IndexTabGraph plotData={plotData?.at(0)} />
+                        <IndexTabGraph plotData={plotData.estadual} />
                       </TabPanel>
                       <TabPanel value={value} index={1}>
                         <IndexChartLegend />
-                        <IndexTabGraph plotData={plotData?.at(1)} />
+                        <IndexTabGraph plotData={plotData.ministerios} />
                       </TabPanel>
                       <TabPanel value={value} index={2}>
                         <IndexChartLegend />
-                        <IndexTabGraph plotData={plotData?.at(2)} />
+                        <IndexTabGraph plotData={plotData.trabalho} />
                       </TabPanel>
                       <TabPanel value={value} index={3}>
                         <IndexChartLegend />
-                        <IndexTabGraph plotData={plotData?.at(3)} />
+                        <IndexTabGraph plotData={plotData.militar} />
                       </TabPanel>
                       <TabPanel value={value} index={4}>
                         <IndexChartLegend />
-                        <IndexTabGraph plotData={plotData?.at(4)} />
+                        <IndexTabGraph plotData={plotData.federal} />
                       </TabPanel>
                       <TabPanel value={value} index={5}>
                         <IndexChartLegend />
-                        <IndexTabGraph plotData={plotData?.at(5)} />
+                        <IndexTabGraph plotData={plotData.eleitoral} />
+                      </TabPanel>
+                      <TabPanel value={value} index={6}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.superior} />
                       </TabPanel>
                     </>
                   )}
