@@ -78,7 +78,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     <Container fixed>
       <Box>
         <Typography variant="h2" textAlign="center">
-          {title} ({formatAgency(id.toLocaleUpperCase('pt'), title)})
+          {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
         </Typography>
         {agency && agency.coletando && !data ? (
           <></>
