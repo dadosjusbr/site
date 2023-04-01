@@ -84,7 +84,7 @@ export default function Index({
     return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
-  const [plotData, setPlotData] = useState<any>({});
+  const [plotData, setPlotData] = useState<any>([]);
   // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
@@ -110,6 +110,7 @@ export default function Index({
       'federal',
       'eleitoral',
       'superior',
+      'conselhos',
     ];
 
     if (
@@ -123,6 +124,7 @@ export default function Index({
         'justica-federal',
         'justica-eleitoral',
         'justica-superior',
+        'conselhos-de-justica',
       ];
 
       try {
@@ -137,7 +139,7 @@ export default function Index({
         });
         setPlotLoading(false);
       } catch (error) {
-        setPlotData({ error });
+        setPlotData([error]);
       }
     }
 
@@ -295,6 +297,7 @@ export default function Index({
                           <Tab label="Justiça federal" {...a11yProps(4)} />
                           <Tab label="Justiça eleitoral" {...a11yProps(5)} />
                           <Tab label="Justiça Superior" {...a11yProps(6)} />
+                          <Tab label="Conselhos de justiça" {...a11yProps(7)} />
                         </Tabs>
                       </Box>
                     </Grid>
@@ -334,6 +337,10 @@ export default function Index({
                       <TabPanel value={value} index={6}>
                         <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.superior} />
+                      </TabPanel>
+                      <TabPanel value={value} index={7}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.conselhos} />
                       </TabPanel>
                     </>
                   )}
