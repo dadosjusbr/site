@@ -18,7 +18,7 @@ export default function IndexTabGraph({ plotData }) {
     .sort((a, b) => b.transparencia - a.transparencia);
 
   useEffect(() => {
-    const barChart = Plot.plot({
+    const linePlot = Plot.plot({
       grid: true,
       width: 1000,
       height: !isMobile ? 800 : 1300,
@@ -77,14 +77,14 @@ export default function IndexTabGraph({ plotData }) {
       ],
     });
 
-    ref.current.append(barChart);
+    ref.current.append(linePlot);
 
-    return () => barChart.remove();
+    return () => linePlot.remove();
   }, []);
 
   return (
     <Box display="flex" alignItems="center">
-      <Graph ref={ref} />{' '}
+      <Graph ref={ref} />
     </Box>
   );
 }
