@@ -147,10 +147,10 @@ export default function Index({
   };
   async function fetchGeneralChartData() {
     try {
-      const { data } = await api.ui.get(`/v2/geral/remuneracao/${year}`);
-      const tabGraph = await api.default.get(
-        'indice/grupo/justica-estadual?agregado=true',
-      );
+      const [{ data }, tabGraph] = await Promise.all([
+        api.ui.get(`/v2/geral/remuneracao/${year}`),
+        api.default.get('indice/grupo/justica-estadual?agregado=true'),
+      ]);
 
       setPlotData({
         estadual: tabGraph.data,
