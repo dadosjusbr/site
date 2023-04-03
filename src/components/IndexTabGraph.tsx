@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import * as Plot from '@observablehq/plot';
 import styled from 'styled-components';
 import { Box, useMediaQuery } from '@mui/material';
@@ -8,14 +8,12 @@ export default function IndexTabGraph({ plotData }) {
   const ref = useRef(null);
   const isMobile = useMediaQuery('(max-width: 900px)');
 
-  const data = plotData
-    .map((item: any) => ({
-      nome: formatAgency(item.id_orgao).toUpperCase(),
-      facilidade: item.agregado.indice_facilidade,
-      completude: item.agregado.indice_completude,
-      transparencia: item.agregado.indice_transparencia,
-    }))
-    .sort((a, b) => b.transparencia - a.transparencia);
+  const data = plotData.map((item: any) => ({
+    nome: formatAgency(item.id_orgao).toUpperCase(),
+    facilidade: item.agregado.indice_facilidade,
+    completude: item.agregado.indice_completude,
+    transparencia: item.agregado.indice_transparencia,
+  }));
 
   useEffect(() => {
     const linePlot = Plot.plot({
@@ -45,6 +43,7 @@ export default function IndexTabGraph({ plotData }) {
           y: 'nome',
         }),
         Plot.dot(data, {
+          title: d => `${d.completude.toFixed(2)}`,
           x: 'completude',
           y: 'nome',
           r: !isMobile ? 6 : 10,
@@ -53,6 +52,7 @@ export default function IndexTabGraph({ plotData }) {
           strokeWidth: 1,
         }),
         Plot.dot(data, {
+          title: d => `${d.facilidade.toFixed(2)}`,
           x: 'facilidade',
           y: 'nome',
           r: !isMobile ? 6 : 10,
@@ -67,6 +67,7 @@ export default function IndexTabGraph({ plotData }) {
           fill: 'black',
         }),
         Plot.dot(data, {
+          title: d => `${d.transparencia.toFixed(2)}`,
           x: 'transparencia',
           y: 'nome',
           r: !isMobile ? 10 : 16,
