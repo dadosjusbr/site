@@ -8,7 +8,7 @@ export default function IndexTabGraph({ plotData }) {
   const ref = useRef(null);
   const isMobile = useMediaQuery('(max-width: 900px)');
 
-  const data = plotData.map((item: any) => ({
+  const data = plotData?.map((item: any) => ({
     nome: formatAgency(item.id_orgao).toUpperCase(),
     facilidade: item.agregado.indice_facilidade,
     completude: item.agregado.indice_completude,

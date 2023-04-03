@@ -393,10 +393,6 @@ export default function Index({
   );
 }
 export const getServerSideProps: GetServerSideProps = async context => {
-  context.res.setHeader(
-    'Cache-Control',
-    'public, s-maxage=1296000, stale-while-revalidate=2160000',
-  );
   try {
     const { data } = await api.ui.get('/v2/geral/resumo');
     const res = await api.default.get('/orgaos');
