@@ -1,21 +1,23 @@
 import { useRef, useEffect } from 'react';
 import * as Plot from '@observablehq/plot';
 import styled from 'styled-components';
-import { useMediaQuery } from '@mui/material';
+import { Box, useMediaQuery } from '@mui/material';
 import { formatAgency } from '../functions/format';
 
 export default function IndexTabGraph({ plotData }) {
   const ref = useRef(null);
   const isMobile = useMediaQuery('(max-width: 900px)');
 
-  useEffect(() => {
-    const data = plotData.map((item: any) => ({
+  const data = plotData
+    .map((item: any) => ({
       nome: formatAgency(item.id_orgao).toUpperCase(),
       facilidade: item.agregado.indice_facilidade,
       completude: item.agregado.indice_completude,
       transparencia: item.agregado.indice_transparencia,
-    }));
+    }))
+    .sort((a, b) => b.transparencia - a.transparencia);
 
+  useEffect(() => {
     const barChart = Plot.plot({
       grid: true,
       width: 1000,
@@ -70,6 +72,7 @@ export default function IndexTabGraph({ plotData }) {
           r: !isMobile ? 10 : 16,
           fill: '#3edbb1',
           opacity: 0.65,
+          sort: { y: 'x', reverse: true },
         }),
       ],
     });
@@ -79,10 +82,13 @@ export default function IndexTabGraph({ plotData }) {
     return () => barChart.remove();
   }, []);
 
-  return <Div ref={ref} />;
+  return (
+    <Box display="flex" alignItems="center">
+      <Graph ref={ref} />{' '}
+    </Box>
+  );
 }
-
-const Div = styled.div`
+const Graph = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
