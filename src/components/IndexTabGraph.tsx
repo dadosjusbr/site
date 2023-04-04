@@ -43,7 +43,7 @@ export default function IndexTabGraph({ plotData }) {
           y: 'nome',
         }),
         Plot.dot(data, {
-          title: d => `${d.completude.toFixed(2)}`,
+          title: d => `${d.completude.toFixed(2)}`.replace('.', ','),
           x: 'completude',
           y: 'nome',
           r: !isMobile ? 6 : 10,
@@ -52,7 +52,7 @@ export default function IndexTabGraph({ plotData }) {
           strokeWidth: 1,
         }),
         Plot.dot(data, {
-          title: d => `${d.facilidade.toFixed(2)}`,
+          title: d => `${d.facilidade.toFixed(2)}`.replace('.', ','),
           x: 'facilidade',
           y: 'nome',
           r: !isMobile ? 6 : 10,
@@ -67,7 +67,7 @@ export default function IndexTabGraph({ plotData }) {
           fill: 'black',
         }),
         Plot.dot(data, {
-          title: d => `${d.transparencia.toFixed(2)}`,
+          title: d => `${d.transparencia.toFixed(2)}`.replace('.', ','),
           x: 'transparencia',
           y: 'nome',
           r: !isMobile ? 10 : 16,
