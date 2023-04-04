@@ -12,10 +12,6 @@ import {
   Tooltip,
   useMediaQuery,
   IconButton,
-  Alert,
-  Modal,
-  Fade,
-  Backdrop,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -26,6 +22,7 @@ import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
 import CrawlingDateTable from './CrawlingDateTable';
 import NotCollecting from './NotCollecting';
+import AlertModal from './AlertModal';
 import { getCurrentYear } from '../functions/currentYear';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
@@ -49,7 +46,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   dataLoading = true,
   billion = false,
 }) => {
-  // this constant is used as an alx value to determine the max graph height
   const matches = useMediaQuery('(max-width:500px)');
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
@@ -57,18 +53,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const style = {
-    position: 'absolute',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    width: 400,
-    bgcolor: '#3e5363',
-    border: '1px solid white',
-    borderRadius: 2,
-    boxShadow: 24,
-    p: 4,
-  };
 
   const calculateValue = (value: number, decimal_places = 1): string => {
     if (value.toFixed(0).toString().length > 9) {
@@ -127,7 +111,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         });
       return a;
     }
-    return [];
+    return a;
   }, [data]);
 
   const noData = () => {
@@ -179,7 +163,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
 
     return dataArray;
   };
-
+  // this constant is used as an alx value to determine the max graph height
   const MaxMonthPlaceholder = useMemo(() => {
     if (data) {
       const max = data
@@ -196,55 +180,27 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return 10000;
   }, [data]);
 
-  function TransitionsModal({ children, agencyData }) {
-    return (
-      <div>
-        {children}
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 800,
-          }}
-        >
-          <Fade in={open}>
-            <Box sx={style}>
-              <Typography
-                id="transition-modal-title"
-                variant="h6"
-                component="h2"
-              >
-                Ajude na inclusão de dados do {agencyData?.nome}
-              </Typography>
-              <Typography
-                id="transition-modal-description"
-                sx={{ mt: 2, textAlign: 'justify' }}
-              >
-                Este órgão não conta com todos os dados de remunerações. Você
-                pode ajudar o DadosJusBr fazendo um requerimento na ouvidoria
-                deste órgão solicitando a publicação recorrente de todos gastos.
-              </Typography>
-              <Box display="flex" justifyContent="center" mt={2}>
-                <Button
-                  variant="outlined"
-                  color="info"
-                  href={agencyData?.ouvidoria}
-                  target="_blank"
-                  endIcon={<ArrowForwardIosIcon />}
-                >
-                  Ir para a ouvidoria
-                </Button>
-              </Box>
-            </Box>
-          </Fade>
-        </Modal>
-      </div>
-    );
-  }
+  const warningMessage = () => {
+    if (noData().find(d => d !== 0)) {
+      return `Este órgão não publicou dados de ${yearsWithoutData.length}
+      ${yearsWithoutData.length > 1 ? 'anos' : 'ano'}${
+        monthsWithoutData > 0 ? ` e ${monthsWithoutData}` : '.'
+      }
+      ${
+        monthsWithoutData > 1 ? 'meses.' : monthsWithoutData === 1 ? 'mês.' : ''
+      }`;
+    }
+    if (monthsWithoutData > 0 && !noData().find(d => d !== 0)) {
+      return `Este órgão não publicou dados de ${monthsWithoutData}
+        ${
+          monthsWithoutData > 1
+            ? 'meses.'
+            : monthsWithoutData === 1
+            ? 'mês.'
+            : ''
+        }`;
+    }
+  };
 
   return (
     <>
@@ -431,56 +387,17 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
           </Paper>
           <Paper elevation={0}>
             <Box my={4} pt={2} padding={4}>
-              {!dataLoading && noData().find(d => d !== 0) ? (
-                <Box display="flex" justifyContent="center">
-                  <TransitionsModal agencyData={agency}>
-                    <Alert
-                      severity="warning"
-                      variant="outlined"
-                      sx={{
-                        alignItems: 'center',
-                        width: 'fit-content',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => handleOpen()}
-                    >
-                      Este órgão não publicou dados de {yearsWithoutData.length}{' '}
-                      {yearsWithoutData.length > 1 ? 'anos' : 'ano'}
-                      {monthsWithoutData > 0
-                        ? ` e ${monthsWithoutData}`
-                        : '.'}{' '}
-                      {monthsWithoutData > 1
-                        ? 'meses.'
-                        : monthsWithoutData === 1
-                        ? 'mês.'
-                        : ''}
-                    </Alert>
-                  </TransitionsModal>
-                </Box>
-              ) : null}
               {!dataLoading &&
-              monthsWithoutData > 0 &&
-              !noData().find(d => d !== 0) ? (
+              (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
                 <Box display="flex" justifyContent="center">
-                  <TransitionsModal agencyData={agency}>
-                    <Alert
-                      severity="warning"
-                      variant="outlined"
-                      sx={{
-                        alignItems: 'center',
-                        width: 'fit-content',
-                        cursor: 'pointer',
-                      }}
-                      onClick={() => handleOpen()}
-                    >
-                      Este órgão não publicou dados de {monthsWithoutData}{' '}
-                      {monthsWithoutData > 1
-                        ? 'meses.'
-                        : monthsWithoutData === 1
-                        ? 'mês.'
-                        : ''}
-                    </Alert>
-                  </TransitionsModal>
+                  <AlertModal
+                    agencyData={agency}
+                    openParam={open}
+                    handleClose={handleClose}
+                    handleOpen={handleOpen}
+                  >
+                    {warningMessage()}
+                  </AlertModal>
                 </Box>
               ) : null}
               <Typography mt={2} variant="h5" textAlign="center">
