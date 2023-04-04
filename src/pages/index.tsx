@@ -153,6 +153,7 @@ export default function Index({
       ]);
 
       setPlotData({
+        ...plotData,
         estadual: tabGraph.data,
       });
 
