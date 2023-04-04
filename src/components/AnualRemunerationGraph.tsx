@@ -127,7 +127,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         });
       return a;
     }
-    return [];
+    return a;
   }, [data]);
 
   const noData = () => {

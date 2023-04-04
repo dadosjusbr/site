@@ -1,4 +1,4 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import * as Plot from '@observablehq/plot';
 import styled from 'styled-components';
 import { Box, useMediaQuery } from '@mui/material';
