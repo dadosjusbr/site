@@ -15,6 +15,7 @@ import {
   Tabs,
   Tab,
   Button,
+  CircularProgress,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
@@ -33,6 +34,9 @@ const RemunerationBarGraph = dynamic(
   () => import('../components/RemunerationBarGraph'),
   { loading: () => <p>Carregando...</p> },
 );
+const IndexTabGraph = dynamic(() => import('../components/IndexTabGraph'), {
+  loading: () => <p>Carregando...</p>,
+});
 const Footer = dynamic(() => import('../components/Footer'));
 
 interface TabPanelProps {
@@ -52,11 +56,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
@@ -84,9 +84,11 @@ export default function Index({
     return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
+  const [plotData, setPlotData] = useState<any>([]);
   // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
+  const [plotLoading, setPlotLoading] = useState(true);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -96,12 +98,65 @@ export default function Index({
     fetchGeneralChartData();
   }, [year]);
   const [value, setValue] = React.useState(0);
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+  const handleChange = async (
+    event: React.SyntheticEvent,
+    newValue: number,
+  ) => {
+    const agencyIndexes = [
+      'estadual',
+      'ministerios',
+      'trabalho',
+      'militar',
+      'federal',
+      'eleitoral',
+      'superior',
+      'conselhos',
+    ];
+
+    if (
+      !Object.prototype.hasOwnProperty.call(plotData, agencyIndexes[newValue])
+    ) {
+      const agencyTypes = [
+        'justica-estadual',
+        'ministerios-publicos',
+        'justica-do-trabalho',
+        'justica-militar',
+        'justica-federal',
+        'justica-eleitoral',
+        'justica-superior',
+        'conselhos-de-justica',
+      ];
+
+      try {
+        setPlotLoading(true);
+        const { data } = await api.default.get(
+          `indice/grupo/${agencyTypes[newValue]}?agregado=true`,
+        );
+
+        setPlotData({
+          ...plotData,
+          [agencyIndexes[newValue]]: data,
+        });
+        setPlotLoading(false);
+      } catch (error) {
+        setPlotData([error]);
+      }
+    }
+
     setValue(newValue);
   };
   async function fetchGeneralChartData() {
     try {
-      const { data } = await api.ui.get(`/v2/geral/remuneracao/${year}`);
+      const [{ data }, tabGraph] = await Promise.all([
+        api.ui.get(`/v2/geral/remuneracao/${year}`),
+        api.default.get('indice/grupo/justica-estadual?agregado=true'),
+      ]);
+
+      setPlotData({
+        ...plotData,
+        estadual: tabGraph.data,
+      });
+
       setCompleteChartData(
         data.map(d => ({
           remuneracao_base: d.remuneracao_base,
@@ -114,9 +169,10 @@ export default function Index({
       setCompleteChartData([]);
     }
     setLoading(false);
+    setPlotLoading(false);
   }
 
-  const collecting = ais.filter(ag => ag.collecting === undefined);
+  const collecting = ais.filter(ag => ag.coletando === undefined);
 
   return (
     <Page>
@@ -233,66 +289,62 @@ export default function Index({
                           variant="scrollable"
                           scrollButtons
                           allowScrollButtonsMobile
-                          aria-label="Gráfico do índice de transparêncai"
+                          aria-label="Gráfico do índice de transparência"
                         >
                           <Tab label="Justiça estadual" {...a11yProps(0)} />
                           <Tab label="Ministérios públicos" {...a11yProps(1)} />
                           <Tab label="Justiça do trabalho" {...a11yProps(2)} />
                           <Tab label="Justiça militar" {...a11yProps(3)} />
                           <Tab label="Justiça federal" {...a11yProps(4)} />
-                          <Tab label="Justiça Superior" {...a11yProps(5)} />
+                          <Tab label="Justiça eleitoral" {...a11yProps(5)} />
+                          <Tab label="Justiça Superior" {...a11yProps(6)} />
+                          <Tab label="Conselhos de justiça" {...a11yProps(7)} />
                         </Tabs>
                       </Box>
                     </Grid>
                   </Grid>
-                  <TabPanel value={value} index={0}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-tj.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={1}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-mp.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={2}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-trt.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={3}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-tjm.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={4}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-trf.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
-                  <TabPanel value={value} index={5}>
-                    <IndexChartLegend />
-                    <img
-                      src="https://raw.githubusercontent.com/dadosjusbr/acompanhamento-dados/main/figure/indice-transparencia-superiores.svg"
-                      alt="Índice de transparência"
-                      width="100%"
-                    />
-                  </TabPanel>
+                  {plotLoading ? (
+                    <Grid container justifyContent="center">
+                      <Grid item>
+                        <CircularProgress />
+                      </Grid>
+                    </Grid>
+                  ) : (
+                    <>
+                      <TabPanel value={value} index={0}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.estadual} />
+                      </TabPanel>
+                      <TabPanel value={value} index={1}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.ministerios} />
+                      </TabPanel>
+                      <TabPanel value={value} index={2}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.trabalho} />
+                      </TabPanel>
+                      <TabPanel value={value} index={3}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.militar} />
+                      </TabPanel>
+                      <TabPanel value={value} index={4}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.federal} />
+                      </TabPanel>
+                      <TabPanel value={value} index={5}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.eleitoral} />
+                      </TabPanel>
+                      <TabPanel value={value} index={6}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.superior} />
+                      </TabPanel>
+                      <TabPanel value={value} index={7}>
+                        <IndexChartLegend />
+                        <IndexTabGraph plotData={plotData.conselhos} />
+                      </TabPanel>
+                    </>
+                  )}
                 </Grid>
               </Grid>
             </Box>
