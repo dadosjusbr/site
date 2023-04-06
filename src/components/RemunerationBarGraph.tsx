@@ -24,6 +24,7 @@ import MONTHS from '../@types/MONTHS';
 import CrawlingDateTable from './CrawlingDateTable';
 import NotCollecting from './NotCollecting';
 import { getCurrentYear } from '../functions/currentYear';
+import AlertModal from './AlertModal';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -48,6 +49,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   billion = false,
   selectedMonth,
 }) => {
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
   // this constant is used as an alx value to determine the max graph height
   const MaxMonthPlaceholder = useMemo(() => {
     if (data) {
@@ -305,19 +309,17 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               data.length > 0 &&
               monthsWithouData.length > 0 ? (
                 <Box display="flex" justifyContent="center">
-                  <Alert
-                    severity="warning"
-                    variant="outlined"
-                    sx={{
-                      alignItems: 'center',
-                      width: 'fit-content',
-                    }}
+                  <AlertModal
+                    agencyData={agency}
+                    openParam={open}
+                    handleClose={handleClose}
+                    handleOpen={handleOpen}
                   >
                     Este órgão não publicou dados de{' '}
                     {`${monthsWithouData.length} ${
                       monthsWithouData.length > 1 ? 'meses.' : 'mês.'
                     }`}{' '}
-                  </Alert>
+                  </AlertModal>
                 </Box>
               ) : null}
               <Typography mt={2} variant="h6" textAlign="center">
