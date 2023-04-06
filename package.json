@@ -16,6 +16,7 @@
     "@mui/material": "^5.5.1",
     "@mui/x-data-grid": "^5.12.3",
     "@newrelic/next": "^0.3.0",
+    "@observablehq/plot": "^0.6.4",
     "apexcharts": "^3.27.1",
     "axios": "^0.21.1",
     "date-fns": "^2.25.0",
