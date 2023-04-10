@@ -140,7 +140,6 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
       </ThemeProvider>
 
       <ShareModal
-        pageTitle={title}
         isOpen={modalIsOpen}
         url={`https://dadosjusbr.org/orgao/${id}`}
         onRequestClose={() => setModalIsOpen(false)}

@@ -913,7 +913,6 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       </ThemeProvider>
       <ShareModal
         url={`https://dadosjusbr.org/orgao/${agency}/${year}/${month}`}
-        pageTitle={agency}
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
       />

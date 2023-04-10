@@ -7,7 +7,7 @@ import {
 } from 'react-share';
 
 import { Box, IconButton, Typography, Modal, Dialog } from '@mui/material';
-import WhatsappOutlinedIcon from '@mui/icons-material/WhatsappOutlined';
+import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
@@ -22,14 +22,12 @@ interface ShareModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
   url?: string;
-  pageTitle: string;
 }
 
 const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onRequestClose,
   url,
-  pageTitle,
 }) => {
   const [quoteOpen, setQuoteOpen] = React.useState(false);
   const year = new Date().getFullYear();
@@ -97,7 +95,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
           </Typography>
           <WhatsappShareButton url={url || window.location.href}>
             <IconButton aria-label="whatsapp" size="large">
-              <WhatsappOutlinedIcon />
+              <WhatsAppIcon />
             </IconButton>
           </WhatsappShareButton>
           <TwitterShareButton url={url || window.location.href}>
