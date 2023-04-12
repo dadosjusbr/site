@@ -127,13 +127,17 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const totalWaste = () => {
-    const a = data.map(
-      d =>
-        (d.remuneracao_base === undefined ? 0 : d.remuneracao_base / 1000000) +
-        (d.outras_remuneracoes === undefined
-          ? 0
-          : d.outras_remuneracoes / 1000000),
-    );
+    const a = data
+      .sort((a, b) => a.ano - b.ano)
+      .map(
+        d =>
+          (d.remuneracao_base === undefined
+            ? 0
+            : d.remuneracao_base / 1000000) +
+          (d.outras_remuneracoes === undefined
+            ? 0
+            : d.outras_remuneracoes / 1000000),
+      );
 
     const dataArray = [];
     for (let i = 2018; i <= getCurrentYear(); i += 1) {
@@ -148,9 +152,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const createDataArray = (tipoRemuneracao: string) => {
-    const incomingData = data.map(d =>
-      d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao],
-    );
+    const incomingData = data
+      .sort((a, b) => a.ano - b.ano)
+      .map(d => (d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao]));
 
     const dataArray = [];
     for (let i = 2018; i <= getCurrentYear(); i += 1) {
