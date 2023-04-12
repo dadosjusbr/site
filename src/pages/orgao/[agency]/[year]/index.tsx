@@ -45,8 +45,6 @@ export default function AgencyPage({
           year={year}
           agency={agency}
           dataLoading={false}
-          nextDateIsNavigable={nextDateIsNavigable}
-          previousDateIsNavigable={previousDateIsNavigable}
           title={fullName}
           navigableMonth={navigableMonth}
           setYear={navigateToGivenYear}

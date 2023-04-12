@@ -33,8 +33,6 @@ export interface AgencyPageWithNavigationProps {
   year: number;
   agency: any;
   title: string;
-  nextDateIsNavigable: boolean;
-  previousDateIsNavigable: boolean;
   setYear: (y: number) => void;
   data: any[];
   dataLoading: boolean;
@@ -241,7 +239,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
       </ThemeProvider>
 
       <ShareModal
-        pageTitle={title}
         isOpen={modalIsOpen}
         url={`https://dadosjusbr.org/orgao/${id}/${year}`}
         onRequestClose={() => setModalIsOpen(false)}

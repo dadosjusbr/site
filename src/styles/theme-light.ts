@@ -1,5 +1,5 @@
 import { createTheme } from '@mui/material/styles';
-import { ptBR } from '@material-ui/core/locale';
+import { ptBR } from '@mui/material/locale';
 
 // Create a theme instance.
 const theme = createTheme(

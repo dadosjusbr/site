@@ -200,6 +200,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             : ''
         }`;
     }
+    return '';
   };
 
   return (
