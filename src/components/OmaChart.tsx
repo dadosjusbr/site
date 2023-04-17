@@ -389,7 +389,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                             maxWage / 1000
                           ).toFixed(2)} mil`}
                           secondary={`Total de salários: R$ ${(
-                            totalWage / 100000
+                            totalWage / 1000000
                           ).toFixed(2)}M`}
                         />
                       </ListItem>
