@@ -294,7 +294,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
           fullName: d2.orgao,
           totalMembers: d2.total_membros,
           maxWage: d2.max_remuneracao_base,
-          totalWage: d2.total_remuneracao,
+          totalWage: d2.remuneracao_base,
           maxPerk: d2.max_outras_remuneracoes,
           totalPerks: d2.outras_remuneracoes,
           crawlingTime: d2.timestamp && d2.timestamp.seconds,
