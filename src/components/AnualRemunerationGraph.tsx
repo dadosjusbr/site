@@ -261,14 +261,11 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 >
                   <Tab value="Média per capita" label="Média per capita" />
                   <Tab value="Média mensal" label="Média mensal" />
-                  <Tab
-                    value="Total de remunerações"
-                    label="Total de remunerações"
-                  />
+                  <Tab value="Total" label="Total" />
                 </Tabs>
               </Box>
               <Typography variant="h5" {...(matches && { variant: 'h6' })}>
-                {value} de membros R${' '}
+                {value} de remunerações de membros R${' '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
