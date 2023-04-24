@@ -12,6 +12,8 @@ import {
   Tooltip,
   useMediaQuery,
   IconButton,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -161,6 +163,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
 
   const createDataArray = (tipoRemuneracao: string) => {
     const incomingData = data
+      .filter(d => d.meses_com_dados === 12)
       .sort((a, b) => a.ano - b.ano)
       .map(d => (d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao]));
 
@@ -215,6 +218,15 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return '';
   };
 
+  const [value, setValue] = useState('Total de remunerações');
+
+  const handleChange = async (
+    event: React.SyntheticEvent,
+    newValue: string,
+  ) => {
+    setValue(newValue);
+  };
+
   return (
     <>
       {agency && agency.coletando && !data ? (
@@ -229,13 +241,34 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               }),
             }}
           >
-            <Box py={4} textAlign="center" padding={4}>
-              <Typography
-                variant="h5"
-                {...(matches && { variant: 'h6' })}
-                textAlign="center"
-              >
-                Total de remunerações de membros R${' '}
+            <Box
+              py={4}
+              textAlign="center"
+              padding={4}
+              alignItems="center"
+              justifyContent="center"
+              display="flex"
+              flexDirection="column"
+            >
+              <Box sx={{ marginBottom: 4 }}>
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  variant="scrollable"
+                  scrollButtons
+                  allowScrollButtonsMobile
+                  aria-label="Gráfico do índice de transparência"
+                >
+                  <Tab value="Média per capita" label="Média per capita" />
+                  <Tab value="Média mensal" label="Média mensal" />
+                  <Tab
+                    value="Total de remunerações"
+                    label="Total de remunerações"
+                  />
+                </Tabs>
+              </Box>
+              <Typography variant="h5" {...(matches && { variant: 'h6' })}>
+                {value} de membros R${' '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
@@ -453,6 +486,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             'transparent',
                             '#97BB2F',
                             '#2FBB96',
+                            '#97BB2F',
+                            '#2FBB96',
                             '#2c3236',
                           ],
                           chart: {
@@ -571,18 +606,44 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               },
                             },
                           },
+                          fill: {
+                            type: 'gradient',
+                            gradient: {
+                              shade: 'light',
+                              type: 'diagonal',
+                              shadeIntensity: 0.25,
+                              gradientToColors: [
+                                '',
+                                '',
+                                '',
+                                '',
+                                'gray',
+                                'gray',
+                              ],
+                              inverseColors: true,
+                              opacityFrom: 0.93,
+                              opacityTo: 0.93,
+                              stops: [0, 100],
+                            },
+                          },
+                          stroke: {
+                            width: 2,
+                            colors: ['gray', '', '', '', 'gray'],
+                          },
                           tooltip: {
                             enabled: true,
                             shared: true,
                             intersect: false,
                             inverseOrder: true,
-                            enabledOnSeries: [0, 1, 2, 3],
+                            enabledOnSeries: [0, 1, 2, 3, 4, 5],
                             marker: {
                               fillColors: [
                                 'transparent',
                                 'transparent',
                                 '#2FBB96',
                                 '#97BB2F',
+                                '#98bb2f7f',
+                                '#2fbb967f',
                                 '#2c3236',
                               ],
                             },
@@ -682,17 +743,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               }
                               return [];
                             })(),
-                            // @ts-expect-error
-                            color: ({ value }) => {
-                              if (
-                                yearsWithParcialData(
-                                  'outras_remuneracoes',
-                                ).includes(value)
-                              ) {
-                                return '#98bb2f7f';
-                              }
-                              return '#97BB2F';
-                            },
                           },
                           {
                             name: 'Salário',
@@ -702,17 +752,20 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               }
                               return [];
                             })(),
-                            // @ts-expect-error
-                            color: ({ value }) => {
-                              if (
-                                yearsWithParcialData(
-                                  'remuneracao_base',
-                                ).includes(value)
-                              ) {
-                                return '#2fbb967f';
-                              }
-                              return '#2FBB96';
-                            },
+                          },
+                          {
+                            name: 'Benefícios',
+                            data: [
+                              0, 40743097.71000004, 103066219.83, 0,
+                              39997226.58000002, 0,
+                            ],
+                          },
+                          {
+                            name: 'Salário',
+                            data: [
+                              0, 187603051.77999935, 249857438.4899977, 0,
+                              294832309.4899964, 0,
+                            ],
                           },
                           {
                             name: 'Sem Dados',
