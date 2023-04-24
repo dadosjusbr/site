@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import {
