@@ -91,6 +91,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return [];
   }, [data]);
 
+  const yearsWithParcialData = (tipoRemuneracao: string) => {
+    const arr = data
+      .filter(d => d.meses_com_dados < 12)
+      .map(d => d[tipoRemuneracao]);
+
+    return arr;
+  };
+
   const monthsWithoutData = useMemo(() => {
     let a = 0;
     if (data) {
@@ -563,13 +571,21 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               },
                             },
                           },
-
                           tooltip: {
                             enabled: true,
                             shared: true,
                             intersect: false,
                             inverseOrder: true,
                             enabledOnSeries: [0, 1, 2, 3],
+                            marker: {
+                              fillColors: [
+                                'transparent',
+                                'transparent',
+                                '#2FBB96',
+                                '#97BB2F',
+                                '#2c3236',
+                              ],
+                            },
                             x: {
                               formatter(val) {
                                 const noDataMonths =
@@ -666,6 +682,17 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               }
                               return [];
                             })(),
+                            // @ts-expect-error
+                            color: ({ value }) => {
+                              if (
+                                yearsWithParcialData(
+                                  'outras_remuneracoes',
+                                ).includes(value)
+                              ) {
+                                return '#98bb2f7f';
+                              }
+                              return '#97BB2F';
+                            },
                           },
                           {
                             name: 'Salário',
@@ -675,6 +702,17 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               }
                               return [];
                             })(),
+                            // @ts-expect-error
+                            color: ({ value }) => {
+                              if (
+                                yearsWithParcialData(
+                                  'remuneracao_base',
+                                ).includes(value)
+                              ) {
+                                return '#2fbb967f';
+                              }
+                              return '#2FBB96';
+                            },
                           },
                           {
                             name: 'Sem Dados',
