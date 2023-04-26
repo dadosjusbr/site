@@ -183,17 +183,18 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         .filter(d => d.meses_com_dados < 12)
         .map(d => (d.ano === undefined ? 0 : d.ano));
 
-      const label = {
-        borderColor: '#f2ce5c',
+      const label: AnnotationLabel = {
+        borderColor: '#f2ca4b',
         text: 'Dados incompletos',
-        orientation: matches ? 'vertical' : 'horizontal',
+        orientation: 'vertical',
         position: 'bottom',
+        textAnchor: matches ? 'middle' : 'end',
         offsetY: -5,
         style: {
-          color: '#fff',
+          color: '#000',
           background: '#f2ce5c',
           fontFamily: 'Roboto Condensed',
-          fontSize: '12px',
+          fontSize: '14px',
         },
       };
 
@@ -201,6 +202,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         return {
           x: d,
           label: label,
+          borderWidth: 0,
         };
       });
     }
