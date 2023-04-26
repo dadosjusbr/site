@@ -193,6 +193,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
           color: '#fff',
           background: '#f2ce5c',
           fontFamily: 'Roboto Condensed',
+          fontSize: '12px',
         },
       };
 
