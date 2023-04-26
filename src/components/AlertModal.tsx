@@ -33,7 +33,7 @@ const AlertModal = ({
     <>
       <Alert
         severity="warning"
-        variant="outlined"
+        variant="filled"
         sx={{
           alignItems: 'center',
           width: 'fit-content',
@@ -49,10 +49,8 @@ const AlertModal = ({
         open={openParam}
         onClose={handleClose}
         closeAfterTransition
-        BackdropComponent={Backdrop}
-        BackdropProps={{
-          timeout: 800,
-        }}
+        slots={{ backdrop: Backdrop }}
+        slotProps={{ backdrop: { timeout: 800 } }}
       >
         <Fade in={openParam}>
           <Box sx={style}>
