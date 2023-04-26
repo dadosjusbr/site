@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import {
@@ -91,8 +91,16 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return [];
   }, [data]);
 
+  const incompleteDataValues = (tipoRemuneracao: string) => {
+    const arr = data
+      .filter(d => d.meses_com_dados < 12)
+      .map(d => d[tipoRemuneracao]);
+
+    return arr;
+  };
+
   const monthsWithoutData = useMemo(() => {
-    let a = 0;
+    let monthsWithoutDataArr = 0;
     if (data) {
       data
         .map(d => {
@@ -107,11 +115,11 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
           return 12 - d.meses_com_dados;
         })
         .forEach(d => {
-          a += d;
+          monthsWithoutDataArr += d;
         });
-      return a;
+      return monthsWithoutDataArr;
     }
-    return a;
+    return monthsWithoutDataArr;
   }, [data]);
 
   const noData = () => {
@@ -127,7 +135,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const totalWaste = () => {
-    const a = data
+    const totalRemunerationArr = data
       .sort((a, b) => a.ano - b.ano)
       .map(
         d =>
@@ -142,7 +150,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     const dataArray = [];
     for (let i = 2018; i <= getCurrentYear(); i += 1) {
       if (yearsWithData.includes(i)) {
-        dataArray.push(a[yearsWithData.indexOf(i)]);
+        dataArray.push(totalRemunerationArr[yearsWithData.indexOf(i)]);
       } else if (!yearsWithData.includes(i)) {
         dataArray.push(0);
       }
@@ -167,6 +175,38 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
 
     return dataArray;
   };
+
+  const graphAnnotations = useMemo(() => {
+    if (data) {
+      const yearsArr = data
+        .sort((a, b) => a.ano - b.ano)
+        .filter(d => d.meses_com_dados < 12)
+        .map(d => (d.ano === undefined ? 0 : d.ano));
+
+      const annotationsLabel: AnnotationLabel = {
+        borderColor: '#f2ca4b',
+        text: 'Dados incompletos',
+        orientation: 'vertical',
+        position: 'bottom',
+        textAnchor: matches ? 'middle' : 'end',
+        offsetY: -5,
+        style: {
+          color: '#000',
+          background: '#f2ce5c',
+          fontFamily: 'Roboto Condensed',
+          fontSize: '12px',
+        },
+      };
+
+      return yearsArr.map(d => ({
+        x: d,
+        label: annotationsLabel,
+        borderWidth: 0,
+      }));
+    }
+    return [];
+  }, [data, matches]);
+
   // this constant is used as an alx value to determine the max graph height
   const MaxMonthPlaceholder = useMemo(() => {
     if (data) {
@@ -221,12 +261,16 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               }),
             }}
           >
-            <Box py={4} textAlign="center" padding={4}>
-              <Typography
-                variant="h5"
-                {...(matches && { variant: 'h6' })}
-                textAlign="center"
-              >
+            <Box
+              py={4}
+              textAlign="center"
+              padding={4}
+              alignItems="center"
+              justifyContent="center"
+              display="flex"
+              flexDirection="column"
+            >
+              <Typography variant="h5" {...(matches && { variant: 'h6' })}>
                 Total de remunerações de membros R${' '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
@@ -563,13 +607,24 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               },
                             },
                           },
-
+                          annotations: {
+                            xaxis: graphAnnotations,
+                          },
                           tooltip: {
                             enabled: true,
                             shared: true,
                             intersect: false,
                             inverseOrder: true,
                             enabledOnSeries: [0, 1, 2, 3],
+                            marker: {
+                              fillColors: [
+                                'transparent',
+                                'transparent',
+                                '#2FBB96',
+                                '#97BB2F',
+                                '#2c3236',
+                              ],
+                            },
                             x: {
                               formatter(val) {
                                 const noDataMonths =
@@ -666,6 +721,13 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               }
                               return [];
                             })(),
+                            // @ts-expect-error this function always returns a string
+                            color: ({ value }) =>
+                              incompleteDataValues(
+                                'outras_remuneracoes',
+                              ).includes(value)
+                                ? '#98bb2f7d'
+                                : '#97BB2F',
                           },
                           {
                             name: 'Salário',
@@ -675,6 +737,13 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               }
                               return [];
                             })(),
+                            // @ts-expect-error this function always returns a string
+                            color: ({ value }) =>
+                              incompleteDataValues(
+                                'outras_remuneracoes',
+                              ).includes(value)
+                                ? '#2fbb967d'
+                                : '#2FBB96',
                           },
                           {
                             name: 'Sem Dados',
