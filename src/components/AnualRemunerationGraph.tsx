@@ -100,7 +100,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const monthsWithoutData = useMemo(() => {
-    let a = 0;
+    let monthsWithoutDataArr = 0;
     if (data) {
       data
         .map(d => {
@@ -115,11 +115,11 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
           return 12 - d.meses_com_dados;
         })
         .forEach(d => {
-          a += d;
+          monthsWithoutDataArr += d;
         });
-      return a;
+      return monthsWithoutDataArr;
     }
-    return a;
+    return monthsWithoutDataArr;
   }, [data]);
 
   const noData = () => {
@@ -135,7 +135,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const totalWaste = () => {
-    const a = data
+    const totalRemunerationArr = data
       .sort((a, b) => a.ano - b.ano)
       .map(
         d =>
@@ -150,7 +150,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     const dataArray = [];
     for (let i = 2018; i <= getCurrentYear(); i += 1) {
       if (yearsWithData.includes(i)) {
-        dataArray.push(a[yearsWithData.indexOf(i)]);
+        dataArray.push(totalRemunerationArr[yearsWithData.indexOf(i)]);
       } else if (!yearsWithData.includes(i)) {
         dataArray.push(0);
       }
@@ -176,14 +176,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return dataArray;
   };
 
-  const graphAnotations = useMemo(() => {
+  const graphAnnotations = useMemo(() => {
     if (data) {
       const yearsArr = data
         .sort((a, b) => a.ano - b.ano)
         .filter(d => d.meses_com_dados < 12)
         .map(d => (d.ano === undefined ? 0 : d.ano));
 
-      const label: AnnotationLabel = {
+      const annotationsLabel: AnnotationLabel = {
         borderColor: '#f2ca4b',
         text: 'Dados incompletos',
         orientation: 'vertical',
@@ -198,13 +198,11 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         },
       };
 
-      return yearsArr.map(d => {
-        return {
-          x: d,
-          label: label,
-          borderWidth: 0,
-        };
-      });
+      return yearsArr.map(d => ({
+        x: d,
+        label: annotationsLabel,
+        borderWidth: 0,
+      }));
     }
     return [];
   }, [data, matches]);
@@ -610,7 +608,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             },
                           },
                           annotations: {
-                            xaxis: graphAnotations,
+                            xaxis: graphAnnotations,
                           },
                           tooltip: {
                             enabled: true,
@@ -723,7 +721,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               }
                               return [];
                             })(),
-                            //@ts-expect-error
+                            // @ts-expect-error this function always returns a string
                             color: ({ value }) =>
                               incompleteDataValues(
                                 'outras_remuneracoes',
@@ -739,7 +737,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               }
                               return [];
                             })(),
-                            //@ts-expect-error
+                            // @ts-expect-error this function always returns a string
                             color: ({ value }) =>
                               incompleteDataValues(
                                 'outras_remuneracoes',
