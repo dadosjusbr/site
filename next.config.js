@@ -6,6 +6,10 @@ const withTM = require('next-transpile-modules')([
 ]);
 require('dotenv');
 module.exports = {
+  compiler: {
+    // Enables the styled-components SWC transform
+    styledComponents: true,
+  },
   // this line is used to allow nextjs to use this esModule in ssr
   // it allows to import the lib from the es6 patter in all components
   // https://github.com/sheshbabu/react-frappe-charts#with-nextjs
