@@ -189,7 +189,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         orientation: 'vertical',
         position: 'bottom',
         textAnchor: matches ? 'middle' : 'end',
-        offsetY: -5,
+        offsetY: -6,
+        offsetX: 6,
         style: {
           color: '#000',
           background: '#f2ce5c',
