@@ -336,7 +336,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               display="flex"
               flexDirection="column"
             >
-              {console.log(data)}
               <Box sx={{ maxWidth: { xs: 320, sm: 720 } }}>
                 <Tabs
                   value={value}
