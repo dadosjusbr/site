@@ -355,12 +355,32 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
-                  const monthlyTotals = data.map(
+                  const yearlyTotals = data.map(
                     d => d.remuneracao_base + d.outras_remuneracoes,
                   );
-                  monthlyTotals.forEach(w => {
-                    total += w;
-                  });
+                  const yearlyTotalsPerMember = data.map(
+                    d =>
+                      d.remuneracao_base_por_membro +
+                      d.outras_remuneracoes_por_membro,
+                  );
+                  const yearlyTotalsPerMonth = data.map(
+                    d =>
+                      d.remuneracao_base_por_mes +
+                      d.outras_remuneracoes_por_mes,
+                  );
+                  if (value === 'Média per capita') {
+                    yearlyTotalsPerMember.forEach(w => {
+                      total += w;
+                    });
+                  } else if (value === 'Média mensal') {
+                    yearlyTotalsPerMonth.forEach(w => {
+                      total += w;
+                    });
+                  } else {
+                    yearlyTotals.forEach(w => {
+                      total += w;
+                    });
+                  }
                   // here we return the final value to millions showing 2 decimal places
                   return calculateValue(total);
                 })()}
@@ -434,10 +454,26 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   R${' '}
                   {(() => {
                     let total = 0;
-                    const monthlyTotals = data.map(d => d.remuneracao_base);
-                    monthlyTotals.forEach(w => {
-                      total += w;
-                    });
+                    const yearlyTotals = data.map(d => d.remuneracao_base);
+                    const yearlyTotalsPerMember = data.map(
+                      d => d.remuneracao_base_por_membro,
+                    );
+                    const yearlyTotalsPerMonth = data.map(
+                      d => d.remuneracao_base_por_mes,
+                    );
+                    if (value === 'Média per capita') {
+                      yearlyTotalsPerMember.forEach(w => {
+                        total += w;
+                      });
+                    } else if (value === 'Média mensal') {
+                      yearlyTotalsPerMonth.forEach(w => {
+                        total += w;
+                      });
+                    } else {
+                      yearlyTotals.forEach(w => {
+                        total += w;
+                      });
+                    }
                     return calculateValue(total);
                   })()}
                 </Typography>
@@ -483,10 +519,26 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   R${' '}
                   {(() => {
                     let total = 0;
-                    const monthlyTotals = data.map(d => d.outras_remuneracoes);
-                    monthlyTotals.forEach(w => {
-                      total += w;
-                    });
+                    const yearlyTotals = data.map(d => d.outras_remuneracoes);
+                    const yearlyTotalsPerMember = data.map(
+                      d => d.outras_remuneracoes_por_membro,
+                    );
+                    const yearlyTotalsPerMonth = data.map(
+                      d => d.outras_remuneracoes_por_mes,
+                    );
+                    if (value === 'Média per capita') {
+                      yearlyTotalsPerMember.forEach(w => {
+                        total += w;
+                      });
+                    } else if (value === 'Média mensal') {
+                      yearlyTotalsPerMonth.forEach(w => {
+                        total += w;
+                      });
+                    } else {
+                      yearlyTotals.forEach(w => {
+                        total += w;
+                      });
+                    }
                     return calculateValue(total);
                   })()}
                 </Typography>
