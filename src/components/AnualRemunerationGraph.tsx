@@ -52,14 +52,10 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
-  const [value, setValue] = React.useState('Média per capita');
+  const [graphType, setGraphType] = React.useState('Média per capita');
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
-  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
-    setValue(newValue);
-  };
 
   const calculateValue = (value: number, decimal_places = 1): string => {
     if (value.toFixed(0).toString().length > 9) {
@@ -73,6 +69,26 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     }
     return value.toFixed(0);
   };
+
+  const baseRemunerationDataTypes = useMemo(() => {
+    if (graphType === 'Média per capita') {
+      return 'remuneracao_base_por_membro';
+    }
+    if (graphType === 'Média mensal') {
+      return 'remuneracao_base_por_mes';
+    }
+    return 'remuneracao_base';
+  }, [graphType]);
+
+  const otherRemunerationsDataTypes = useMemo(() => {
+    if (graphType === 'Média per capita') {
+      return 'outras_remuneracoes_por_membro';
+    }
+    if (graphType === 'Média mensal') {
+      return 'outras_remuneracoes_por_mes';
+    }
+    return 'outras_remuneracoes';
+  }, [graphType]);
 
   const yearList = () => {
     const list = [];
@@ -142,45 +158,17 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const totalWaste = () => {
-    let totalRemunerationArr = [];
-
-    if (value === 'Média per capita') {
-      totalRemunerationArr = data
-        .sort((a, b) => a.ano - b.ano)
-        .map(
-          d =>
-            (d.remuneracao_base_por_membro === undefined
-              ? 0
-              : d.remuneracao_base_por_membro / 1000000) +
-            (d.outras_remuneracoes_por_membro === undefined
-              ? 0
-              : d.outras_remuneracoes_por_membro / 1000000),
-        );
-    } else if (value === 'Média mensal') {
-      totalRemunerationArr = data
-        .sort((a, b) => a.ano - b.ano)
-        .map(
-          d =>
-            (d.remuneracao_base_por_mes === undefined
-              ? 0
-              : d.remuneracao_base_por_mes / 1000000) +
-            (d.outras_remuneracoes_por_mes === undefined
-              ? 0
-              : d.outras_remuneracoes_por_mes / 1000000),
-        );
-    } else {
-      totalRemunerationArr = data
-        .sort((a, b) => a.ano - b.ano)
-        .map(
-          d =>
-            (d.remuneracao_base === undefined
-              ? 0
-              : d.remuneracao_base / 1000000) +
-            (d.outras_remuneracoes === undefined
-              ? 0
-              : d.outras_remuneracoes / 1000000),
-        );
-    }
+    const totalRemunerationArr = data
+      .sort((a, b) => a.ano - b.ano)
+      .map(
+        d =>
+          (d[baseRemunerationDataTypes] === undefined
+            ? 0
+            : d[baseRemunerationDataTypes] / 1000000) +
+          (d[otherRemunerationsDataTypes] === undefined
+            ? 0
+            : d[otherRemunerationsDataTypes] / 1000000),
+      );
 
     const dataArray = [];
     for (let i = 2018; i <= getCurrentYear(); i += 1) {
@@ -246,49 +234,21 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   // this constant is used as an alx value to determine the max graph height
   const MaxMonthPlaceholder = useMemo(() => {
     if (data) {
-      if (value === 'Média per capita') {
-        const max = data
-          .sort(
-            (a, b) =>
-              a.remuneracao_base_por_membro +
-              a.outras_remuneracoes_por_membro -
-              (b.remuneracao_base_por_membro +
-                b.outras_remuneracoes_por_membro),
-          )
-          .reverse()[0];
-
-        return max
-          ? max.remuneracao_base_por_membro +
-              max.outras_remuneracoes_por_membro +
-              1
-          : 10000;
-      } else if (value === 'Média mensal') {
-        const max = data
-          .sort(
-            (a, b) =>
-              a.remuneracao_base_por_mes +
-              a.outras_remuneracoes_por_mes -
-              (b.remuneracao_base_por_mes + b.outras_remuneracoes_por_mes),
-          )
-          .reverse()[0];
-
-        return max
-          ? max.remuneracao_base_por_mes + max.outras_remuneracoes_por_mes + 1
-          : 10000;
-      }
       const max = data
         .sort(
           (a, b) =>
-            a.remuneracao_base +
-            a.outras_remuneracoes -
-            (b.remuneracao_base + b.outras_remuneracoes),
+            a[baseRemunerationDataTypes] +
+            a[otherRemunerationsDataTypes] -
+            (b[baseRemunerationDataTypes] + b[otherRemunerationsDataTypes]),
         )
         .reverse()[0];
 
-      return max ? max.remuneracao_base + max.outras_remuneracoes + 1 : 10000;
+      return max
+        ? max[baseRemunerationDataTypes] + max[otherRemunerationsDataTypes] + 1
+        : 10000;
     }
     return 10000;
-  }, [data, value]);
+  }, [data, baseRemunerationDataTypes, otherRemunerationsDataTypes]);
 
   const warningMessage = () => {
     if (noData().find(d => d !== 0)) {
@@ -338,8 +298,10 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             >
               <Box sx={{ maxWidth: { xs: 320, sm: 720 } }}>
                 <Tabs
-                  value={value}
-                  onChange={handleChange}
+                  value={graphType}
+                  onChange={(event: React.SyntheticEvent, newValue: any) =>
+                    setGraphType(newValue)
+                  }
                   variant="scrollable"
                   scrollButtons
                   allowScrollButtonsMobile
@@ -351,37 +313,20 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 </Tabs>
               </Box>
               <Typography variant="h5" {...(matches && { variant: 'h6' })}>
-                {value} de remunerações de membros R${' '}
+                {graphType} de remunerações de membros R${' '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
                   const yearlyTotals = data.map(
-                    d => d.remuneracao_base + d.outras_remuneracoes,
-                  );
-                  const yearlyTotalsPerMember = data.map(
                     d =>
-                      d.remuneracao_base_por_membro +
-                      d.outras_remuneracoes_por_membro,
+                      d[baseRemunerationDataTypes] +
+                      d[otherRemunerationsDataTypes],
                   );
-                  const yearlyTotalsPerMonth = data.map(
-                    d =>
-                      d.remuneracao_base_por_mes +
-                      d.outras_remuneracoes_por_mes,
-                  );
-                  if (value === 'Média per capita') {
-                    yearlyTotalsPerMember.forEach(w => {
-                      total += w;
-                    });
-                  } else if (value === 'Média mensal') {
-                    yearlyTotalsPerMonth.forEach(w => {
-                      total += w;
-                    });
-                  } else {
-                    yearlyTotals.forEach(w => {
-                      total += w;
-                    });
-                  }
-                  // here we return the final value to millions showing 2 decimal places
+
+                  yearlyTotals.forEach(w => {
+                    total += w;
+                  });
+
                   return calculateValue(total);
                 })()}
                 <Tooltip
@@ -454,26 +399,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   R${' '}
                   {(() => {
                     let total = 0;
-                    const yearlyTotals = data.map(d => d.remuneracao_base);
-                    const yearlyTotalsPerMember = data.map(
-                      d => d.remuneracao_base_por_membro,
+                    const yearlyTotals = data.map(
+                      d => d[baseRemunerationDataTypes],
                     );
-                    const yearlyTotalsPerMonth = data.map(
-                      d => d.remuneracao_base_por_mes,
-                    );
-                    if (value === 'Média per capita') {
-                      yearlyTotalsPerMember.forEach(w => {
-                        total += w;
-                      });
-                    } else if (value === 'Média mensal') {
-                      yearlyTotalsPerMonth.forEach(w => {
-                        total += w;
-                      });
-                    } else {
-                      yearlyTotals.forEach(w => {
-                        total += w;
-                      });
-                    }
+
+                    yearlyTotals.forEach(w => {
+                      total += w;
+                    });
+
                     return calculateValue(total);
                   })()}
                 </Typography>
@@ -519,26 +452,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   R${' '}
                   {(() => {
                     let total = 0;
-                    const yearlyTotals = data.map(d => d.outras_remuneracoes);
-                    const yearlyTotalsPerMember = data.map(
-                      d => d.outras_remuneracoes_por_membro,
+                    const yearlyTotals = data.map(
+                      d => d[otherRemunerationsDataTypes],
                     );
-                    const yearlyTotalsPerMonth = data.map(
-                      d => d.outras_remuneracoes_por_mes,
-                    );
-                    if (value === 'Média per capita') {
-                      yearlyTotalsPerMember.forEach(w => {
-                        total += w;
-                      });
-                    } else if (value === 'Média mensal') {
-                      yearlyTotalsPerMonth.forEach(w => {
-                        total += w;
-                      });
-                    } else {
-                      yearlyTotals.forEach(w => {
-                        total += w;
-                      });
-                    }
+
+                    yearlyTotals.forEach(w => {
+                      total += w;
+                    });
+
                     return calculateValue(total);
                   })()}
                 </Typography>
@@ -582,8 +503,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 </Box>
               ) : null}
               <Typography mt={2} variant="h5" textAlign="center">
-                Gráfico {value == 'Total' ? 'do' : 'da'} {value.toLowerCase()}{' '}
-                de remunerações de membros
+                Gráfico {graphType === 'Total' ? 'do' : 'da'}{' '}
+                {graphType.toLowerCase()} de remunerações de membros
               </Typography>
               {agency && data && !dataLoading ? (
                 <Grid display="flex" justifyContent="flex-end" sx={{ mt: 3 }}>
@@ -850,29 +771,16 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             name: 'Benefícios',
                             data: (() => {
                               if (!hidingBenefits) {
-                                if (value === 'Média per capita') {
-                                  return createDataArray(
-                                    'outras_remuneracoes_por_membro',
-                                  );
-                                } else if (value === 'Média mensal') {
-                                  return createDataArray(
-                                    'outras_remuneracoes_por_mes',
-                                  );
-                                }
-                                return createDataArray('outras_remuneracoes');
+                                return createDataArray(
+                                  otherRemunerationsDataTypes,
+                                );
                               }
                               return [];
                             })(),
                             // @ts-expect-error this function always returns a string
                             color: ({ value }) =>
                               incompleteDataValues(
-                                'outras_remuneracoes',
-                              ).includes(value) ||
-                              incompleteDataValues(
-                                'outras_remuneracoes_por_membro',
-                              ).includes(value) ||
-                              incompleteDataValues(
-                                'outras_remuneracoes_por_mes',
+                                otherRemunerationsDataTypes,
                               ).includes(value)
                                 ? '#98bb2f7d'
                                 : '#97BB2F',
@@ -881,29 +789,16 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             name: 'Salário',
                             data: (() => {
                               if (!hidingWage) {
-                                if (value === 'Média per capita') {
-                                  return createDataArray(
-                                    'remuneracao_base_por_membro',
-                                  );
-                                } else if (value === 'Média mensal') {
-                                  return createDataArray(
-                                    'remuneracao_base_por_mes',
-                                  );
-                                }
-                                return createDataArray('remuneracao_base');
+                                return createDataArray(
+                                  baseRemunerationDataTypes,
+                                );
                               }
                               return [];
                             })(),
                             // @ts-expect-error this function always returns a string
                             color: ({ value }) =>
-                              incompleteDataValues('remuneracao_base').includes(
-                                value,
-                              ) ||
                               incompleteDataValues(
-                                'remuneracao_base_por_membro',
-                              ).includes(value) ||
-                              incompleteDataValues(
-                                'remuneracao_base_por_mes',
+                                baseRemunerationDataTypes,
                               ).includes(value)
                                 ? '#2fbb967d'
                                 : '#2FBB96',
