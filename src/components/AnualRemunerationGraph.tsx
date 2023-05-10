@@ -288,15 +288,13 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             }}
           >
             <Box
-              py={4}
               textAlign="center"
-              padding={4}
               alignItems="center"
               justifyContent="center"
               display="flex"
               flexDirection="column"
             >
-              <Box sx={{ maxWidth: { xs: 320, sm: 720 } }}>
+              <Box sx={{ maxWidth: { xs: 320, sm: 720 }, marginY: 2 }}>
                 <Tabs
                   value={graphType}
                   onChange={(event: React.SyntheticEvent, newValue: any) =>
