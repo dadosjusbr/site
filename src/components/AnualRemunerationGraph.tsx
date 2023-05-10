@@ -304,6 +304,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   scrollButtons
                   allowScrollButtonsMobile
                   aria-label="Opções de gráfico"
+                  sx={{ marginBottom: 2 }}
                 >
                   <Tab
                     value="Média per capita"
@@ -378,7 +379,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               </Typography>
             </Box>
             <Grid
-              pb={8}
+              py={4}
               container
               spacing={8}
               justifyContent="center"
