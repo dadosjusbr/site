@@ -307,9 +307,21 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   allowScrollButtonsMobile
                   aria-label="Opções de gráfico"
                 >
-                  <Tab value="Média per capita" label="Média per capita" />
-                  <Tab value="Média mensal" label="Média mensal" />
-                  <Tab value="Total" label="Total de ramunerações" />
+                  <Tab
+                    value="Média per capita"
+                    label="Média per capita"
+                    sx={{ marginLeft: 2, marginRight: 2 }}
+                  />
+                  <Tab
+                    value="Média mensal"
+                    label="Média mensal"
+                    sx={{ marginLeft: 2, marginRight: 2 }}
+                  />
+                  <Tab
+                    value="Total"
+                    label="Total de ramunerações"
+                    sx={{ marginLeft: 2, marginRight: 2 }}
+                  />
                 </Tabs>
               </Box>
               <Typography variant="h5" {...(matches && { variant: 'h6' })}>
