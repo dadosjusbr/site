@@ -52,7 +52,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
-  const [graphType, setGraphType] = React.useState('Média por membro');
+  const [graphType, setGraphType] = React.useState('Média de remunerações por membro');
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -71,20 +71,20 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'Média por membro') {
+    if (graphType === 'Média de remunerações por membro') {
       return 'remuneracao_base_por_membro';
     }
-    if (graphType === 'Média mensal') {
+    if (graphType === 'Média mensal de remunerações') {
       return 'remuneracao_base_por_mes';
     }
     return 'remuneracao_base';
   }, [graphType]);
 
   const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'Média por membro') {
+    if (graphType === 'Média de remunerações por membro') {
       return 'outras_remuneracoes_por_membro';
     }
-    if (graphType === 'Média mensal') {
+    if (graphType === 'Média mensal de remunerações') {
       return 'outras_remuneracoes_por_mes';
     }
     return 'outras_remuneracoes';
@@ -313,24 +313,24 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   sx={{ my: 2 }}
                 >
                   <Tab
-                    value="Média por membro"
+                    value="Média de remunerações por membro"
                     label="Média por membro"
                     sx={{ marginLeft: 2, marginRight: 2 }}
                   />
                   <Tab
-                    value="Média mensal"
+                    value="Média mensal de remunerações"
                     label="Média mensal"
                     sx={{ marginLeft: 2, marginRight: 2 }}
                   />
                   <Tab
-                    value="Total"
+                    value="Total de remunerações"
                     label="Total de remunerações"
                     sx={{ marginLeft: 2, marginRight: 2 }}
                   />
                 </Tabs>
               </Box>
               <Typography variant="h5" {...(matches && { variant: 'h6' })}>
-                {graphType} de remunerações de membros R${' '}
+                {graphType}: R${' '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
