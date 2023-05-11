@@ -52,7 +52,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
-  const [graphType, setGraphType] = React.useState('Média per capita');
+  const [graphType, setGraphType] = React.useState('Média por membro');
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -71,7 +71,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   };
 
   const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'Média per capita') {
+    if (graphType === 'Média por membro') {
       return 'remuneracao_base_por_membro';
     }
     if (graphType === 'Média mensal') {
@@ -81,7 +81,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   }, [graphType]);
 
   const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'Média per capita') {
+    if (graphType === 'Média por membro') {
       return 'outras_remuneracoes_por_membro';
     }
     if (graphType === 'Média mensal') {
@@ -279,15 +279,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         <NotCollecting agency={agency} />
       ) : (
         <>
-          <Paper
-            elevation={0}
-            sx={{
-              ...(matches && {
-                paddingBottom: 4,
-              }),
-            }}
-          >
-            <Box
+          <Paper elevation={0}>
+          <Box
               textAlign="center"
               alignItems="center"
               justifyContent="center"
@@ -295,6 +288,19 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               flexDirection="column"
             >
               <Box sx={{ maxWidth: { xs: 320, sm: 720 }, marginY: 2 }}>
+              {!dataLoading &&
+              (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
+                <Box mt={2} display="flex" justifyContent="center">
+                  <AlertModal
+                    agencyData={agency}
+                    openParam={open}
+                    handleClose={handleClose}
+                    handleOpen={handleOpen}
+                  >
+                    {warningMessage()}
+                  </AlertModal>
+                </Box>
+              ) : null}
                 <Tabs
                   value={graphType}
                   onChange={(event: React.SyntheticEvent, newValue: any) =>
@@ -304,11 +310,11 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   scrollButtons
                   allowScrollButtonsMobile
                   aria-label="Opções de gráfico"
-                  sx={{ marginBottom: 2 }}
+                  sx={{ my: 2 }}
                 >
                   <Tab
-                    value="Média per capita"
-                    label="Média per capita"
+                    value="Média por membro"
+                    label="Média por membro"
                     sx={{ marginLeft: 2, marginRight: 2 }}
                   />
                   <Tab
@@ -318,7 +324,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   />
                   <Tab
                     value="Total"
-                    label="Total de ramunerações"
+                    label="Total de remunerações"
                     sx={{ marginLeft: 2, marginRight: 2 }}
                   />
                 </Tabs>
@@ -345,7 +351,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   title={
                     <Typography fontSize="0.8rem">
                       <p>
-                        <b>Membros:</b> Participantes ativos do órgao, incluindo
+                        <b>Membros:</b> Participantes ativos do órgão, incluindo
                         os servidores públicos, os militares e os membros do
                         Poder Judiciário.
                       </p>
@@ -379,7 +385,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               </Typography>
             </Box>
             <Grid
-              py={4}
+              pt={4}
               container
               spacing={8}
               justifyContent="center"
@@ -497,28 +503,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 </>
               ) : null}
             </Grid>
-          </Paper>
-          <Paper elevation={0}>
-            <Box my={4} pt={2} padding={4}>
-              {!dataLoading &&
-              (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
-                <Box display="flex" justifyContent="center">
-                  <AlertModal
-                    agencyData={agency}
-                    openParam={open}
-                    handleClose={handleClose}
-                    handleOpen={handleOpen}
-                  >
-                    {warningMessage()}
-                  </AlertModal>
-                </Box>
-              ) : null}
-              <Typography mt={2} variant="h5" textAlign="center">
-                Gráfico {graphType === 'Total' ? 'do' : 'da'}{' '}
-                {graphType.toLowerCase()} de remunerações de membros
-              </Typography>
+            <Box px={4}>
               {agency && data && !dataLoading ? (
-                <Grid display="flex" justifyContent="flex-end" sx={{ mt: 3 }}>
+                <Grid display="flex" justifyContent="flex-end">
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -560,7 +547,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             id: 'remuneration-graph',
                             stacked: true,
                             toolbar: {
-                              offsetY: 480,
+                              offsetY: 370,
                               tools: {
                                 download:
                                   '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
@@ -825,7 +812,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                           },
                         ]}
                         width="100%"
-                        height="500"
+                        height="400"
                         type="bar"
                       />
                     </Box>
