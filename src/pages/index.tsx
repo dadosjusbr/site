@@ -275,8 +275,30 @@ export default function Index({
                   </p>
                   <p>
                     Este gráfico representa dados de <b>janeiro de 2018</b> até{' '}
-                    <b>novembro de 2022</b> e foi gerado em{' '}
-                    <b>24 de dezembro de 2022</b>
+                    <b>{formatedEndDate.toLowerCase()}</b> e foi gerado em{' '}
+                    <b>
+                      {new Date().getDate() < 17
+                        ? new Date(
+                            getCurrentYear(),
+                            new Date().getMonth() - 1,
+                            17,
+                          ).toLocaleDateString('pt-BR', {
+                            calendar: 'gregory',
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric',
+                          })
+                        : new Date(
+                            getCurrentYear(),
+                            new Date().getMonth(),
+                            17,
+                          ).toLocaleDateString('pt-BR', {
+                            calendar: 'gregory',
+                            day: '2-digit',
+                            month: 'long',
+                            year: 'numeric',
+                          })}
+                    </b>
                   </p>
                 </Grid>
                 <Grid item width={900}>
