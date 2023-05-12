@@ -12,6 +12,8 @@ import {
   Tooltip,
   useMediaQuery,
   IconButton,
+  Tabs,
+  Tab,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
@@ -50,6 +52,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
+  const [graphType, setGraphType] = React.useState('Média de remunerações por membro');
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -66,6 +69,26 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     }
     return value.toFixed(0);
   };
+
+  const baseRemunerationDataTypes = useMemo(() => {
+    if (graphType === 'Média de remunerações por membro') {
+      return 'remuneracao_base_por_membro';
+    }
+    if (graphType === 'Média mensal de remunerações') {
+      return 'remuneracao_base_por_mes';
+    }
+    return 'remuneracao_base';
+  }, [graphType]);
+
+  const otherRemunerationsDataTypes = useMemo(() => {
+    if (graphType === 'Média de remunerações por membro') {
+      return 'outras_remuneracoes_por_membro';
+    }
+    if (graphType === 'Média mensal de remunerações') {
+      return 'outras_remuneracoes_por_mes';
+    }
+    return 'outras_remuneracoes';
+  }, [graphType]);
 
   const yearList = () => {
     const list = [];
@@ -139,12 +162,12 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
       .sort((a, b) => a.ano - b.ano)
       .map(
         d =>
-          (d.remuneracao_base === undefined
+          (d[baseRemunerationDataTypes] === undefined
             ? 0
-            : d.remuneracao_base / 1000000) +
-          (d.outras_remuneracoes === undefined
+            : d[baseRemunerationDataTypes] / 1000000) +
+          (d[otherRemunerationsDataTypes] === undefined
             ? 0
-            : d.outras_remuneracoes / 1000000),
+            : d[otherRemunerationsDataTypes] / 1000000),
       );
 
     const dataArray = [];
@@ -214,16 +237,18 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
       const max = data
         .sort(
           (a, b) =>
-            a.remuneracao_base +
-            a.outras_remuneracoes -
-            (b.remuneracao_base + b.outras_remuneracoes),
+            a[baseRemunerationDataTypes] +
+            a[otherRemunerationsDataTypes] -
+            (b[baseRemunerationDataTypes] + b[otherRemunerationsDataTypes]),
         )
         .reverse()[0];
 
-      return max ? max.remuneracao_base + max.outras_remuneracoes + 1 : 10000;
+      return max
+        ? max[baseRemunerationDataTypes] + max[otherRemunerationsDataTypes] + 1
+        : 10000;
     }
     return 10000;
-  }, [data]);
+  }, [data, baseRemunerationDataTypes, otherRemunerationsDataTypes]);
 
   const warningMessage = () => {
     if (noData().find(d => d !== 0)) {
@@ -254,35 +279,71 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         <NotCollecting agency={agency} />
       ) : (
         <>
-          <Paper
-            elevation={0}
-            sx={{
-              ...(matches && {
-                paddingBottom: 4,
-              }),
-            }}
-          >
-            <Box
-              py={4}
+          <Paper elevation={0}>
+          <Box
               textAlign="center"
-              padding={4}
               alignItems="center"
               justifyContent="center"
               display="flex"
               flexDirection="column"
             >
+              <Box sx={{ maxWidth: { xs: 320, sm: 720 }, marginY: 2 }}>
+              {!dataLoading &&
+              (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
+                <Box mt={2} display="flex" justifyContent="center">
+                  <AlertModal
+                    agencyData={agency}
+                    openParam={open}
+                    handleClose={handleClose}
+                    handleOpen={handleOpen}
+                  >
+                    {warningMessage()}
+                  </AlertModal>
+                </Box>
+              ) : null}
+                <Tabs
+                  value={graphType}
+                  onChange={(event: React.SyntheticEvent, newValue: any) =>
+                    setGraphType(newValue)
+                  }
+                  variant="scrollable"
+                  scrollButtons
+                  allowScrollButtonsMobile
+                  aria-label="Opções de gráfico"
+                  sx={{ my: 2 }}
+                >
+                  <Tab
+                    value="Média de remunerações por membro"
+                    label="Média por membro"
+                    sx={{ marginLeft: 2, marginRight: 2 }}
+                  />
+                  <Tab
+                    value="Média mensal de remunerações"
+                    label="Média mensal"
+                    sx={{ marginLeft: 2, marginRight: 2 }}
+                  />
+                  <Tab
+                    value="Total de remunerações"
+                    label="Total de remunerações"
+                    sx={{ marginLeft: 2, marginRight: 2 }}
+                  />
+                </Tabs>
+              </Box>
               <Typography variant="h5" {...(matches && { variant: 'h6' })}>
-                Total de remunerações de membros R${' '}
+                {graphType}: R${' '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
-                  const monthlyTotals = data.map(
-                    d => d.remuneracao_base + d.outras_remuneracoes,
+                  const yearlyTotals = data.map(
+                    d =>
+                      d[baseRemunerationDataTypes] +
+                      d[otherRemunerationsDataTypes],
                   );
-                  monthlyTotals.forEach(w => {
+
+                  yearlyTotals.forEach(w => {
                     total += w;
                   });
-                  // here we return the final value to millions showing 2 decimal places
+
                   return calculateValue(total);
                 })()}
                 <Tooltip
@@ -290,7 +351,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   title={
                     <Typography fontSize="0.8rem">
                       <p>
-                        <b>Membros:</b> Participantes ativos do órgao, incluindo
+                        <b>Membros:</b> Participantes ativos do órgão, incluindo
                         os servidores públicos, os militares e os membros do
                         Poder Judiciário.
                       </p>
@@ -324,7 +385,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               </Typography>
             </Box>
             <Grid
-              pb={8}
+              pt={4}
               container
               spacing={8}
               justifyContent="center"
@@ -355,10 +416,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   R${' '}
                   {(() => {
                     let total = 0;
-                    const monthlyTotals = data.map(d => d.remuneracao_base);
-                    monthlyTotals.forEach(w => {
+                    const yearlyTotals = data.map(
+                      d => d[baseRemunerationDataTypes],
+                    );
+
+                    yearlyTotals.forEach(w => {
                       total += w;
                     });
+
                     return calculateValue(total);
                   })()}
                 </Typography>
@@ -404,10 +469,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   R${' '}
                   {(() => {
                     let total = 0;
-                    const monthlyTotals = data.map(d => d.outras_remuneracoes);
-                    monthlyTotals.forEach(w => {
+                    const yearlyTotals = data.map(
+                      d => d[otherRemunerationsDataTypes],
+                    );
+
+                    yearlyTotals.forEach(w => {
                       total += w;
                     });
+
                     return calculateValue(total);
                   })()}
                 </Typography>
@@ -434,27 +503,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 </>
               ) : null}
             </Grid>
-          </Paper>
-          <Paper elevation={0}>
-            <Box my={4} pt={2} padding={4}>
-              {!dataLoading &&
-              (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
-                <Box display="flex" justifyContent="center">
-                  <AlertModal
-                    agencyData={agency}
-                    openParam={open}
-                    handleClose={handleClose}
-                    handleOpen={handleOpen}
-                  >
-                    {warningMessage()}
-                  </AlertModal>
-                </Box>
-              ) : null}
-              <Typography mt={2} variant="h5" textAlign="center">
-                Total de remunerações de membros por ano
-              </Typography>
+            <Box px={4}>
               {agency && data && !dataLoading ? (
-                <Grid display="flex" justifyContent="flex-end" sx={{ mt: 3 }}>
+                <Grid display="flex" justifyContent="flex-end">
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -493,9 +544,10 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             '#2c3236',
                           ],
                           chart: {
+                            id: 'remuneration-graph',
                             stacked: true,
                             toolbar: {
-                              offsetY: 480,
+                              offsetY: 370,
                               tools: {
                                 download:
                                   '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
@@ -664,13 +716,12 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                   if (val === undefined) {
                                     return `R$ 0.00M`;
                                   }
-                                  return !billion
-                                    ? `R$ ${val.toFixed(2)}M`
-                                    : `R$ ${val.toFixed(2)}B`;
+                                  return `R$ ${calculateValue(
+                                    val * 1000000,
+                                    2,
+                                  )}`;
                                 }
-                                return !billion
-                                  ? `R$ ${(val / 1000000).toFixed(2)}M`
-                                  : `R$ ${(val / 1000000000).toFixed(2)}B`;
+                                return `R$ ${calculateValue(val, 2)}`;
                               },
                             },
                           },
@@ -718,14 +769,16 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             name: 'Benefícios',
                             data: (() => {
                               if (!hidingBenefits) {
-                                return createDataArray('outras_remuneracoes');
+                                return createDataArray(
+                                  otherRemunerationsDataTypes,
+                                );
                               }
                               return [];
                             })(),
                             // @ts-expect-error this function always returns a string
                             color: ({ value }) =>
                               incompleteDataValues(
-                                'outras_remuneracoes',
+                                otherRemunerationsDataTypes,
                               ).includes(value)
                                 ? '#98bb2f7d'
                                 : '#97BB2F',
@@ -734,14 +787,16 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             name: 'Salário',
                             data: (() => {
                               if (!hidingWage) {
-                                return createDataArray('remuneracao_base');
+                                return createDataArray(
+                                  baseRemunerationDataTypes,
+                                );
                               }
                               return [];
                             })(),
                             // @ts-expect-error this function always returns a string
                             color: ({ value }) =>
                               incompleteDataValues(
-                                'outras_remuneracoes',
+                                baseRemunerationDataTypes,
                               ).includes(value)
                                 ? '#2fbb967d'
                                 : '#2FBB96',
@@ -757,7 +812,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                           },
                         ]}
                         width="100%"
-                        height="500"
+                        height="400"
                         type="bar"
                       />
                     </Box>

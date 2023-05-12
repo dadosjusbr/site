@@ -156,7 +156,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   }, [year]);
   async function fetchAgencyData() {
     try {
-      const { data: agency } = await api.ui.get(`/v1/orgao/resumo/${id}`);
+      const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
       setData(agency.dados_anuais ? agency.dados_anuais : null);
       setAgencyData(agency.orgao);
       setYear(agency.dados_anuais.at(-1).ano);

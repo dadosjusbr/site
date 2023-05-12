@@ -55,7 +55,7 @@ const Page = styled.div`
 export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id } = context.params;
   try {
-    const { data: agency } = await api.ui.get(`/v1/orgao/resumo/${id}`);
+    const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
     return {
       props: {
         id,
