@@ -22,7 +22,6 @@ import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
-import CrawlingDateTable from './CrawlingDateTable';
 import NotCollecting from './NotCollecting';
 import AlertModal from './AlertModal';
 import { getCurrentYear } from '../functions/currentYear';
@@ -38,7 +37,6 @@ export interface AnualRemunerationGraphProps {
   agency: any;
   data: any[];
   dataLoading: boolean;
-  billion?: boolean;
 }
 
 const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
@@ -46,47 +44,44 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   agency,
   data,
   dataLoading = true,
-  billion = false,
 }) => {
   const matches = useMediaQuery('(max-width:500px)');
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
-  const [graphType, setGraphType] = React.useState(
-    'Média de remunerações por membro',
-  );
+  const [graphType, setGraphType] = React.useState('media-por-membro');
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
   const calculateValue = (value: number, decimal_places = 1): string => {
     if (value.toFixed(0).toString().length > 9) {
-      return `${(value / 1000000000).toFixed(decimal_places)}B`;
+      return `R$ ${(value / 1000000000).toFixed(decimal_places)}B`;
     }
     if (value.toFixed(0).toString().length > 6) {
-      return `${(value / 1000000).toFixed(decimal_places)}M`;
+      return `R$ ${(value / 1000000).toFixed(decimal_places)}M`;
     }
     if (value.toFixed(0).toString().length > 3) {
-      return `${(value / 1000).toFixed(decimal_places)} mil`;
+      return `R$ ${(value / 1000).toFixed(decimal_places)} mil`;
     }
-    return value.toFixed(0);
+    return `R$ ${value.toFixed(0)}`;
   };
 
   const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'Média de remunerações por membro') {
+    if (graphType === 'media-por-membro') {
       return 'remuneracao_base_por_membro';
     }
-    if (graphType === 'Média mensal de remunerações') {
+    if (graphType === 'media-mensal') {
       return 'remuneracao_base_por_mes';
     }
     return 'remuneracao_base';
   }, [graphType]);
 
   const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'Média de remunerações por membro') {
+    if (graphType === 'media-por-membro') {
       return 'outras_remuneracoes_por_membro';
     }
-    if (graphType === 'Média mensal de remunerações') {
+    if (graphType === 'media-mensal') {
       return 'outras_remuneracoes_por_mes';
     }
     return 'outras_remuneracoes';
@@ -289,7 +284,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               display="flex"
               flexDirection="column"
             >
-              <Box sx={{ maxWidth: { xs: 320, sm: 720 }, marginY: 2 }}>
+              <Box sx={{ maxWidth: { xs: 320, sm: 720 }, marginBottom: 2 }}>
                 {!dataLoading &&
                 (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
                   <Box mt={2} display="flex" justifyContent="center">
@@ -314,25 +309,17 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   aria-label="Opções de gráfico"
                   sx={{ my: 2 }}
                 >
-                  <Tab
-                    value="Média de remunerações por membro"
-                    label="Média por membro"
-                    sx={{ marginLeft: 2, marginRight: 2 }}
-                  />
-                  <Tab
-                    value="Média mensal de remunerações"
-                    label="Média mensal"
-                    sx={{ marginLeft: 2, marginRight: 2 }}
-                  />
-                  <Tab
-                    value="Total de remunerações"
-                    label="Total de remunerações"
-                    sx={{ marginLeft: 2, marginRight: 2 }}
-                  />
+                  <Tab value="media-por-membro" label="Média por membro" />
+                  <Tab value="media-mensal" label="Média mensal" />
+                  <Tab value="total" label="Total de remunerações" />
                 </Tabs>
               </Box>
-              <Typography variant="h5" {...(matches && { variant: 'h6' })}>
-                {graphType}: R${' '}
+              <Typography variant="h5">
+                {graphType === 'media-por-membro' &&
+                  'Em média, cada membro deste órgão recebe: '}
+                {graphType === 'media-mensal' &&
+                  'Em média, este órgão gasta todos os meses: '}
+                {graphType === 'total' && 'Total de gastos deste órgão: '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
                   let total = 0;
@@ -346,7 +333,11 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                     total += w;
                   });
 
-                  return calculateValue(total);
+                  if (graphType === 'total') {
+                    return calculateValue(total);
+                  }
+
+                  return calculateValue(total / data.length);
                 })()}
                 <Tooltip
                   placement="top"
@@ -387,17 +378,13 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               </Typography>
             </Box>
             <Grid
-              pt={6}
               container
-              spacing={8}
-              justifyContent="center"
-              {...(matches && {
-                justifyContent: 'space-evenly',
-                pb: 0,
-                rowSpacing: 4,
-              })}
+              pt={6}
+              maxWidth={615}
+              margin="auto"
+              justifyContent="space-between"
             >
-              <Grid item textAlign="center">
+              <Grid xs={5} md={3} item textAlign="center">
                 <SalarioButton
                   sx={{ backgroundColor: '#2fbb95' }}
                   onClick={e => {
@@ -413,9 +400,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   <AccountBalanceWalletIcon />
                 </SalarioButton>
                 <Typography pt={1}>
-                  Salário:
-                  {matches ? <br /> : ' '}
-                  R${' '}
+                  Salário:{' '}
                   {(() => {
                     let total = 0;
                     const yearlyTotals = data.map(
@@ -429,28 +414,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                     return calculateValue(total);
                   })()}
                 </Typography>
-
-                {matches ? (
-                  <>
-                    <SemDadosButton
-                      sx={{ mt: 2, backgroundColor: '#3E5363' }}
-                      onClick={e => {
-                        if (hidingNoData) {
-                          e.currentTarget.classList.remove('active');
-                          setHidingNoData(false);
-                        } else {
-                          e.currentTarget.classList.add('active');
-                          setHidingNoData(true);
-                        }
-                      }}
-                    >
-                      <CropSquareIcon />
-                    </SemDadosButton>
-                    <Typography pt={1}>Sem dados</Typography>
-                  </>
-                ) : null}
               </Grid>
-              <Grid item textAlign="center">
+              <Grid xs={5} md={3} item textAlign="center">
                 <BeneficiosButton
                   sx={{ backgroundColor: '#96bb2f' }}
                   onClick={e => {
@@ -466,9 +431,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   <CardGiftcardIcon />
                 </BeneficiosButton>
                 <Typography pt={1}>
-                  Benefícios:
-                  {matches ? <br /> : ' '}
-                  R${' '}
+                  Benefícios:{' '}
                   {(() => {
                     let total = 0;
                     const yearlyTotals = data.map(
@@ -483,27 +446,23 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                   })()}
                 </Typography>
               </Grid>
-              {!matches ? (
-                <>
-                  <Grid item textAlign="center">
-                    <SemDadosButton
-                      sx={{ backgroundColor: '#3E5363' }}
-                      onClick={e => {
-                        if (hidingNoData) {
-                          e.currentTarget.classList.remove('active');
-                          setHidingNoData(false);
-                        } else {
-                          e.currentTarget.classList.add('active');
-                          setHidingNoData(true);
-                        }
-                      }}
-                    >
-                      <CropSquareIcon />
-                    </SemDadosButton>
-                    <Typography pt={1}>Sem dados</Typography>
-                  </Grid>
-                </>
-              ) : null}
+              <Grid xs={5} md={3} item textAlign="center">
+                <SemDadosButton
+                  sx={{ backgroundColor: '#3E5363' }}
+                  onClick={e => {
+                    if (hidingNoData) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingNoData(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingNoData(true);
+                    }
+                  }}
+                >
+                  <CropSquareIcon />
+                </SemDadosButton>
+                <Typography pt={1}>Sem dados</Typography>
+              </Grid>
             </Grid>
             <Box px={4}>
               {agency && data && !dataLoading ? (
@@ -613,7 +572,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                       cssClass: 'apexcharts-yaxis-label',
                                     },
                                     formatter(value: number) {
-                                      return `R$ ${calculateValue(value, 0)}`;
+                                      return `${calculateValue(value, 0)}`;
                                     },
                                   },
                                 },
@@ -658,7 +617,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                 cssClass: 'apexcharts-yaxis-label',
                               },
                               formatter(value) {
-                                return `R$ ${calculateValue(value)}`;
+                                return `${calculateValue(value)}`;
                               },
                             },
                           },
@@ -718,12 +677,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                   if (val === undefined) {
                                     return `R$ 0.00M`;
                                   }
-                                  return `R$ ${calculateValue(
-                                    val * 1000000,
-                                    2,
-                                  )}`;
+                                  return `${calculateValue(val * 1000000, 2)}`;
                                 }
-                                return `R$ ${calculateValue(val, 2)}`;
+                                return `${calculateValue(val, 2)}`;
                               },
                             },
                           },
@@ -826,20 +782,6 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 </>
               )}
             </Box>
-            {data && data.length > 0 && (
-              <Grid container display="flex" justifyContent="center">
-                <Grid
-                  display="flex"
-                  item
-                  pb={4}
-                  sx={{ width: '50%' }}
-                  justifyContent="center"
-                  flexDirection="row"
-                >
-                  <CrawlingDateTable data={data} dataLoading={dataLoading} />
-                </Grid>
-              </Grid>
-            )}
           </Paper>
         </>
       )}
