@@ -52,7 +52,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
-  const [graphType, setGraphType] = React.useState('Média de remunerações por membro');
+  const [graphType, setGraphType] = React.useState(
+    'Média de remunerações por membro',
+  );
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -279,8 +281,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         <NotCollecting agency={agency} />
       ) : (
         <>
-          <Paper elevation={0}>
-          <Box
+          <Paper elevation={0} sx={{ p: 2 }}>
+            <Box
               textAlign="center"
               alignItems="center"
               justifyContent="center"
@@ -288,19 +290,19 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               flexDirection="column"
             >
               <Box sx={{ maxWidth: { xs: 320, sm: 720 }, marginY: 2 }}>
-              {!dataLoading &&
-              (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
-                <Box mt={2} display="flex" justifyContent="center">
-                  <AlertModal
-                    agencyData={agency}
-                    openParam={open}
-                    handleClose={handleClose}
-                    handleOpen={handleOpen}
-                  >
-                    {warningMessage()}
-                  </AlertModal>
-                </Box>
-              ) : null}
+                {!dataLoading &&
+                (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
+                  <Box mt={2} display="flex" justifyContent="center">
+                    <AlertModal
+                      agencyData={agency}
+                      openParam={open}
+                      handleClose={handleClose}
+                      handleOpen={handleOpen}
+                    >
+                      {warningMessage()}
+                    </AlertModal>
+                  </Box>
+                ) : null}
                 <Tabs
                   value={graphType}
                   onChange={(event: React.SyntheticEvent, newValue: any) =>
@@ -385,7 +387,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               </Typography>
             </Box>
             <Grid
-              pt={4}
+              pt={6}
               container
               spacing={8}
               justifyContent="center"
