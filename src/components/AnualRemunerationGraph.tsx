@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import React, { useState, useMemo } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import {
@@ -46,11 +46,11 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   dataLoading = true,
 }) => {
   const matches = useMediaQuery('(max-width:500px)');
-  const [hidingWage, setHidingWage] = useState(false);
-  const [hidingBenefits, setHidingBenefits] = useState(false);
-  const [hidingNoData, setHidingNoData] = useState(false);
+  const [hidingWage, setHidingWage] = React.useState(false);
+  const [hidingBenefits, setHidingBenefits] = React.useState(false);
+  const [hidingNoData, setHidingNoData] = React.useState(false);
   const [graphType, setGraphType] = React.useState('media-por-membro');
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
@@ -67,7 +67,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return `R$ ${value.toFixed(0)}`;
   };
 
-  const baseRemunerationDataTypes = useMemo(() => {
+  const baseRemunerationDataTypes = React.useMemo(() => {
     if (graphType === 'media-por-membro') {
       return 'remuneracao_base_por_membro';
     }
@@ -77,7 +77,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return 'remuneracao_base';
   }, [graphType]);
 
-  const otherRemunerationsDataTypes = useMemo(() => {
+  const otherRemunerationsDataTypes = React.useMemo(() => {
     if (graphType === 'media-por-membro') {
       return 'outras_remuneracoes_por_membro';
     }
@@ -95,14 +95,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return list;
   };
 
-  const yearsWithData = useMemo(() => {
+  const yearsWithData = React.useMemo(() => {
     if (data) {
       return data.map(d => d.ano).sort((a, b) => a - b);
     }
     return [];
   }, [data]);
 
-  const yearsWithoutData = useMemo(() => {
+  const yearsWithoutData = React.useMemo(() => {
     if (yearsWithData) {
       return yearList().filter(
         returnedYear => !yearsWithData.includes(returnedYear),
@@ -119,7 +119,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return arr;
   };
 
-  const monthsWithoutData = useMemo(() => {
+  const monthsWithoutData = React.useMemo(() => {
     let monthsWithoutDataArr = 0;
     if (data) {
       data
@@ -196,7 +196,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return dataArray;
   };
 
-  const graphAnnotations = useMemo(() => {
+  const graphAnnotations = React.useMemo(() => {
     if (data) {
       const yearsArr = data
         .sort((a, b) => a.ano - b.ano)
@@ -229,7 +229,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
   }, [data, matches]);
 
   // this constant is used as an alx value to determine the max graph height
-  const MaxMonthPlaceholder = useMemo(() => {
+  const MaxMonthPlaceholder = React.useMemo(() => {
     if (data) {
       const max = data
         .sort(
