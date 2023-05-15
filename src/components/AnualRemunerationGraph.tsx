@@ -379,7 +379,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             </Box>
             <Grid
               container
-              pt={6}
+              pt={4}
               maxWidth={615}
               margin="auto"
               justifyContent="space-between"
@@ -508,7 +508,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             id: 'remuneration-graph',
                             stacked: true,
                             toolbar: {
-                              offsetY: 370,
+                              offsetY: 475,
                               tools: {
                                 download:
                                   '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
@@ -547,6 +547,10 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                 },
                                 chart: {
                                   width: '110%',
+                                  height: '400',
+                                  toolbar: {
+                                    offsetY: 370,
+                                  },
                                 },
                                 yaxis: {
                                   decimalsInFloat: 2,
@@ -597,7 +601,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             title: {
                               text: 'Total de Remunerações',
                               offsetY: 10,
-                              offsetX: 7,
+                              offsetX: -5,
                               style: {
                                 fontSize: '14px',
                                 fontWeight: 'bold',
@@ -770,7 +774,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                           },
                         ]}
                         width="100%"
-                        height="400"
+                        height="500"
                         type="bar"
                       />
                     </Box>
