@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { useEffect, useMemo, useState } from 'react';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
@@ -32,10 +31,10 @@ import { getCurrentYear } from '../functions/currentYear';
 
 const RemunerationBarGraph = dynamic(
   () => import('../components/RemunerationBarGraph'),
-  { loading: () => <p>Carregando...</p> },
+  { loading: () => <CircularProgress /> },
 );
 const IndexTabGraph = dynamic(() => import('../components/IndexTabGraph'), {
-  loading: () => <p>Carregando...</p>,
+  loading: () => <CircularProgress />,
 });
 const Footer = dynamic(() => import('../components/Footer'));
 
@@ -97,7 +96,7 @@ export default function Index({
   useEffect(() => {
     fetchGeneralChartData();
   }, [year]);
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = useState(0);
   const handleChange = async (
     event: React.SyntheticEvent,
     newValue: number,
@@ -288,6 +287,7 @@ export default function Index({
                         day: '2-digit',
                         month: 'long',
                         year: 'numeric',
+                        timeZone: 'UTC',
                       })}
                     </b>
                   </p>
