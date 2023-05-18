@@ -1,11 +1,6 @@
-const withTM = require('next-transpile-modules')([
-  'react-modal',
-  'react-share',
-  'react-apexcharts',
-  'apexcharts',
-]);
 require('dotenv');
 module.exports = {
+  swcMinify: true,
   compiler: {
     // Enables the styled-components SWC transform
     styledComponents: true,

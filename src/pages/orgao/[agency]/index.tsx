@@ -19,7 +19,7 @@ export default function AnualAgencyPage({ id, agency, data, fullName }) {
         .find(d => d <= getCurrentYear());
 
     setYear(yearData);
-  }, [year]);
+  }, [data]);
   return (
     <Page>
       <Head>
