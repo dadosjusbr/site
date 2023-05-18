@@ -113,7 +113,12 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
 
   const incompleteDataValues = (tipoRemuneracao: string) => {
     const arr = data
-      .filter(d => d.meses_com_dados < 12)
+      .filter(
+        d =>
+          d.meses_com_dados < 12 &&
+          d.ano === getCurrentYear() &&
+          d.meses_com_dados < new Date().getMonth(),
+      )
       .map(d => d[tipoRemuneracao]);
 
     return arr;
@@ -200,7 +205,12 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     if (data) {
       const yearsArr = data
         .sort((a, b) => a.ano - b.ano)
-        .filter(d => d.meses_com_dados < 12)
+        .filter(
+          d =>
+            d.meses_com_dados < 12 &&
+            d.ano === getCurrentYear() &&
+            d.meses_com_dados < new Date().getMonth(),
+        )
         .map(d => (d.ano === undefined ? 0 : d.ano));
 
       const annotationsLabel: AnnotationLabel = {
@@ -316,9 +326,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               </Box>
               <Typography variant="h5">
                 {graphType === 'media-por-membro' &&
-                  'Em média, cada membro deste órgão recebe: '}
+                  'Em média, cada membro deste órgão recebeu: '}
                 {graphType === 'media-mensal' &&
-                  'Em média, este órgão gasta todos os meses: '}
+                  'Em média, este órgão gastou mensalmente: '}
                 {graphType === 'total' && 'Total de gastos deste órgão: '}
                 {(() => {
                   // this function is used to sum the data from all money arrays and generate the last remuneration value
