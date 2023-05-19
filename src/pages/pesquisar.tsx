@@ -99,6 +99,7 @@ export default function Index({ ais }) {
   const [numRowsIfAvailable, setNumRowsIfAvailable] = React.useState(0);
   const [query, setQuery] = React.useState('');
   const [modalIsOpen, setModalIsOpen] = React.useState(false);
+  const isFirstRender = React.useRef(true);
 
   const clearSearch = () => {
     setSelectedYears(getCurrentYear());
@@ -319,6 +320,10 @@ export default function Index({ ais }) {
   }, []);
 
   React.useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
     const url = new URL(window.location.href);
     const params = url.searchParams;
     params.set('anos', selectedYears != null ? selectedYears.toString() : '');
