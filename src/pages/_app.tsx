@@ -1,3 +1,4 @@
+import { StrictMode } from 'react';
 import Head from 'next/head';
 
 import { ThemeProvider } from '@mui/material/styles';
@@ -6,7 +7,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 import theme from '../styles/theme-dark';
 import { PrivacityPolicyProvider } from '../contexts/privacity-policy-context';
 import GATracker from '../components/GATracker';
-import { StrictMode } from 'react';
 /*
 o _app.tsx nesse caso está sendo utilizado para conseguirmos
 usar a api de contextos do next, ela permite compartilharmos funcionalidades
