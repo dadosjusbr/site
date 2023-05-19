@@ -1,4 +1,4 @@
-'use strict'
+'use strict';
 
 /**
  * New Relic agent configuration.
@@ -9,7 +9,6 @@
 require('dotenv').config();
 
 exports.config = {
-  
   /**
    * Array of application names.
    */
@@ -17,9 +16,9 @@ exports.config = {
   /**
    * Your New Relic license key.
    */
-  license_key:process.env.NEW_RELIC_LICENSE_KEY,
+  license_key: process.env.NEW_RELIC_LICENSE_KEY,
   distributed_tracing: {
-    enabled: true
+    enabled: true,
   },
   logging: {
     /**
@@ -27,7 +26,8 @@ exports.config = {
      * issues with the agent, 'info' and higher will impose the least overhead on
      * production applications.
      */
-    level: 'info'
+    level: 'info',
+    enabled: false,
   },
   /**
    * When true, all request headers except for those listed in attributes.exclude
@@ -40,8 +40,8 @@ exports.config = {
       /**
        * Toggles whether the agent gathers log records for sending to New Relic.
        */
-      enabled: true
-    }
+      enabled: true,
+    },
   },
   attributes: {
     /**
@@ -62,7 +62,7 @@ exports.config = {
       'response.headers.authorization',
       'response.headers.proxyAuthorization',
       'response.headers.setCookie*',
-      'response.headers.x*'
-    ]
-  }
-}
+      'response.headers.x*',
+    ],
+  },
+};
