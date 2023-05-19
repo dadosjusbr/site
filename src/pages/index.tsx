@@ -88,6 +88,8 @@ export default function Index({
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
   const [plotLoading, setPlotLoading] = useState(true);
+  const [value, setValue] = useState(0);
+  const [createAt, setCreateAt] = useState<string>("");
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -95,8 +97,23 @@ export default function Index({
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   useEffect(() => {
     fetchGeneralChartData();
+    const date = new Date(
+      getCurrentYear(),
+      new Date().getDate() < 17
+        ? new Date().getMonth() - 1
+        : new Date().getMonth(),
+      16,
+    ).toLocaleDateString('pt-BR', {
+      calendar: 'gregory',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+      timeZone: 'UTC',
+    });
+
+    setCreateAt(date)
   }, [year]);
-  const [value, setValue] = useState(0);
+
   const handleChange = async (
     event: React.SyntheticEvent,
     newValue: number,
@@ -276,19 +293,7 @@ export default function Index({
                     Este gráfico representa dados de <b>janeiro de 2018</b> até{' '}
                     <b>{formatedEndDate.toLowerCase()}</b> e foi gerado em{' '}
                     <b>
-                      {new Date(
-                        getCurrentYear(),
-                        new Date().getDate() < 17
-                          ? new Date().getMonth() - 1
-                          : new Date().getMonth(),
-                        16,
-                      ).toLocaleDateString('pt-BR', {
-                        calendar: 'gregory',
-                        day: '2-digit',
-                        month: 'long',
-                        year: 'numeric',
-                        timeZone: 'UTC',
-                      })}
+                      {createAt}
                     </b>
                   </p>
                 </Grid>
