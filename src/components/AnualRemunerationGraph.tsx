@@ -115,9 +115,9 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     const arr = data
       .filter(
         d =>
-          d.meses_com_dados < 12 &&
-          d.ano === getCurrentYear() &&
-          d.meses_com_dados < new Date().getMonth(),
+          (d.meses_com_dados < 12 && d.ano < getCurrentYear()) ||
+          (d.ano === getCurrentYear() &&
+            d.meses_com_dados < new Date().getMonth()),
       )
       .map(d => d[tipoRemuneracao]);
 
@@ -201,15 +201,15 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return dataArray;
   };
 
-  const graphAnnotations = React.useMemo(() => {
+  const graphAnnotations = () => {
     if (data) {
       const yearsArr = data
         .sort((a, b) => a.ano - b.ano)
         .filter(
           d =>
-            d.meses_com_dados < 12 &&
-            d.ano === getCurrentYear() &&
-            d.meses_com_dados < new Date().getMonth(),
+            (d.meses_com_dados < 12 && d.ano < getCurrentYear()) ||
+            (d.ano === getCurrentYear() &&
+              d.meses_com_dados < new Date().getMonth()),
         )
         .map(d => (d.ano === undefined ? 0 : d.ano));
 
@@ -236,7 +236,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
       }));
     }
     return [];
-  }, [data, matches]);
+  };
 
   // this constant is used as an alx value to determine the max graph height
   const MaxMonthPlaceholder = React.useMemo(() => {
@@ -636,7 +636,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                             },
                           },
                           annotations: {
-                            xaxis: graphAnnotations,
+                            xaxis: graphAnnotations(),
                           },
                           tooltip: {
                             enabled: true,
