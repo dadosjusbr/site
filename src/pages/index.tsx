@@ -89,7 +89,7 @@ export default function Index({
   const [loading, setLoading] = useState(true);
   const [plotLoading, setPlotLoading] = useState(true);
   const [value, setValue] = useState(0);
-  const [createAt, setCreateAt] = useState<string>("");
+  const [createdAt, setCreatedAt] = useState<string>('');
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -111,7 +111,7 @@ export default function Index({
       timeZone: 'UTC',
     });
 
-    setCreateAt(date)
+    setCreatedAt(date);
   }, [year]);
 
   const handleChange = async (
@@ -292,9 +292,7 @@ export default function Index({
                   <p>
                     Este gráfico representa dados de <b>janeiro de 2018</b> até{' '}
                     <b>{formatedEndDate.toLowerCase()}</b> e foi gerado em{' '}
-                    <b>
-                      {createAt}
-                    </b>
+                    <b>{createdAt}</b>
                   </p>
                 </Grid>
                 <Grid item width={900}>
