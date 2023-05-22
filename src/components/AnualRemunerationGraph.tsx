@@ -648,8 +648,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               fillColors: [
                                 'transparent',
                                 'transparent',
-                                '#2FBB96',
                                 '#97BB2F',
+                                '#2FBB96',
                                 '#2c3236',
                               ],
                             },
@@ -748,10 +748,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               return [];
                             })(),
                             // @ts-expect-error this function always returns a string
-                            color: ({ value }) =>
+                            color: options =>
                               incompleteDataValues(
                                 otherRemunerationsDataTypes,
-                              ).includes(value)
+                              ).includes(options.value) &&
+                              graphAnnotations()
+                                .map(d => d.x)
+                                .map(elemento => yearList().indexOf(elemento))
+                                .includes(options.dataPointIndex)
                                 ? '#98bb2f7d'
                                 : '#97BB2F',
                           },
@@ -766,10 +770,14 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                               return [];
                             })(),
                             // @ts-expect-error this function always returns a string
-                            color: ({ value }) =>
+                            color: options =>
                               incompleteDataValues(
                                 baseRemunerationDataTypes,
-                              ).includes(value)
+                              ).includes(options.value) &&
+                              graphAnnotations()
+                                .map(d => d.x)
+                                .map(elemento => yearList().indexOf(elemento))
+                                .includes(options.dataPointIndex)
                                 ? '#2fbb967d'
                                 : '#2FBB96',
                           },
