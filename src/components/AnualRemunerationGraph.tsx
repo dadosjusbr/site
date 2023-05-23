@@ -124,7 +124,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     return arr;
   };
 
-  const monthsWithoutData = React.useMemo(() => {
+  const monthsWithoutData = () => {
     let monthsWithoutDataArr = 0;
     if (data) {
       data
@@ -145,7 +145,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
       return monthsWithoutDataArr;
     }
     return monthsWithoutDataArr;
-  }, [data]);
+  };
 
   const noData = () => {
     const noDataArr = [];
@@ -261,18 +261,22 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
     if (noData().find(d => d !== 0)) {
       return `Este órgão não publicou dados de ${yearsWithoutData.length}
       ${yearsWithoutData.length > 1 ? 'anos' : 'ano'}${
-        monthsWithoutData > 0 ? ` e ${monthsWithoutData}` : '.'
+        monthsWithoutData() > 0 ? ` e ${monthsWithoutData()}` : '.'
       }
       ${
-        monthsWithoutData > 1 ? 'meses.' : monthsWithoutData === 1 ? 'mês.' : ''
+        monthsWithoutData() > 1
+          ? 'meses.'
+          : monthsWithoutData() === 1
+          ? 'mês.'
+          : ''
       }`;
     }
-    if (monthsWithoutData > 0 && !noData().find(d => d !== 0)) {
-      return `Este órgão não publicou dados de ${monthsWithoutData}
+    if (monthsWithoutData() > 0 && !noData().find(d => d !== 0)) {
+      return `Este órgão não publicou dados de ${monthsWithoutData()}
         ${
-          monthsWithoutData > 1
+          monthsWithoutData() > 1
             ? 'meses.'
-            : monthsWithoutData === 1
+            : monthsWithoutData() === 1
             ? 'mês.'
             : ''
         }`;
@@ -296,7 +300,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             >
               <Box sx={{ maxWidth: { xs: 320, sm: 720 }, marginBottom: 2 }}>
                 {!dataLoading &&
-                (yearsWithoutData.length > 0 || monthsWithoutData > 0) ? (
+                (yearsWithoutData.length > 0 || monthsWithoutData() > 0) ? (
                   <Box mt={2} display="flex" justifyContent="center">
                     <AlertModal
                       agencyData={agency}
