@@ -1,6 +1,6 @@
 /* eslint-disable */
 import * as React from 'react';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import Head from 'next/head';
 import styled from 'styled-components';
 import {
@@ -606,9 +606,10 @@ export default function Index({ ais }) {
                     endIcon={<CloudDownloadIcon />}
                     disabled={!downloadAvailable}
                     onClick={() => {
-                      ReactGA.pageview(
-                        `${process.env.API_BASE_URL}/v2/download`,
-                      );
+                      ReactGA.event('file_download', {
+                        category: 'download',
+                        action: `From: ${window.location.pathname}`,
+                      });
                     }}
                     href={`${process.env.API_BASE_URL}/v2/download${query}`}
                     id="download-button"
