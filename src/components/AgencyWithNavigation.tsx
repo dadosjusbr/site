@@ -200,10 +200,9 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       color="info"
                       endIcon={<CloudDownloadIcon />}
                       onClick={() => {
-                        ReactGA.event({
+                        ReactGA.event('file_download', {
                           category: 'download',
-                          action: 'file_download',
-                          label: `From: ${window.location.pathname}`,
+                          action: `From: ${window.location.pathname}`,
                         });
                       }}
                       href={url.downloadURL(fileLink)}
