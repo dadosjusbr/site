@@ -2,7 +2,7 @@ import { useState } from 'react';
 import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CodeIcon from '@mui/icons-material/Code';
 import HistoryIcon from '@mui/icons-material/History';
@@ -261,7 +261,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             color="info"
             endIcon={<CloudDownloadIcon />}
             onClick={() => {
-              ReactGA.pageview(url.downloadURL(fileLink));
+              ReactGA.event({
+                category: 'download',
+                action: 'file_download',
+                label: `From: ${window.location.pathname}`,
+              });
             }}
             href={url.downloadURL(fileLink)}
           >
@@ -323,7 +327,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               color="info"
               endIcon={<CloudDownloadIcon />}
               onClick={() => {
-                ReactGA.pageview(url.downloadURL(fileLink));
+                ReactGA.event({
+                  category: 'download',
+                  action: 'file_download',
+                  label: `From: ${window.location.pathname}`,
+                });
               }}
               href={url.downloadURL(fileLink)}
             >
@@ -889,7 +897,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               color="info"
               endIcon={<CloudDownloadIcon />}
               onClick={() => {
-                ReactGA.pageview(url.downloadURL(fileLink));
+                ReactGA.event({
+                  category: 'download',
+                  action: 'file_download',
+                  label: `From: ${window.location.pathname}`,
+                });
               }}
               href={url.downloadURL(fileLink)}
             >
