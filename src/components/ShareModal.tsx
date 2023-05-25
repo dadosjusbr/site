@@ -6,7 +6,14 @@ import {
   FacebookShareButton,
 } from 'react-share';
 import ReactGA from 'react-ga4';
-import { Box, IconButton, Typography, Modal, Dialog } from '@mui/material';
+import {
+  Box,
+  IconButton,
+  Typography,
+  Modal,
+  InputAdornment,
+  OutlinedInput,
+} from '@mui/material';
 import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import FacebookOutlinedIcon from '@mui/icons-material/FacebookOutlined';
@@ -14,9 +21,8 @@ import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import FormatQuote from '@mui/icons-material/FormatQuote';
 import ContentCopy from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close';
+import { Link as LinkButton } from '@mui/icons-material';
 import Snackbar from '@mui/material/Snackbar';
-
-import MONTHS from '../@types/MONTHS';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -29,22 +35,22 @@ const ShareModal: React.FC<ShareModalProps> = ({
   onRequestClose,
   url,
 }) => {
-  const [quoteOpen, setQuoteOpen] = React.useState(false);
-  const year = new Date().getFullYear();
-  const date = `${new Date().getDate()} de ${MONTHS[new Date().getMonth() + 1]
-    .substring(0, 3)
-    .toLowerCase()}. de ${year}`;
-
-  const handleQuoteOpen = () => {
-    setQuoteOpen(!quoteOpen);
-  };
-  const text = `DADOSJUSBR, ${year}. Disponível em:${'\n'}<${url}>.${'\n'}Acesso em: ${date}.`;
-
   const [open, setOpen] = React.useState(false);
+  const [quote, setQuote] = React.useState(false);
+  const year = new Date().getFullYear();
+  const date = `${new Date().toLocaleDateString('pt-BR', {
+    calendar: 'gregory',
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+    timeZone: 'UTC',
+  })}`;
+
+  const text = `DADOSJUSBR, ${year}. Disponível em: <${url}>. ${' '}Acesso em: ${date}.`;
 
   const handleClick = () => {
     setOpen(true);
-    navigator.clipboard.writeText(text);
+    navigator.clipboard.writeText(quote ? text : url || window.location.href);
     ReactGA.event('share', {
       action: 'share',
       category: 'copy to clipboard',
@@ -85,16 +91,35 @@ const ShareModal: React.FC<ShareModalProps> = ({
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 320,
+            width: '90%',
+            maxWidth: 650,
             bgcolor: 'background.paper',
             border: '2px solid #fff',
+            borderRadius: 2,
             boxShadow: 24,
-            p: 4,
+            p: 2,
           }}
         >
           <Typography id="modal-title" variant="h6" component="h2">
             Compartilhar
           </Typography>
+
+          <IconButton
+            aria-label="copy link"
+            size="large"
+            title="Copiar link"
+            onClick={() => setQuote(false)}
+          >
+            <LinkButton />
+          </IconButton>
+          <IconButton
+            aria-label="quote"
+            size="large"
+            title="Fazer citação"
+            onClick={() => setQuote(true)}
+          >
+            <FormatQuote />
+          </IconButton>
           <WhatsappShareButton
             url={url || window.location.href}
             onClick={() =>
@@ -104,7 +129,11 @@ const ShareModal: React.FC<ShareModalProps> = ({
               })
             }
           >
-            <IconButton aria-label="whatsapp" size="large">
+            <IconButton
+              aria-label="whatsapp"
+              size="large"
+              title="Compartilhar no Whatsapp"
+            >
               <WhatsAppIcon />
             </IconButton>
           </WhatsappShareButton>
@@ -117,7 +146,11 @@ const ShareModal: React.FC<ShareModalProps> = ({
               })
             }
           >
-            <IconButton aria-label="twitter" size="large">
+            <IconButton
+              aria-label="twitter"
+              size="large"
+              title="Compartilhar no Twitter"
+            >
               <TwitterIcon />
             </IconButton>
           </TwitterShareButton>
@@ -130,7 +163,11 @@ const ShareModal: React.FC<ShareModalProps> = ({
               })
             }
           >
-            <IconButton aria-label="facebook" size="large">
+            <IconButton
+              aria-label="facebook"
+              size="large"
+              title="Compartilhar no Facebook"
+            >
               <FacebookOutlinedIcon />
             </IconButton>
           </FacebookShareButton>
@@ -143,50 +180,45 @@ const ShareModal: React.FC<ShareModalProps> = ({
               })
             }
           >
-            <IconButton aria-label="email" size="large">
+            <IconButton
+              aria-label="email"
+              size="large"
+              title="Compartilhar com Email"
+            >
               <EmailOutlinedIcon />
             </IconButton>
           </EmailShareButton>
-          <IconButton aria-label="quote" size="large" onClick={handleQuoteOpen}>
-            <FormatQuote />
-          </IconButton>
-        </Box>
 
-        <Dialog open={quoteOpen} onClose={handleQuoteOpen}>
-          <Box
-            sx={{
-              px: 2,
-              py: 2,
-              bgcolor: 'background.paper',
-              border: '2px solid #fff',
-              overflow: 'auto',
-            }}
-          >
-            <Box display="flex">
-              <Typography
-                id="dialog-title"
-                variant="h6"
-                component="h2"
-                margin="auto"
-              >
-                Citar
-              </Typography>
-              <IconButton onClick={handleClick}>
-                <ContentCopy />
-              </IconButton>
-            </Box>
-
-            <Typography>{text}</Typography>
-
-            <Snackbar
-              open={open}
-              autoHideDuration={4000}
-              onClose={handleClose}
-              message="Copiado para a área de transferência"
-              action={action}
+          <Box mt={4} mx={1} mb={2}>
+            <OutlinedInput
+              id="outlined-basic"
+              fullWidth
+              multiline
+              value={quote ? text : url || window.location.href}
+              endAdornment={
+                <InputAdornment position="end">
+                  <ContentCopy
+                    titleAccess="Copiar link"
+                    sx={{ cursor: 'pointer' }}
+                    onClick={handleClick}
+                  />
+                </InputAdornment>
+              }
             />
           </Box>
-        </Dialog>
+        </Box>
+
+        <Snackbar
+          open={open}
+          autoHideDuration={2000}
+          onClose={handleClose}
+          message={
+            quote
+              ? 'Citação copiada para a área de transferência'
+              : 'Link copiado para a área de transferência'
+          }
+          action={action}
+        />
       </>
     </Modal>
   );
