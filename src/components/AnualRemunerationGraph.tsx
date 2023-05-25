@@ -290,7 +290,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
         <NotCollecting agency={agency} />
       ) : (
         <>
-          <Paper elevation={0} sx={{ p: 2 }}>
+          <Paper elevation={0}>
             <Box
               textAlign="center"
               alignItems="center"
@@ -394,7 +394,8 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
             <Grid
               container
               pt={4}
-              maxWidth={615}
+              px={2}
+              maxWidth={650}
               margin="auto"
               justifyContent="space-between"
             >
@@ -478,7 +479,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                 <Typography pt={1}>Sem dados</Typography>
               </Grid>
             </Grid>
-            <Box px={4}>
+            <Box px={2}>
               {agency && data && !dataLoading ? (
                 <Grid display="flex" justifyContent="flex-end">
                   <Button
@@ -486,6 +487,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                     color="secondary"
                     endIcon={<ArrowForwardIosIcon />}
                     href={`/orgao/${agency.id_orgao}/${year}`}
+                    sx={{ mr: 2 }}
                   >
                     EXPLORAR
                   </Button>
@@ -508,7 +510,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
               ) : (
                 <>
                   {data.length > 0 ? (
-                    <Box pr={2}>
+                    <Box>
                       <Chart
                         options={{
                           colors: [
@@ -560,7 +562,7 @@ const AnualRemunerationGraph: React.FC<AnualRemunerationGraphProps> = ({
                                   offsetY: 0,
                                 },
                                 chart: {
-                                  width: '110%',
+                                  width: '100%',
                                   height: '400',
                                   toolbar: {
                                     offsetY: 370,
