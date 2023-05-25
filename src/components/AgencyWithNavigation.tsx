@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
-import ReactGA from 'react-ga';
+import ReactGA from 'react-ga4';
 import {
   Container,
   Box,
@@ -148,7 +148,10 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       color="info"
                       endIcon={<CloudDownloadIcon />}
                       onClick={() => {
-                        ReactGA.pageview(url.downloadURL(fileLink));
+                        ReactGA.event('file_download', {
+                          category: 'download',
+                          action: `From: ${window.location.pathname}`,
+                        });
                       }}
                       href={url.downloadURL(fileLink)}
                       id="download-button"
@@ -197,7 +200,10 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       color="info"
                       endIcon={<CloudDownloadIcon />}
                       onClick={() => {
-                        ReactGA.pageview(url.downloadURL(fileLink));
+                        ReactGA.event('file_download', {
+                          category: 'download',
+                          action: `From: ${window.location.pathname}`,
+                        });
                       }}
                       href={url.downloadURL(fileLink)}
                       id="download-button"
