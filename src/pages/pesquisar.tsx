@@ -640,7 +640,7 @@ export default function Index({ ais }) {
         </Box>
         <ShareModal
           isOpen={modalIsOpen}
-          url={`dadosjusbr.org/pesquisar${query}`}
+          url={`https://dadosjusbr.org/pesquisar${query}`}
           onRequestClose={() => setModalIsOpen(false)}
         />
       </Container>

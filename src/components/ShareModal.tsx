@@ -23,6 +23,10 @@ import ContentCopy from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link as LinkButton } from '@mui/icons-material';
 import Snackbar from '@mui/material/Snackbar';
+import {
+  setUtmParameters,
+  removeUtmParameters,
+} from '../functions/utmParameters';
 
 interface ShareModalProps {
   isOpen: boolean;
@@ -46,11 +50,22 @@ const ShareModal: React.FC<ShareModalProps> = ({
     timeZone: 'UTC',
   })}`;
 
-  const text = `DADOSJUSBR, ${year}. Disponível em: <${url}>. ${' '}Acesso em: ${date}.`;
+  const text = `DADOSJUSBR, ${year}. Disponível em: <${removeUtmParameters(
+    url,
+  )}>. ${' '}Acesso em: ${date}.`;
 
   const handleClick = () => {
     setOpen(true);
-    navigator.clipboard.writeText(quote ? text : url || window.location.href);
+    navigator.clipboard.writeText(
+      quote
+        ? text
+        : setUtmParameters(
+            `${url || window.location.href}`,
+            'copied_link',
+            'site_share',
+            'share_buttons',
+          ),
+    );
     ReactGA.event('share', {
       action: 'share',
       category: 'copy to clipboard',
@@ -121,7 +136,12 @@ const ShareModal: React.FC<ShareModalProps> = ({
             <FormatQuote />
           </IconButton>
           <WhatsappShareButton
-            url={url || window.location.href}
+            url={setUtmParameters(
+              `${url || window.location.href}`,
+              'whatsapp',
+              'site_share',
+              'share_buttons',
+            )}
             onClick={() =>
               ReactGA.event('share', {
                 action: 'share',
@@ -138,7 +158,12 @@ const ShareModal: React.FC<ShareModalProps> = ({
             </IconButton>
           </WhatsappShareButton>
           <TwitterShareButton
-            url={url || window.location.href}
+            url={setUtmParameters(
+              `${url || window.location.href}`,
+              'twitter',
+              'site_share',
+              'share_buttons',
+            )}
             onClick={() =>
               ReactGA.event('share', {
                 action: 'share',
@@ -155,7 +180,12 @@ const ShareModal: React.FC<ShareModalProps> = ({
             </IconButton>
           </TwitterShareButton>
           <FacebookShareButton
-            url={url || window.location.href}
+            url={setUtmParameters(
+              `${url || window.location.href}`,
+              'facebook',
+              'site_share',
+              'share_buttons',
+            )}
             onClick={() =>
               ReactGA.event('share', {
                 action: 'share',
@@ -172,7 +202,12 @@ const ShareModal: React.FC<ShareModalProps> = ({
             </IconButton>
           </FacebookShareButton>
           <EmailShareButton
-            url={url || window.location.href}
+            url={setUtmParameters(
+              `${url || window.location.href}`,
+              'email',
+              'site_share',
+              'share_buttons',
+            )}
             onClick={() =>
               ReactGA.event('share', {
                 action: 'share',
@@ -194,7 +229,16 @@ const ShareModal: React.FC<ShareModalProps> = ({
               id="outlined-basic"
               fullWidth
               multiline
-              value={quote ? text : url || window.location.href}
+              value={
+                quote
+                  ? text
+                  : setUtmParameters(
+                      `${url || window.location.href}`,
+                      'copied_link',
+                      'site_share',
+                      'share_buttons',
+                    )
+              }
               endAdornment={
                 <InputAdornment position="end">
                   <ContentCopy
@@ -212,11 +256,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
           open={open}
           autoHideDuration={2000}
           onClose={handleClose}
-          message={
-            quote
-              ? 'Citação copiada para a área de transferência'
-              : 'Link copiado para a área de transferência'
-          }
+          message="Copiado para a área de transferência"
           action={action}
         />
       </>
