@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
   Container,
@@ -7,36 +8,36 @@ import {
   Button,
   ThemeProvider,
   Stack,
+  CircularProgress,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import styled from 'styled-components';
 import ShareModal from './ShareModal';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
+import { agencyType, dataType } from '../@types/PAPI_TYPES';
 import Drawer from './Drawer';
-import AnualRemunerationGraph from './AnualRemunerationGraph';
+
+const AnualRemunerationGraph = dynamic(
+  () => import('./AnnualRemunerationGraph'),
+  { loading: () => <CircularProgress />, ssr: false },
+);
 
 export interface AgencyPageWithoutNavigationProps {
   id: string;
   year: number;
-  agency: any;
+  agency: agencyType;
   title: string;
-  data: any[];
+  data: dataType[];
   dataLoading: boolean;
 }
 
-const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = ({
-  id,
-  title,
-  year,
-  agency,
-  data,
-  dataLoading,
-}) => {
+const AgencyPageWithoutNavigation: React.FC<
+  AgencyPageWithoutNavigationProps
+> = ({ id, title, year, agency, data, dataLoading }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
@@ -52,7 +53,7 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
         ) : (
           <>
             {!matches ? (
-              <Div>
+              <Box display="flex" justifyContent="space-between">
                 <Stack
                   spacing={2}
                   direction="row"
@@ -94,7 +95,7 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
                     PESQUISAR
                   </Button>
                 </Stack>
-              </Div>
+              </Box>
             ) : (
               <Drawer>
                 <Stack
@@ -129,7 +130,7 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
         )}
       </Box>
       <ThemeProvider theme={light}>
-        <Box mb={12}>
+        <Box>
           <AnualRemunerationGraph
             data={data}
             year={year}
@@ -147,10 +148,5 @@ const AgencyPageWithoutNavigation: React.FC<AgencyPageWithoutNavigationProps> = 
     </Container>
   );
 };
-
-const Div = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
 
 export default AgencyPageWithoutNavigation;

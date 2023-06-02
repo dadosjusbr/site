@@ -1,11 +1,9 @@
 import { useState } from 'react';
-import styled from 'styled-components';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga4';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import CodeIcon from '@mui/icons-material/Code';
-import HistoryIcon from '@mui/icons-material/History';
 import AlarmOnIcon from '@mui/icons-material/AlarmOn';
 
 import {
@@ -28,7 +26,6 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
@@ -39,11 +36,15 @@ import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import { Done, Close } from '@mui/icons-material';
 
-import * as url from '../url';
-import ShareModal from './ShareModal';
-import MONTHS from '../@types/MONTHS';
-import light from '../styles/theme-light';
-import Drawer from './Drawer';
+import * as url from '../../url';
+import ShareModal from '../ShareModal';
+import MONTHS from '../../@types/MONTHS';
+import light from '../../styles/theme-light';
+import Drawer from '../Drawer';
+import { HandleAccess, HandleDataTypes } from './components/HandleMetadata';
+import { formatBytes } from '../../functions/format';
+import StackButtons from './components/StackButtons';
+import { formatLink } from './functions';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -51,146 +52,14 @@ export interface OMASummaryProps {
   totalWage: number;
   maxPerk: number;
   totalPerks: number;
-  chartData: any;
-  mi: any;
+  chartData: AgencySalary;
+  mi: SummaryzedMI;
   year: number;
   month: number;
   agency: string;
 }
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-function ShowAcesso(props) {
-  const { children: acesso } = props;
-  switch (acesso) {
-    case 'ACESSO_DIRETO':
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon>
-            <Done color="success" />
-          </ListItemIcon>
-          <span>Acesso direto</span>
-        </div>
-      );
-      break;
-    case 'AMIGAVEL_PARA_RASPAGEM':
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon>
-            <Done color="warning" />
-          </ListItemIcon>
-          <span>Amigável para raspagem</span>
-        </div>
-      );
-      break;
-    case 'RASPAGEM_DIFICULTADA':
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon>
-            <Done color="warning" />
-          </ListItemIcon>
-          <span>Raspagem dificultada</span>
-        </div>
-      );
-      break;
-    case 'NECESSITA_SIMULACAO_USUARIO':
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon>
-            <Done color="warning" />
-          </ListItemIcon>
-          <span>É possível navegar no html do site</span>
-        </div>
-      );
-      break;
-    default:
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon>
-            <Close color="error" />
-          </ListItemIcon>
-          <span>--</span>
-        </div>
-      );
-      break;
-  }
-}
-function ShowTipoDado(props) {
-  const { children: texto } = props;
-  const { tipo } = props;
-  switch (tipo) {
-    case 'SUMARIZADO':
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon>
-            <Done color="warning" />
-          </ListItemIcon>
-          <span>Disponibiliza dados de {texto} sumarizados</span>
-        </div>
-      );
-      break;
-    case 'DETALHADO':
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon>
-            <Done color="success" />
-          </ListItemIcon>
-          <span>Disponibiliza dados de {texto} detalhados</span>
-        </div>
-      );
-      break;
-    default:
-      return (
-        <div
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-          }}
-        >
-          <ListItemIcon>
-            <Close color="error" />
-          </ListItemIcon>
-          <span> Não disponibiliza dados de {texto} </span>
-        </div>
-      );
-      break;
-  }
-}
 
 const OMASummary: React.FC<OMASummaryProps> = ({
   totalMembers,
@@ -209,107 +78,18 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
-  function formatBytes(bytes: number, decimals = 2) {
-    if (!+bytes) return '0 Bytes';
-
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB'];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-
-    return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
-  }
-
-  function StackButton() {
-    return (
-      <ButtonBox>
-        <Stack
-          spacing={2}
-          direction="row"
-          justifyContent="flex-start"
-          mt={2}
-          mb={4}
-        >
-          <Button
-            variant="outlined"
-            color="info"
-            startIcon={<ArrowBackIcon />}
-            onClick={() => {
-              router.back();
-            }}
-          >
-            VOLTAR
-          </Button>
-        </Stack>
-        <Stack
-          spacing={2}
-          direction="row"
-          justifyContent="flex-end"
-          mt={2}
-          mb={4}
-        >
-          <Button
-            variant="outlined"
-            color="info"
-            endIcon={<IosShareIcon />}
-            onClick={() => setModalIsOpen(true)}
-          >
-            COMPARTILHAR
-          </Button>
-          <Button
-            variant="outlined"
-            color="info"
-            endIcon={<CloudDownloadIcon />}
-            onClick={() => {
-              ReactGA.event('file_download', {
-                category: 'download',
-                action: `From: ${window.location.pathname}`,
-              });
-            }}
-            href={url.downloadURL(fileLink)}
-          >
-            BAIXAR{' '}
-            <GreenColor>{formatBytes(mi.pacote_de_dados.size)}</GreenColor>
-          </Button>
-          <Button
-            variant="outlined"
-            color="info"
-            endIcon={<SearchIcon />}
-            onClick={() => {
-              router.push(
-                `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
-              );
-            }}
-          >
-            PESQUISAR
-          </Button>
-        </Stack>
-      </ButtonBox>
-    );
-  }
-
-  function formatLink(version: string, repository: string): string {
-    // Caso tenhamos a versão, o link redirecionará para o repositório na versão utilizada.
-    // Caso contrário, retornará o link do próprio repositório (versão atual).
-    // Tbm verificamos se a versão refere-se ao id de um container ou commit.
-    if (version !== undefined && version !== 'unspecified') {
-      if (version.includes('sha256')) {
-        const p = repository.includes('coletor') ? 'coletor' : 'parser';
-        const ag = repository.includes('cnj') ? 'cnj' : agency;
-
-        return `${repository}/pkgs/container/${p}-${ag}/${version}`;
-      }
-
-      return `${repository}/tree/${version}`;
-    }
-
-    return `${repository}`;
-  }
-
   return (
     <>
       {!matches ? (
-        <StackButton />
+        <StackButtons
+          router={router}
+          setModalIsOpen={setModalIsOpen}
+          agency={agency}
+          fileLink={fileLink}
+          month={month}
+          year={year}
+          mi={mi}
+        />
       ) : (
         <Drawer>
           <Stack spacing={2} direction="column" mt={3} mx={6}>
@@ -333,8 +113,12 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               }}
               href={url.downloadURL(fileLink)}
             >
-              BAIXAR{' '}
-              <GreenColor>{formatBytes(mi.pacote_de_dados.size)}</GreenColor>
+              <Typography variant="button" mr={1}>
+                BAIXAR
+              </Typography>
+              <Typography variant="button" color="#00bfa6">
+                {formatBytes(mi.pacote_de_dados.size)}
+              </Typography>
             </Button>
             <Button
               variant="outlined"
@@ -355,13 +139,13 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         <Grid container spacing={2}>
           <Grid item xs={12} md={20}>
             <Paper elevation={0}>
-              <Div>
+              <Box textAlign="center">
                 <Typography pt={2} px={2} variant="h6">
                   Resumo de remunerações de membros ativos
                 </Typography>
-              </Div>
+              </Box>
               <Box p={2} pb={4}>
-                <Grid xs={12} md={20}>
+                <Grid item xs={12} md={20}>
                   <List
                     dense
                     sx={{
@@ -541,29 +325,30 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado
-                              tipo={mi.metadados.remuneracao_basica}
-                            >
-                              remuneração básica
-                            </ShowTipoDado>
+                            <HandleDataTypes
+                              type={mi.metadados.remuneracao_basica}
+                              text="remuneração básica"
+                            />
                           }
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado tipo={mi.metadados.despesas}>
-                              descontos
-                            </ShowTipoDado>
+                            <HandleDataTypes
+                              type={mi.metadados.despesas}
+                              text="descontos"
+                            />
                           }
                         />
                       </ListItem>
                       <ListItem>
                         <ListItemText
                           primary={
-                            <ShowTipoDado tipo={mi.metadados.outras_receitas}>
-                              outras receitas
-                            </ShowTipoDado>
+                            <HandleDataTypes
+                              type={mi.metadados.outras_receitas}
+                              text="outras receitas"
+                            />
                           }
                         />
                       </ListItem>
@@ -588,9 +373,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                       </ListItem>
                       <ListItem>
                         <ListItemText
-                          primary={
-                            <ShowAcesso>{mi.metadados.acesso}</ShowAcesso>
-                          }
+                          primary={<HandleAccess text={mi.metadados.acesso} />}
                         />
                       </ListItem>
                       <ListItem>
@@ -668,9 +451,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 </Typography>
                 <Box px={2}>
                   {!chartData.histograma ? (
-                    <ActivityIndicatorPlaceholder fontColor="#3e5363">
-                      <span>Não há dados de membros para esse mês</span>
-                    </ActivityIndicatorPlaceholder>
+                    <Box display="flex" justifyContent="center">
+                      <Typography variant="h1">
+                        Não há dados de membros para esse mês
+                      </Typography>
+                    </Box>
                   ) : (
                     <Chart
                       options={{
@@ -819,10 +604,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                             button
                             component="a"
                             target="_blank"
-                            href={formatLink(
-                              mi.dados_coleta.versao_coletor,
-                              mi.dados_coleta.repositorio_coletor,
-                            )}
+                            href={formatLink({
+                              version: mi.dados_coleta.versao_coletor,
+                              repository: mi.dados_coleta.repositorio_coletor,
+                              agency,
+                            })}
                           >
                             <ListItemIcon>
                               <CodeIcon />
@@ -857,10 +643,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                             button
                             component="a"
                             target="_blank"
-                            href={formatLink(
-                              mi.dados_coleta.versao_parser,
-                              mi.dados_coleta.repositorio_parser,
-                            )}
+                            href={formatLink({
+                              version: mi.dados_coleta.versao_parser,
+                              repository: mi.dados_coleta.repositorio_parser,
+                              agency,
+                            })}
                           >
                             <ListItemIcon>
                               <CodeIcon />
@@ -879,7 +666,15 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           </Grid>
         </Grid>
         {!matches ? (
-          <StackButton />
+          <StackButtons
+            router={router}
+            setModalIsOpen={setModalIsOpen}
+            agency={agency}
+            fileLink={fileLink}
+            month={month}
+            year={year}
+            mi={mi}
+          />
         ) : (
           <Stack spacing={2} direction="column" my={2} mx={6}>
             <Button
@@ -902,8 +697,12 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               }}
               href={url.downloadURL(fileLink)}
             >
-              BAIXAR{' '}
-              <GreenColor>{formatBytes(mi.pacote_de_dados.size)}</GreenColor>
+              <Typography variant="button" mr={1}>
+                BAIXAR
+              </Typography>
+              <Typography variant="button" color="#00bfa6">
+                {formatBytes(mi.pacote_de_dados.size)}
+              </Typography>
             </Button>
             <Button
               variant="outlined"
@@ -928,35 +727,5 @@ const OMASummary: React.FC<OMASummaryProps> = ({
     </>
   );
 };
-
-const ActivityIndicatorPlaceholder = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  padding: 20rem 0;
-  span {
-    margin-top: 3rem;
-  }
-  font-family: 'Roboto Condensed', sans-serif;
-  color: ${(p: { fontColor?: string }) => (p.fontColor ? p.fontColor : '#FFF')};
-  font-size: 3rem;
-  align-items: center;
-`;
-
-export const GreenColor = styled.span`
-  margin-left: 0.5em;
-  color: #00bfa6;
-`;
-
-const Div = styled.div`
-  width: 100%;
-  display: flex;
-  justify-content: center;
-`;
-
-const ButtonBox = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
 
 export default OMASummary;

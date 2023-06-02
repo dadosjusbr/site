@@ -9,7 +9,7 @@ const drawerBleeding = 56;
 
 interface Props {
   window?: () => Window;
-  children: any;
+  children: React.ReactChildren | React.ReactChild;
 }
 
 const StyledBox = styled(Box)(({ theme }) => ({

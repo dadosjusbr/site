@@ -19,25 +19,23 @@ import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import styled from 'styled-components';
 import ShareModal from './ShareModal';
 import RemunerationBarGraph from './RemunerationBarGraph';
 import * as url from '../url';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
 import Drawer from './Drawer';
-import { GreenColor } from './OmaChart';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
   year: number;
-  agency: any;
+  agency: Agency;
   title: string;
   setYear: (y: number) => void;
-  data: any[];
+  data: v2MonthTotals[];
   dataLoading: boolean;
   navigableMonth: number;
-  summaryPackage?: any;
+  summaryPackage?: Backup;
 }
 
 const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
@@ -111,7 +109,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             </Grid>
 
             {!matches ? (
-              <Div>
+              <Box display="flex" justifyContent="space-between">
                 <Stack
                   spacing={2}
                   direction="row"
@@ -156,10 +154,12 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       href={url.downloadURL(fileLink)}
                       id="download-button"
                     >
-                      BAIXAR{' '}
-                      <GreenColor>
+                      <Typography variant="button" mr={1}>
+                        BAIXAR
+                      </Typography>
+                      <Typography variant="button" color="#00bfa6">
                         {formatBytes(summaryPackage.size)}
-                      </GreenColor>
+                      </Typography>
                     </Button>
                   )}
 
@@ -176,7 +176,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     PESQUISAR
                   </Button>
                 </Stack>
-              </Div>
+              </Box>
             ) : (
               <Drawer>
                 <Stack
@@ -208,10 +208,12 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       href={url.downloadURL(fileLink)}
                       id="download-button"
                     >
-                      BAIXAR{' '}
-                      <GreenColor>
+                      <Typography variant="button" mr={1}>
+                        BAIXAR
+                      </Typography>
+                      <Typography variant="button" color="#00bfa6">
                         {formatBytes(summaryPackage.size)}
-                      </GreenColor>
+                      </Typography>
                     </Button>
                   )}
                   <Button
@@ -252,10 +254,5 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     </Container>
   );
 };
-
-const Div = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
 
 export default AgencyPageWithNavigation;

@@ -242,7 +242,11 @@ export default function OmaPage({
 }
 
 export const getServerSideProps: GetServerSideProps = async context => {
-  const { agency, year: y, month: m } = context.params as {
+  const {
+    agency,
+    year: y,
+    month: m,
+  } = context.params as {
     agency: string;
     year: string;
     month: string;
