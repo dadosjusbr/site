@@ -203,6 +203,13 @@ export const graphOptions = ({
           return `${val}`;
         }
 
+        if (
+          getYearWithIncompleteData(data).filter(d => d.ano === val).length ===
+          0
+        ) {
+          return `${val}`;
+        }
+
         return `${val} (${noDataMonths} ${
           noDataMonths > 1 ? 'meses' : 'mês'
         } sem dados)`;

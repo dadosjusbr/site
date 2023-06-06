@@ -7,28 +7,17 @@ import {
   Grid,
   Paper,
   Typography,
-  Tooltip,
   useMediaQuery,
-  IconButton,
-  Tabs,
-  Tab,
 } from '@mui/material';
-
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import InfoIcon from '@mui/icons-material/Info';
-import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
-import CropSquareIcon from '@mui/icons-material/CropSquare';
-import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 
-import NotCollecting from '../NotCollecting';
-import AlertModal from '../AlertModal';
 import {
   monthsWithoutData,
   warningMessage,
   yearsWithoutData,
 } from './functions';
-import { formatCurrencyValue } from '../../functions/format';
 import { graphOptions, graphSeries } from './functions/graphConfigs';
+import NotCollecting from '../NotCollecting';
 import RemunerationChartLegend from '../RemunerationChartLegend';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });

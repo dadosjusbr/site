@@ -48,8 +48,11 @@ export const getYearWithIncompleteData = (
     d =>
       (d.meses_com_dados < 12 && d.ano < getCurrentYear()) ||
       (d.ano === getCurrentYear() &&
-        d.meses_com_dados < new Date().getMonth() + 1 &&
-        new Date().getDate() < COLLECT_INFOS.COLLECT_DATE),
+        new Date().getDate() > COLLECT_INFOS.COLLECT_DATE &&
+        d.meses_com_dados < 10 - new Date().getMonth()) ||
+      (d.ano === getCurrentYear() &&
+        new Date().getDate() < COLLECT_INFOS.COLLECT_DATE &&
+        d.meses_com_dados < 9 - new Date().getMonth()),
   );
 
 export const monthsWithoutData = ({
