@@ -18,7 +18,6 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import ShareModal from './ShareModal';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
-import { agencyType, dataType } from '../@types/PAPI_TYPES';
 import Drawer from './Drawer';
 
 const AnualRemunerationGraph = dynamic(
@@ -29,9 +28,9 @@ const AnualRemunerationGraph = dynamic(
 export interface AgencyPageWithoutNavigationProps {
   id: string;
   year: number;
-  agency: agencyType;
+  agency: Agency;
   title: string;
-  data: dataType[];
+  data: AnnualSummaryData[];
   dataLoading: boolean;
 }
 

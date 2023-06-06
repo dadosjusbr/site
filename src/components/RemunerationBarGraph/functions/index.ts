@@ -1,14 +1,14 @@
-import MONTHS from '../../@types/MONTHS';
-import { getCurrentYear } from '../../functions/currentYear';
+import MONTHS from '../../../@types/MONTHS';
+import { getCurrentYear } from '../../../functions/currentYear';
 
 export const MonthlyInfo = ({
   data,
   baseRemunerationDataTypes,
-  othersRemunerationsDataTypes,
+  otherRemunerationsDataTypes,
 }: {
   data: v2MonthTotals[];
   baseRemunerationDataTypes: string;
-  othersRemunerationsDataTypes: string;
+  otherRemunerationsDataTypes: string;
 }) => {
   let object = {};
   data?.forEach(element => {
@@ -16,7 +16,7 @@ export const MonthlyInfo = ({
       ...object,
       [MONTHS[element.mes]]:
         element[baseRemunerationDataTypes] +
-        element[othersRemunerationsDataTypes],
+        element[otherRemunerationsDataTypes],
     };
   });
   return object;
@@ -48,35 +48,35 @@ export function fixYearDataArray(array: v2MonthTotals[]) {
 export const MaxMonthPlaceholder = ({
   data,
   baseRemunerationDataTypes,
-  othersRemunerationsDataTypes,
+  otherRemunerationsDataTypes,
 }: {
   data: v2MonthTotals[];
   baseRemunerationDataTypes: string;
-  othersRemunerationsDataTypes: string;
+  otherRemunerationsDataTypes: string;
 }) => {
   const found = data
     ?.filter(d => !d.error)
     .sort(
       (a, b) =>
         a[baseRemunerationDataTypes] +
-        a[othersRemunerationsDataTypes] -
-        (b[baseRemunerationDataTypes] + b[othersRemunerationsDataTypes]),
+        a[otherRemunerationsDataTypes] -
+        (b[baseRemunerationDataTypes] + b[otherRemunerationsDataTypes]),
     )
     .reverse()[0];
   // 10000 is used here as the min value of chart height
   return found
-    ? found[baseRemunerationDataTypes] + found[othersRemunerationsDataTypes] + 1
+    ? found[baseRemunerationDataTypes] + found[otherRemunerationsDataTypes] + 1
     : 10000;
 };
 
-export const monthsWithouData = ({
+export const monthsWithoutData = ({
   data,
   year,
 }: {
   data: v2MonthTotals[];
   year: number;
-}) => {
-  const months = [];
+}): number[] => {
+  const months: number[] = [];
   for (let i = 1; i <= 12; i += 1) {
     if (year === getCurrentYear()) {
       if (!data?.find(d => d.mes === i) && i < new Date().getMonth()) {

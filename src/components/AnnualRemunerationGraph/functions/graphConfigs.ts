@@ -4,8 +4,8 @@ import {
   noData,
   totalWaste,
   yearList,
-} from './functions';
-import { formatCurrencyValue } from '../../functions/format';
+} from '.';
+import { formatCurrencyValue } from '../../../functions/format';
 
 export const graphAnnotations = ({
   data,

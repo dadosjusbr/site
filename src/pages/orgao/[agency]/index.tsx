@@ -40,7 +40,7 @@ export default function AnualAgencyPage({ id, agency, data, fullName }) {
         />
       </Head>
       <Header />
-      <Box display="flex" my={8} justifyContent="center">
+      <Box display="flex" my={10} justifyContent="center">
         <AgencyWithoutNavigation
           data={data}
           id={id}

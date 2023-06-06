@@ -1,5 +1,5 @@
-import { getCurrentYear } from '../../functions/currentYear';
-import COLLECT_INFOS from '../../@types/COLLECT_INFOS';
+import { getCurrentYear } from '../../../functions/currentYear';
+import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
 
 // this constant is used as an aux value to determine the max graph height when there is no data
 const MaxMonthPlaceholder = ({
@@ -48,11 +48,15 @@ export const getYearWithIncompleteData = (
     d =>
       (d.meses_com_dados < 12 && d.ano < getCurrentYear()) ||
       (d.ano === getCurrentYear() &&
-        d.meses_com_dados < new Date().getMonth() &&
-        new Date().getDate() > COLLECT_INFOS.COLLECT_DATE),
+        d.meses_com_dados < new Date().getMonth() + 1 &&
+        new Date().getDate() < COLLECT_INFOS.COLLECT_DATE),
   );
 
-export const monthsWithoutData = (data: AnnualSummaryData[]): number => {
+export const monthsWithoutData = ({
+  data,
+}: {
+  data: AnnualSummaryData[];
+}): number => {
   let monthsCount = 0;
   data
     ?.map(d => {
@@ -174,29 +178,31 @@ export const warningMessage = (
   ) {
     return `Este órgão não publicou dados de ${yearsWithoutData.length}
         ${yearsWithoutData.length > 1 ? 'anos' : 'ano'}${
-      monthsWithoutData(data) > 0 ? ` e ${monthsWithoutData(data)}` : '.'
+      monthsWithoutData({ data }) > 0
+        ? ` e ${monthsWithoutData({ data })}`
+        : '.'
     }
         ${
-          monthsWithoutData(data) > 1
+          monthsWithoutData({ data }) > 1
             ? 'meses.'
-            : monthsWithoutData(data) === 1
+            : monthsWithoutData({ data }) === 1
             ? 'mês.'
             : ''
         }`;
   }
   if (
-    monthsWithoutData(data) > 0 &&
+    monthsWithoutData({ data }) > 0 &&
     !noData({
       data,
       baseRemunerationDataTypes,
       otherRemunerationsDataTypes,
     }).find(d => d !== 0)
   ) {
-    return `Este órgão não publicou dados de ${monthsWithoutData(data)}
+    return `Este órgão não publicou dados de ${monthsWithoutData({ data })}
           ${
-            monthsWithoutData(data) > 1
+            monthsWithoutData({ data }) > 1
               ? 'meses.'
-              : monthsWithoutData(data) === 1
+              : monthsWithoutData({ data }) === 1
               ? 'mês.'
               : ''
           }`;

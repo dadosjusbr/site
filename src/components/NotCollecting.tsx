@@ -14,7 +14,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 const NotCollecting: React.FC<{
   agency: Agency;
 }> = ({ agency }) => {
-  console.log(agency);
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);

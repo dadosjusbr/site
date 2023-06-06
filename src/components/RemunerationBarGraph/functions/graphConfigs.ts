@@ -1,26 +1,26 @@
-import { formatCurrencyValue } from '../../functions/format';
-import MONTHS from '../../@types/MONTHS';
-import { getCurrentYear } from '../../functions/currentYear';
+import { formatCurrencyValue } from '../../../functions/format';
+import MONTHS from '../../../@types/MONTHS';
+import { getCurrentYear } from '../../../functions/currentYear';
 import {
   MaxMonthPlaceholder,
   MonthlyInfo,
   createArrayFilledWithValue,
   fixYearDataArray,
-} from './functions';
-import COLLECT_INFOS from '../../@types/COLLECT_INFOS';
+} from '.';
+import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
 
 export const graphOptions = ({
   agency,
   data,
   year,
   baseRemunerationDataTypes,
-  othersRemunerationsDataTypes,
+  otherRemunerationsDataTypes,
 }: {
   agency: Agency;
   data: v2MonthTotals[];
   year: number;
   baseRemunerationDataTypes: string;
-  othersRemunerationsDataTypes: string;
+  otherRemunerationsDataTypes: string;
 }): ApexCharts.ApexOptions => ({
   colors: [
     'transparent',
@@ -146,7 +146,7 @@ export const graphOptions = ({
           MaxMonthPlaceholder({
             data,
             baseRemunerationDataTypes,
-            othersRemunerationsDataTypes,
+            otherRemunerationsDataTypes,
           })
         )
           return 'Não existem dados para esse mês';
@@ -234,7 +234,7 @@ export const graphSeries = ({
   hidingErrors,
   hidingNoData,
   baseRemunerationDataTypes,
-  othersRemunerationsDataTypes,
+  otherRemunerationsDataTypes,
 }: {
   data: v2MonthTotals[];
   year: number;
@@ -243,7 +243,7 @@ export const graphSeries = ({
   hidingErrors: boolean;
   hidingNoData: boolean;
   baseRemunerationDataTypes: string;
-  othersRemunerationsDataTypes: string;
+  otherRemunerationsDataTypes: string;
 }): ApexAxisChartSeries | ApexNonAxisChartSeries => [
   {
     name: 'Total de remunerações',
@@ -251,7 +251,7 @@ export const graphSeries = ({
       createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
         fixYearDataArray(data)[i]
           ? fixYearDataArray(data)[i][baseRemunerationDataTypes] / 10000000 +
-            fixYearDataArray(data)[i][othersRemunerationsDataTypes] / 10000000
+            fixYearDataArray(data)[i][otherRemunerationsDataTypes] / 10000000
           : v,
       ))(),
   },
@@ -269,7 +269,7 @@ export const graphSeries = ({
         return createArrayFilledWithValue({ size: 12, value: 0 }).map(
           (v, i) => {
             if (fixYearDataArray(data)[i]) {
-              return fixYearDataArray(data)[i][othersRemunerationsDataTypes];
+              return fixYearDataArray(data)[i][otherRemunerationsDataTypes];
             }
             return v;
           },
@@ -311,14 +311,14 @@ export const graphSeries = ({
                 return MaxMonthPlaceholder({
                   data,
                   baseRemunerationDataTypes,
-                  othersRemunerationsDataTypes,
+                  otherRemunerationsDataTypes,
                 });
               }
             } else {
               return MaxMonthPlaceholder({
                 data,
                 baseRemunerationDataTypes,
-                othersRemunerationsDataTypes,
+                otherRemunerationsDataTypes,
               });
             }
             return 0;
@@ -339,7 +339,7 @@ export const graphSeries = ({
               return MaxMonthPlaceholder({
                 data,
                 baseRemunerationDataTypes,
-                othersRemunerationsDataTypes,
+                otherRemunerationsDataTypes,
               });
             }
             return 0;
