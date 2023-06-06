@@ -22,7 +22,7 @@ export const MonthlyInfo = ({
   return object;
 };
 
-//functions to normalize data
+// functions to normalize data
 export function createArrayFilledWithValue<T>({
   size,
   value,

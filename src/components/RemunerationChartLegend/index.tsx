@@ -8,11 +8,11 @@ import {
   Tooltip,
   Typography,
 } from '@mui/material';
-import AlertModal from '../AlertModal';
 import InfoIcon from '@mui/icons-material/Info';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
+import AlertModal from '../AlertModal';
 import { formatCurrencyValue } from '../../functions/format';
 
 const index = ({
@@ -48,13 +48,15 @@ const index = ({
   hidingNoData: boolean;
   setHidingNoData: React.Dispatch<React.SetStateAction<boolean>>;
   monthsWithoutData: ({
+    // eslint-disable-next-line no-shadow
     data,
+    // eslint-disable-next-line no-shadow
     year,
   }: {
     data: v2MonthTotals[] | AnnualSummaryData[];
     year?: number;
   }) => any;
-  yearsWithoutData?: any;
+  yearsWithoutData?: number[];
   warningMessage?: string;
   annual?: boolean;
 }) => {

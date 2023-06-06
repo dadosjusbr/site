@@ -109,7 +109,6 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
           <AgencyGenerals
-            matches={matches}
             maxPerk={maxPerk}
             maxWage={maxWage}
             totalPerks={totalPerks}

@@ -179,8 +179,8 @@ export const warningMessage = (
       otherRemunerationsDataTypes,
     }).find(d => d !== 0)
   ) {
-    return `Este órgão não publicou dados de ${yearsWithoutData.length}
-        ${yearsWithoutData.length > 1 ? 'anos' : 'ano'}${
+    return `Este órgão não publicou dados de ${yearsWithoutData(data).length}
+        ${yearsWithoutData(data).length > 1 ? 'anos' : 'ano'}${
       monthsWithoutData({ data }) > 0
         ? ` e ${monthsWithoutData({ data })}`
         : '.'

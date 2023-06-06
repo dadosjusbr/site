@@ -83,7 +83,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               hidingNoData={hidingNoData}
               setHidingNoData={setHidingNoData}
               monthsWithoutData={monthsWithoutData}
-              yearsWithoutData={yearsWithoutData}
+              yearsWithoutData={yearsWithoutData(data)}
               warningMessage={warningMessage(
                 data,
                 baseRemunerationDataTypes,

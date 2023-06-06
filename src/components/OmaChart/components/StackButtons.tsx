@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
@@ -6,7 +7,6 @@ import SearchIcon from '@mui/icons-material/Search';
 import ReactGA from 'react-ga4';
 import { NextRouter } from 'next/router';
 import { formatBytes } from '../../../functions/format';
-import { Dispatch, SetStateAction } from 'react';
 import * as url from '../../../url';
 
 export default function index({

@@ -8,7 +8,6 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import MONTHS from '../@types/MONTHS';
-import { mensalDataType } from '../@types/PAPI_TYPES';
 
 function TableRow(props) {
   const { month, crawlingtimeseconds } = props;
@@ -25,7 +24,7 @@ function TableRow(props) {
   );
 }
 
-function DateTable({ data }: { data: mensalDataType[] }) {
+function DateTable({ data }: { data: v2MonthTotals[] }) {
   return (
     <Accordion
       sx={{
@@ -47,7 +46,7 @@ function DateTable({ data }: { data: mensalDataType[] }) {
                 <TableRow
                   key={d.mes}
                   month={d.mes}
-                  crawlingtimeseconds={d.timestamp.seconds}
+                  crawlingtimeseconds={d.timestamp.Seconds}
                 />
               ))}
             </tbody>
@@ -59,7 +58,7 @@ function DateTable({ data }: { data: mensalDataType[] }) {
 }
 
 const CrawlingDateTable: React.FC<{
-  data: mensalDataType[];
+  data: v2MonthTotals[];
   dataLoading: boolean;
 }> = ({ data, dataLoading }) => (
   <div>
