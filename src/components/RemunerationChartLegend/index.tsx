@@ -32,7 +32,7 @@ const index = ({
   monthsWithoutData,
   yearsWithoutData,
   warningMessage,
-  annual,
+  annual = false,
 }: {
   agency: Agency;
   data: v2MonthTotals[] | AnnualSummaryData[];
