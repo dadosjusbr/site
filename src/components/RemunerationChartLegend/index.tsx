@@ -128,10 +128,6 @@ const index = ({
         </Box>
         <Typography variant="h5" textAlign="center" mt={2}>
           {graphType === 'media-por-membro' &&
-            !annual &&
-            `Em ${year}, a média de remuneração dos membros foi de: `}
-          {graphType === 'media-por-membro' &&
-            annual &&
             `Em média, cada membro deste órgão recebeu: `}
           {graphType === 'media-mensal' &&
             `Em média, este órgão gastou mensalmente: `}
