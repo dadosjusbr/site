@@ -42,7 +42,7 @@ const AgencyPageWithoutNavigation: React.FC<
   const router = useRouter();
 
   return (
-    <Container fixed>
+    <Container fixed sx={{ mb: 12 }}>
       <Box>
         <Typography variant="h2" textAlign="center">
           {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
