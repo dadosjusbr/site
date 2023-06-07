@@ -28,6 +28,7 @@ import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
 import { getCurrentYear } from '../functions/currentYear';
+import COLLECT_INFOS from '../@types/COLLECT_INFOS';
 
 const RemunerationBarGraph = dynamic(
   () => import('../components/RemunerationBarGraph'),
@@ -84,7 +85,6 @@ export default function Index({
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   const [plotData, setPlotData] = useState<any>([]);
-  // this state is used to check if the actual date is at least 17 days away from January 1st. The data collect always happen in the 17th day, so we set the default year after this first data collect of the year.
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
   const [plotLoading, setPlotLoading] = useState(true);
@@ -99,7 +99,7 @@ export default function Index({
     fetchGeneralChartData();
     const date = new Date(
       getCurrentYear(),
-      new Date().getDate() < 17
+      new Date().getDate() < COLLECT_INFOS.COLLECT_DATE
         ? new Date().getMonth() - 1
         : new Date().getMonth(),
       16,
@@ -399,7 +399,6 @@ export default function Index({
                 agency={null}
                 data={completeChartData}
                 dataLoading={loading}
-                billion
               />
             </Box>
           </Box>

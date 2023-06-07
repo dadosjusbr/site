@@ -24,8 +24,7 @@ function TableRow(props) {
   );
 }
 
-function DateTable(props) {
-  const { data } = props;
+function DateTable({ data }: { data: v2MonthTotals[] }) {
   return (
     <Accordion
       sx={{
@@ -45,9 +44,9 @@ function DateTable(props) {
             <tbody>
               {data.map(d => (
                 <TableRow
-                  key={d.Month}
-                  month={d.Month}
-                  crawlingtimeseconds={d.CrawlingTimestamp.seconds}
+                  key={d.mes}
+                  month={d.mes}
+                  crawlingtimeseconds={d.timestamp.Seconds}
                 />
               ))}
             </tbody>
@@ -59,13 +58,12 @@ function DateTable(props) {
 }
 
 const CrawlingDateTable: React.FC<{
-  data;
-  dataLoading;
+  data: v2MonthTotals[];
+  dataLoading: boolean;
 }> = ({ data, dataLoading }) => (
   <div>
     {dataLoading ? (
       <Box
-        m={4}
         sx={{
           display: 'flex',
           flexDirection: 'column',
@@ -78,9 +76,7 @@ const CrawlingDateTable: React.FC<{
         <p>Aguarde...</p>
       </Box>
     ) : (
-      data &&
-      data.length &&
-      data[0].CrawlingTimestamp && <DateTable data={data} />
+      data && data.length && data[0].timestamp && <DateTable data={data} />
     )}
   </div>
 );

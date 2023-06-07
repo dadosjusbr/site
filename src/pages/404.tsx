@@ -8,7 +8,7 @@ function Error() {
   return (
     <>
       <Head>
-        <title>DadosJusBr - Erro</title>
+        <title>404</title>
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
         <meta property="og:title" content="DadosJusBr" />
         <meta

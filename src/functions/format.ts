@@ -10,4 +10,23 @@ function formatAgency(aid: string): string {
   if (aid.length === 5) return `${aid.substring(0, 3)}-${aid.substring(3, 5)}`;
   return aid;
 }
-export { formatAgency };
+
+const formatCurrencyValue = (value: number): string =>
+  value.toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+    maximumFractionDigits: 1,
+    notation: 'compact',
+  });
+
+const formatBytes = (bytes: number, decimals = 2) => {
+  if (!+bytes) return '0 Bytes';
+
+  const dm = decimals < 0 ? 0 : decimals;
+  const sizes = ['Bytes', 'KB', 'MB'];
+
+  const i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+  return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
+};
+export { formatAgency, formatCurrencyValue, formatBytes };

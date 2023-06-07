@@ -33,6 +33,8 @@
     "no-nested-ternary": "off",
     "no-restricted-syntax": "off",
     "no-param-reassign": "off",
+    "camelcase": "off",
+    "@typescript-eslint/naming-convention": "off",
     "react/jsx-filename-extension": [
       1,
       {

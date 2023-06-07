@@ -1,9 +1,8 @@
 import { useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
-import styled from 'styled-components';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { CircularProgress } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import api from '../../../services/api';
@@ -11,7 +10,7 @@ import { getCurrentYear } from '../../../functions/currentYear';
 
 const AgencyWithoutNavigation = dynamic(
   () => import('../../../components/AgencyWithoutNavigation'),
-  { loading: () => <CircularProgress /> },
+  { loading: () => <CircularProgress />, ssr: false },
 );
 
 export default function AnualAgencyPage({ id, agency, data, fullName }) {
@@ -27,7 +26,7 @@ export default function AnualAgencyPage({ id, agency, data, fullName }) {
     setYear(yearData);
   }, [data]);
   return (
-    <Page>
+    <Box>
       <Head>
         <title>{fullName}</title>
         <meta property="og:image" content="/img/icon_dadosjus_background.png" />
@@ -41,7 +40,7 @@ export default function AnualAgencyPage({ id, agency, data, fullName }) {
         />
       </Head>
       <Header />
-      <Container>
+      <Box display="flex" my={10} justifyContent="center">
         <AgencyWithoutNavigation
           data={data}
           id={id}
@@ -50,14 +49,12 @@ export default function AnualAgencyPage({ id, agency, data, fullName }) {
           dataLoading={false}
           title={fullName}
         />
-      </Container>
+      </Box>
       <Footer />
-    </Page>
+    </Box>
   );
 }
-const Page = styled.div`
-  background: #3e5363;
-`;
+
 export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id } = context.params;
   try {
@@ -80,6 +77,3 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 };
-const Container = styled.div`
-  margin-top: 3rem;
-`;
