@@ -165,7 +165,13 @@ export const graphOptions = ({
       : { enabledOnSeries: [0, 2, 3] }),
     x: {
       formatter(val) {
-        if (MonthlyInfo[val] === undefined) {
+        if (
+          MonthlyInfo({
+            data,
+            baseRemunerationDataTypes,
+            otherRemunerationsDataTypes,
+          })[val] === undefined
+        ) {
           return 'Sem Dados';
         }
         return `${val}`;
