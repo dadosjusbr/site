@@ -5,6 +5,8 @@ import {
   totalWaste,
   yearList,
 } from '.';
+import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
+import { getCurrentYear } from '../../../functions/currentYear';
 import { formatCurrencyValue } from '../../../functions/format';
 
 export const graphAnnotations = ({
@@ -190,17 +192,26 @@ export const graphOptions = ({
     },
     x: {
       formatter(val) {
+        const date = new Date();
+        const validMonths =
+          val === getCurrentYear() &&
+          date.getDate() > COLLECT_INFOS.COLLECT_DATE
+            ? date.getMonth()
+            : val === getCurrentYear() &&
+              date.getDate() < COLLECT_INFOS.COLLECT_DATE
+            ? date.getMonth() - 1
+            : 12;
         const noDataMonths =
-          12 -
-          (data.find(d => d.ano === val) &&
-            data.find(d => d.ano === val).meses_com_dados);
+          validMonths - data.find(d => d.ano === val)?.meses_com_dados;
 
         if (!data.map(d => d.ano).includes(val)) {
           return `${val} (12 meses sem dados)`;
         }
 
-        if (noDataMonths === 0) {
-          return `${val}`;
+        if (noDataMonths > 0) {
+          return `${val} (${noDataMonths} ${
+            noDataMonths > 1 ? 'meses' : 'mês'
+          } sem dados)`;
         }
 
         if (
@@ -210,9 +221,7 @@ export const graphOptions = ({
           return `${val}`;
         }
 
-        return `${val} (${noDataMonths} ${
-          noDataMonths > 1 ? 'meses' : 'mês'
-        } sem dados)`;
+        return `${val}`;
       },
     },
     y: {
