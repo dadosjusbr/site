@@ -47,7 +47,7 @@ const AgencyPageWithoutNavigation: React.FC<
         <Typography variant="h2" textAlign="center">
           {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
         </Typography>
-        {agency && agency.coletando ? (
+        {agency && agency.coletando && !agency.possui_dados ? (
           <></>
         ) : (
           <>
