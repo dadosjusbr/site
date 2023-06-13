@@ -61,7 +61,7 @@ export const graphOptions = ({
     'transparent',
     '#97BB2F',
     '#2FBB96',
-    '#775ecf',
+    '#57659d',
     '#2c3236',
   ],
   chart: {
@@ -198,7 +198,7 @@ export const graphOptions = ({
         'transparent',
         '#97BB2F',
         '#2FBB96',
-        '#775ecf',
+        '#57659d',
         '#2c3236',
       ],
     },
@@ -292,7 +292,7 @@ export const graphOptions = ({
   stroke: {
     curve: 'smooth',
     lineCap: 'round',
-    colors: ['', '', '', '', '#775ecf'],
+    colors: ['', '', '', '', '#57659d'],
   },
 });
 
