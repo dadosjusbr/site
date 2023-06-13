@@ -4,12 +4,15 @@ import {
   Box,
   Button,
   CircularProgress,
+  Fab,
   Grid,
   Paper,
   Typography,
   useMediaQuery,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import SsidIcon from '@mui/icons-material/SsidChart';
+import BarChartIcon from '@mui/icons-material/BarChart';
 
 import {
   monthsWithoutData,
@@ -122,7 +125,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               ) : (
                 <>
                   {data.length > 0 ? (
-                    <Box>
+                    <Box position="relative">
                       <Suspense fallback={<CircularProgress />}>
                         <Chart
                           options={graphOptions({ agency, data, matches })}
@@ -140,6 +143,17 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                           type="bar"
                         />
                       </Suspense>
+                      <Box position="absolute" top="2%" left="0">
+                        <Fab
+                          size="medium"
+                          color="secondary"
+                          variant="extended"
+                          aria-label="add"
+                        >
+                          <SsidIcon />
+                          Transparência
+                        </Fab>
+                      </Box>
                     </Box>
                   ) : (
                     <Typography variant="body1" mt={2} textAlign="center">
