@@ -88,8 +88,8 @@ type v2MonthTotals = {
 };
 
 type Timestamp = {
-  Seconds: number;
-  Nanos: number;
+  seconds: number;
+  nanos: number;
 };
 
 type v2ProcInfoResult = {
