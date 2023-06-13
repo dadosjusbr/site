@@ -12,6 +12,7 @@ import InfoIcon from '@mui/icons-material/Info';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import CropSquareIcon from '@mui/icons-material/CropSquare';
+import Payments from '@mui/icons-material/Payments';
 import AlertModal from '../AlertModal';
 import { formatCurrencyValue } from '../../functions/format';
 
@@ -23,6 +24,7 @@ const index = ({
   setGraphType,
   baseRemunerationDataTypes,
   otherRemunerationsDataTypes,
+  discountsDataTypes,
   hidingWage,
   setHidingWage,
   hidingBenefits,
@@ -41,6 +43,7 @@ const index = ({
   setGraphType: React.Dispatch<React.SetStateAction<string>>;
   baseRemunerationDataTypes: string;
   otherRemunerationsDataTypes: string;
+  discountsDataTypes: string;
   hidingWage: boolean;
   setHidingWage: React.Dispatch<React.SetStateAction<boolean>>;
   hidingBenefits: boolean;
@@ -166,6 +169,10 @@ const index = ({
                   remuneração fixa ou variável.
                 </p>
                 <p>
+                  <b>Remunerações:</b> Valor final da soma entre salário e
+                  benefícios, retirando os descontos.
+                </p>
+                <p>
                   <b>Salário:</b> Valor recebido de acordo com a prestação de
                   serviços, em decorrência do contrato de trabalho.
                 </p>
@@ -191,10 +198,48 @@ const index = ({
       </Box>
       <Grid
         container
-        maxWidth={650}
+        maxWidth={850}
         margin="auto"
         justifyContent="space-between"
+        p={1}
       >
+        {agency && (
+          <Grid xs={5} md={3} item textAlign="center">
+            <IconButton
+              sx={{ backgroundColor: '#57659d' }}
+              onClick={e => {
+                if (hidingWage) {
+                  e.currentTarget.classList.remove('active');
+                  setHidingWage(false);
+                } else {
+                  e.currentTarget.classList.add('active');
+                  setHidingWage(true);
+                }
+              }}
+            >
+              <Payments />
+            </IconButton>
+            <Typography pt={1}>
+              Remunerações:
+              <br />
+              {(() => {
+                let total = 0;
+                const yearlyTotals = data.map(
+                  d =>
+                    d[baseRemunerationDataTypes] +
+                    d[otherRemunerationsDataTypes] -
+                    d[discountsDataTypes],
+                );
+
+                yearlyTotals.forEach(w => {
+                  total += w;
+                });
+
+                return formatCurrencyValue(total);
+              })()}
+            </Typography>
+          </Grid>
+        )}
         <Grid xs={5} md={3} item textAlign="center">
           <IconButton
             sx={{ backgroundColor: '#2fbb95' }}

@@ -167,6 +167,42 @@ export const createDataArray = ({
   return dataArray;
 };
 
+export const createRemunerationArray = ({
+  data,
+  baseRemunerationDataTypes,
+  otherRemunerationsDataTypes,
+  discountsDataTypes,
+}: {
+  data: AnnualSummaryData[];
+  baseRemunerationDataTypes: string;
+  otherRemunerationsDataTypes: string;
+  discountsDataTypes: string;
+}): number[] => {
+  const incomingData = data
+    ?.sort((a, b) => a.ano - b.ano)
+    .map(
+      d =>
+        (d[baseRemunerationDataTypes] === undefined
+          ? 0
+          : d[baseRemunerationDataTypes]) +
+        (d[otherRemunerationsDataTypes] === undefined
+          ? 0
+          : d[otherRemunerationsDataTypes]) -
+        (d[discountsDataTypes] === undefined ? 0 : d[discountsDataTypes]),
+    );
+
+  const dataArray: number[] = [];
+  for (let i = 2018; i <= getCurrentYear(); i += 1) {
+    if (yearsWithData(data)?.includes(i)) {
+      dataArray.push(incomingData[yearsWithData(data)?.indexOf(i)]);
+    } else if (!yearsWithData(data)?.includes(i)) {
+      dataArray.push(0);
+    }
+  }
+
+  return dataArray;
+};
+
 export const warningMessage = (
   data: AnnualSummaryData[],
   baseRemunerationDataTypes: string,

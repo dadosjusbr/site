@@ -54,6 +54,13 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     return 'outras_remuneracoes';
   }, [graphType]);
 
+  const discountsDataTypes = useMemo(() => {
+    if (graphType === 'media-por-membro' && agency) {
+      return 'descontos_por_membro';
+    }
+    return 'descontos';
+  }, [graphType]);
+
   return (
     <>
       {agency && agency.coletando && !data ? (
@@ -69,6 +76,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               setGraphType={setGraphType}
               baseRemunerationDataTypes={baseRemunerationDataTypes}
               otherRemunerationsDataTypes={otherRemunerationsDataTypes}
+              discountsDataTypes={discountsDataTypes}
               hidingWage={hidingWage}
               setHidingWage={setHidingWage}
               hidingBenefits={hidingBenefits}
@@ -125,10 +133,11 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           hidingNoData,
                           baseRemunerationDataTypes,
                           otherRemunerationsDataTypes,
+                          discountsDataTypes,
                         })}
                         width="100%"
                         height="500"
-                        type="bar"
+                        type="line"
                       />
                     </Box>
                   ) : (

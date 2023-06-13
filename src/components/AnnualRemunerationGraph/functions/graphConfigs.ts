@@ -1,5 +1,6 @@
 import {
   createDataArray,
+  createRemunerationArray,
   getYearWithIncompleteData,
   noData,
   totalWaste,
@@ -8,6 +9,9 @@ import {
 import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
 import { getCurrentYear } from '../../../functions/currentYear';
 import { formatCurrencyValue } from '../../../functions/format';
+
+const yearListArr = yearList();
+const currentYear = getCurrentYear();
 
 export const graphAnnotations = ({
   data,
@@ -52,7 +56,14 @@ export const graphOptions = ({
   data: AnnualSummaryData[];
   matches: boolean;
 }): ApexCharts.ApexOptions => ({
-  colors: ['transparent', 'transparent', '#97BB2F', '#2FBB96', '#2c3236'],
+  colors: [
+    'transparent',
+    'transparent',
+    '#97BB2F',
+    '#2FBB96',
+    '#775ecf',
+    '#2c3236',
+  ],
   chart: {
     id: 'remuneration-graph',
     stacked: true,
@@ -81,7 +92,7 @@ export const graphOptions = ({
       },
     },
     zoom: {
-      enabled: true,
+      enabled: false,
     },
   },
   responsive: [
@@ -180,13 +191,14 @@ export const graphOptions = ({
     shared: true,
     intersect: false,
     inverseOrder: true,
-    enabledOnSeries: [0, 1, 2, 3],
+    enabledOnSeries: [0, 1, 2, 3, 4],
     marker: {
       fillColors: [
         'transparent',
         'transparent',
         '#97BB2F',
         '#2FBB96',
+        '#775ecf',
         '#2c3236',
       ],
     },
@@ -194,34 +206,36 @@ export const graphOptions = ({
       formatter(val) {
         const date = new Date();
         const validMonths =
-          val === getCurrentYear() &&
+          yearListArr[val - 1] === currentYear &&
           date.getDate() > COLLECT_INFOS.COLLECT_DATE
             ? date.getMonth()
-            : val === getCurrentYear() &&
+            : yearListArr[val - 1] === currentYear &&
               date.getDate() < COLLECT_INFOS.COLLECT_DATE
             ? date.getMonth() - 1
             : 12;
         const noDataMonths =
-          validMonths - data.find(d => d.ano === val)?.meses_com_dados;
+          validMonths -
+          data.find(d => d.ano === yearListArr[val - 1])?.meses_com_dados;
 
-        if (!data.map(d => d.ano).includes(val)) {
-          return `${val} (12 meses sem dados)`;
+        if (!data.map(d => d.ano).includes(yearListArr[val - 1])) {
+          return `${yearListArr[val - 1]} (12 meses sem dados)`;
         }
 
         if (noDataMonths > 0) {
-          return `${val} (${noDataMonths} ${
+          return `${yearListArr[val - 1]} (${noDataMonths} ${
             noDataMonths > 1 ? 'meses' : 'mês'
           } sem dados)`;
         }
 
         if (
-          getYearWithIncompleteData(data).filter(d => d.ano === val).length ===
-          0
+          getYearWithIncompleteData(data).filter(
+            d => d.ano === yearListArr[val - 1],
+          ).length === 0
         ) {
-          return `${val}`;
+          return `${yearListArr[val - 1]}`;
         }
 
-        return `${val}`;
+        return `${yearListArr[val - 1]}`;
       },
     },
     y: {
@@ -248,14 +262,13 @@ export const graphOptions = ({
   xaxis: {
     crosshairs: {
       show: false,
-      width: 1,
     },
     labels: {
       style: {
         fontSize: '12px',
       },
     },
-    categories: yearList(),
+    categories: yearListArr,
     title: {
       text: 'Anos',
       offsetX: -25,
@@ -266,14 +279,20 @@ export const graphOptions = ({
         color: '#263238',
       },
     },
+    tooltip: {
+      enabled: false,
+    },
   },
   legend: {
     show: false,
-    position: 'right',
-    offsetY: 120,
   },
   dataLabels: {
     enabled: false,
+  },
+  stroke: {
+    curve: 'smooth',
+    lineCap: 'round',
+    colors: ['', '', '', '', '#775ecf'],
   },
 });
 
@@ -281,6 +300,7 @@ export const graphSeries = ({
   data,
   baseRemunerationDataTypes,
   otherRemunerationsDataTypes,
+  discountsDataTypes,
   hidingBenefits,
   hidingWage,
   hidingNoData,
@@ -289,12 +309,14 @@ export const graphSeries = ({
   data: AnnualSummaryData[];
   baseRemunerationDataTypes: string;
   otherRemunerationsDataTypes: string;
+  discountsDataTypes: string;
   hidingBenefits: boolean;
   hidingWage: boolean;
   hidingNoData: boolean;
   matches: boolean;
 }): ApexAxisChartSeries | ApexNonAxisChartSeries => [
   {
+    type: 'bar',
     name: 'Total de remunerações',
     data: (() =>
       totalWaste({
@@ -304,10 +326,12 @@ export const graphSeries = ({
       }))(),
   },
   {
+    type: 'bar',
     name: 'Média mensal de membros',
     data: (() => createDataArray({ tipoRemuneracao: 'num_membros', data }))(),
   },
   {
+    type: 'bar',
     name: 'Benefícios',
     data: (() => {
       if (!hidingBenefits) {
@@ -325,12 +349,13 @@ export const graphSeries = ({
         .includes(options.value) &&
       graphAnnotations({ data, matches })
         .map(d => d.x)
-        .map(elemento => yearList().indexOf(+elemento))
+        .map(elemento => yearListArr.indexOf(+elemento))
         .includes(options.dataPointIndex)
         ? '#98bb2f7d'
         : '#97BB2F',
   },
   {
+    type: 'bar',
     name: 'Salário',
     data: (() => {
       if (!hidingWage) {
@@ -348,12 +373,23 @@ export const graphSeries = ({
         .includes(options.value) &&
       graphAnnotations({ data, matches })
         .map(d => d.x)
-        .map(elemento => yearList().indexOf(+elemento))
+        .map(elemento => yearListArr.indexOf(+elemento))
         .includes(options.dataPointIndex)
         ? '#2fbb967d'
         : '#2FBB96',
   },
   {
+    type: 'line',
+    name: 'Remunerações',
+    data: createRemunerationArray({
+      data,
+      baseRemunerationDataTypes,
+      otherRemunerationsDataTypes,
+      discountsDataTypes,
+    }),
+  },
+  {
+    type: 'bar',
     name: 'Sem Dados',
     data: (() => {
       if (!hidingNoData) {

@@ -61,6 +61,16 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
     return 'outras_remuneracoes';
   }, [graphType]);
 
+  const discountsDataTypes = useMemo(() => {
+    if (graphType === 'media-por-membro') {
+      return 'descontos_por_membro';
+    }
+    if (graphType === 'media-mensal') {
+      return 'descontos_por_mes';
+    }
+    return 'descontos';
+  }, [graphType]);
+
   return (
     <>
       {agency && agency.coletando && !data ? (
@@ -76,6 +86,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               setGraphType={setGraphType}
               baseRemunerationDataTypes={baseRemunerationDataTypes}
               otherRemunerationsDataTypes={otherRemunerationsDataTypes}
+              discountsDataTypes={discountsDataTypes}
               hidingWage={hidingWage}
               setHidingWage={setHidingWage}
               hidingBenefits={hidingBenefits}
@@ -130,6 +141,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                             data,
                             baseRemunerationDataTypes,
                             otherRemunerationsDataTypes,
+                            discountsDataTypes,
                             hidingBenefits,
                             hidingWage,
                             hidingNoData,
@@ -137,7 +149,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                           })}
                           width="100%"
                           height="500"
-                          type="bar"
+                          type="line"
                         />
                       </Suspense>
                     </Box>
