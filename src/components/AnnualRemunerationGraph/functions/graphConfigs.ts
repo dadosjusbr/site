@@ -56,14 +56,7 @@ export const graphOptions = ({
   data: AnnualSummaryData[];
   matches: boolean;
 }): ApexCharts.ApexOptions => ({
-  colors: [
-    'transparent',
-    'transparent',
-    '#97BB2F',
-    '#2FBB96',
-    '#57659d',
-    '#2c3236',
-  ],
+  colors: ['transparent', '#97BB2F', '#2FBB96', '#57659d', '#2c3236'],
   chart: {
     id: 'remuneration-graph',
     stacked: true,
@@ -186,21 +179,20 @@ export const graphOptions = ({
   annotations: {
     xaxis: graphAnnotations({ data, matches }),
   },
+  markers: {
+    size: 5,
+    hover: {
+      size: 7,
+    },
+  },
   tooltip: {
     enabled: true,
     shared: true,
     intersect: false,
     inverseOrder: true,
-    enabledOnSeries: [0, 1, 2, 3, 4],
+    enabledOnSeries: [0, 1, 2, 3],
     marker: {
-      fillColors: [
-        'transparent',
-        'transparent',
-        '#97BB2F',
-        '#2FBB96',
-        '#57659d',
-        '#2c3236',
-      ],
+      fillColors: ['transparent', '#97BB2F', '#2FBB96', '#57659d', '#2c3236'],
     },
     x: {
       formatter(val) {
@@ -292,7 +284,7 @@ export const graphOptions = ({
   stroke: {
     curve: 'smooth',
     lineCap: 'round',
-    colors: ['', '', '', '', '#57659d'],
+    colors: ['', '', '', '', '', '#57659d'],
   },
 });
 
@@ -315,16 +307,6 @@ export const graphSeries = ({
   hidingNoData: boolean;
   matches: boolean;
 }): ApexAxisChartSeries | ApexNonAxisChartSeries => [
-  {
-    type: 'bar',
-    name: 'Total de remunerações',
-    data: (() =>
-      totalWaste({
-        data,
-        baseRemunerationDataTypes,
-        otherRemunerationsDataTypes,
-      }))(),
-  },
   {
     type: 'bar',
     name: 'Média mensal de membros',
@@ -387,6 +369,7 @@ export const graphSeries = ({
       otherRemunerationsDataTypes,
       discountsDataTypes,
     }),
+    color: '#57659d',
   },
   {
     type: 'bar',

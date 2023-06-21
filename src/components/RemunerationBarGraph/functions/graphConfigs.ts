@@ -30,11 +30,10 @@ export const graphOptions = ({
 
   return {
     colors: [
-      'transparent',
-      'transparent',
       '#97BB2F',
       '#2FBB96',
       '#57659d',
+      'transparent',
       '#2c3236',
       '#ffab00',
     ],
@@ -162,15 +161,20 @@ export const graphOptions = ({
         },
       },
     },
-
+    markers: {
+      size: 5,
+      hover: {
+        size: 7,
+      },
+    },
     tooltip: {
       enabled: true,
       shared: true,
       intersect: false,
       inverseOrder: true,
       ...(agency
-        ? { enabledOnSeries: [0, 1, 2, 3, 4] }
-        : { enabledOnSeries: [0, 2, 3] }),
+        ? { enabledOnSeries: [0, 1, 2, 3] }
+        : { enabledOnSeries: [0, 1, 2] }),
       x: {
         formatter(val) {
           if (MonthlyInfoArr[MONTHS[val]] === undefined) {
@@ -184,12 +188,7 @@ export const graphOptions = ({
           if (opts.w.globals.seriesNames[opts.seriesIndex] === 'Membros') {
             return `${val}`;
           }
-          if (
-            opts.w.globals.seriesNames[opts.seriesIndex] ===
-            'Total de remunerações'
-          ) {
-            return formatCurrencyValue(val * 10000000);
-          }
+
           return formatCurrencyValue(val);
         },
       },
@@ -238,8 +237,7 @@ export const graphOptions = ({
     stroke: {
       curve: 'smooth',
       lineCap: 'round',
-      colors: ['', '', '', '', '#57659d'],
-      ...(!agency && { width: 0 }),
+      colors: ['', '', '', '', '', '#57659d'],
     },
   };
 };
@@ -265,25 +263,6 @@ export const graphSeries = ({
   otherRemunerationsDataTypes: string;
   discountsDataTypes: string;
 }): ApexAxisChartSeries | ApexNonAxisChartSeries => [
-  {
-    type: 'bar',
-    name: 'Total de remunerações',
-    data: (() =>
-      createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
-        fixYearDataArray(data)[i]
-          ? fixYearDataArray(data)[i][baseRemunerationDataTypes] / 10000000 +
-            fixYearDataArray(data)[i][otherRemunerationsDataTypes] / 10000000
-          : v,
-      ))(),
-  },
-  {
-    type: 'bar',
-    name: 'Membros',
-    data: (() =>
-      createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
-        fixYearDataArray(data)[i] ? fixYearDataArray(data)[i].total_membros : v,
-      ))(),
-  },
   {
     type: 'bar',
     name: 'Benefícios',
@@ -325,6 +304,15 @@ export const graphSeries = ({
             fixYearDataArray(data)[i][otherRemunerationsDataTypes] -
             fixYearDataArray(data)[i][discountsDataTypes]
           : v,
+      ))(),
+    color: '#57659d',
+  },
+  {
+    type: 'bar',
+    name: 'Membros',
+    data: (() =>
+      createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
+        fixYearDataArray(data)[i] ? fixYearDataArray(data)[i].total_membros : v,
       ))(),
   },
   {
