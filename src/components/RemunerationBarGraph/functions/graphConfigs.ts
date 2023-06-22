@@ -43,6 +43,13 @@ export const graphOptions = ({
       })[key],
   );
 
+  function transformGrpahTitle() {
+    if (baseRemunerationDataTypes === 'remuneracao_base_por_membro') {
+      return 'Média de memunerações por membro';
+    }
+    return 'Total de Remunerações';
+  }
+
   return {
     colors: [
       'transparent',
@@ -144,8 +151,9 @@ export const graphOptions = ({
         return max + max * 0.1;
       })(),
       decimalsInFloat: 2,
+      forceNiceScale: true,
       title: {
-        text: 'Total de Remunerações',
+        text: transformGrpahTitle(),
         offsetY: 10,
         offsetX: -5.5,
         style: {
