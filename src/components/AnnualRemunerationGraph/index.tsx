@@ -36,6 +36,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   dataLoading = true,
 }) => {
   const matches = useMediaQuery('(max-width:500px)');
+  const [hidingRemunerations, setHidingRemunerations] = useState(false);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
@@ -87,6 +88,8 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               baseRemunerationDataTypes={baseRemunerationDataTypes}
               otherRemunerationsDataTypes={otherRemunerationsDataTypes}
               discountsDataTypes={discountsDataTypes}
+              hidingRemunerations={hidingRemunerations}
+              setHidingRemunerations={setHidingRemunerations}
               hidingWage={hidingWage}
               setHidingWage={setHidingWage}
               hidingBenefits={hidingBenefits}
@@ -136,12 +139,19 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                     <Box>
                       <Suspense fallback={<CircularProgress />}>
                         <Chart
-                          options={graphOptions({ agency, data, matches })}
+                          options={graphOptions({
+                            agency,
+                            data,
+                            matches,
+                            baseRemunerationDataTypes,
+                            otherRemunerationsDataTypes,
+                          })}
                           series={graphSeries({
                             data,
                             baseRemunerationDataTypes,
                             otherRemunerationsDataTypes,
                             discountsDataTypes,
+                            hidingRemunerations,
                             hidingBenefits,
                             hidingWage,
                             hidingNoData,

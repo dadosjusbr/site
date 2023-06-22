@@ -28,12 +28,27 @@ export const graphOptions = ({
     otherRemunerationsDataTypes,
   });
 
+  const RemunerationArr = Object.keys(
+    MonthlyInfo({
+      data,
+      baseRemunerationDataTypes,
+      otherRemunerationsDataTypes,
+    }),
+  ).map(
+    key =>
+      MonthlyInfo({
+        data,
+        baseRemunerationDataTypes,
+        otherRemunerationsDataTypes,
+      })[key],
+  );
+
   return {
     colors: [
+      'transparent',
       '#97BB2F',
       '#2FBB96',
       '#57659d',
-      'transparent',
       '#2c3236',
       '#ffab00',
     ],
@@ -124,6 +139,10 @@ export const graphOptions = ({
       },
     },
     yaxis: {
+      max: (() => {
+        const max = Math.max(...RemunerationArr.map(month => month));
+        return max + max * 0.1;
+      })(),
       decimalsInFloat: 2,
       title: {
         text: 'Total de Remunerações',
@@ -245,6 +264,7 @@ export const graphOptions = ({
 export const graphSeries = ({
   data,
   year,
+  hidingRemunerations,
   hidingBenefits,
   hidingWage,
   hidingErrors,
@@ -255,6 +275,7 @@ export const graphSeries = ({
 }: {
   data: v2MonthTotals[];
   year: number;
+  hidingRemunerations: boolean;
   hidingBenefits: boolean;
   hidingWage: boolean;
   hidingErrors: boolean;
@@ -263,6 +284,14 @@ export const graphSeries = ({
   otherRemunerationsDataTypes: string;
   discountsDataTypes: string;
 }): ApexAxisChartSeries | ApexNonAxisChartSeries => [
+  {
+    type: 'bar',
+    name: 'Membros',
+    data: (() =>
+      createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
+        fixYearDataArray(data)[i] ? fixYearDataArray(data)[i].total_membros : v,
+      ))(),
+  },
   {
     type: 'bar',
     name: 'Benefícios',
@@ -297,23 +326,19 @@ export const graphSeries = ({
   {
     type: 'line',
     name: 'Remunerações',
-    data: (() =>
-      createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
-        fixYearDataArray(data)[i]
-          ? fixYearDataArray(data)[i][baseRemunerationDataTypes] +
-            fixYearDataArray(data)[i][otherRemunerationsDataTypes] -
-            fixYearDataArray(data)[i][discountsDataTypes]
-          : v,
-      ))(),
+    data: (() => {
+      if (!hidingRemunerations) {
+        return createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
+          fixYearDataArray(data)[i]
+            ? fixYearDataArray(data)[i][baseRemunerationDataTypes] +
+              fixYearDataArray(data)[i][otherRemunerationsDataTypes] -
+              fixYearDataArray(data)[i][discountsDataTypes]
+            : v,
+        );
+      }
+      return createArrayFilledWithValue({ size: 12, value: 0 });
+    })(),
     color: '#57659d',
-  },
-  {
-    type: 'bar',
-    name: 'Membros',
-    data: (() =>
-      createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
-        fixYearDataArray(data)[i] ? fixYearDataArray(data)[i].total_membros : v,
-      ))(),
   },
   {
     type: 'bar',

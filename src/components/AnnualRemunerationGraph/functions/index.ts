@@ -126,10 +126,10 @@ export const totalWaste = ({
       d =>
         (d[baseRemunerationDataTypes] === undefined
           ? 0
-          : d[baseRemunerationDataTypes] / 1000000) +
+          : d[baseRemunerationDataTypes]) +
         (d[otherRemunerationsDataTypes] === undefined
           ? 0
-          : d[otherRemunerationsDataTypes] / 1000000),
+          : d[otherRemunerationsDataTypes]),
     );
 
   const dataArray: number[] = [];

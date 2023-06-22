@@ -34,6 +34,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   dataLoading = true,
   selectedMonth,
 }) => {
+  const [hidingRemunerations, setHidingRemunerations] = useState(false);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
@@ -77,6 +78,8 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               baseRemunerationDataTypes={baseRemunerationDataTypes}
               otherRemunerationsDataTypes={otherRemunerationsDataTypes}
               discountsDataTypes={discountsDataTypes}
+              hidingRemunerations={hidingRemunerations}
+              setHidingRemunerations={setHidingRemunerations}
               hidingWage={hidingWage}
               setHidingWage={setHidingWage}
               hidingBenefits={hidingBenefits}
@@ -127,6 +130,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         series={graphSeries({
                           data,
                           year,
+                          hidingRemunerations,
                           hidingBenefits,
                           hidingWage,
                           hidingErrors,

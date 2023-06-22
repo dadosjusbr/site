@@ -51,10 +51,14 @@ export const graphOptions = ({
   agency,
   data,
   matches,
+  baseRemunerationDataTypes,
+  otherRemunerationsDataTypes,
 }: {
   agency: Agency;
   data: AnnualSummaryData[];
   matches: boolean;
+  baseRemunerationDataTypes: string;
+  otherRemunerationsDataTypes: string;
 }): ApexCharts.ApexOptions => ({
   colors: ['transparent', '#97BB2F', '#2FBB96', '#57659d', '#2c3236'],
   chart: {
@@ -148,6 +152,16 @@ export const graphOptions = ({
     },
   },
   yaxis: {
+    max: (() => {
+      const max = Math.max(
+        ...totalWaste({
+          data,
+          baseRemunerationDataTypes,
+          otherRemunerationsDataTypes,
+        }).map(month => month),
+      );
+      return max + max * 0.1;
+    })(),
     decimalsInFloat: 2,
     title: {
       text: 'Total de Remunerações',
@@ -293,6 +307,7 @@ export const graphSeries = ({
   baseRemunerationDataTypes,
   otherRemunerationsDataTypes,
   discountsDataTypes,
+  hidingRemunerations,
   hidingBenefits,
   hidingWage,
   hidingNoData,
@@ -302,6 +317,7 @@ export const graphSeries = ({
   baseRemunerationDataTypes: string;
   otherRemunerationsDataTypes: string;
   discountsDataTypes: string;
+  hidingRemunerations: boolean;
   hidingBenefits: boolean;
   hidingWage: boolean;
   hidingNoData: boolean;
@@ -363,12 +379,17 @@ export const graphSeries = ({
   {
     type: 'line',
     name: 'Remunerações',
-    data: createRemunerationArray({
-      data,
-      baseRemunerationDataTypes,
-      otherRemunerationsDataTypes,
-      discountsDataTypes,
-    }),
+    data: (() => {
+      if (!hidingRemunerations) {
+        return createRemunerationArray({
+          data,
+          baseRemunerationDataTypes,
+          otherRemunerationsDataTypes,
+          discountsDataTypes,
+        });
+      }
+      return [];
+    })(),
     color: '#57659d',
   },
   {
