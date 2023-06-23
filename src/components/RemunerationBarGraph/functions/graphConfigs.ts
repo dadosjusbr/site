@@ -201,7 +201,7 @@ export const graphOptions = ({
       inverseOrder: true,
       ...(agency
         ? { enabledOnSeries: [0, 1, 2, 3] }
-        : { enabledOnSeries: [0, 1, 2] }),
+        : { enabledOnSeries: [1, 2, 3] }),
       x: {
         formatter(val) {
           if (MonthlyInfoArr[MONTHS[val]] === undefined) {
@@ -272,6 +272,7 @@ export const graphOptions = ({
 export const graphSeries = ({
   data,
   year,
+  agency,
   hidingRemunerations,
   hidingBenefits,
   hidingWage,
@@ -283,6 +284,7 @@ export const graphSeries = ({
 }: {
   data: v2MonthTotals[];
   year: number;
+  agency: Agency;
   hidingRemunerations: boolean;
   hidingBenefits: boolean;
   hidingWage: boolean;
@@ -295,10 +297,16 @@ export const graphSeries = ({
   {
     type: 'bar',
     name: 'Membros',
-    data: (() =>
-      createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
-        fixYearDataArray(data)[i] ? fixYearDataArray(data)[i].total_membros : v,
-      ))(),
+    data: (() => {
+      if (agency) {
+        return createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
+          fixYearDataArray(data)[i]
+            ? fixYearDataArray(data)[i].total_membros
+            : v,
+        );
+      }
+      return createArrayFilledWithValue({ size: 12, value: 0 });
+    })(),
   },
   {
     type: 'bar',

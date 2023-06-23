@@ -130,6 +130,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         series={graphSeries({
                           data,
                           year,
+                          agency,
                           hidingRemunerations,
                           hidingBenefits,
                           hidingWage,
