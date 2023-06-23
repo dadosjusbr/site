@@ -53,6 +53,7 @@ export const graphOptions = ({
   return {
     colors: [
       'transparent',
+      'transparent',
       '#97BB2F',
       '#2FBB96',
       '#57659d',
@@ -200,8 +201,18 @@ export const graphOptions = ({
       intersect: false,
       inverseOrder: true,
       ...(agency
-        ? { enabledOnSeries: [0, 1, 2, 3] }
+        ? { enabledOnSeries: [0, 1, 2, 3, 4] }
         : { enabledOnSeries: [1, 2, 3] }),
+      marker: {
+        fillColors: [
+          '#e5cbb4',
+          '#ec4b59',
+          '#97BB2F',
+          '#2FBB96',
+          '#57659d',
+          '#2c3236',
+        ],
+      },
       x: {
         formatter(val) {
           if (MonthlyInfoArr[MONTHS[val]] === undefined) {
@@ -214,6 +225,9 @@ export const graphOptions = ({
         formatter(val, opts) {
           if (opts.w.globals.seriesNames[opts.seriesIndex] === 'Membros') {
             return `${val}`;
+          }
+          if (opts.w.globals.seriesNames[opts.seriesIndex] === 'Descontos') {
+            return `${formatCurrencyValue(val * 1000000000)}`;
           }
 
           return formatCurrencyValue(val);
@@ -264,7 +278,7 @@ export const graphOptions = ({
     stroke: {
       curve: 'smooth',
       lineCap: 'round',
-      colors: ['', '', '', '', '', '#57659d'],
+      colors: ['', '', '', '', '', '', '#57659d'],
     },
   };
 };
@@ -304,6 +318,22 @@ export const graphSeries = ({
             ? fixYearDataArray(data)[i].total_membros
             : v,
         );
+      }
+      return createArrayFilledWithValue({ size: 12, value: 0 });
+    })(),
+  },
+  {
+    type: 'bar',
+    name: 'Descontos',
+    data: (() => {
+      if (agency) {
+        return createArrayFilledWithValue({ size: 12, value: 0 })
+          .map((v, i) =>
+            fixYearDataArray(data)[i]
+              ? fixYearDataArray(data)[i][discountsDataTypes]
+              : v,
+          )
+          .map(d => d / 1000000000);
       }
       return createArrayFilledWithValue({ size: 12, value: 0 });
     })(),

@@ -71,7 +71,14 @@ export const graphOptions = ({
   }
 
   return {
-    colors: ['transparent', '#97BB2F', '#2FBB96', '#57659d', '#2c3236'],
+    colors: [
+      'transparent',
+      'transparent',
+      '#97BB2F',
+      '#2FBB96',
+      '#57659d',
+      '#2c3236',
+    ],
     chart: {
       id: 'remuneration-graph',
       stacked: true,
@@ -216,9 +223,16 @@ export const graphOptions = ({
       shared: true,
       intersect: false,
       inverseOrder: true,
-      enabledOnSeries: [0, 1, 2, 3],
+      enabledOnSeries: [0, 1, 2, 3, 4],
       marker: {
-        fillColors: ['transparent', '#97BB2F', '#2FBB96', '#57659d', '#2c3236'],
+        fillColors: [
+          '#e5cbb4',
+          '#ec4b59',
+          '#97BB2F',
+          '#2FBB96',
+          '#57659d',
+          '#2c3236',
+        ],
       },
       x: {
         formatter(val) {
@@ -264,14 +278,11 @@ export const graphOptions = ({
           ) {
             return `${val}`;
           }
-          if (
-            opts.w.globals.seriesNames[opts.seriesIndex] ===
-            'Total de remunerações'
-          ) {
+          if (opts.w.globals.seriesNames[opts.seriesIndex] === 'Descontos') {
             if (val === undefined) {
               return `R$ 0.00M`;
             }
-            return `${formatCurrencyValue(val * 1000000)}`;
+            return `${formatCurrencyValue(val * 1000000000)}`;
           }
           return `${formatCurrencyValue(val)}`;
         },
@@ -340,6 +351,14 @@ export const graphSeries = ({
     type: 'bar',
     name: 'Média mensal de membros',
     data: (() => createDataArray({ tipoRemuneracao: 'num_membros', data }))(),
+  },
+  {
+    type: 'bar',
+    name: 'Descontos',
+    data: createDataArray({
+      tipoRemuneracao: discountsDataTypes,
+      data,
+    }).map(d => d / 1000000000),
   },
   {
     type: 'bar',

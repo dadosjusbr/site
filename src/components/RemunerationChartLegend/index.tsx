@@ -304,7 +304,7 @@ const index = ({
               <Payments />
             </IconButton>
             <Typography pt={1} fontSize={{ xs: 14, md: 16 }}>
-              Remunerações{' '}
+              Remuneração{' '}
               {(() => {
                 let total = 0;
                 const yearlyTotals = data.map(
