@@ -62,10 +62,10 @@ export const graphOptions = ({
 }): ApexCharts.ApexOptions => {
   function transformGrpahTitle() {
     if (baseRemunerationDataTypes === 'remuneracao_base_por_membro') {
-      return 'Média de memunerações por membro';
+      return 'Média de remuneração por membro';
     }
     if (baseRemunerationDataTypes === 'remuneracao_base_por_mes') {
-      return 'Média de memunerações mensal';
+      return 'Média de remuneração mensal';
     }
     return 'Total de Remunerações';
   }
@@ -127,9 +127,20 @@ export const graphOptions = ({
             },
           },
           yaxis: {
+            max: (() => {
+              const max = Math.max(
+                ...totalWaste({
+                  data,
+                  baseRemunerationDataTypes,
+                  otherRemunerationsDataTypes,
+                }).map(month => month),
+              );
+              return max + max * 0.1;
+            })(),
+            forceNiceScale: true,
             decimalsInFloat: 2,
             title: {
-              text: 'Total de Remunerações',
+              text: transformGrpahTitle(),
               offsetY: 10,
               style: {
                 fontSize: '10px',
@@ -280,11 +291,11 @@ export const graphOptions = ({
           }
           if (opts.w.globals.seriesNames[opts.seriesIndex] === 'Descontos') {
             if (val === undefined) {
-              return `R$ 0.00M`;
+              return `R$ 0,0`;
             }
-            return `${formatCurrencyValue(val * 1000000000)}`;
+            return `${formatCurrencyValue(val * 1000000000, 1)}`;
           }
-          return `${formatCurrencyValue(val)}`;
+          return `${formatCurrencyValue(val, 1)}`;
         },
       },
     },
@@ -410,7 +421,7 @@ export const graphSeries = ({
   },
   {
     type: 'line',
-    name: 'Remunerações',
+    name: 'Remuneração',
     data: (() => {
       if (!hidingRemunerations) {
         return createRemunerationArray({

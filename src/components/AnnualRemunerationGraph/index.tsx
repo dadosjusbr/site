@@ -107,13 +107,12 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
             />
             <Box px={2}>
               {agency && data && !dataLoading ? (
-                <Grid display="flex" justifyContent="flex-end">
+                <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
                   <Button
                     variant="outlined"
                     color="secondary"
                     endIcon={<ArrowForwardIosIcon />}
                     href={`/orgao/${agency.id_orgao}/${year}`}
-                    sx={{ mr: 2 }}
                   >
                     EXPLORAR
                   </Button>

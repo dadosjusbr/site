@@ -90,7 +90,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             />
             <Box px={2}>
               {agency && data.length > 0 && !dataLoading && (
-                <Grid display="flex" justifyContent="flex-end" mr={2}>
+                <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
                   <Button
                     variant="outlined"
                     color="secondary"

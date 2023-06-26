@@ -141,8 +141,8 @@ const index = ({
         </Box>
       </Box>
       <Box
-        p={2}
-        pb={1}
+        pt={1}
+        px={1}
         border="2px solid #57659d"
         borderRadius={4}
         overflow="auto"
@@ -152,11 +152,11 @@ const index = ({
         <Typography variant="h5" textAlign="center" mb={1}>
           Resumo das remunerações
           <Tooltip
-            placement="top"
+            placement="bottom"
             title={
-              <Typography fontSize="0.8rem">
+              <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
                 <p>
-                  <b>Remunerações:</b> Valor final da soma entre salário e
+                  <b>Remuneração:</b> Valor final da soma entre salário e
                   benefícios, retirando os descontos.
                 </p>
                 <p>
@@ -169,6 +169,12 @@ const index = ({
                   benefícios são: diárias, gratificações, remuneração por função
                   de confiança, benefícios pessoais ou eventuais, auxílios
                   alimentação, saúde, escolar...
+                </p>
+                <p>
+                  <b>Descontos:</b> Valor retirado do salário ou de benefícios
+                  do funcionário de acordo com a lei, como imposto de renda,
+                  contribuição para previdência, pensão alimentícia, entre
+                  outros.
                 </p>
                 <p>
                   <b>Membros:</b> Participantes ativos do órgao, incluindo os
@@ -192,8 +198,11 @@ const index = ({
             </IconButton>
           </Tooltip>
         </Typography>
-        <Grid container justifyContent="space-between">
-          <Grid xs={2} md={2} item textAlign="center">
+        <Grid
+          container
+          justifyContent={{ xs: 'flex-start', md: 'space-between' }}
+        >
+          <Grid xs={3} md={2} item textAlign="center">
             <IconButton
               sx={{ backgroundColor: '#2fbb95' }}
               onClick={e => {
@@ -208,8 +217,10 @@ const index = ({
             >
               <AccountBalanceWalletIcon />
             </IconButton>
-            <Typography pt={1} fontSize={{ xs: 14, md: 16 }}>
-              Salário{' '}
+            <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
+              Salário
+            </Typography>
+            <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
                 let total = 0;
                 const yearlyTotals = data.map(
@@ -221,15 +232,17 @@ const index = ({
                 });
 
                 if (graphType === 'total') {
-                  return formatCurrencyValue(total);
+                  return formatCurrencyValue(total, 1);
                 }
 
-                return formatCurrencyValue(total / data.length);
+                return formatCurrencyValue(total / data.length, 1);
               })()}
             </Typography>
           </Grid>
-          <Add sx={{ alignSelf: 'center' }} fontSize="small" />
-          <Grid xs={2} md={2} item textAlign="center">
+          <Grid md={0.4} item alignSelf="center" textAlign="center">
+            <Add sx={{ alignSelf: 'center' }} fontSize="small" />
+          </Grid>
+          <Grid xs={3} md={2} item textAlign="center">
             <IconButton
               sx={{ backgroundColor: '#96bb2f' }}
               onClick={e => {
@@ -244,8 +257,10 @@ const index = ({
             >
               <CardGiftcardIcon />
             </IconButton>
-            <Typography pt={1} fontSize={{ xs: 14, md: 16 }}>
-              Benefícios{' '}
+            <Typography pt={1} pb={0}>
+              Benefícios
+            </Typography>
+            <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
                 let total = 0;
                 const yearlyTotals = data.map(
@@ -257,20 +272,24 @@ const index = ({
                 });
 
                 if (graphType === 'total') {
-                  return formatCurrencyValue(total);
+                  return formatCurrencyValue(total, 1);
                 }
 
-                return formatCurrencyValue(total / data.length);
+                return formatCurrencyValue(total / data.length, 1);
               })()}
             </Typography>
           </Grid>
-          <Remove sx={{ alignSelf: 'center' }} fontSize="small" />
-          <Grid xs={2} md={2} item textAlign="center">
+          <Grid md={0.4} item alignSelf="center" textAlign="center">
+            <Remove sx={{ alignSelf: 'center' }} fontSize="small" />
+          </Grid>
+          <Grid xs={3} md={2} item textAlign="center">
             <IconButton sx={{ backgroundColor: '#ec4b59' }}>
               <RemoveCircle />
             </IconButton>
-            <Typography pt={1} fontSize={{ xs: 14, md: 16 }}>
-              Descontos{' '}
+            <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
+              Descontos
+            </Typography>
+            <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
                 let total = 0;
                 const yearlyTotals = data.map(d => d[discountsDataTypes]);
@@ -280,15 +299,17 @@ const index = ({
                 });
 
                 if (graphType === 'total') {
-                  return formatCurrencyValue(total);
+                  return formatCurrencyValue(total, 1);
                 }
 
-                return formatCurrencyValue(total / data.length);
+                return formatCurrencyValue(total / data.length, 1);
               })()}
             </Typography>
           </Grid>
-          <Equal sx={{ alignSelf: 'center' }} fontSize="small" />
-          <Grid xs={2} md={2} item textAlign="center">
+          <Grid xs={1.6} md={0.4} item alignSelf="center" textAlign="center">
+            <Equal fontSize="small" />
+          </Grid>
+          <Grid xs={3} md={2} item textAlign="center">
             <IconButton
               sx={{ backgroundColor: '#57659d' }}
               onClick={e => {
@@ -303,8 +324,10 @@ const index = ({
             >
               <Payments />
             </IconButton>
-            <Typography pt={1} fontSize={{ xs: 14, md: 16 }}>
-              Remuneração{' '}
+            <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
+              Remuneração
+            </Typography>
+            <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
                 let total = 0;
                 const yearlyTotals = data.map(
@@ -319,33 +342,33 @@ const index = ({
                 });
 
                 if (graphType === 'total') {
-                  return formatCurrencyValue(total);
+                  return formatCurrencyValue(total, 1);
                 }
 
-                return formatCurrencyValue(total / data.length);
+                return formatCurrencyValue(total / data.length, 1);
               })()}
             </Typography>
           </Grid>
+          <Grid xs={3} md={2} item textAlign="center">
+            <IconButton
+              sx={{ backgroundColor: '#3E5363' }}
+              onClick={e => {
+                if (hidingNoData) {
+                  e.currentTarget.classList.remove('active');
+                  setHidingNoData(false);
+                } else {
+                  e.currentTarget.classList.add('active');
+                  setHidingNoData(true);
+                }
+              }}
+            >
+              <CropSquare />
+            </IconButton>
+            <Typography pt={1} fontSize={{ xs: 14, md: 16 }}>
+              Sem dados
+            </Typography>
+          </Grid>
         </Grid>
-      </Box>
-      <Box textAlign="center" mt={2}>
-        <IconButton
-          sx={{ backgroundColor: '#3E5363' }}
-          onClick={e => {
-            if (hidingNoData) {
-              e.currentTarget.classList.remove('active');
-              setHidingNoData(false);
-            } else {
-              e.currentTarget.classList.add('active');
-              setHidingNoData(true);
-            }
-          }}
-        >
-          <CropSquare />
-        </IconButton>
-        <Typography pt={1} fontSize={{ xs: 14, md: 16 }}>
-          Sem dados
-        </Typography>
       </Box>
     </>
   );

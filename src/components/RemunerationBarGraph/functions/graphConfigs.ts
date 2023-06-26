@@ -45,7 +45,7 @@ export const graphOptions = ({
 
   function transformGrpahTitle() {
     if (baseRemunerationDataTypes === 'remuneracao_base_por_membro') {
-      return 'Média de memunerações por membro';
+      return 'Média de remuneração por membro';
     }
     return 'Total de Remunerações';
   }
@@ -95,6 +95,11 @@ export const graphOptions = ({
       {
         breakpoint: 500,
         options: {
+          plotOptions: {
+            bar: {
+              columnWidth: '100%',
+            },
+          },
           legend: {
             position: 'bottom',
             offsetX: -10,
@@ -104,9 +109,14 @@ export const graphOptions = ({
             width: '100%',
           },
           yaxis: {
+            max: (() => {
+              const max = Math.max(...RemunerationArr.map(month => month));
+              return max + max * 0.1;
+            })(),
+            forceNiceScale: true,
             decimalsInFloat: 2,
             title: {
-              text: 'Total de Remunerações',
+              text: transformGrpahTitle(),
               offsetY: 10,
               style: {
                 fontSize: '10px',
@@ -144,6 +154,7 @@ export const graphOptions = ({
     plotOptions: {
       bar: {
         horizontal: false,
+        columnWidth: '70%',
       },
     },
     yaxis: {
@@ -227,10 +238,10 @@ export const graphOptions = ({
             return `${val}`;
           }
           if (opts.w.globals.seriesNames[opts.seriesIndex] === 'Descontos') {
-            return `${formatCurrencyValue(val * 1000000000)}`;
+            return `${formatCurrencyValue(val * 1000000000, 1)}`;
           }
 
-          return formatCurrencyValue(val);
+          return formatCurrencyValue(val, 1);
         },
       },
     },
@@ -325,18 +336,14 @@ export const graphSeries = ({
   {
     type: 'bar',
     name: 'Descontos',
-    data: (() => {
-      if (agency) {
-        return createArrayFilledWithValue({ size: 12, value: 0 })
-          .map((v, i) =>
-            fixYearDataArray(data)[i]
-              ? fixYearDataArray(data)[i][discountsDataTypes]
-              : v,
-          )
-          .map(d => d / 1000000000);
-      }
-      return createArrayFilledWithValue({ size: 12, value: 0 });
-    })(),
+    data: (() =>
+      createArrayFilledWithValue({ size: 12, value: 0 })
+        .map((v, i) =>
+          fixYearDataArray(data)[i]
+            ? fixYearDataArray(data)[i][discountsDataTypes]
+            : v,
+        )
+        .map(d => d / 1000000000))(),
   },
   {
     type: 'bar',
@@ -371,7 +378,7 @@ export const graphSeries = ({
   },
   {
     type: 'line',
-    name: 'Remunerações',
+    name: 'Remuneração',
     data: (() => {
       if (!hidingRemunerations) {
         return createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
