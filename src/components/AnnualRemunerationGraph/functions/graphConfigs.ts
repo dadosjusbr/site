@@ -332,7 +332,7 @@ export const graphOptions = ({
     stroke: {
       curve: 'smooth',
       lineCap: 'round',
-      colors: ['', '', '', '', '', '#57659d'],
+      colors: ['', '', '', '', '', '', '#57659d'],
     },
   };
 };
