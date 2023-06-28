@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   Box,
+  Divider,
   Grid,
   IconButton,
   Tab,
@@ -141,15 +142,15 @@ const index = ({
         </Box>
       </Box>
       <Box
-        pt={1}
-        px={1}
-        border="2px solid #57659d"
-        borderRadius={4}
+        // pt={1}
+        // px={1}
+        // border="2px solid #57659d"
+        // borderRadius={4}
         overflow="auto"
-        maxWidth={600}
+        maxWidth={700}
         margin={{ xs: '0 10px', md: 'auto' }}
       >
-        <Typography variant="h5" textAlign="center" mb={1}>
+        <Typography variant="h5" textAlign="center" mb={2}>
           Resumo das remunerações
           <Tooltip
             placement="bottom"
@@ -201,8 +202,38 @@ const index = ({
         <Grid
           container
           justifyContent={{ xs: 'flex-start', md: 'space-between' }}
+          columns={{ md: 13, sm: 13, xs: 9 }}
         >
-          <Grid xs={3} md={2} item textAlign="center">
+          {agency && (
+            <>
+              <Grid xs={2.5} md={2} item textAlign="center">
+                <IconButton
+                  sx={{ backgroundColor: '#3E5363' }}
+                  onClick={e => {
+                    if (hidingNoData) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingNoData(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingNoData(true);
+                    }
+                  }}
+                >
+                  <CropSquare />
+                </IconButton>
+                <Typography pt={2} fontSize={{ xs: 14, md: 16 }}>
+                  Sem dados
+                </Typography>
+              </Grid>
+              <Divider
+                orientation="vertical"
+                variant="fullWidth"
+                flexItem
+                sx={{ mb: 2, mx: 0.8, border: '1px dashed #ccc' }}
+              />
+            </>
+          )}
+          <Grid xs={2.5} md={2} item textAlign="center">
             <IconButton
               sx={{ backgroundColor: '#2fbb95' }}
               onClick={e => {
@@ -218,7 +249,7 @@ const index = ({
               <AccountBalanceWalletIcon />
             </IconButton>
             <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
-              Salário
+              Salário bruto
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
@@ -239,10 +270,10 @@ const index = ({
               })()}
             </Typography>
           </Grid>
-          <Grid md={0.4} item alignSelf="center" textAlign="center">
-            <Add sx={{ alignSelf: 'center' }} fontSize="small" />
+          <Grid xs={0.7} md={0.4} item alignSelf="center" textAlign="center">
+            <Add fontSize="small" />
           </Grid>
-          <Grid xs={3} md={2} item textAlign="center">
+          <Grid xs={2.5} md={2.3} item textAlign="center">
             <IconButton
               sx={{ backgroundColor: '#96bb2f' }}
               onClick={e => {
@@ -257,8 +288,8 @@ const index = ({
             >
               <CardGiftcardIcon />
             </IconButton>
-            <Typography pt={1} pb={0}>
-              Benefícios
+            <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
+              Benefício bruto
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
@@ -279,10 +310,17 @@ const index = ({
               })()}
             </Typography>
           </Grid>
-          <Grid md={0.4} item alignSelf="center" textAlign="center">
-            <Remove sx={{ alignSelf: 'center' }} fontSize="small" />
+          <Grid
+            xs={0.6}
+            sm={0.5}
+            md={0.4}
+            item
+            alignSelf="center"
+            textAlign="center"
+          >
+            <Remove fontSize="small" />
           </Grid>
-          <Grid xs={3} md={2} item textAlign="center">
+          <Grid xs={2} md={2} item textAlign="center">
             <IconButton sx={{ backgroundColor: '#ec4b59' }}>
               <RemoveCircle />
             </IconButton>
@@ -306,10 +344,10 @@ const index = ({
               })()}
             </Typography>
           </Grid>
-          <Grid xs={1.6} md={0.4} item alignSelf="center" textAlign="center">
+          <Grid xs={0.7} md={0.4} item alignSelf="center" textAlign="center">
             <Equal fontSize="small" />
           </Grid>
-          <Grid xs={3} md={2} item textAlign="center">
+          <Grid xs={2.5} md={3} sm={2.5} item textAlign="center">
             <IconButton
               sx={{ backgroundColor: '#57659d' }}
               onClick={e => {
@@ -325,9 +363,9 @@ const index = ({
               <Payments />
             </IconButton>
             <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
-              Remuneração
+              Remuneração líquida
             </Typography>
-            <Typography fontSize={{ xs: 14, md: 16 }}>
+            <Typography pb={0} fontSize={{ xs: 14, md: 16 }}>
               {(() => {
                 let total = 0;
                 const yearlyTotals = data.map(
@@ -347,25 +385,6 @@ const index = ({
 
                 return formatCurrencyValue(total / data.length, 1);
               })()}
-            </Typography>
-          </Grid>
-          <Grid xs={3} md={2} item textAlign="center">
-            <IconButton
-              sx={{ backgroundColor: '#3E5363' }}
-              onClick={e => {
-                if (hidingNoData) {
-                  e.currentTarget.classList.remove('active');
-                  setHidingNoData(false);
-                } else {
-                  e.currentTarget.classList.add('active');
-                  setHidingNoData(true);
-                }
-              }}
-            >
-              <CropSquare />
-            </IconButton>
-            <Typography pt={1} fontSize={{ xs: 14, md: 16 }}>
-              Sem dados
             </Typography>
           </Grid>
         </Grid>

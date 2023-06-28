@@ -373,7 +373,7 @@ export const graphSeries = ({
   },
   {
     type: 'bar',
-    name: 'Benefícios',
+    name: 'Benefício bruto',
     data: (() => {
       if (!hidingBenefits) {
         return createDataArray({
@@ -397,7 +397,7 @@ export const graphSeries = ({
   },
   {
     type: 'bar',
-    name: 'Salário',
+    name: 'Salário bruto',
     data: (() => {
       if (!hidingWage) {
         return createDataArray({
@@ -421,7 +421,7 @@ export const graphSeries = ({
   },
   {
     type: 'line',
-    name: 'Remuneração',
+    name: 'Remuneração líquida',
     data: (() => {
       if (!hidingRemunerations) {
         return createRemunerationArray({
