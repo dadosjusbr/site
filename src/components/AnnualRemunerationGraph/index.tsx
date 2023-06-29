@@ -11,8 +11,7 @@ import {
   useMediaQuery,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import SsidIcon from '@mui/icons-material/SsidChart';
-import BarChartIcon from '@mui/icons-material/BarChart';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
 import {
   monthsWithoutData,
@@ -145,12 +144,14 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                       </Suspense>
                       <Box position="absolute" top="2%" left="0">
                         <Fab
-                          size="medium"
+                          size="small"
                           color="secondary"
                           variant="extended"
-                          aria-label="add"
+                          aria-label="Alternar entre gráficos"
+                          title="Alternar entre gráficos"
+                          sx={{ pr: 2 }}
                         >
-                          <SsidIcon />
+                          <AutoGraphIcon />
                           Transparência
                         </Fab>
                       </Box>
