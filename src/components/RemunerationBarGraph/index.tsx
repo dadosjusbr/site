@@ -34,6 +34,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   dataLoading = true,
   selectedMonth,
 }) => {
+  const [hidingRemunerations, setHidingRemunerations] = useState(false);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
@@ -54,6 +55,13 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
     return 'outras_remuneracoes';
   }, [graphType]);
 
+  const discountsDataTypes = useMemo(() => {
+    if (graphType === 'media-por-membro' && agency) {
+      return 'descontos_por_membro';
+    }
+    return 'descontos';
+  }, [graphType]);
+
   return (
     <>
       {agency && agency.coletando && !data ? (
@@ -69,6 +77,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               setGraphType={setGraphType}
               baseRemunerationDataTypes={baseRemunerationDataTypes}
               otherRemunerationsDataTypes={otherRemunerationsDataTypes}
+              discountsDataTypes={discountsDataTypes}
+              hidingRemunerations={hidingRemunerations}
+              setHidingRemunerations={setHidingRemunerations}
               hidingWage={hidingWage}
               setHidingWage={setHidingWage}
               hidingBenefits={hidingBenefits}
@@ -79,7 +90,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             />
             <Box px={2}>
               {agency && data.length > 0 && !dataLoading && (
-                <Grid display="flex" justifyContent="flex-end" mr={2}>
+                <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
                   <Button
                     variant="outlined"
                     color="secondary"
@@ -119,16 +130,19 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         series={graphSeries({
                           data,
                           year,
+                          agency,
+                          hidingRemunerations,
                           hidingBenefits,
                           hidingWage,
                           hidingErrors,
                           hidingNoData,
                           baseRemunerationDataTypes,
                           otherRemunerationsDataTypes,
+                          discountsDataTypes,
                         })}
                         width="100%"
                         height="500"
-                        type="bar"
+                        type="line"
                       />
                     </Box>
                   ) : (

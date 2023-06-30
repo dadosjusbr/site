@@ -126,10 +126,10 @@ export const totalWaste = ({
       d =>
         (d[baseRemunerationDataTypes] === undefined
           ? 0
-          : d[baseRemunerationDataTypes] / 1000000) +
+          : d[baseRemunerationDataTypes]) +
         (d[otherRemunerationsDataTypes] === undefined
           ? 0
-          : d[otherRemunerationsDataTypes] / 1000000),
+          : d[otherRemunerationsDataTypes]),
     );
 
   const dataArray: number[] = [];
@@ -154,6 +154,42 @@ export const createDataArray = ({
   const incomingData = data
     ?.sort((a, b) => a.ano - b.ano)
     .map(d => (d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao]));
+
+  const dataArray: number[] = [];
+  for (let i = 2018; i <= getCurrentYear(); i += 1) {
+    if (yearsWithData(data)?.includes(i)) {
+      dataArray.push(incomingData[yearsWithData(data)?.indexOf(i)]);
+    } else if (!yearsWithData(data)?.includes(i)) {
+      dataArray.push(0);
+    }
+  }
+
+  return dataArray;
+};
+
+export const createRemunerationArray = ({
+  data,
+  baseRemunerationDataTypes,
+  otherRemunerationsDataTypes,
+  discountsDataTypes,
+}: {
+  data: AnnualSummaryData[];
+  baseRemunerationDataTypes: string;
+  otherRemunerationsDataTypes: string;
+  discountsDataTypes: string;
+}): number[] => {
+  const incomingData = data
+    ?.sort((a, b) => a.ano - b.ano)
+    .map(
+      d =>
+        (d[baseRemunerationDataTypes] === undefined
+          ? 0
+          : d[baseRemunerationDataTypes]) +
+        (d[otherRemunerationsDataTypes] === undefined
+          ? 0
+          : d[otherRemunerationsDataTypes]) -
+        (d[discountsDataTypes] === undefined ? 0 : d[discountsDataTypes]),
+    );
 
   const dataArray: number[] = [];
   for (let i = 2018; i <= getCurrentYear(); i += 1) {

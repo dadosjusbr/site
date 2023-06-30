@@ -11,11 +11,12 @@ function formatAgency(aid: string): string {
   return aid;
 }
 
-const formatCurrencyValue = (value: number): string =>
+const formatCurrencyValue = (value: number, decimal_places = 0): string =>
   value.toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-    maximumFractionDigits: 1,
+    maximumFractionDigits: decimal_places,
+    minimumFractionDigits: decimal_places,
     notation: 'compact',
   });
 

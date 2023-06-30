@@ -36,6 +36,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   dataLoading = true,
 }) => {
   const matches = useMediaQuery('(max-width:500px)');
+  const [hidingRemunerations, setHidingRemunerations] = useState(false);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
@@ -61,6 +62,16 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
     return 'outras_remuneracoes';
   }, [graphType]);
 
+  const discountsDataTypes = useMemo(() => {
+    if (graphType === 'media-por-membro') {
+      return 'descontos_por_membro';
+    }
+    if (graphType === 'media-mensal') {
+      return 'descontos_por_mes';
+    }
+    return 'descontos';
+  }, [graphType]);
+
   return (
     <>
       {agency && agency.coletando && !data ? (
@@ -76,6 +87,9 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               setGraphType={setGraphType}
               baseRemunerationDataTypes={baseRemunerationDataTypes}
               otherRemunerationsDataTypes={otherRemunerationsDataTypes}
+              discountsDataTypes={discountsDataTypes}
+              hidingRemunerations={hidingRemunerations}
+              setHidingRemunerations={setHidingRemunerations}
               hidingWage={hidingWage}
               setHidingWage={setHidingWage}
               hidingBenefits={hidingBenefits}
@@ -93,13 +107,12 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
             />
             <Box px={2}>
               {agency && data && !dataLoading ? (
-                <Grid display="flex" justifyContent="flex-end">
+                <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
                   <Button
                     variant="outlined"
                     color="secondary"
                     endIcon={<ArrowForwardIosIcon />}
                     href={`/orgao/${agency.id_orgao}/${year}`}
-                    sx={{ mr: 2 }}
                   >
                     EXPLORAR
                   </Button>
@@ -125,11 +138,19 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                     <Box>
                       <Suspense fallback={<CircularProgress />}>
                         <Chart
-                          options={graphOptions({ agency, data, matches })}
+                          options={graphOptions({
+                            agency,
+                            data,
+                            matches,
+                            baseRemunerationDataTypes,
+                            otherRemunerationsDataTypes,
+                          })}
                           series={graphSeries({
                             data,
                             baseRemunerationDataTypes,
                             otherRemunerationsDataTypes,
+                            discountsDataTypes,
+                            hidingRemunerations,
                             hidingBenefits,
                             hidingWage,
                             hidingNoData,
@@ -137,7 +158,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                           })}
                           width="100%"
                           height="500"
-                          type="bar"
+                          type="line"
                         />
                       </Suspense>
                     </Box>
