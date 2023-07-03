@@ -137,7 +137,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               ) : (
                 <>
                   {data.length > 0 ? (
-                    <Box position="relative">
+                    <Box>
                       <Suspense fallback={<CircularProgress />}>
                         <Chart
                           options={graphOptions({
@@ -163,19 +163,6 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                           type="line"
                         />
                       </Suspense>
-                      <Box position="absolute" top="2%" left="0">
-                        <Fab
-                          size="small"
-                          color="secondary"
-                          variant="extended"
-                          aria-label="Alternar entre gráficos"
-                          title="Alternar entre gráficos"
-                          sx={{ pr: 2 }}
-                        >
-                          <AutoGraphIcon />
-                          Transparência
-                        </Fab>
-                      </Box>
                     </Box>
                   ) : (
                     <Typography variant="body1" mt={2} textAlign="center">

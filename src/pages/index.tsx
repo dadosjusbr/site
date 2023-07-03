@@ -23,7 +23,6 @@ import SearchIcon from '@mui/icons-material/Search';
 
 import Header from '../components/Header';
 import DropDownGroupSelector from '../components/DropDownGroupSelector';
-import IndexChartLegend from '../components/IndexChartLegend';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
@@ -329,35 +328,27 @@ export default function Index({
                   ) : (
                     <>
                       <TabPanel value={value} index={0}>
-                        <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.estadual} />
                       </TabPanel>
                       <TabPanel value={value} index={1}>
-                        <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.ministerios} />
                       </TabPanel>
                       <TabPanel value={value} index={2}>
-                        <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.trabalho} />
                       </TabPanel>
                       <TabPanel value={value} index={3}>
-                        <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.militar} />
                       </TabPanel>
                       <TabPanel value={value} index={4}>
-                        <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.federal} />
                       </TabPanel>
                       <TabPanel value={value} index={5}>
-                        <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.eleitoral} />
                       </TabPanel>
                       <TabPanel value={value} index={6}>
-                        <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.superior} />
                       </TabPanel>
                       <TabPanel value={value} index={7}>
-                        <IndexChartLegend />
                         <IndexTabGraph plotData={plotData.conselhos} />
                       </TabPanel>
                     </>

@@ -149,6 +149,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [year, setYear] = useState(getCurrentYear());
   const [agencyData, setAgencyData] = useState<any>();
   const [dataLoading, setDataLoading] = useState(true);
+  const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
 
   useEffect(() => {
     setDataLoading(true);
@@ -156,10 +157,14 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   }, [year]);
   async function fetchAgencyData() {
     try {
-      const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
+      const [{ data: agency }, { data: incomingPlotData }] = await Promise.all([
+        api.ui.get(`/v2/orgao/resumo/${id}`),
+        api.default.get(`/indice/orgao/${id}?agregado=true`),
+      ]);
       setData(agency.dados_anuais ? agency.dados_anuais : null);
       setAgencyData(agency.orgao);
       setYear(agency.dados_anuais?.at(-1).ano);
+      setPlotData(incomingPlotData);
       setDataLoading(false);
     } catch (err) {
       setDataLoading(false);
@@ -175,6 +180,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         title={title}
         year={year}
         agency={agencyData}
+        plotData={plotData}
       />
     </div>
   );

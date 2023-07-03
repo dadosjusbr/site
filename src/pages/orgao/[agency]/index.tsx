@@ -13,7 +13,13 @@ const AgencyWithoutNavigation = dynamic(
   { loading: () => <CircularProgress />, ssr: false },
 );
 
-export default function AnualAgencyPage({ id, agency, data, fullName }) {
+export default function AnualAgencyPage({
+  id,
+  agency,
+  data,
+  fullName,
+  plotData,
+}) {
   const [year, setYear] = useState(getCurrentYear());
   useEffect(() => {
     const yearData: number =
@@ -48,6 +54,7 @@ export default function AnualAgencyPage({ id, agency, data, fullName }) {
           agency={agency}
           dataLoading={false}
           title={fullName}
+          plotData={plotData}
         />
       </Box>
       <Footer />
@@ -59,12 +66,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id } = context.params;
   try {
     const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
+    const { data: plotData } = await api.default.get(
+      `/indice/orgao/${id}?agregado=true`,
+    );
     return {
       props: {
         id,
         data: agency.dados_anuais ? agency.dados_anuais : null,
         agency: agency.orgao,
         fullName: agency.orgao.nome,
+        plotData,
       },
     };
   } catch (err) {

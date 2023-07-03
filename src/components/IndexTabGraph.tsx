@@ -3,11 +3,16 @@ import * as Plot from '@observablehq/plot';
 import styled from 'styled-components';
 import { Box, useMediaQuery } from '@mui/material';
 import { formatAgency } from '../functions/format';
+import IndexChartLegend from './IndexChartLegend';
 
 export default function IndexTabGraph({
   plotData,
+  height = 700,
+  mobileHeight = 1400,
 }: {
   plotData: AggregateIndexes[];
+  height?: number;
+  mobileHeight?: number;
 }) {
   const ref = useRef(null);
   const isMobile = useMediaQuery('(max-width: 900px)');
@@ -23,20 +28,21 @@ export default function IndexTabGraph({
     const linePlot = Plot.plot({
       grid: true,
       width: 1000,
-      height: !isMobile ? 800 : 1300,
-      margin: !isMobile ? 55 : 65,
+      height: !isMobile ? height : mobileHeight,
+      marginLeft: !isMobile ? 55 : 110,
       y: {
         label: '',
       },
       x: {
-        label: 'PONTUAÇÃO',
+        label: !isMobile ? 'PONTUAÇÃO' : '',
         domain: [0, 1],
         tickFormat: d => `${d}`.replace('.', ','),
+        labelOffset: 29,
       },
       style: {
         color: '#3e5363',
         background: '#f5f5f5',
-        fontSize: !isMobile ? '14px' : '20px',
+        fontSize: !isMobile ? '14px' : '30px',
         fontWeight: 'bold',
         fontFamily: 'Roboto Condensed, sans-serif',
       },
@@ -50,7 +56,7 @@ export default function IndexTabGraph({
           title: d => `${d.completude.toFixed(2)}`.replace('.', ','),
           x: 'completude',
           y: 'nome',
-          r: !isMobile ? 6 : 10,
+          r: !isMobile ? 6 : 14,
           fill: '#f2ca4b',
           stroke: '#3e5363',
           strokeWidth: 1,
@@ -59,7 +65,7 @@ export default function IndexTabGraph({
           title: d => `${d.facilidade.toFixed(2)}`.replace('.', ','),
           x: 'facilidade',
           y: 'nome',
-          r: !isMobile ? 6 : 10,
+          r: !isMobile ? 6 : 14,
           fill: '#7f3d8b',
           stroke: '#3e5363',
           strokeWidth: 1,
@@ -74,7 +80,7 @@ export default function IndexTabGraph({
           title: d => `${d.transparencia.toFixed(2)}`.replace('.', ','),
           x: 'transparencia',
           y: 'nome',
-          r: !isMobile ? 10 : 16,
+          r: !isMobile ? 10 : 20,
           fill: '#3edbb1',
           opacity: 0.65,
           sort: { y: 'x', reverse: true },
@@ -85,10 +91,11 @@ export default function IndexTabGraph({
     ref.current.append(linePlot);
 
     return () => linePlot.remove();
-  }, []);
+  }, [data]);
 
   return (
-    <Box display="flex" alignItems="center">
+    <Box>
+      <IndexChartLegend />
       <Graph ref={ref} />
     </Box>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
@@ -9,18 +9,23 @@ import {
   ThemeProvider,
   Stack,
   CircularProgress,
+  Tooltip,
+  Link,
+  IconButton,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import InfoIcon from '@mui/icons-material/Info';
 
 import ShareModal from './ShareModal';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
 import Drawer from './Drawer';
+import IndexTabGraph from './IndexTabGraph';
 
-const AnualRemunerationGraph = dynamic(
+const AnnualRemunerationGraph = dynamic(
   () => import('./AnnualRemunerationGraph'),
   { loading: () => <CircularProgress />, ssr: false },
 );
@@ -32,11 +37,12 @@ export interface AgencyPageWithoutNavigationProps {
   title: string;
   data: AnnualSummaryData[];
   dataLoading: boolean;
+  plotData: AggregateIndexes[];
 }
 
 const AgencyPageWithoutNavigation: React.FC<
   AgencyPageWithoutNavigationProps
-> = ({ id, title, year, agency, data, dataLoading }) => {
+> = ({ id, title, year, agency, data, dataLoading, plotData }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
@@ -130,13 +136,48 @@ const AgencyPageWithoutNavigation: React.FC<
       </Box>
       <ThemeProvider theme={light}>
         <Box>
-          <AnualRemunerationGraph
+          <AnnualRemunerationGraph
             data={data}
             year={year}
             agency={agency}
             dataLoading={dataLoading}
           />
         </Box>
+        <Suspense fallback={<CircularProgress />}>
+          <Box mt={4} borderRadius={1} px={0.5} py={2} bgcolor="#F5F5F5">
+            <Typography variant="h5" textAlign="center" color="#000" mb={1}>
+              Índice de transparência
+              <Tooltip
+                placement="bottom"
+                title={
+                  <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                    <p>
+                      O Índice de Transparência é composto por duas dimensões:
+                      facilidade e completude. Cada uma das dimensões, por sua
+                      vez, é composta por até seis critérios em cada prestação
+                      de contas, que são avaliados mês a mês. O índice
+                      corresponde à média harmônica das duas dimensões.{' '}
+                      <Link href="/indice" color="inherit">
+                        Saiba mais
+                      </Link>
+                      .
+                    </p>
+                  </Typography>
+                }
+              >
+                <IconButton aria-label="Botão de informações">
+                  <InfoIcon />
+                </IconButton>
+              </Tooltip>
+            </Typography>
+
+            <IndexTabGraph
+              plotData={plotData}
+              height={100}
+              mobileHeight={100}
+            />
+          </Box>
+        </Suspense>
       </ThemeProvider>
 
       <ShareModal
