@@ -1,5 +1,6 @@
 import {
   createDataArray,
+  createRemunerationArray,
   getYearWithIncompleteData,
   noData,
   totalWaste,
@@ -8,6 +9,9 @@ import {
 import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
 import { getCurrentYear } from '../../../functions/currentYear';
 import { formatCurrencyValue } from '../../../functions/format';
+
+const yearListArr = yearList();
+const currentYear = getCurrentYear();
 
 export const graphAnnotations = ({
   data,
@@ -47,240 +51,298 @@ export const graphOptions = ({
   agency,
   data,
   matches,
+  baseRemunerationDataTypes,
+  otherRemunerationsDataTypes,
 }: {
   agency: Agency;
   data: AnnualSummaryData[];
   matches: boolean;
-}): ApexCharts.ApexOptions => ({
-  colors: ['transparent', 'transparent', '#97BB2F', '#2FBB96', '#2c3236'],
-  chart: {
-    id: 'remuneration-graph',
-    stacked: true,
-    toolbar: {
-      offsetY: 475,
-      tools: {
-        download: '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
+  baseRemunerationDataTypes: string;
+  otherRemunerationsDataTypes: string;
+}): ApexCharts.ApexOptions => {
+  function transformGrpahTitle() {
+    if (baseRemunerationDataTypes === 'remuneracao_base_por_membro') {
+      return 'Média de remuneração por membro';
+    }
+    if (baseRemunerationDataTypes === 'remuneracao_base_por_mes') {
+      return 'Média de remuneração mensal';
+    }
+    return 'Total de Remunerações';
+  }
+
+  return {
+    colors: [
+      'transparent',
+      'transparent',
+      '#97BB2F',
+      '#2FBB96',
+      '#57659d',
+      '#2c3236',
+    ],
+    chart: {
+      id: 'remuneration-graph',
+      stacked: true,
+      toolbar: {
+        offsetY: 475,
+        tools: {
+          download: '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
+        },
+        show: true,
+        export: {
+          svg: {
+            filename: `remuneracoes-membros${
+              agency ? `- ${agency.id_orgao}` : ''
+            }`,
+          },
+          png: {
+            filename: `remuneracoes-membros${
+              agency ? `- ${agency.id_orgao}` : ''
+            }`,
+          },
+          csv: {
+            filename: `remuneracoes-membros${
+              agency ? `- ${agency.id_orgao}` : ''
+            }`,
+          },
+        },
       },
-      show: true,
-      export: {
-        svg: {
-          filename: `remuneracoes-membros${
-            agency ? `- ${agency.id_orgao}` : ''
-          }`,
+      zoom: {
+        enabled: false,
+      },
+    },
+    responsive: [
+      {
+        breakpoint: 500,
+        options: {
+          legend: {
+            position: 'bottom',
+            offsetX: -10,
+            offsetY: 0,
+          },
+          chart: {
+            width: '100%',
+            height: '400',
+            toolbar: {
+              offsetY: 370,
+            },
+          },
+          yaxis: {
+            max: (() => {
+              const max = Math.max(
+                ...totalWaste({
+                  data,
+                  baseRemunerationDataTypes,
+                  otherRemunerationsDataTypes,
+                }).map(month => month),
+              );
+              return max + max * 0.1;
+            })(),
+            forceNiceScale: true,
+            decimalsInFloat: 2,
+            title: {
+              text: transformGrpahTitle(),
+              offsetY: 10,
+              style: {
+                fontSize: '10px',
+                fontWeight: 'bold',
+                color: '#091216',
+              },
+            },
+            labels: {
+              show: true,
+              minWidth: 0,
+              maxWidth: 70,
+              style: {
+                colors: [],
+                fontSize: '0.7rem',
+                fontFamily: 'Roboto Condensed, sans-serif',
+                fontWeight: 600,
+                cssClass: 'apexcharts-yaxis-label',
+              },
+              formatter(value: number) {
+                return `${formatCurrencyValue(value)}`;
+              },
+            },
+          },
+          xaxis: {
+            labels: {
+              rotate: -60,
+              style: {
+                fontSize: '12px',
+              },
+            },
+          },
         },
-        png: {
-          filename: `remuneracoes-membros${
-            agency ? `- ${agency.id_orgao}` : ''
-          }`,
+      },
+    ],
+    plotOptions: {
+      bar: {
+        horizontal: false,
+      },
+    },
+    yaxis: {
+      max: (() => {
+        const max = Math.max(
+          ...totalWaste({
+            data,
+            baseRemunerationDataTypes,
+            otherRemunerationsDataTypes,
+          }).map(month => month),
+        );
+        return max + max * 0.1;
+      })(),
+      forceNiceScale: true,
+      decimalsInFloat: 2,
+      title: {
+        text: transformGrpahTitle(),
+        offsetY: 10,
+        offsetX: -5,
+        style: {
+          fontSize: '14px',
+          fontWeight: 'bold',
+          fontFamily: undefined,
+          color: '#091216',
         },
-        csv: {
-          filename: `remuneracoes-membros${
-            agency ? `- ${agency.id_orgao}` : ''
-          }`,
+      },
+      labels: {
+        show: true,
+        minWidth: 0,
+        maxWidth: 160,
+        style: {
+          colors: [],
+          fontSize: '11px',
+          fontFamily: 'Roboto Condensed, sans-serif',
+          fontWeight: 600,
+          cssClass: 'apexcharts-yaxis-label',
+        },
+        formatter(value) {
+          return `${formatCurrencyValue(value)}`;
         },
       },
     },
-    zoom: {
+    annotations: {
+      xaxis: graphAnnotations({ data, matches }),
+    },
+    markers: {
+      size: 5,
+      hover: {
+        size: 7,
+      },
+    },
+    tooltip: {
       enabled: true,
-    },
-  },
-  responsive: [
-    {
-      breakpoint: 500,
-      options: {
-        legend: {
-          position: 'bottom',
-          offsetX: -10,
-          offsetY: 0,
-        },
-        chart: {
-          width: '100%',
-          height: '400',
-          toolbar: {
-            offsetY: 370,
-          },
-        },
-        yaxis: {
-          decimalsInFloat: 2,
-          title: {
-            text: 'Total de Remunerações',
-            offsetY: 10,
-            style: {
-              fontSize: '10px',
-              fontWeight: 'bold',
-              color: '#091216',
-            },
-          },
-          labels: {
-            show: true,
-            minWidth: 0,
-            maxWidth: 70,
-            style: {
-              colors: [],
-              fontSize: '0.7rem',
-              fontFamily: 'Roboto Condensed, sans-serif',
-              fontWeight: 600,
-              cssClass: 'apexcharts-yaxis-label',
-            },
-            formatter(value: number) {
-              return `${formatCurrencyValue(value)}`;
-            },
-          },
-        },
-        xaxis: {
-          labels: {
-            rotate: -60,
-            style: {
-              fontSize: '12px',
-            },
-          },
-        },
+      shared: true,
+      intersect: false,
+      inverseOrder: true,
+      enabledOnSeries: [0, 1, 2, 3, 4],
+      marker: {
+        fillColors: [
+          '#e5cbb4',
+          '#ec4b59',
+          '#97BB2F',
+          '#2FBB96',
+          '#57659d',
+          '#2c3236',
+        ],
       },
-    },
-  ],
-  plotOptions: {
-    bar: {
-      horizontal: false,
-    },
-  },
-  yaxis: {
-    decimalsInFloat: 2,
-    title: {
-      text: 'Total de Remunerações',
-      offsetY: 10,
-      offsetX: -5,
-      style: {
-        fontSize: '14px',
-        fontWeight: 'bold',
-        fontFamily: undefined,
-        color: '#091216',
-      },
-    },
-    labels: {
-      show: true,
-      minWidth: 0,
-      maxWidth: 160,
-      style: {
-        colors: [],
-        fontSize: '11px',
-        fontFamily: 'Roboto Condensed, sans-serif',
-        fontWeight: 600,
-        cssClass: 'apexcharts-yaxis-label',
-      },
-      formatter(value) {
-        return `${formatCurrencyValue(value)}`;
-      },
-    },
-  },
-  annotations: {
-    xaxis: graphAnnotations({ data, matches }),
-  },
-  tooltip: {
-    enabled: true,
-    shared: true,
-    intersect: false,
-    inverseOrder: true,
-    enabledOnSeries: [0, 1, 2, 3],
-    marker: {
-      fillColors: [
-        'transparent',
-        'transparent',
-        '#97BB2F',
-        '#2FBB96',
-        '#2c3236',
-      ],
-    },
-    x: {
-      formatter(val) {
-        const date = new Date();
-        const validMonths =
-          val === getCurrentYear() &&
-          date.getDate() > COLLECT_INFOS.COLLECT_DATE
-            ? date.getMonth()
-            : val === getCurrentYear() &&
-              date.getDate() < COLLECT_INFOS.COLLECT_DATE
-            ? date.getMonth() - 1
-            : 12;
-        const noDataMonths =
-          validMonths - data.find(d => d.ano === val)?.meses_com_dados;
+      x: {
+        formatter(val) {
+          const date = new Date();
+          const validMonths =
+            yearListArr[val - 1] === currentYear &&
+            date.getDate() > COLLECT_INFOS.COLLECT_DATE
+              ? date.getMonth()
+              : yearListArr[val - 1] === currentYear &&
+                date.getDate() < COLLECT_INFOS.COLLECT_DATE
+              ? date.getMonth() - 1
+              : 12;
+          const noDataMonths =
+            validMonths -
+            data.find(d => d.ano === yearListArr[val - 1])?.meses_com_dados;
 
-        if (!data.map(d => d.ano).includes(val)) {
-          return `${val} (12 meses sem dados)`;
-        }
-
-        if (noDataMonths > 0) {
-          return `${val} (${noDataMonths} ${
-            noDataMonths > 1 ? 'meses' : 'mês'
-          } sem dados)`;
-        }
-
-        if (
-          getYearWithIncompleteData(data).filter(d => d.ano === val).length ===
-          0
-        ) {
-          return `${val}`;
-        }
-
-        return `${val}`;
-      },
-    },
-    y: {
-      formatter(val, opts) {
-        if (
-          opts.w.globals.seriesNames[opts.seriesIndex] ===
-          'Média mensal de membros'
-        ) {
-          return `${val}`;
-        }
-        if (
-          opts.w.globals.seriesNames[opts.seriesIndex] ===
-          'Total de remunerações'
-        ) {
-          if (val === undefined) {
-            return `R$ 0.00M`;
+          if (!data.map(d => d.ano).includes(yearListArr[val - 1])) {
+            return `${yearListArr[val - 1]} (12 meses sem dados)`;
           }
-          return `${formatCurrencyValue(val * 1000000)}`;
-        }
-        return `${formatCurrencyValue(val)}`;
+
+          if (noDataMonths > 0) {
+            return `${yearListArr[val - 1]} (${noDataMonths} ${
+              noDataMonths > 1 ? 'meses' : 'mês'
+            } sem dados)`;
+          }
+
+          if (
+            getYearWithIncompleteData(data).filter(
+              d => d.ano === yearListArr[val - 1],
+            ).length === 0
+          ) {
+            return `${yearListArr[val - 1]}`;
+          }
+
+          return `${yearListArr[val - 1]}`;
+        },
+      },
+      y: {
+        formatter(val, opts) {
+          if (
+            opts.w.globals.seriesNames[opts.seriesIndex] ===
+            'Média mensal de membros'
+          ) {
+            return `${val}`;
+          }
+          if (opts.w.globals.seriesNames[opts.seriesIndex] === 'Descontos') {
+            if (val === undefined) {
+              return `R$ 0,0`;
+            }
+            return `${formatCurrencyValue(val * 1000000000, 1)}`;
+          }
+          return `${formatCurrencyValue(val, 1)}`;
+        },
       },
     },
-  },
-  xaxis: {
-    crosshairs: {
+    xaxis: {
+      crosshairs: {
+        show: false,
+      },
+      labels: {
+        style: {
+          fontSize: '12px',
+        },
+      },
+      categories: yearListArr,
+      title: {
+        text: 'Anos',
+        offsetX: -25,
+        style: {
+          fontSize: '15px',
+          fontWeight: 'bold',
+          fontFamily: undefined,
+          color: '#263238',
+        },
+      },
+      tooltip: {
+        enabled: false,
+      },
+    },
+    legend: {
       show: false,
-      width: 1,
     },
-    labels: {
-      style: {
-        fontSize: '12px',
-      },
+    dataLabels: {
+      enabled: false,
     },
-    categories: yearList(),
-    title: {
-      text: 'Anos',
-      offsetX: -25,
-      style: {
-        fontSize: '15px',
-        fontWeight: 'bold',
-        fontFamily: undefined,
-        color: '#263238',
-      },
+    stroke: {
+      curve: 'smooth',
+      lineCap: 'round',
+      colors: ['', '', '', '', '', '', '#57659d'],
     },
-  },
-  legend: {
-    show: false,
-    position: 'right',
-    offsetY: 120,
-  },
-  dataLabels: {
-    enabled: false,
-  },
-});
+  };
+};
 
 export const graphSeries = ({
   data,
   baseRemunerationDataTypes,
   otherRemunerationsDataTypes,
+  discountsDataTypes,
+  hidingRemunerations,
   hidingBenefits,
   hidingWage,
   hidingNoData,
@@ -289,26 +351,29 @@ export const graphSeries = ({
   data: AnnualSummaryData[];
   baseRemunerationDataTypes: string;
   otherRemunerationsDataTypes: string;
+  discountsDataTypes: string;
+  hidingRemunerations: boolean;
   hidingBenefits: boolean;
   hidingWage: boolean;
   hidingNoData: boolean;
   matches: boolean;
 }): ApexAxisChartSeries | ApexNonAxisChartSeries => [
   {
-    name: 'Total de remunerações',
-    data: (() =>
-      totalWaste({
-        data,
-        baseRemunerationDataTypes,
-        otherRemunerationsDataTypes,
-      }))(),
-  },
-  {
+    type: 'bar',
     name: 'Média mensal de membros',
     data: (() => createDataArray({ tipoRemuneracao: 'num_membros', data }))(),
   },
   {
-    name: 'Benefícios',
+    type: 'bar',
+    name: 'Descontos',
+    data: createDataArray({
+      tipoRemuneracao: discountsDataTypes,
+      data,
+    }).map(d => d / 1000000000),
+  },
+  {
+    type: 'bar',
+    name: 'Benefício bruto',
     data: (() => {
       if (!hidingBenefits) {
         return createDataArray({
@@ -325,13 +390,14 @@ export const graphSeries = ({
         .includes(options.value) &&
       graphAnnotations({ data, matches })
         .map(d => d.x)
-        .map(elemento => yearList().indexOf(+elemento))
+        .map(elemento => yearListArr.indexOf(+elemento))
         .includes(options.dataPointIndex)
         ? '#98bb2f7d'
         : '#97BB2F',
   },
   {
-    name: 'Salário',
+    type: 'bar',
+    name: 'Salário bruto',
     data: (() => {
       if (!hidingWage) {
         return createDataArray({
@@ -348,12 +414,29 @@ export const graphSeries = ({
         .includes(options.value) &&
       graphAnnotations({ data, matches })
         .map(d => d.x)
-        .map(elemento => yearList().indexOf(+elemento))
+        .map(elemento => yearListArr.indexOf(+elemento))
         .includes(options.dataPointIndex)
         ? '#2fbb967d'
         : '#2FBB96',
   },
   {
+    type: 'line',
+    name: 'Remuneração líquida',
+    data: (() => {
+      if (!hidingRemunerations) {
+        return createRemunerationArray({
+          data,
+          baseRemunerationDataTypes,
+          otherRemunerationsDataTypes,
+          discountsDataTypes,
+        });
+      }
+      return [];
+    })(),
+    color: '#57659d',
+  },
+  {
+    type: 'bar',
     name: 'Sem Dados',
     data: (() => {
       if (!hidingNoData) {

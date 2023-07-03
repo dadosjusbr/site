@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import {
   Box,
+  Divider,
   Grid,
   IconButton,
   Tab,
@@ -11,7 +12,12 @@ import {
 import InfoIcon from '@mui/icons-material/Info';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
-import CropSquareIcon from '@mui/icons-material/CropSquare';
+import CropSquare from '@mui/icons-material/CropSquare';
+import Payments from '@mui/icons-material/Payments';
+import RemoveCircle from '@mui/icons-material/CancelPresentation';
+import Add from '@mui/icons-material/Add';
+import Remove from '@mui/icons-material/Remove';
+import Equal from '@mui/icons-material/DragHandle';
 import AlertModal from '../AlertModal';
 import { formatCurrencyValue } from '../../functions/format';
 
@@ -23,7 +29,10 @@ const index = ({
   setGraphType,
   baseRemunerationDataTypes,
   otherRemunerationsDataTypes,
+  discountsDataTypes,
   hidingWage,
+  hidingRemunerations,
+  setHidingRemunerations,
   setHidingWage,
   hidingBenefits,
   setHidingBenefits,
@@ -41,6 +50,9 @@ const index = ({
   setGraphType: React.Dispatch<React.SetStateAction<string>>;
   baseRemunerationDataTypes: string;
   otherRemunerationsDataTypes: string;
+  discountsDataTypes: string;
+  hidingRemunerations: boolean;
+  setHidingRemunerations: React.Dispatch<React.SetStateAction<boolean>>;
   hidingWage: boolean;
   setHidingWage: React.Dispatch<React.SetStateAction<boolean>>;
   hidingBenefits: boolean;
@@ -74,7 +86,7 @@ const index = ({
         flexDirection="column"
         mb={4}
       >
-        <Box maxWidth={{ xs: 320, sm: 720 }} mb={1}>
+        <Box maxWidth={{ xs: 320, sm: 720 }}>
           {annual === false &&
             agency != null &&
             data.length < 12 &&
@@ -128,42 +140,25 @@ const index = ({
             </Tabs>
           )}
         </Box>
-        <Typography variant="h5" textAlign="center" mt={2}>
-          {graphType === 'media-por-membro' &&
-            `Em média, cada membro deste órgão recebeu: `}
-          {graphType === 'media-mensal' &&
-            `Em média, este órgão gastou mensalmente: `}
-          {graphType === 'total' && `Total de gastos deste órgão: `}
-          {(() => {
-            // this function is used to sum the data from all money arrays and generate the last remuneration value
-            let total = 0;
-            const monthlyTotals = data.map(
-              d =>
-                d[baseRemunerationDataTypes] + d[otherRemunerationsDataTypes],
-            );
-            monthlyTotals.forEach(w => {
-              total += w;
-            });
-
-            if (graphType === 'total') {
-              return formatCurrencyValue(total);
-            }
-
-            return formatCurrencyValue(total / data.length);
-          })()}
+      </Box>
+      <Box
+        // pt={1}
+        // px={1}
+        // border="2px solid #57659d"
+        // borderRadius={4}
+        overflow="auto"
+        maxWidth={700}
+        margin={{ xs: '0 10px', md: 'auto' }}
+      >
+        <Typography variant="h5" textAlign="center" mb={2}>
+          Resumo das remunerações
           <Tooltip
-            placement="top"
+            placement="bottom"
             title={
-              <Typography fontSize="0.8rem">
+              <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
                 <p>
-                  <b>Membros:</b> Participantes ativos do órgao, incluindo os
-                  servidores públicos, os militares e os membros do Poder
-                  Judiciário.
-                </p>
-                <p>
-                  <b>Servidor:</b> Funcionário público que exerce cargo ou
-                  função pública, com vínculo empregatício, e que recebe
-                  remuneração fixa ou variável.
+                  <b>Remuneração:</b> Valor final da soma entre salário e
+                  benefícios, retirando os descontos.
                 </p>
                 <p>
                   <b>Salário:</b> Valor recebido de acordo com a prestação de
@@ -177,6 +172,22 @@ const index = ({
                   alimentação, saúde, escolar...
                 </p>
                 <p>
+                  <b>Descontos:</b> Valor retirado do salário ou de benefícios
+                  do funcionário de acordo com a lei, como imposto de renda,
+                  contribuição para previdência, pensão alimentícia, entre
+                  outros.
+                </p>
+                <p>
+                  <b>Membros:</b> Participantes ativos do órgao, incluindo os
+                  servidores públicos, os militares e os membros do Poder
+                  Judiciário.
+                </p>
+                <p>
+                  <b>Servidor:</b> Funcionário público que exerce cargo ou
+                  função pública, com vínculo empregatício, e que recebe
+                  remuneração fixa ou variável.
+                </p>
+                <p>
                   <b>Sem dados:</b> Quando um órgão não disponibiliza os dados
                   de um determinado mês
                 </p>
@@ -188,91 +199,196 @@ const index = ({
             </IconButton>
           </Tooltip>
         </Typography>
+        <Grid
+          container
+          justifyContent={{ xs: 'flex-start', md: 'space-between' }}
+          columns={{ md: 13, sm: 13, xs: 9 }}
+        >
+          {agency && (
+            <>
+              <Grid xs={2.5} md={2} item textAlign="center">
+                <IconButton
+                  sx={{ backgroundColor: '#3E5363' }}
+                  onClick={e => {
+                    if (hidingNoData) {
+                      e.currentTarget.classList.remove('active');
+                      setHidingNoData(false);
+                    } else {
+                      e.currentTarget.classList.add('active');
+                      setHidingNoData(true);
+                    }
+                  }}
+                >
+                  <CropSquare />
+                </IconButton>
+                <Typography pt={2} fontSize={{ xs: 14, md: 16 }}>
+                  Sem dados
+                </Typography>
+              </Grid>
+              <Divider
+                orientation="vertical"
+                variant="fullWidth"
+                flexItem
+                sx={{ mb: 2, mx: 0.8, border: '1px dashed #ccc' }}
+              />
+            </>
+          )}
+          <Grid xs={2.5} md={2} item textAlign="center">
+            <IconButton
+              sx={{ backgroundColor: '#2fbb95' }}
+              onClick={e => {
+                if (hidingWage) {
+                  e.currentTarget.classList.remove('active');
+                  setHidingWage(false);
+                } else {
+                  e.currentTarget.classList.add('active');
+                  setHidingWage(true);
+                }
+              }}
+            >
+              <AccountBalanceWalletIcon />
+            </IconButton>
+            <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
+              Salário bruto
+            </Typography>
+            <Typography fontSize={{ xs: 14, md: 16 }}>
+              {(() => {
+                let total = 0;
+                const yearlyTotals = data.map(
+                  d => d[baseRemunerationDataTypes],
+                );
+
+                yearlyTotals.forEach(w => {
+                  total += w;
+                });
+
+                if (graphType === 'total') {
+                  return formatCurrencyValue(total, 1);
+                }
+
+                return formatCurrencyValue(total / data.length, 1);
+              })()}
+            </Typography>
+          </Grid>
+          <Grid xs={0.7} md={0.4} item alignSelf="center" textAlign="center">
+            <Add fontSize="small" />
+          </Grid>
+          <Grid xs={2.5} md={2.3} item textAlign="center">
+            <IconButton
+              sx={{ backgroundColor: '#96bb2f' }}
+              onClick={e => {
+                if (hidingBenefits) {
+                  e.currentTarget.classList.remove('active');
+                  setHidingBenefits(false);
+                } else {
+                  e.currentTarget.classList.add('active');
+                  setHidingBenefits(true);
+                }
+              }}
+            >
+              <CardGiftcardIcon />
+            </IconButton>
+            <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
+              Benefício bruto
+            </Typography>
+            <Typography fontSize={{ xs: 14, md: 16 }}>
+              {(() => {
+                let total = 0;
+                const yearlyTotals = data.map(
+                  d => d[otherRemunerationsDataTypes],
+                );
+
+                yearlyTotals.forEach(w => {
+                  total += w;
+                });
+
+                if (graphType === 'total') {
+                  return formatCurrencyValue(total, 1);
+                }
+
+                return formatCurrencyValue(total / data.length, 1);
+              })()}
+            </Typography>
+          </Grid>
+          <Grid
+            xs={0.6}
+            sm={0.5}
+            md={0.4}
+            item
+            alignSelf="center"
+            textAlign="center"
+          >
+            <Remove fontSize="small" />
+          </Grid>
+          <Grid xs={2} md={2} item textAlign="center">
+            <IconButton sx={{ backgroundColor: '#ec4b59' }}>
+              <RemoveCircle />
+            </IconButton>
+            <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
+              Descontos
+            </Typography>
+            <Typography fontSize={{ xs: 14, md: 16 }}>
+              {(() => {
+                let total = 0;
+                const yearlyTotals = data.map(d => d[discountsDataTypes]);
+
+                yearlyTotals.forEach(w => {
+                  total += w;
+                });
+
+                if (graphType === 'total') {
+                  return formatCurrencyValue(total, 1);
+                }
+
+                return formatCurrencyValue(total / data.length, 1);
+              })()}
+            </Typography>
+          </Grid>
+          <Grid xs={0.7} md={0.4} item alignSelf="center" textAlign="center">
+            <Equal fontSize="small" />
+          </Grid>
+          <Grid xs={2.5} md={3} sm={2.5} item textAlign="center">
+            <IconButton
+              sx={{ backgroundColor: '#57659d' }}
+              onClick={e => {
+                if (hidingRemunerations) {
+                  e.currentTarget.classList.remove('active');
+                  setHidingRemunerations(false);
+                } else {
+                  e.currentTarget.classList.add('active');
+                  setHidingRemunerations(true);
+                }
+              }}
+            >
+              <Payments />
+            </IconButton>
+            <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
+              Remuneração líquida
+            </Typography>
+            <Typography pb={0} fontSize={{ xs: 14, md: 16 }}>
+              {(() => {
+                let total = 0;
+                const yearlyTotals = data.map(
+                  d =>
+                    d[baseRemunerationDataTypes] +
+                    d[otherRemunerationsDataTypes] -
+                    d[discountsDataTypes],
+                );
+
+                yearlyTotals.forEach(w => {
+                  total += w;
+                });
+
+                if (graphType === 'total') {
+                  return formatCurrencyValue(total, 1);
+                }
+
+                return formatCurrencyValue(total / data.length, 1);
+              })()}
+            </Typography>
+          </Grid>
+        </Grid>
       </Box>
-      <Grid
-        container
-        maxWidth={650}
-        margin="auto"
-        justifyContent="space-between"
-      >
-        <Grid xs={5} md={3} item textAlign="center">
-          <IconButton
-            sx={{ backgroundColor: '#2fbb95' }}
-            onClick={e => {
-              if (hidingWage) {
-                e.currentTarget.classList.remove('active');
-                setHidingWage(false);
-              } else {
-                e.currentTarget.classList.add('active');
-                setHidingWage(true);
-              }
-            }}
-          >
-            <AccountBalanceWalletIcon />
-          </IconButton>
-          <Typography pt={1}>
-            Salário:{' '}
-            {(() => {
-              let total = 0;
-              const yearlyTotals = data.map(d => d[baseRemunerationDataTypes]);
-
-              yearlyTotals.forEach(w => {
-                total += w;
-              });
-
-              return formatCurrencyValue(total);
-            })()}
-          </Typography>
-        </Grid>
-        <Grid xs={5} md={3} item textAlign="center">
-          <IconButton
-            sx={{ backgroundColor: '#96bb2f' }}
-            onClick={e => {
-              if (hidingBenefits) {
-                e.currentTarget.classList.remove('active');
-                setHidingBenefits(false);
-              } else {
-                e.currentTarget.classList.add('active');
-                setHidingBenefits(true);
-              }
-            }}
-          >
-            <CardGiftcardIcon />
-          </IconButton>
-          <Typography pt={1}>
-            Benefícios:{' '}
-            {(() => {
-              let total = 0;
-              const yearlyTotals = data.map(
-                d => d[otherRemunerationsDataTypes],
-              );
-
-              yearlyTotals.forEach(w => {
-                total += w;
-              });
-
-              return formatCurrencyValue(total);
-            })()}
-          </Typography>
-        </Grid>
-        <Grid xs={5} md={3} item textAlign="center">
-          <IconButton
-            sx={{ backgroundColor: '#3E5363' }}
-            onClick={e => {
-              if (hidingNoData) {
-                e.currentTarget.classList.remove('active');
-                setHidingNoData(false);
-              } else {
-                e.currentTarget.classList.add('active');
-                setHidingNoData(true);
-              }
-            }}
-          >
-            <CropSquareIcon />
-          </IconButton>
-          <Typography pt={1}>Sem dados</Typography>
-        </Grid>
-      </Grid>
     </>
   );
 };

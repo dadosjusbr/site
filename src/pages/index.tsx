@@ -177,6 +177,7 @@ export default function Index({
         data.map(d => ({
           remuneracao_base: d.remuneracao_base,
           outras_remuneracoes: d.outras_remuneracoes,
+          descontos: d.descontos,
           // eslint-disable-next-line no-underscore-dangle
           mes: d.mes,
         })),

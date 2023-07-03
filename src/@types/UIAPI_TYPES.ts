@@ -57,6 +57,8 @@ type v2AgencySummary = {
   max_remuneracao_base: number;
   outras_remuneracoes: number;
   max_outras_remuneracoes: number;
+  descontos: number;
+  max_descontos: number;
   timestamp: Timestamp;
   total_membros: number;
   total_remuneracao: number;
@@ -84,12 +86,14 @@ type v2MonthTotals = {
   remuneracao_base_por_membro: number;
   outras_remuneracoes: number;
   outras_remuneracoes_por_membro: number;
+  descontos: number;
+  descontos_por_membro: number;
   timestamp: Timestamp;
 };
 
 type Timestamp = {
-  Seconds: number;
-  Nanos: number;
+  seconds: number;
+  nanos: number;
 };
 
 type v2ProcInfoResult = {
@@ -165,6 +169,9 @@ type AnnualSummaryData = {
   outras_remuneracoes: number;
   outras_remuneracoes_por_mes: number;
   outras_remuneracoes_por_membro: number;
+  descontos: number;
+  descontos_por_mes: number;
+  descontos_por_membro: number;
   meses_com_dados: number;
   package: Backup;
 };
@@ -174,4 +181,5 @@ type mensalRemuneration = {
   num_membros: number;
   remuneracao_base: number;
   outras_remuneracoes: number;
+  descontos: number;
 };

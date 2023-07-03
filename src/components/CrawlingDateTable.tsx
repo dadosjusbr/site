@@ -46,7 +46,7 @@ function DateTable({ data }: { data: v2MonthTotals[] }) {
                 <TableRow
                   key={d.mes}
                   month={d.mes}
-                  crawlingtimeseconds={d.timestamp.Seconds}
+                  crawlingtimeseconds={d.timestamp.seconds}
                 />
               ))}
             </tbody>
