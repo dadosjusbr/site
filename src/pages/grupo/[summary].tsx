@@ -153,23 +153,53 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
 
   useEffect(() => {
     setDataLoading(true);
-    fetchAgencyData();
+    Promise.all([fetchAgencyData(), fetchPlotData()]);
   }, [year]);
   async function fetchAgencyData() {
     try {
-      const [{ data: agency }, { data: incomingPlotData }] = await Promise.all([
-        api.ui.get(`/v2/orgao/resumo/${id}`),
-        api.default.get(`/indice/orgao/${id}?agregado=true`),
-      ]);
+      const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
       setData(agency.dados_anuais ? agency.dados_anuais : null);
       setAgencyData(agency.orgao);
       setYear(agency.dados_anuais?.at(-1).ano);
-      setPlotData(incomingPlotData);
       setDataLoading(false);
     } catch (err) {
       setDataLoading(false);
       console.log(err);
     }
+  }
+
+  async function fetchPlotData() {
+    let incomingPlotData = [];
+
+    for (let year = 2018; year <= getCurrentYear(); year++) {
+      try {
+        let { data } = await api.default.get(
+          `/indice/orgao/${id}/${year}?agregado=true`,
+        );
+        data = data.map((item: AggregateIndexes) => ({
+          id_orgao: year,
+          agregado: {
+            indice_completude: item.agregado.indice_completude,
+            indice_facilidade: item.agregado.indice_facilidade,
+            indice_transparencia: item.agregado.indice_transparencia,
+          },
+        }));
+
+        incomingPlotData.push(...data);
+      } catch (err) {
+        incomingPlotData.push({
+          id_orgao: year,
+          agregado: {
+            indice_completude: 0,
+            indice_facilidade: 0,
+            indice_transparencia: 0,
+          },
+        });
+
+        setPlotData(incomingPlotData);
+      }
+    }
+    setDataLoading(false);
   }
   return (
     <div id={id}>

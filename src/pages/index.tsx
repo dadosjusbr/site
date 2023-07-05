@@ -33,9 +33,12 @@ const RemunerationBarGraph = dynamic(
   () => import('../components/RemunerationBarGraph'),
   { loading: () => <CircularProgress /> },
 );
-const IndexTabGraph = dynamic(() => import('../components/IndexTabGraph'), {
-  loading: () => <CircularProgress />,
-});
+const IndexTabGraph = dynamic(
+  () => import('../components/TransparencyChart/IndexTabChart'),
+  {
+    loading: () => <CircularProgress />,
+  },
+);
 const Footer = dynamic(() => import('../components/Footer'));
 
 interface TabPanelProps {

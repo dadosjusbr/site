@@ -12,22 +12,33 @@ import {
   Tooltip,
   Link,
   IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import InfoIcon from '@mui/icons-material/Info';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ShareModal from './ShareModal';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
 import Drawer from './Drawer';
-import IndexTabGraph from './IndexTabGraph';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./AnnualRemunerationGraph'),
   { loading: () => <CircularProgress />, ssr: false },
+);
+
+const IndexTabGraph = dynamic(
+  () => import('./TransparencyChart/IndexTabChart'),
+  {
+    loading: () => <CircularProgress />,
+    ssr: false,
+  },
 );
 
 export interface AgencyPageWithoutNavigationProps {
@@ -143,15 +154,16 @@ const AgencyPageWithoutNavigation: React.FC<
             dataLoading={dataLoading}
           />
         </Box>
-        <Suspense fallback={<CircularProgress />}>
-          <Box mt={4} borderRadius={1} px={0.5} py={2} bgcolor="#F5F5F5">
-            <Typography variant="h5" textAlign="center" color="#000" mb={1}>
-              Índice de transparência
-              <Tooltip
-                placement="bottom"
-                title={
-                  <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                    <p>
+
+        <Box mt={2}>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6" color="#000">
+                Índice de transparência
+                <Tooltip
+                  placement="bottom"
+                  title={
+                    <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
                       O Índice de Transparência é composto por duas dimensões:
                       facilidade e completude. Cada uma das dimensões, por sua
                       vez, é composta por até seis critérios em cada prestação
@@ -161,23 +173,27 @@ const AgencyPageWithoutNavigation: React.FC<
                         Saiba mais
                       </Link>
                       .
-                    </p>
-                  </Typography>
-                }
-              >
-                <IconButton aria-label="Botão de informações">
-                  <InfoIcon />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-
-            <IndexTabGraph
-              plotData={plotData}
-              height={100}
-              mobileHeight={100}
-            />
-          </Box>
-        </Suspense>
+                    </Typography>
+                  }
+                >
+                  <IconButton aria-label="Botão de informações">
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Suspense fallback={<CircularProgress />}>
+                <IndexTabGraph
+                  plotData={plotData}
+                  height={55 * plotData.length}
+                  mobileHeight={75 * plotData.length}
+                  isAgency
+                />
+              </Suspense>
+            </AccordionDetails>
+          </Accordion>
+        </Box>
       </ThemeProvider>
 
       <ShareModal
