@@ -187,7 +187,7 @@ const AgencyPageWithoutNavigation: React.FC<
                 <IndexTabGraph
                   plotData={plotData}
                   height={55 * plotData.length}
-                  mobileHeight={75 * plotData.length}
+                  mobileHeight={110 * plotData.length}
                   isAgency
                 />
               </Suspense>
