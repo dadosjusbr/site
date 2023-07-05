@@ -195,10 +195,9 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
             indice_transparencia: 0,
           },
         });
-
-        setPlotData(incomingPlotData);
       }
     }
+    setPlotData(incomingPlotData);
     setDataLoading(false);
   }
   return (
