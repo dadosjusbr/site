@@ -7,6 +7,7 @@ import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import api from '../../../services/api';
 import { getCurrentYear } from '../../../functions/currentYear';
+import { normalizePlotData } from '../../../functions/normalize';
 
 const AgencyWithoutNavigation = dynamic(
   () => import('../../../components/AgencyWithoutNavigation'),
@@ -36,6 +37,7 @@ export default function AnualAgencyPage({
         .find(d => d <= getCurrentYear());
 
     setYear(yearData);
+    console.log(normalizePlotData(plotData));
   }, [data]);
   return (
     <Box>
@@ -60,7 +62,7 @@ export default function AnualAgencyPage({
           agency={agency}
           dataLoading={false}
           title={fullName}
-          plotData={plotData}
+          plotData={normalizePlotData(plotData)}
         />
       </Box>
       <Footer />
@@ -72,23 +74,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id } = context.params;
   try {
     const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
-    const plotData: AggregateIndexes[] = [];
-
-    for (let year = 2018; year <= getCurrentYear(); year++) {
-      let { data } = await api.default.get(
-        `/indice/orgao/${id}/${year}?agregado=true`,
-      );
-      data = data.map((item: AggregateIndexes) => ({
-        id_orgao: year,
-        agregado: {
-          indice_completude: item.agregado.indice_completude,
-          indice_facilidade: item.agregado.indice_facilidade,
-          indice_transparencia: item.agregado.indice_transparencia,
-        },
-      }));
-
-      plotData.push(...data);
-    }
+    const { data: plotData } = await api.default.get(`/indice/orgao/${id}`);
 
     return {
       props: {

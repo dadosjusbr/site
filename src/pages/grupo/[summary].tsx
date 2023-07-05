@@ -23,6 +23,7 @@ import DropDownGroupSelector, {
 } from '../../components/DropDownGroupSelector';
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AgencyWithoutNavigation';
+import { normalizePlotData } from '../../functions/normalize';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `${formatToAgency(summary)}`;
@@ -153,7 +154,9 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
 
   useEffect(() => {
     setDataLoading(true);
-    Promise.all([fetchAgencyData(), fetchPlotData()]);
+    Promise.all([fetchAgencyData(), fetchPlotData()]).finally(() =>
+      setDataLoading(false),
+    );
   }, [year]);
   async function fetchAgencyData() {
     try {
@@ -161,44 +164,20 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       setData(agency.dados_anuais ? agency.dados_anuais : null);
       setAgencyData(agency.orgao);
       setYear(agency.dados_anuais?.at(-1).ano);
-      setDataLoading(false);
     } catch (err) {
-      setDataLoading(false);
       console.log(err);
     }
   }
 
   async function fetchPlotData() {
-    let incomingPlotData = [];
-
-    for (let year = 2018; year <= getCurrentYear(); year++) {
-      try {
-        let { data } = await api.default.get(
-          `/indice/orgao/${id}/${year}?agregado=true`,
-        );
-        data = data.map((item: AggregateIndexes) => ({
-          id_orgao: year,
-          agregado: {
-            indice_completude: item.agregado.indice_completude,
-            indice_facilidade: item.agregado.indice_facilidade,
-            indice_transparencia: item.agregado.indice_transparencia,
-          },
-        }));
-
-        incomingPlotData.push(...data);
-      } catch (err) {
-        incomingPlotData.push({
-          id_orgao: year,
-          agregado: {
-            indice_completude: 0,
-            indice_facilidade: 0,
-            indice_transparencia: 0,
-          },
-        });
-      }
+    try {
+      const { data: transparencyPlot } = await api.default.get(
+        `/indice/orgao/${id}`,
+      );
+      setPlotData(transparencyPlot);
+    } catch (err) {
+      console.log(err);
     }
-    setPlotData(incomingPlotData);
-    setDataLoading(false);
   }
   return (
     <div id={id}>
@@ -209,7 +188,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         title={title}
         year={year}
         agency={agencyData}
-        plotData={plotData}
+        plotData={normalizePlotData(plotData)}
       />
     </div>
   );

@@ -60,7 +60,6 @@ export default function IndexTabGraph({
           tickFormat: d => `${d}`.replace('.', ','),
           axis: 'left',
           labelAnchor: 'center',
-          interval: 0.1,
           inset: 10,
         },
         style: {
