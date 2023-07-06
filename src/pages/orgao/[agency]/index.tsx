@@ -37,7 +37,6 @@ export default function AnualAgencyPage({
         .find(d => d <= getCurrentYear());
 
     setYear(yearData);
-    console.log(normalizePlotData(plotData));
   }, [data]);
   return (
     <Box>

@@ -6,17 +6,26 @@ import Header from '../../../../components/Header';
 import Footer from '../../../../components/Footer';
 import api from '../../../../services/api';
 import AgencyWithNavigation from '../../../../components/AgencyWithNavigation';
+import { normalizeMonthlyPlotData } from '../../../../functions/normalize';
 
 export default function AgencyPage({
   id,
   year,
   agency,
   data,
-  nextDateIsNavigable,
-  previousDateIsNavigable,
   navigableMonth,
   fullName,
   summaryPackage,
+  plotData,
+}: {
+  id: string;
+  year: number;
+  agency: Agency;
+  data: v2MonthTotals[];
+  navigableMonth: number;
+  fullName: string;
+  summaryPackage: Backup;
+  plotData: AggregateIndexes[];
 }) {
   const router = useRouter();
   function navigateToGivenYear(y: number) {
@@ -49,6 +58,7 @@ export default function AgencyPage({
           navigableMonth={navigableMonth}
           setYear={navigateToGivenYear}
           summaryPackage={summaryPackage && summaryPackage}
+          plotData={normalizeMonthlyPlotData(plotData)}
         />
       </Container>
       <Footer />
@@ -62,6 +72,10 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id, year } = context.params;
   try {
     const { data: agency } = await api.ui.get(`/v2/orgao/totais/${id}/${year}`);
+    const { data: plotData } = await api.default.get(
+      `/indice/orgao/${id}/${year}`,
+    );
+
     return {
       props: {
         id,
@@ -76,6 +90,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
           : 1,
         fullName: agency.orgao.nome,
         summaryPackage: agency.package || null,
+        plotData,
       },
     };
   } catch (err) {

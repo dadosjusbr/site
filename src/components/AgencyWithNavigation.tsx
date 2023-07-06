@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { Suspense, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga4';
 import {
@@ -10,6 +10,12 @@ import {
   Button,
   ThemeProvider,
   Stack,
+  Accordion,
+  AccordionSummary,
+  Tooltip,
+  AccordionDetails,
+  CircularProgress,
+  Link,
 } from '@mui/material';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
@@ -17,6 +23,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
+import InfoIcon from '@mui/icons-material/Info';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import ShareModal from './ShareModal';
@@ -25,6 +33,7 @@ import * as url from '../url';
 import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
 import Drawer from './Drawer';
+import IndexTabGraph from './TransparencyChart/IndexTabChart';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -36,6 +45,7 @@ export interface AgencyPageWithNavigationProps {
   dataLoading: boolean;
   navigableMonth: number;
   summaryPackage?: Backup;
+  plotData: AggregateIndexes[];
 }
 
 const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
@@ -48,6 +58,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   dataLoading,
   navigableMonth,
   summaryPackage,
+  plotData,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const nextDateIsNavigable = useMemo<boolean>(
@@ -235,7 +246,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         )}
       </Box>
       <ThemeProvider theme={light}>
-        <Box mb={12}>
+        <Box>
           <RemunerationBarGraph
             data={data}
             year={year}
@@ -243,6 +254,46 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             dataLoading={dataLoading}
             selectedMonth={navigableMonth}
           />
+        </Box>
+        <Box mt={2} mb={12}>
+          <Accordion>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6" color="#000">
+                Índice de transparência
+                <Tooltip
+                  placement="bottom"
+                  title={
+                    <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                      O Índice de Transparência é composto por duas dimensões:
+                      facilidade e completude. Cada uma das dimensões, por sua
+                      vez, é composta por até seis critérios em cada prestação
+                      de contas, que são avaliados mês a mês. O índice
+                      corresponde à média harmônica das duas dimensões.{' '}
+                      <Link href="/indice" color="inherit">
+                        Saiba mais
+                      </Link>
+                      .
+                    </Typography>
+                  }
+                >
+                  <IconButton aria-label="Botão de informações">
+                    <InfoIcon />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Suspense fallback={<CircularProgress />}>
+                <IndexTabGraph
+                  plotData={plotData}
+                  height={350}
+                  mobileHeight={555}
+                  monthly
+                  isAgency
+                />
+              </Suspense>
+            </AccordionDetails>
+          </Accordion>
         </Box>
       </ThemeProvider>
 

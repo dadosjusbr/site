@@ -3,17 +3,20 @@ import * as Plot from '@observablehq/plot';
 import { Box, useMediaQuery } from '@mui/material';
 import { formatAgency } from '../../functions/format';
 import IndexChartLegend from '../IndexChartLegend';
+import MONTHS from '../../@types/MONTHS';
 
 export default function IndexTabGraph({
   plotData,
   height = 700,
   mobileHeight = 1400,
   isAgency = false,
+  monthly = false,
 }: {
   plotData: AggregateIndexes[];
   height?: number;
   mobileHeight?: number;
   isAgency?: boolean;
+  monthly?: boolean;
 }) {
   const ref = useRef(null);
   const isMobile = useMediaQuery('(max-width: 900px)');
@@ -36,6 +39,16 @@ export default function IndexTabGraph({
     }));
   }
 
+  const tickFormatFunc = (d: any) => {
+    if (monthly && isMobile) {
+      return `${MONTHS[d]}`.substring(0, 3);
+    }
+    if (monthly && !isMobile) {
+      return `${MONTHS[d]}`;
+    }
+    return `${d}`.replace('.', ',');
+  };
+
   useEffect(() => {
     let linePlot = null;
 
@@ -45,12 +58,12 @@ export default function IndexTabGraph({
         width: 1000,
         height: !isMobile ? height : mobileHeight,
         marginLeft: !isMobile ? 55 : 90,
-        marginBottom: !isMobile ? 45 : 50,
+        marginBottom: !isMobile ? 45 : 60,
         x: {
-          label: 'Anos',
-          tickFormat: d => `${d}`.replace(',', ''),
+          label: monthly ? 'Meses' : 'Anos',
+          tickFormat: d => tickFormatFunc(d),
           labelAnchor: 'center',
-          labelOffset: !isMobile ? 42 : 48,
+          labelOffset: !isMobile ? 42 : 60,
           inset: 12,
           interval: 1,
         },
@@ -60,7 +73,7 @@ export default function IndexTabGraph({
           tickFormat: d => `${d}`.replace('.', ','),
           axis: 'left',
           labelAnchor: 'center',
-          inset: 10,
+          inset: 12,
         },
         style: {
           color: '#3e5363',
@@ -106,7 +119,6 @@ export default function IndexTabGraph({
             r: !isMobile ? 10 : 20,
             fill: '#3edbb1',
             opacity: 0.65,
-            sort: { y: 'x', reverse: true },
           }),
         ],
       });
