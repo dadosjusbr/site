@@ -4,12 +4,14 @@ import {
   Box,
   Button,
   CircularProgress,
+  Fab,
   Grid,
   Paper,
   Typography,
   useMediaQuery,
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import AutoGraphIcon from '@mui/icons-material/AutoGraph';
 
 import {
   monthsWithoutData,

@@ -141,15 +141,7 @@ const index = ({
           )}
         </Box>
       </Box>
-      <Box
-        // pt={1}
-        // px={1}
-        // border="2px solid #57659d"
-        // borderRadius={4}
-        overflow="auto"
-        maxWidth={700}
-        margin={{ xs: '0 10px', md: 'auto' }}
-      >
+      <Box overflow="auto" maxWidth={700} margin={{ xs: '0 10px', md: 'auto' }}>
         <Typography variant="h5" textAlign="center" mb={2}>
           Resumo das remunerações
           <Tooltip

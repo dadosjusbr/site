@@ -7,13 +7,26 @@ import Header from '../../../components/Header';
 import Footer from '../../../components/Footer';
 import api from '../../../services/api';
 import { getCurrentYear } from '../../../functions/currentYear';
+import { normalizePlotData } from '../../../functions/normalize';
 
 const AgencyWithoutNavigation = dynamic(
   () => import('../../../components/AgencyWithoutNavigation'),
   { loading: () => <CircularProgress />, ssr: false },
 );
 
-export default function AnualAgencyPage({ id, agency, data, fullName }) {
+export default function AnualAgencyPage({
+  id,
+  agency,
+  data,
+  fullName,
+  plotData,
+}: {
+  id: string;
+  agency: Agency;
+  data: AnnualSummaryData[];
+  fullName: string;
+  plotData: AggregateIndexes[];
+}) {
   const [year, setYear] = useState(getCurrentYear());
   useEffect(() => {
     const yearData: number =
@@ -48,6 +61,7 @@ export default function AnualAgencyPage({ id, agency, data, fullName }) {
           agency={agency}
           dataLoading={false}
           title={fullName}
+          plotData={normalizePlotData(plotData)}
         />
       </Box>
       <Footer />
@@ -59,12 +73,15 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id } = context.params;
   try {
     const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
+    const { data: plotData } = await api.default.get(`/indice/orgao/${id}`);
+
     return {
       props: {
         id,
         data: agency.dados_anuais ? agency.dados_anuais : null,
         agency: agency.orgao,
         fullName: agency.orgao.nome,
+        plotData,
       },
     };
   } catch (err) {

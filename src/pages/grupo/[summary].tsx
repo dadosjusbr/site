@@ -23,6 +23,7 @@ import DropDownGroupSelector, {
 } from '../../components/DropDownGroupSelector';
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AgencyWithoutNavigation';
+import { normalizePlotData } from '../../functions/normalize';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `${formatToAgency(summary)}`;
@@ -149,10 +150,13 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [year, setYear] = useState(getCurrentYear());
   const [agencyData, setAgencyData] = useState<any>();
   const [dataLoading, setDataLoading] = useState(true);
+  const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
 
   useEffect(() => {
     setDataLoading(true);
-    fetchAgencyData();
+    Promise.all([fetchAgencyData(), fetchPlotData()]).finally(() =>
+      setDataLoading(false),
+    );
   }, [year]);
   async function fetchAgencyData() {
     try {
@@ -160,9 +164,18 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       setData(agency.dados_anuais ? agency.dados_anuais : null);
       setAgencyData(agency.orgao);
       setYear(agency.dados_anuais?.at(-1).ano);
-      setDataLoading(false);
     } catch (err) {
-      setDataLoading(false);
+      console.log(err);
+    }
+  }
+
+  async function fetchPlotData() {
+    try {
+      const { data: transparencyPlot } = await api.default.get(
+        `/indice/orgao/${id}`,
+      );
+      setPlotData(transparencyPlot);
+    } catch (err) {
       console.log(err);
     }
   }
@@ -175,6 +188,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         title={title}
         year={year}
         agency={agencyData}
+        plotData={normalizePlotData(plotData)}
       />
     </div>
   );
