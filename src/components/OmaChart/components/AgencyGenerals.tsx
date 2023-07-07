@@ -83,7 +83,11 @@ const index = ({
       </Box>
       <Box p={2} pt={0}>
         <List dense>
-          <Grid container justifyContent="space-between" alignItems="center">
+          <Grid
+            container
+            justifyContent={{ md: 'center', xm: 'flex-start' }}
+            alignItems="center"
+          >
             <Grid item md={3.5}>
               <ListItem>
                 <ListItemAvatar>
