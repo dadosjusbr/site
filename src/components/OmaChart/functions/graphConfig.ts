@@ -42,6 +42,10 @@ export const graphOptions = {
         cssClass: 'apexcharts-yaxis-label',
       },
     },
+    title: {
+      text: 'Valor',
+      offsetX: 5,
+    },
   },
   xaxis: {
     categories: [
@@ -54,7 +58,7 @@ export const graphOptions = {
     ],
     title: {
       text: 'Quantidade',
-      offsetY: 30,
+      offsetY: 10,
     },
   },
   fill: {

@@ -25,7 +25,11 @@ export interface OMASummaryProps {
   totalWage: number;
   maxPerk: number;
   totalPerks: number;
-  chartData: AgencySalary;
+  maxRemuneration: number;
+  totalRemuneration: number;
+  discounts: number;
+  maxDiscounts: number;
+  chartData: AgencyRemuneration;
   mi: SummaryzedMI;
   year: number;
   month: number;
@@ -38,6 +42,10 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   totalWage,
   maxPerk,
   totalPerks,
+  maxRemuneration,
+  totalRemuneration,
+  discounts,
+  maxDiscounts,
   chartData,
   mi,
   year,
@@ -111,8 +119,12 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <AgencyGenerals
             maxPerk={maxPerk}
             maxWage={maxWage}
+            maxRemuneration={maxRemuneration}
             totalPerks={totalPerks}
             totalWage={totalWage}
+            totalRemuneration={totalRemuneration}
+            discounts={discounts}
+            maxDiscounts={maxDiscounts}
             totalMembers={totalMembers}
           />
           <TransparencyMetrics mi={mi} month={month} year={year} />

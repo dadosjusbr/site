@@ -148,41 +148,32 @@ const index = ({
             placement="bottom"
             title={
               <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                <p>
-                  <b>Remuneração:</b> Valor final da soma entre salário e
-                  benefícios, retirando os descontos.
-                </p>
-                <p>
-                  <b>Salário:</b> Valor recebido de acordo com a prestação de
-                  serviços, em decorrência do contrato de trabalho.
-                </p>
-                <p>
-                  <b>Benefícios:</b> Qualquer remuneração recebida por um
-                  funcionário que não seja proveniente de salário. Exemplos de
-                  benefícios são: diárias, gratificações, remuneração por função
-                  de confiança, benefícios pessoais ou eventuais, auxílios
-                  alimentação, saúde, escolar...
-                </p>
-                <p>
-                  <b>Descontos:</b> Valor retirado do salário ou de benefícios
-                  do funcionário de acordo com a lei, como imposto de renda,
-                  contribuição para previdência, pensão alimentícia, entre
-                  outros.
-                </p>
-                <p>
-                  <b>Membros:</b> Participantes ativos do órgao, incluindo os
-                  servidores públicos, os militares e os membros do Poder
-                  Judiciário.
-                </p>
-                <p>
-                  <b>Servidor:</b> Funcionário público que exerce cargo ou
-                  função pública, com vínculo empregatício, e que recebe
-                  remuneração fixa ou variável.
-                </p>
-                <p>
-                  <b>Sem dados:</b> Quando um órgão não disponibiliza os dados
-                  de um determinado mês
-                </p>
+                <b>Remuneração:</b> Valor final da soma entre salário e
+                benefícios, retirando os descontos.
+                <hr />
+                <b>Salário:</b> Valor recebido de acordo com a prestação de
+                serviços, em decorrência do contrato de trabalho.
+                <hr />
+                <b>Benefícios:</b> Qualquer remuneração recebida por um
+                funcionário que não seja proveniente de salário. Exemplos de
+                benefícios são: diárias, gratificações, remuneração por função
+                de confiança, benefícios pessoais ou eventuais, auxílios
+                alimentação, saúde, escolar...
+                <hr />
+                <b>Descontos:</b> Valor retirado do salário ou de benefícios do
+                funcionário de acordo com a lei, como imposto de renda,
+                contribuição para previdência, pensão alimentícia, entre outros.
+                <hr />
+                <b>Membros:</b> Participantes ativos do órgao, incluindo os
+                servidores públicos, os militares e os membros do Poder
+                Judiciário.
+                <hr />
+                <b>Servidor:</b> Funcionário público que exerce cargo ou função
+                pública, com vínculo empregatício, e que recebe remuneração fixa
+                ou variável.
+                <hr />
+                <b>Sem dados:</b> Quando um órgão não disponibiliza os dados de
+                um determinado mês
               </Typography>
             }
           >

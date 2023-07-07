@@ -4,7 +4,7 @@ import { graphOptions } from '../functions/graphConfig';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const index = ({ chartData }: { chartData: AgencySalary }) => (
+const index = ({ chartData }: { chartData: AgencyRemuneration }) => (
   <Grid item xs={12}>
     <Paper elevation={0}>
       <Box pt={4} py={4} px={2}>

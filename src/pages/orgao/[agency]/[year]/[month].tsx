@@ -37,12 +37,20 @@ export default function OmaPage({
   oma,
   previousButtonActive,
   nextButtonActive,
+}: {
+  agency: string;
+  year: number;
+  month: number;
+  mi: SummaryzedMI;
+  oma: v2AgencySummary;
+  previousButtonActive: boolean;
+  nextButtonActive: boolean;
 }) {
-  const [chartData, setChartData] = useState<any>();
+  const [chartData, setChartData] = useState<AgencyRemuneration>();
   const [loading, setLoading] = useState(true);
   function getNextDate() {
-    let m = parseInt(month, 10);
-    let y = parseInt(year, 10);
+    let m = +month;
+    let y = +year;
     if (m === 12) {
       m = 1;
       y += 1;
@@ -53,8 +61,8 @@ export default function OmaPage({
   }
 
   function getPreviousDate() {
-    let m = parseInt(month, 10);
-    let y = parseInt(year, 10);
+    let m = +month;
+    let y = +year;
     if (m === 1) {
       m = 12;
       y -= 1;
@@ -76,7 +84,7 @@ export default function OmaPage({
     try {
       // frist of all it sets the loading state to loading to feedback the user thats loading the data from api
       setLoading(true);
-      const { data } = await api.ui.get(
+      const { data }: { data: AgencyRemuneration } = await api.ui.get(
         `/v2/orgao/salario/${agency}/${year}/${month}`,
       );
       // after get the data from api the state is updated with the chart data
@@ -106,7 +114,7 @@ export default function OmaPage({
           property="og:title"
           content={
             oma
-              ? `Veja os dados de ${month}/${year} do ${oma.fullName} (${agency})`
+              ? `Veja os dados de ${month}/${year} do ${oma?.orgao} (${agency})`
               : `Dados não coletados`
           }
         />
@@ -119,7 +127,7 @@ export default function OmaPage({
       <Container fixed>
         <Box py={4}>
           <Typography variant="h2" textAlign="center">
-            {oma ? oma.fullName : 'Coleta não realizada!'} (
+            {oma ? oma?.orgao : 'Coleta não realizada!'} (
             {agency.toLocaleUpperCase('pt')})
           </Typography>
           <Grid container justifyContent="center" alignItems="center">
@@ -185,14 +193,18 @@ export default function OmaPage({
                   </Typography>
                 </Box>
               ) : (
-                oma.crawlingTime && (
+                oma?.timestamp && (
                   <Typography textAlign="center">
                     Dados coletados em{' '}
-                    {UnixToHumanDate(oma.crawlingTime).getDate()} de{' '}
+                    {UnixToHumanDate(oma?.timestamp.seconds).getDate()} de{' '}
                     <Sub>
-                      {MONTHS[UnixToHumanDate(oma.crawlingTime).getMonth() + 1]}
+                      {
+                        MONTHS[
+                          UnixToHumanDate(oma?.timestamp.seconds).getMonth() + 1
+                        ]
+                      }
                     </Sub>{' '}
-                    de {UnixToHumanDate(oma.crawlingTime).getFullYear()}
+                    de {UnixToHumanDate(oma?.timestamp.seconds).getFullYear()}
                   </Typography>
                 )
               ))()
@@ -222,11 +234,15 @@ export default function OmaPage({
                 <OMASummary
                   agency={agency}
                   chartData={chartData}
-                  maxPerk={oma.maxPerk}
-                  maxWage={oma.maxWage}
-                  totalMembers={oma.totalMembers}
-                  totalPerks={oma.totalPerks}
-                  totalWage={oma.totalWage}
+                  maxPerk={oma?.max_outras_remuneracoes}
+                  maxWage={oma?.max_remuneracao_base}
+                  maxRemuneration={oma?.max_remuneracao}
+                  maxDiscounts={oma?.max_descontos}
+                  totalMembers={oma?.total_membros}
+                  totalPerks={oma?.outras_remuneracoes}
+                  totalWage={oma?.remuneracao_base}
+                  totalRemuneration={oma?.total_remuneracao}
+                  discounts={oma?.descontos}
                   year={year}
                   month={month}
                   mi={mi}
@@ -272,18 +288,18 @@ export const getServerSideProps: GetServerSideProps = async context => {
     };
   }
 
-  let mi = [];
+  let mi: SummaryzedMI;
   try {
     const { data: d3 } = await api.default.get(
       `/dados/${agency}/${year}/${month}`,
     );
     mi = d3;
   } catch (err) {
-    mi = [];
+    mi = err.response.data;
   }
 
   try {
-    const { data: d2 } = await api.ui.get(
+    const { data: d2 }: { data: v2AgencySummary } = await api.ui.get(
       `/v2/orgao/resumo/${agency}/${year}/${month}`,
     );
     return {
@@ -294,15 +310,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         mi,
         previousButtonActive: d2.tem_anterior,
         nextButtonActive: d2.tem_proximo,
-        oma: {
-          fullName: d2.orgao,
-          totalMembers: d2.total_membros,
-          maxWage: d2.max_remuneracao_base,
-          totalWage: d2.remuneracao_base,
-          maxPerk: d2.max_outras_remuneracoes,
-          totalPerks: d2.outras_remuneracoes,
-          crawlingTime: d2.timestamp && d2.timestamp.seconds,
-        },
+        oma: d2,
       },
     };
   } catch (err) {
