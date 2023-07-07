@@ -12,6 +12,8 @@ import {
   Typography,
 } from '@mui/material';
 import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import RemoveCircle from '@mui/icons-material/CancelPresentation';
+import Payments from '@mui/icons-material/Payments';
 import CardGiftcardIcon from '@mui/icons-material/CardGiftcard';
 import EmojiPeopleIcon from '@mui/icons-material/EmojiPeople';
 import InfoIcon from '@mui/icons-material/Info';
@@ -86,7 +88,7 @@ const index = ({
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
-                    <CardGiftcardIcon />
+                    <Payments />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
@@ -143,7 +145,7 @@ const index = ({
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
-                    <CardGiftcardIcon />
+                    <RemoveCircle />
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
