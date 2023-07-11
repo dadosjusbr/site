@@ -154,7 +154,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               )}
             </Box>
             {data && data.length > 0 && agency && (
-              <Box display="flex" justifyContent="center" pb={4}>
+              <Box display="flex" justifyContent="center" pb={2}>
                 <CrawlingDateTable data={data} dataLoading={dataLoading} />
               </Box>
             )}

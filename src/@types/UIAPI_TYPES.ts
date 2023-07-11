@@ -7,10 +7,11 @@ type DataForChartAtAgencyScreen = {
   PackageSize: number;
 };
 
-type AgencySalary = {
+type AgencyRemuneration = {
   max_salario: number;
   histograma: number[];
   package: Backup;
+  proc_info?: ProcInfo;
 };
 
 type GeneralTotals = {
@@ -59,6 +60,7 @@ type v2AgencySummary = {
   max_outras_remuneracoes: number;
   descontos: number;
   max_descontos: number;
+  max_remuneracao: number;
   timestamp: Timestamp;
   total_membros: number;
   total_remuneracao: number;
@@ -84,6 +86,8 @@ type v2MonthTotals = {
   total_membros: number;
   remuneracao_base: number;
   remuneracao_base_por_membro: number;
+  remuneracoes: number;
+  remuneracoes_por_membro: number;
   outras_remuneracoes: number;
   outras_remuneracoes_por_membro: number;
   descontos: number;
@@ -172,6 +176,9 @@ type AnnualSummaryData = {
   descontos: number;
   descontos_por_mes: number;
   descontos_por_membro: number;
+  remuneracoes: number;
+  remuneracoes_por_mes: number;
+  remuneracoes_por_membro: number;
   meses_com_dados: number;
   package: Backup;
 };
@@ -182,4 +189,5 @@ type mensalRemuneration = {
   remuneracao_base: number;
   outras_remuneracoes: number;
   descontos: number;
+  remuneracoes: number;
 };

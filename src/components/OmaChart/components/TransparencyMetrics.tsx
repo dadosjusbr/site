@@ -38,20 +38,15 @@ const index = ({
             placement="top"
             sx={{ mb: 0.5 }}
             title={
-              <Typography fontSize="0.8rem">
-                <p>
-                  <b>Índice de transparência:</b> Média harmônica entre os
-                  índices de completude e facilidade em {MONTHS[month]} de{' '}
-                  {year}
-                </p>
-                <p>
-                  <b>Índice de completude:</b> Pontua a completude dos dados
-                  segundo os critérios listados
-                </p>
-                <p>
-                  <b>Índice de facilidade:</b> Pontua a facilidade de obtenção e
-                  uso dos dados segundo os critérios listados
-                </p>
+              <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                <b>Índice de transparência:</b> Média harmônica entre os índices
+                de completude e facilidade em {MONTHS[month]} de {year}.
+                <hr />
+                <b>Índice de completude:</b> Pontua a completude dos dados
+                segundo os critérios listados.
+                <hr />
+                <b>Índice de facilidade:</b> Pontua a facilidade de obtenção e
+                uso dos dados segundo os critérios listados.
               </Typography>
             }
           >

@@ -36,25 +36,21 @@ const index = ({ mi, agency }: { mi: SummaryzedMI; agency: string }) => (
             placement="top"
             sx={{ mb: 0.5 }}
             title={
-              <Typography fontSize="0.8rem">
-                <p>
-                  <b>Repositório do Coletor:</b> Link para o repositório de
-                  código aberto utilizado para a realização da coleta de dados
-                  do respectivo órgão - baixando os dados diretamente,
-                  realizando a raspagem do HTML ou ainda simulando um usuário.
-                </p>
-                <p>
-                  <b>Repositório para Tratamento dos Dados:</b> Link para o
-                  repositório de código aberto utilizado para o tratamento dos
-                  dados obtidos pelo coletor - organizando, detalhando e
-                  unificando esses dados. Alguns órgãos recebem o tratamento de
-                  dados ainda no coletor, não possuindo esse estágio.
-                </p>
-                <p>
-                  <b>Duração da Coleta:</b> Tempo total do processo de coleta -
-                  considerando a coleta, o tratamento, a validação, o
-                  empacotamento e o armazenamento desses dados.
-                </p>
+              <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                <b>Repositório do Coletor:</b> Link para o repositório de código
+                aberto utilizado para a realização da coleta de dados do
+                respectivo órgão - baixando os dados diretamente, realizando a
+                raspagem do HTML ou ainda simulando um usuário.
+                <hr />
+                <b>Repositório para Tratamento dos Dados:</b> Link para o
+                repositório de código aberto utilizado para o tratamento dos
+                dados obtidos pelo coletor - organizando, detalhando e
+                unificando esses dados. Alguns órgãos recebem o tratamento de
+                dados ainda no coletor, não possuindo esse estágio.
+                <hr />
+                <b>Duração da Coleta:</b> Tempo total do processo de coleta -
+                considerando a coleta, o tratamento, a validação, o
+                empacotamento e o armazenamento desses dados.
               </Typography>
             }
           >

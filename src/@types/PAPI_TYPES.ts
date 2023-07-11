@@ -7,7 +7,7 @@ type SummaryzedMI = {
   metadados: Metadata;
   indice_transparencia: Score;
   dados_coleta: Collect;
-  error: MiError;
+  error?: MiError;
 };
 
 type Summaries = {
@@ -18,6 +18,8 @@ type Summary = {
   quantidade: number;
   remuneracao_base: DataSummary;
   outras_remuneracoes: DataSummary;
+  descontos: DataSummary;
+  remuneracoes: DataSummary;
 };
 
 type DataSummary = {
