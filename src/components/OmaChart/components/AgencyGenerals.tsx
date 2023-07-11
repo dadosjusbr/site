@@ -81,90 +81,118 @@ const index = ({
           </Tooltip>
         </Typography>
       </Box>
-      <Box p={2} pt={0}>
+      <Box p={2} pt={0} maxWidth={905} margin="0 auto">
         <List dense>
-          <Grid
-            container
-            justifyContent={{ md: 'center', xm: 'flex-start' }}
-            alignItems="center"
-          >
-            <Grid item md={3.5}>
+          <Grid container justifyContent="flex-start" alignItems="center">
+            <Grid item>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
                     <Payments />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText
-                  primary={`Maior remuneração: ${formatCurrencyValue(
-                    maxRemuneration,
-                    1,
-                  )}`}
-                  secondary={`Total de remunerações: ${formatCurrencyValue(
-                    totalRemuneration,
-                    2,
-                  )}`}
-                />
+                <Box>
+                  <ListItemText primaryTypographyProps={{ lineHeight: 1 }}>
+                    Remuneração média:{' '}
+                    {formatCurrencyValue(totalRemuneration / totalMembers, 2)}
+                  </ListItemText>
+                  <ListItemText
+                    secondaryTypographyProps={{ lineHeight: 1 }}
+                    secondary={`Maior remuneração: ${formatCurrencyValue(
+                      maxRemuneration,
+                      1,
+                    )}`}
+                  />
+                  <ListItemText
+                    secondaryTypographyProps={{ lineHeight: 1 }}
+                    secondary={`Total de remunerações:
+                    ${formatCurrencyValue(totalRemuneration, 2)}`}
+                  />
+                </Box>
               </ListItem>
             </Grid>
-            <Grid item md={3.5}>
+            <Grid item>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
                     <AccountBalanceWalletIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText
-                  primary={`Maior salário bruto: ${formatCurrencyValue(
-                    maxWage,
-                    1,
-                  )}`}
-                  secondary={`Total de salários brutos: ${formatCurrencyValue(
-                    totalWage,
-                    2,
-                  )} `}
-                />
+                <Box>
+                  <ListItemText primaryTypographyProps={{ lineHeight: 1 }}>
+                    Salário bruto médio:{' '}
+                    {formatCurrencyValue(totalWage / totalMembers, 2)}
+                  </ListItemText>
+                  <ListItemText
+                    secondaryTypographyProps={{ lineHeight: 1 }}
+                    secondary={`Maior salário bruto: ${formatCurrencyValue(
+                      maxWage,
+                      1,
+                    )}`}
+                  />
+                  <ListItemText
+                    secondaryTypographyProps={{ lineHeight: 1 }}
+                    secondary={`Total de salários brutos:
+                    ${formatCurrencyValue(totalWage, 2)}`}
+                  />
+                </Box>
               </ListItem>
             </Grid>
-            <Grid item md={3.5}>
+            <Grid item>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
                     <CardGiftcardIcon />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText
-                  primary={`Maior benefício bruto: ${formatCurrencyValue(
-                    maxPerk,
-                    1,
-                  )}`}
-                  secondary={`Total de benefícios brutos: ${formatCurrencyValue(
-                    totalPerks,
-                    2,
-                  )}`}
-                />
+                <Box>
+                  <ListItemText primaryTypographyProps={{ lineHeight: 1 }}>
+                    Benefício bruto médio:{' '}
+                    {formatCurrencyValue(totalPerks / totalMembers, 2)}
+                  </ListItemText>
+                  <ListItemText
+                    secondaryTypographyProps={{ lineHeight: 1 }}
+                    secondary={`Maior benefício bruto: ${formatCurrencyValue(
+                      maxPerk,
+                      1,
+                    )}`}
+                  />
+                  <ListItemText
+                    secondaryTypographyProps={{ lineHeight: 1 }}
+                    secondary={`Total de benefícios brutos:
+                    ${formatCurrencyValue(totalPerks, 2)}`}
+                  />
+                </Box>
               </ListItem>
             </Grid>
-            <Grid item md={3.5}>
+            <Grid item md={3.8}>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
                     <RemoveCircle />
                   </Avatar>
                 </ListItemAvatar>
-                <ListItemText
-                  primary={`Maior desconto: ${formatCurrencyValue(
-                    maxDiscounts,
-                    1,
-                  )}`}
-                  secondary={`Total de descontos: ${formatCurrencyValue(
-                    discounts,
-                    2,
-                  )}`}
-                />
+                <Box>
+                  <ListItemText primaryTypographyProps={{ lineHeight: 1 }}>
+                    Desconto médio:{' '}
+                    {formatCurrencyValue(discounts / totalMembers, 2)}
+                  </ListItemText>
+                  <ListItemText
+                    secondaryTypographyProps={{ lineHeight: 1 }}
+                    secondary={`Maior desconto: ${formatCurrencyValue(
+                      maxDiscounts,
+                      1,
+                    )}`}
+                  />
+                  <ListItemText
+                    secondaryTypographyProps={{ lineHeight: 1 }}
+                    secondary={`Total de desconto:
+                    ${formatCurrencyValue(discounts, 2)}`}
+                  />
+                </Box>
               </ListItem>
             </Grid>
-            <Grid item md={3.5}>
+            <Grid item>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>
