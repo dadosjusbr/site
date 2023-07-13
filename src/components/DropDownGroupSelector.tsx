@@ -3,6 +3,7 @@ import React, { HTMLAttributes } from 'react';
 import {
   FormControl,
   InputBase,
+  OutlinedInput,
   ListSubheader,
   MenuItem,
   Typography,
@@ -17,6 +18,7 @@ export interface DropDownGroupSelectorProps
   extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange'> {
   value?: STATE_AGENCIES;
   noStyle?: boolean;
+  inputType?: 'outlined' | 'standard' | 'filled';
   minWidth?: number;
   maxWidth?: number;
 }
@@ -24,6 +26,7 @@ export interface DropDownGroupSelectorProps
 const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   value,
   noStyle = false,
+  inputType = 'standard',
   minWidth = 240,
   maxWidth = 250,
 }) => {
@@ -51,7 +54,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         onChange={handleChange}
         displayEmpty
         inputProps={{ 'aria-label': 'Dados por órgão' }}
-        input={<InputBase />}
+        input={inputType === 'outlined' ? <OutlinedInput /> : <InputBase />}
         IconComponent={() => <ArrowDropDownIcon />}
         renderValue={selected => {
           if (selected.length === 0) {
@@ -70,9 +73,10 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
           height: 40,
           pb: 0,
           ...{
-            ...(!noStyle && {
-              borderBottom: '2px solid #b361c6',
-            }),
+            ...(!noStyle &&
+              inputType === 'standard' && {
+                borderBottom: '2px solid #b361c6',
+              }),
           },
           '& #orgaos-select': {
             padding: '0 0 0 10px',
