@@ -153,10 +153,10 @@ type Agency = {
   entidade: string;
   uf: string;
   url: string;
-  coletando: Collecting[];
+  coletando?: Collecting[];
   twitter_handle: string;
   ouvidoria: string;
-  possui_dados: boolean;
+  possui_dados?: boolean;
 };
 
 type AnnualSummary = {
@@ -183,7 +183,7 @@ type AnnualSummaryData = {
   package: Backup;
 };
 
-type mensalRemuneration = {
+type MensalRemuneration = {
   mes: number;
   num_membros: number;
   remuneracao_base: number;

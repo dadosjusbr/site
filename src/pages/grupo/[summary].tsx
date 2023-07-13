@@ -18,12 +18,11 @@ import {
 import Footer from '../../components/Footer';
 import Header from '../../components/Header';
 import api from '../../services/api';
-import DropDownGroupSelector, {
-  formatToAgency,
-} from '../../components/DropDownGroupSelector';
+import DropDownGroupSelector from '../../components/DropDownGroupSelector';
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AgencyWithoutNavigation';
 import { normalizePlotData } from '../../functions/normalize';
+import { formatToAgency } from '../../functions/format';
 // this constant is used to placehold the max value of a chart data
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `${formatToAgency(summary)}`;
@@ -76,6 +75,7 @@ export default function SummaryPage({ dataList, summary }) {
                   }
                   return selected;
                 }}
+                sx={{ height: 50, pb: 0, pt: 0 }}
               >
                 <ListSubheader>
                   <em>Órgãos disponíveis</em>

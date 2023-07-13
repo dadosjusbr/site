@@ -11,30 +11,32 @@ import {
   IconButton,
   ListItemButton,
   ListItemText,
+  Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
+import DropDownGroupSelector from './DropDownGroupSelector';
 
 function Header() {
   const [pages] = useState([
     {
-      key: 'inicio',
-      title: 'Início',
-      anchor: '/',
+      key: 'grupo',
+      title: 'Grupos',
+      anchor: 'dropdown',
+    },
+    {
+      key: 'pesquisa',
+      title: 'Pesquisar',
+      anchor: '/pesquisar',
     },
     {
       key: 'indice',
-      title: 'Índice',
+      title: 'Índice de Transparência',
       anchor: '/indice',
     },
     {
       key: 'namidia',
-      title: 'Na mídia',
+      title: 'Na Mídia',
       anchor: '/namidia',
-    },
-    {
-      key: 'equipe',
-      title: 'Equipe',
-      anchor: '/equipe',
     },
     {
       key: 'status',
@@ -42,8 +44,8 @@ function Header() {
       anchor: '/status',
     },
     {
-      key: 'sobre',
-      title: 'Sobre',
+      key: 'quemsomos',
+      title: 'Quem Somos',
       anchor: '/sobre',
     },
   ]);
@@ -52,7 +54,6 @@ function Header() {
   return (
     <Container fixed>
       <Box
-        p={4}
         sx={{
           borderBottom: '2px solid',
         }}
@@ -81,19 +82,29 @@ function Header() {
             display="flex"
             alignItems="center"
             justifyContent="flex-end"
+            mt={4}
           >
             <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-              {pages.map(page => (
-                <Button
-                  key={page.key}
-                  variant="text"
-                  color="info"
-                  size="large"
-                  href={page.anchor}
-                >
-                  {page.title}
-                </Button>
-              ))}
+              {pages.map(page =>
+                page.anchor === 'dropdown' ? (
+                  <DropDownGroupSelector
+                    key={page.key}
+                    noStyle
+                    minWidth={50}
+                    maxWidth={200}
+                  />
+                ) : (
+                  <Button
+                    key={page.key}
+                    variant="text"
+                    color="info"
+                    size="large"
+                    href={page.anchor}
+                  >
+                    <Typography>{page.title}</Typography>
+                  </Button>
+                ),
+              )}
             </Box>
             <Box sx={{ display: { xs: 'block', md: 'none' } }}>
               <IconButton
@@ -111,13 +122,22 @@ function Header() {
       <Drawer open={openDrawer} onClose={() => setOpenDrawer(false)}>
         <Box pt={4} sx={{ width: 250 }}>
           <List>
-            {pages.map(page => (
-              <ListItem key={page.key} disablePadding>
-                <ListItemButton component="a" href={page.anchor}>
-                  <ListItemText primary={page.title} />
-                </ListItemButton>
-              </ListItem>
-            ))}
+            {pages.map(page =>
+              page.anchor === 'dropdown' ? (
+                <DropDownGroupSelector
+                  key={page.key}
+                  noStyle
+                  minWidth={50}
+                  maxWidth={200}
+                />
+              ) : (
+                <ListItem key={page.key} disablePadding>
+                  <ListItemButton component="a" href={page.anchor}>
+                    <ListItemText primary={page.title} />
+                  </ListItemButton>
+                </ListItem>
+              ),
+            )}
           </List>
         </Box>
       </Drawer>

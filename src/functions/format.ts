@@ -11,6 +11,18 @@ function formatAgency(aid: string): string {
   return aid;
 }
 
+function formatToAgency(input: string): string {
+  const words = input.split('-');
+
+  const formattedWords = words.map(word => {
+    const firstLetter = word.charAt(0).toUpperCase();
+    const remainingLetters = word.slice(1).toLowerCase();
+    return `${firstLetter}${remainingLetters}`;
+  });
+
+  return formattedWords.join(' ');
+}
+
 const formatCurrencyValue = (value: number, decimal_places = 0): string =>
   value.toLocaleString('pt-BR', {
     style: 'currency',
@@ -30,4 +42,4 @@ const formatBytes = (bytes: number, decimals = 2) => {
 
   return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
 };
-export { formatAgency, formatCurrencyValue, formatBytes };
+export { formatAgency, formatToAgency, formatCurrencyValue, formatBytes };
