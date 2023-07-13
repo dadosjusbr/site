@@ -218,7 +218,7 @@ export default function Index({
         <Headline>
           Acesse as remunerações do Sistema de Justiça.
           <br />
-          <Typography component="p" mt={2}>
+          <Typography component="p" mt={2} textAlign="justify">
             Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
             <Lowercase>{formatedEndDate}</Lowercase> e são provenientes de{' '}
             <Link href="/status">
@@ -248,6 +248,7 @@ export default function Index({
             alignItems="flex-start"
             justifyContent="space-between"
             mt={8}
+            pr={38}
           >
             <Grid item>
               <DropDownGroupSelector />
@@ -431,24 +432,23 @@ const Page = styled.div`
   background: #3e5363;
 `;
 const Headline = styled.div`
-  margin-top: 0rem;
   padding-top: 3rem;
-  padding-bottom: 4rem;
+  padding-bottom: 3rem;
   padding-right: 1rem;
   padding-left: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   background-image: url('img/bg.svg');
   background-position: right top;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: auto;
   @media (min-width: 600px) {
     padding-right: 0;
     padding-left: 0;
     font-size: 2rem;
   }
   @media (min-width: 900px) {
-    padding-right: 34rem;
+    padding-right: 22rem;
     font-size: 2.5rem;
   }
 `;
