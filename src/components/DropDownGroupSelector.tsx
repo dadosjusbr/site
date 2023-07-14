@@ -2,21 +2,33 @@ import { useRouter } from 'next/router';
 import React, { HTMLAttributes } from 'react';
 import {
   FormControl,
+  InputBase,
+  OutlinedInput,
   ListSubheader,
   MenuItem,
-  OutlinedInput,
+  Typography,
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
 import STATE_AGENCIES from '../@types/STATE_AGENCIES';
+import { formatToAgency } from '../functions/format';
 
 export interface DropDownGroupSelectorProps
   extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange'> {
   value?: STATE_AGENCIES;
+  noStyle?: boolean;
+  inputType?: 'outlined' | 'standard' | 'filled';
+  minWidth?: number;
+  maxWidth?: number;
 }
 
 const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   value,
+  noStyle = false,
+  inputType = 'standard',
+  minWidth = 240,
+  maxWidth = 250,
 }) => {
   const router = useRouter();
   const [agencyName, setAgencyName] = React.useState(value || '');
@@ -27,7 +39,12 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   };
 
   return (
-    <FormControl fullWidth sx={{ m: 1, minWidth: 240, maxWidth: 250 }}>
+    <FormControl
+      sx={{
+        minWidth,
+        maxWidth,
+      }}
+    >
       <Select
         id="orgaos-select"
         labelId="orgaos-select-label"
@@ -37,12 +54,33 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         onChange={handleChange}
         displayEmpty
         inputProps={{ 'aria-label': 'Dados por órgão' }}
-        input={<OutlinedInput />}
+        input={inputType === 'outlined' ? <OutlinedInput /> : <InputBase />}
+        IconComponent={() => <ArrowDropDownIcon />}
         renderValue={selected => {
           if (selected.length === 0) {
-            return <em>Selecione</em>;
+            return (
+              <Typography
+                pb={0}
+                {...(!noStyle && { textTransform: 'uppercase' })}
+              >
+                Navegar Pelos Dados
+              </Typography>
+            );
           }
           return formatToAgency(selected);
+        }}
+        sx={{
+          height: 40,
+          pb: 0,
+          ...{
+            ...(!noStyle &&
+              inputType === 'standard' && {
+                borderBottom: '2px solid #b361c6',
+              }),
+          },
+          '& #orgaos-select': {
+            padding: '0 0 0 10px',
+          },
         }}
       >
         <ListSubheader>
@@ -78,28 +116,3 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
 };
 
 export default DropDownGroupSelector;
-
-export function formatToAgency(agency: string) {
-  if (agency === '') {
-    return '';
-  }
-  const sub = agency.split('-');
-  const formatedSubs = sub.map(s => {
-    const a = s.toLowerCase();
-    const newString = a.split('');
-    newString[0] = a[0].toLocaleUpperCase();
-    return newString.join('');
-  });
-  const a = formatedSubs.join(' ');
-  const final = a.includes('Justica')
-    ? a.replace('Justica', 'Justiça')
-    : a.includes('Ministerios Publicos')
-    ? a.replace('Ministerios Publicos', 'Ministérios Públicos')
-    : a;
-
-  return final.split(' ').length > 2
-    ? `${final.split(' ')[0]} 
-    ${final.split(' ')[1].toLowerCase()} 
-    ${final.split(' ')[2]}`
-    : final;
-}

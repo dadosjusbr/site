@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
+import { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -13,7 +14,6 @@ import {
   Link,
   Tabs,
   Tab,
-  Button,
   CircularProgress,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
@@ -76,6 +76,12 @@ export default function Index({
   recordAmount,
   finalValue,
   ais,
+}: {
+  startDate: string;
+  endDate: string;
+  recordAmount: number;
+  finalValue: number;
+  ais: Agency[];
 }) {
   const formatedStartDate = useMemo<string>(() => {
     const d = new Date(startDate);
@@ -165,7 +171,10 @@ export default function Index({
   };
   async function fetchGeneralChartData() {
     try {
-      const [{ data }, tabGraph] = await Promise.all([
+      const [{ data }, tabGraph]: [
+        AxiosResponse<MensalRemuneration[]>,
+        AxiosResponse<AggregateIndexes[]>,
+      ] = await Promise.all([
         api.ui.get(`/v2/geral/remuneracao/${year}`),
         api.default.get('indice/grupo/justica-estadual?agregado=true'),
       ]);
@@ -207,67 +216,61 @@ export default function Index({
       <Header />
       <Container fixed>
         <Headline>
-          O DadosJusBr liberta dados do sistema de Justiça. Recuperamos,
-          padronizamos e publicamos continuamente as informações de remuneração
-          de diferentes órgãos como dados abertos.
+          Acesse as remunerações do Sistema de Justiça.
           <br />
-          Disponibilizamos dados dos Tribunais de Justiça e dos Ministérios
-          Públicos estaduais desde 2018. A atualização é realizada mensalmente.
-          <Box py={4}>
-            <Typography component="p">
-              Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
-              <Lowercase>{formatedEndDate}</Lowercase>. São dados de{' '}
-              <Link href="/status">
-                <Typography
-                  variant="inherit"
-                  component="span"
-                  color="success.main"
-                >
-                  {collecting.length}
-                </Typography>{' '}
-                órgãos
-              </Link>{' '}
-              que compreendem{' '}
+          <Typography component="p" mt={2} textAlign="justify">
+            Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
+            <Lowercase>{formatedEndDate}</Lowercase> e são provenientes de{' '}
+            <Link href="/status">
               <Typography
                 variant="inherit"
                 component="span"
                 color="success.main"
               >
-                {recordAmount}
+                {collecting.length}
               </Typography>{' '}
-              registros de pagamentos de salários, indenizações, gratificações e
-              diárias, totalizando{' '}
-              <Typography
-                variant="inherit"
-                component="span"
-                color="success.main"
-              >
-                R$ {(finalValue / 1000000000).toFixed(2)} bilhões
-              </Typography>{' '}
-              em recursos públicos.
-            </Typography>
-          </Box>
-          <Grid container spacing={2} display="flex" alignItems="center">
-            <Grid item>
-              <Typography variant="h6">Navegue pelos dados</Typography>
-            </Grid>
+              órgãos
+            </Link>{' '}
+            que compreendem{' '}
+            <Typography variant="inherit" component="span" color="success.main">
+              {recordAmount}
+            </Typography>{' '}
+            registros de pagamentos de salários, indenizações, gratificações e
+            diárias, totalizando{' '}
+            <Typography variant="inherit" component="span" color="success.main">
+              R$ {(finalValue / 1000000000).toFixed(2)} bilhões
+            </Typography>{' '}
+            em recursos públicos.
+          </Typography>
+          <Grid
+            container
+            display="flex"
+            alignItems="flex-start"
+            justifyContent="space-between"
+            mt={8}
+            pr={38}
+          >
             <Grid item>
               <DropDownGroupSelector />
             </Grid>
             <Grid item>
-              <Typography variant="h6" pl={1}>
-                ou faça uma
-              </Typography>
+              <Typography variant="h6">OU</Typography>
             </Grid>
-            <Grid item>
-              <Button
-                variant="outlined"
-                size="large"
+            <Grid item borderBottom="2px solid #2fbb96" mt={1}>
+              <Link
                 href="/pesquisar"
-                startIcon={<SearchIcon />}
+                color="inherit"
+                sx={{
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  display: 'flex',
+                }}
               >
-                Pesquisa avançada
-              </Button>
+                <Typography ml={1} mr={2}>
+                  PESQUISAR
+                </Typography>
+                <SearchIcon />
+              </Link>
             </Grid>
           </Grid>
         </Headline>
@@ -429,25 +432,24 @@ const Page = styled.div`
   background: #3e5363;
 `;
 const Headline = styled.div`
-  margin-top: 1rem;
-  margin-bottom: 4rem;
-  padding-top: 6rem;
-  padding-bottom: 6rem;
+  padding-top: 3rem;
+  padding-bottom: 3rem;
   padding-right: 1rem;
   padding-left: 1rem;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   font-weight: 700;
   background-image: url('img/bg.svg');
   background-position: right top;
   background-repeat: no-repeat;
-  background-size: contain;
+  background-size: auto;
   @media (min-width: 600px) {
-    padding-right: 8rem;
+    padding-right: 0;
+    padding-left: 0;
     font-size: 2rem;
   }
   @media (min-width: 900px) {
-    padding-right: 20rem;
-    font-size: 2rem;
+    padding-right: 22rem;
+    font-size: 2.5rem;
   }
 `;
 const Lowercase = styled.span`

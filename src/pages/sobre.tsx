@@ -10,6 +10,7 @@ import {
   Animation3,
   Animation4,
 } from '../components/index-animations';
+import Team from '../components/Team';
 
 export default function Index() {
   return (
@@ -131,6 +132,7 @@ export default function Index() {
             <Animation4 />
           </Grid>
         </Grid>
+        <Team />
       </Container>
       <Footer />
     </Page>

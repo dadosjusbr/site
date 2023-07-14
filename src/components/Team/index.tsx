@@ -1,11 +1,7 @@
-import Head from 'next/head';
 import { useState } from 'react';
 import styled from 'styled-components';
 
 import { Box, Container, Grid, Button, Typography, Link } from '@mui/material';
-
-import Footer from '../components/Footer';
-import Header from '../components/Header';
 
 export default function Team() {
   const [teamMates] = useState([
@@ -25,22 +21,22 @@ export default function Team() {
       photoURL:
         'https://avatars2.githubusercontent.com/u/8951363?s=400&u=acdedbbd00a15d2f913e3e1bde6b14f2c7451f90&v=4',
     },
+    // {
+    //   id: 3,
+    //   name: 'Eduardo Queiroz',
+    //   role: 'Desenvolvedor',
+    //   profileURL: 'https://github.com/duardoqueiroz',
+    //   photoURL: 'https://avatars.githubusercontent.com/u/83377894?v=4',
+    // },
+    // {
+    //   id: 4,
+    //   name: 'Jefferson Neves',
+    //   role: 'Desenvolvedor',
+    //   profileURL: 'https://github.com/jeffersonrpn',
+    //   photoURL: 'https://github.com/jeffersonrpn.png',
+    // },
     {
       id: 3,
-      name: 'Eduardo Queiroz',
-      role: 'Desenvolvedor',
-      profileURL: 'https://github.com/duardoqueiroz',
-      photoURL: 'https://avatars.githubusercontent.com/u/83377894?v=4',
-    },
-    {
-      id: 4,
-      name: 'Jefferson Neves',
-      role: 'Desenvolvedor',
-      profileURL: 'https://github.com/jeffersonrpn',
-      photoURL: 'https://github.com/jeffersonrpn.png',
-    },
-    {
-      id: 5,
       name: 'Jessé Oliveira',
       role: 'Desenvolvedor',
       profileURL: 'https://github.com/jezzdiego',
@@ -53,14 +49,14 @@ export default function Team() {
     //   profileURL: 'https://github.com/joaolgm',
     // },
     {
-      id: 6,
+      id: 4,
       name: 'Joellen Silva',
       role: 'Desenvolvedora',
       profileURL: 'https://github.com/Joellensilva',
       photoURL: 'https://github.com/Joellensilva.png',
     },
     {
-      id: 7,
+      id: 5,
       name: 'Juliana Sakai',
       role: 'Lider',
       profileURL: 'https://www.linkedin.com/in/julianasakai/',
@@ -73,14 +69,14 @@ export default function Team() {
     //   profileURL: 'https://github.com/marcos-inja',
     // },
     {
-      id: 8,
+      id: 6,
       name: 'Mariana Souto',
       role: 'Designer',
       profileURL: 'https://github.com/soutoam',
       photoURL: 'https://github.com/soutoam.png',
     },
     {
-      id: 9,
+      id: 7,
       name: 'Nazareno Andrade',
       role: 'Professor',
       profileURL: 'https://github.com/nazareno',
@@ -93,7 +89,7 @@ export default function Team() {
     //   photoURL: '/img/team/samara_sonale.jpg',
     // },
     {
-      id: 10,
+      id: 8,
       name: 'Raul Durlo',
       role: 'Cientista de Dados',
       profileURL: 'https://github.com/rdurl0',
@@ -137,17 +133,6 @@ export default function Team() {
   ]);
   return (
     <Page>
-      <Head>
-        <title>Equipe</title>
-        <title>DadosJusBr</title>
-        <meta property="og:image" content="/img/icon_dadosjus_background.png" />
-        <meta property="og:title" content="Equipe - DadosJusBr" />
-        <meta
-          property="og:description"
-          content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
-        />
-      </Head>
-      <Header />
       <Box py={4}>
         <Container fixed>
           <Typography variant="h1" textAlign="center" gutterBottom>
@@ -239,7 +224,6 @@ export default function Team() {
           </Box>
         </Container>
       </Box>
-      <Footer />
     </Page>
   );
 }
