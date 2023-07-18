@@ -28,6 +28,7 @@ export default function AnualAgencyPage({
   plotData: AggregateIndexes[];
 }) {
   const [year, setYear] = useState(getCurrentYear());
+  const [agencyTotals, setAgencyTotals] = useState<v2AgencyTotalsYear>();
   useEffect(() => {
     const yearData: number =
       data &&
@@ -36,8 +37,31 @@ export default function AnualAgencyPage({
         .sort((a, b) => b - a)
         .find(d => d <= getCurrentYear());
 
+    fetchAgencyTotalData();
     setYear(yearData);
   }, [data]);
+
+  const fetchAgencyTotalData = async () => {
+    const currentYear = getCurrentYear();
+    await fetchAgencyTotalDataRecursive(currentYear);
+  };
+
+  const fetchAgencyTotalDataRecursive = async (yearParam: number) => {
+    try {
+      const { data: agencyTotalsResponse } = await api.ui.get(
+        `/v2/orgao/totais/${id}/${year}`,
+      );
+
+      if (agencyTotalsResponse.meses) {
+        setAgencyTotals(agencyTotalsResponse);
+      } else {
+        const previousYear = yearParam - 1;
+        await fetchAgencyTotalDataRecursive(previousYear);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
   return (
     <Box>
       <Head>
@@ -56,6 +80,7 @@ export default function AnualAgencyPage({
       <Box display="flex" my={10} justifyContent="center">
         <AgencyWithoutNavigation
           data={data}
+          agencyTotals={agencyTotals}
           id={id}
           year={year}
           agency={agency}
