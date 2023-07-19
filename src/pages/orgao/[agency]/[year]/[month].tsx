@@ -23,6 +23,7 @@ import api from '../../../../services/api';
 import OMASummary from '../../../../components/OmaChart';
 import ErrorTable from '../../../../components/ErrorTable';
 import MonthPopover from '../../../../components/MonthPopover';
+import MoreInfoAccordion from '../../../../components/MoreInfoAccordion';
 
 function UnixToHumanDate(unix) {
   const d = new Date(unix * 1000);
@@ -48,6 +49,7 @@ export default function OmaPage({
 }) {
   const [chartData, setChartData] = useState<AgencyRemuneration>();
   const [loading, setLoading] = useState(true);
+  const [agencyInfo, setAgencyInfo] = useState<Agency>();
   function getNextDate() {
     let m = +month;
     let y = +year;
@@ -78,7 +80,7 @@ export default function OmaPage({
   useEffect(() => {
     // then it checks the next and the previous year to block the navigation buttons or to help to choose the right year
     // finally it fetchs the data from the api to fill the chart with the agency/month/year data
-    fetchChartData();
+    Promise.all([fetchChartData(), fetchAgencyInfo()]);
   }, [year, month]);
   async function fetchChartData() {
     try {
@@ -92,6 +94,17 @@ export default function OmaPage({
       setLoading(false);
     } catch (error) {
       setLoading(false);
+    }
+  }
+  async function fetchAgencyInfo() {
+    try {
+      const { data: agencyObj }: { data: Agency } = await api.default.get(
+        `orgao/${agency}`,
+      );
+      setAgencyInfo(agencyObj);
+    } catch (error) {
+      console.log(error);
+      router.push('/404');
     }
   }
   function handleNavigateToNextSummaryOption() {
@@ -126,10 +139,23 @@ export default function OmaPage({
       <Header />
       <Container fixed>
         <Box py={4}>
-          <Typography variant="h2" textAlign="center">
-            {oma ? oma?.orgao : 'Coleta não realizada!'} (
-            {agency.toLocaleUpperCase('pt')})
-          </Typography>
+          <MoreInfoAccordion
+            ombudsman={agencyInfo?.ouvidoria}
+            timestamp={oma?.timestamp.seconds}
+            twitterHandle={agencyInfo?.twitter_handle}
+            repository={mi?.dados_coleta.repositorio_coletor}
+          >
+            <Typography
+              variant="h2"
+              title="Mais informações sobre o órgão"
+              textAlign="center"
+              width="100%"
+              pb={0}
+            >
+              {oma ? oma?.orgao : 'Coleta não realizada!'} (
+              {agency.toLocaleUpperCase('pt')})
+            </Typography>
+          </MoreInfoAccordion>
           <Grid container justifyContent="center" alignItems="center">
             <Grid item>
               <IconButton

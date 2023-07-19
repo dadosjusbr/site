@@ -34,10 +34,12 @@ import light from '../styles/theme-light';
 import { formatAgency } from '../functions/format';
 import Drawer from './Drawer';
 import IndexTabGraph from './TransparencyChart/IndexTabChart';
+import MoreInfoAccordion from './MoreInfoAccordion';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
   year: number;
+  mi: SummaryzedMI[];
   agency: Agency;
   title: string;
   setYear: (y: number) => void;
@@ -50,6 +52,7 @@ export interface AgencyPageWithNavigationProps {
 
 const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   id,
+  mi,
   title,
   year,
   agency,
@@ -84,9 +87,22 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   return (
     <Container fixed>
       <Box>
-        <Typography variant="h2" textAlign="center">
-          {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
-        </Typography>
+        <MoreInfoAccordion
+          ombudsman={agency?.ouvidoria}
+          twitterHandle={agency?.twitter_handle}
+          timestamp={data?.map(d => d.timestamp.seconds).at(-1)}
+          repository={mi[0]?.dados_coleta.repositorio_coletor}
+        >
+          <Typography
+            variant="h2"
+            title="Mais informações sobre o órgão"
+            textAlign="center"
+            width="100%"
+            pb={0}
+          >
+            {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
+          </Typography>
+        </MoreInfoAccordion>
         {agency && agency.coletando && !data ? (
           <></>
         ) : (
