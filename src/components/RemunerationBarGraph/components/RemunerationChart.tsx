@@ -14,7 +14,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import CrawlingDateTable from '../../CrawlingDateTable';
 import NotCollecting from '../../NotCollecting';
-import { monthsWithoutData } from '../functions';
+import { warningMessage } from '../functions';
 import RemunerationLegend from '../../RemunerationChartLegend';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
@@ -72,7 +72,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
             <RemunerationLegend
               agency={agency}
               data={data}
-              year={year}
               graphType={graphType}
               setGraphType={setGraphType}
               baseRemunerationDataTypes={baseRemunerationDataTypes}
@@ -86,7 +85,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               setHidingBenefits={setHidingBenefits}
               hidingNoData={hidingNoData}
               setHidingNoData={setHidingNoData}
-              monthsWithoutData={monthsWithoutData}
+              warningMessage={warningMessage({ data, year })}
             />
             <Box px={2}>
               {agency && data.length > 0 && !dataLoading && (
@@ -146,7 +145,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                       />
                     </Box>
                   ) : (
-                    <Typography variant="body1" mt={2} textAlign="center">
+                    <Typography variant="body1" py={2} textAlign="center">
                       Não há dados para esse ano.
                     </Typography>
                   )}

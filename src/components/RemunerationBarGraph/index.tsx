@@ -256,44 +256,46 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           />
         </Box>
         <Box mt={2} mb={12}>
-          <Accordion>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6" color="#000">
-                Índice de transparência
-                <Tooltip
-                  placement="bottom"
-                  title={
-                    <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                      O Índice de Transparência é composto por duas dimensões:
-                      facilidade e completude. Cada uma das dimensões, por sua
-                      vez, é composta por até seis critérios em cada prestação
-                      de contas, que são avaliados mês a mês. O índice
-                      corresponde à média harmônica das duas dimensões.{' '}
-                      <Link href="/indice" color="inherit">
-                        Saiba mais
-                      </Link>
-                      .
-                    </Typography>
-                  }
-                >
-                  <IconButton aria-label="Botão de informações">
-                    <InfoIcon />
-                  </IconButton>
-                </Tooltip>
-              </Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Suspense fallback={<CircularProgress />}>
-                <IndexTabGraph
-                  plotData={plotData}
-                  height={350}
-                  mobileHeight={555}
-                  monthly
-                  isAgency
-                />
-              </Suspense>
-            </AccordionDetails>
-          </Accordion>
+          {plotData.length > 0 && (
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6" color="#000">
+                  Índice de transparência
+                  <Tooltip
+                    placement="bottom"
+                    title={
+                      <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                        O Índice de Transparência é composto por duas dimensões:
+                        facilidade e completude. Cada uma das dimensões, por sua
+                        vez, é composta por até seis critérios em cada prestação
+                        de contas, que são avaliados mês a mês. O índice
+                        corresponde à média harmônica das duas dimensões.{' '}
+                        <Link href="/indice" color="inherit">
+                          Saiba mais
+                        </Link>
+                        .
+                      </Typography>
+                    }
+                  >
+                    <IconButton aria-label="Botão de informações">
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Suspense fallback={<CircularProgress />}>
+                  <IndexTabGraph
+                    plotData={plotData}
+                    height={350}
+                    mobileHeight={555}
+                    monthly
+                    isAgency
+                  />
+                </Suspense>
+              </AccordionDetails>
+            </Accordion>
+          )}
         </Box>
       </ThemeProvider>
 

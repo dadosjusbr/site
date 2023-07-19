@@ -1,15 +1,6 @@
 import { useState } from 'react';
-import {
-  Paper,
-  Box,
-  Button,
-  Grid,
-  Backdrop,
-  Modal,
-  Fade,
-  Typography,
-} from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Paper, Box, Button, Grid } from '@mui/material';
+import TransitionModal from '../TransitionModal';
 
 const NotCollecting: React.FC<{
   agency: Agency;
@@ -29,71 +20,6 @@ const NotCollecting: React.FC<{
     boxShadow: 24,
     p: 4,
   };
-
-  function TransitionsModal({ children }) {
-    return (
-      <div>
-        {children}
-        <Modal
-          aria-labelledby="transition-modal-title"
-          aria-describedby="transition-modal-description"
-          open={open}
-          onClose={handleClose}
-          closeAfterTransition
-          BackdropComponent={Backdrop}
-          BackdropProps={{
-            timeout: 800,
-          }}
-        >
-          <Fade in={open}>
-            <Box sx={style}>
-              <Typography
-                id="transition-modal-title"
-                variant="h6"
-                component="h2"
-              >
-                Ajude na inclusão de dados do {agency.nome}
-              </Typography>
-              <Typography
-                id="transition-modal-description"
-                sx={{ mt: 2, textAlign: 'justify' }}
-              >
-                Para ajudar a incluir os dados deste tribunal no DadosJusBr,
-                você pode protocolar um requerimento na ouvidoria solicitando
-                mudanças na
-                {agency.coletando[0].descricao.map(
-                  (desc: string, index: number) => (
-                    <span key={desc}>
-                      {` ${desc.split(' ').at(0).toLowerCase()} ${desc
-                        .split(' ')
-                        .at(1)} ${desc.split(' ').at(2)}
-                    ${
-                      agency.coletando[0].descricao.length > 1 && index === 0
-                        ? 'e'
-                        : ''
-                    }`}
-                    </span>
-                  ),
-                )}
-              </Typography>
-              <Box display="flex" justifyContent="center" mt={2}>
-                <Button
-                  variant="outlined"
-                  color="info"
-                  href={agency.ouvidoria}
-                  target="_blank"
-                  endIcon={<ArrowForwardIosIcon />}
-                >
-                  Ir para a ouvidoria
-                </Button>
-              </Box>
-            </Box>
-          </Fade>
-        </Modal>
-      </div>
-    );
-  }
-
   return (
     <Paper elevation={0}>
       <Box p={4}>
@@ -118,11 +44,16 @@ const NotCollecting: React.FC<{
             )}
           </Grid>
           <Grid item mx={2}>
-            <TransitionsModal>
+            <TransitionModal
+              agency={agency}
+              open={open}
+              handleClose={handleClose}
+              style={style}
+            >
               <Button onClick={handleOpen} variant="outlined" color="secondary">
                 AJUDE-NOS A ABRIR OS DADOS
               </Button>
-            </TransitionsModal>
+            </TransitionModal>
           </Grid>
         </Grid>
       </Box>

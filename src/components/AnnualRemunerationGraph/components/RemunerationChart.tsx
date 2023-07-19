@@ -1,4 +1,4 @@
-import { useState, useMemo, Suspense } from 'react';
+import { useState, useMemo, Suspense, ButtonHTMLAttributes } from 'react';
 import dynamic from 'next/dynamic';
 import {
   Box,
@@ -11,11 +11,7 @@ import {
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import {
-  monthsWithoutData,
-  warningMessage,
-  yearsWithoutData,
-} from '../functions';
+import { warningMessage } from '../functions';
 import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
@@ -82,7 +78,6 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
             <RemunerationChartLegend
               agency={agency}
               data={data}
-              year={year}
               graphType={graphType}
               setGraphType={setGraphType}
               baseRemunerationDataTypes={baseRemunerationDataTypes}
@@ -96,8 +91,6 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               setHidingBenefits={setHidingBenefits}
               hidingNoData={hidingNoData}
               setHidingNoData={setHidingNoData}
-              monthsWithoutData={monthsWithoutData}
-              yearsWithoutData={yearsWithoutData(data)}
               warningMessage={warningMessage(
                 data,
                 baseRemunerationDataTypes,
@@ -163,7 +156,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                       </Suspense>
                     </Box>
                   ) : (
-                    <Typography variant="body1" mt={2} textAlign="center">
+                    <Typography variant="body1" py={2} textAlign="center">
                       Não há dados para esse ano.
                     </Typography>
                   )}

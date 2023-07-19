@@ -31,6 +31,7 @@ function UnixToHumanDate(unix) {
 
 export default function OmaPage({
   agency,
+  agencyObj,
   year,
   month,
   mi,
@@ -39,6 +40,7 @@ export default function OmaPage({
   nextButtonActive,
 }: {
   agency: string;
+  agencyObj: Agency;
   year: number;
   month: number;
   mi: SummaryzedMI;
@@ -249,7 +251,7 @@ export default function OmaPage({
                 />
               );
             }
-            return <ErrorTable agency={agency} month={month} year={year} />;
+            return <ErrorTable agency={agencyObj} month={month} year={year} />;
           })()}
       </Container>
       <Footer />
@@ -298,6 +300,16 @@ export const getServerSideProps: GetServerSideProps = async context => {
     mi = err.response.data;
   }
 
+  let agencyObj: Agency;
+  try {
+    const { data: agencyObjData } = await api.ui.get(
+      `/v2/orgao/resumo/${agency}`,
+    );
+    agencyObj = agencyObjData.orgao;
+  } catch (err) {
+    agencyObj = err.response.data;
+  }
+
   try {
     const { data: d2 }: { data: v2AgencySummary } = await api.ui.get(
       `/v2/orgao/resumo/${agency}/${year}/${month}`,
@@ -305,6 +317,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     return {
       props: {
         agency,
+        agencyObj,
         year,
         month,
         mi,
@@ -319,9 +332,9 @@ export const getServerSideProps: GetServerSideProps = async context => {
     return {
       props: {
         agency,
+        agencyObj,
         year,
         month,
-        mi,
         previousButtonActive: isAfter(date, new Date(2018, 1, 1)),
         nextButtonActive: isBefore(date, nextMonth),
       },

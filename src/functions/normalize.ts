@@ -63,6 +63,9 @@ export const normalizePlotData = (data: AggregateIndexes[]) => {
 };
 
 export const normalizeMonthlyPlotData = (data: AggregateIndexes[]) => {
+  if (!data) {
+    return [];
+  }
   const mediasPorAno = {};
   const result = [];
 

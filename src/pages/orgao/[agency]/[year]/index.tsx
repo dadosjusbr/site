@@ -79,27 +79,29 @@ export const getServerSideProps: GetServerSideProps = async context => {
     return {
       props: {
         id,
-        data: agency.meses ? agency.meses : [],
+        data: agency?.meses,
         year: parseInt(year as string, 10),
-        agency: agency.orgao,
+        agency: agency?.orgao,
         nextDateIsNavigable:
           parseInt(year as string, 10) !== new Date().getFullYear(),
         previousDateIsNavigable: parseInt(year as string, 10) !== 2018,
-        navigableMonth: agency.meses
-          ? agency.meses[agency.meses.length - 1].mes
+        navigableMonth: agency?.meses
+          ? agency?.meses[agency?.meses.length - 1].mes
           : 1,
-        fullName: agency.orgao.nome,
-        summaryPackage: agency.package || null,
+        fullName: agency?.orgao?.nome,
+        summaryPackage: agency?.package || null,
         plotData,
       },
     };
   } catch (err) {
-    context.res.writeHead(301, {
-      Location: `/404`,
-    });
-    context.res.end();
+    const { data: agency } = await api.ui.get(`/v2/orgao/totais/${id}/${year}`);
     return {
-      props: {},
+      props: {
+        id,
+        year: parseInt(year as string, 10),
+        fullName: agency?.orgao?.nome || '',
+        data: [],
+      },
     };
   }
 };

@@ -24,7 +24,6 @@ import { formatCurrencyValue } from '../../functions/format';
 const index = ({
   agency,
   data,
-  year,
   graphType,
   setGraphType,
   baseRemunerationDataTypes,
@@ -38,14 +37,11 @@ const index = ({
   setHidingBenefits,
   hidingNoData,
   setHidingNoData,
-  monthsWithoutData,
-  yearsWithoutData,
   warningMessage,
   annual = false,
 }: {
   agency: Agency;
   data: v2MonthTotals[] | AnnualSummaryData[];
-  year: number;
   graphType: string;
   setGraphType: React.Dispatch<React.SetStateAction<string>>;
   baseRemunerationDataTypes: string;
@@ -59,17 +55,7 @@ const index = ({
   setHidingBenefits: React.Dispatch<React.SetStateAction<boolean>>;
   hidingNoData: boolean;
   setHidingNoData: React.Dispatch<React.SetStateAction<boolean>>;
-  monthsWithoutData: ({
-    // eslint-disable-next-line no-shadow
-    data,
-    // eslint-disable-next-line no-shadow
-    year,
-  }: {
-    data: v2MonthTotals[] | AnnualSummaryData[];
-    year?: number;
-  }) => any;
-  yearsWithoutData?: number[];
-  warningMessage?: string;
+  warningMessage: string;
   annual?: boolean;
 }) => {
   const [open, setOpen] = useState(false);
@@ -87,41 +73,18 @@ const index = ({
         mb={4}
       >
         <Box maxWidth={{ xs: 320, sm: 720 }}>
-          {annual === false &&
-            agency != null &&
-            data.length < 12 &&
-            data.length > 0 &&
-            monthsWithoutData({ data, year }).length > 0 && (
-              <Box mt={2} display="flex" justifyContent="center">
-                <AlertModal
-                  agencyData={agency}
-                  openParam={open}
-                  handleClose={handleClose}
-                  handleOpen={handleOpen}
-                >
-                  Este órgão não publicou dados de{' '}
-                  {`${monthsWithoutData({ data, year }).length} ${
-                    monthsWithoutData({ data, year }).length > 1
-                      ? 'meses.'
-                      : 'mês.'
-                  }`}
-                </AlertModal>
-              </Box>
-            )}
-          {annual &&
-            (yearsWithoutData.length > 0 || monthsWithoutData({ data }) > 0) &&
-            warningMessage.length > 0 && (
-              <Box mt={2} display="flex" justifyContent="center">
-                <AlertModal
-                  agencyData={agency}
-                  openParam={open}
-                  handleClose={handleClose}
-                  handleOpen={handleOpen}
-                >
-                  {warningMessage}
-                </AlertModal>
-              </Box>
-            )}
+          {agency && warningMessage?.length > 0 && (
+            <Box mt={2} display="flex" justifyContent="center">
+              <AlertModal
+                agencyData={agency}
+                openParam={open}
+                handleClose={handleClose}
+                handleOpen={handleOpen}
+              >
+                {warningMessage}
+              </AlertModal>
+            </Box>
+          )}
           {agency && (
             <Tabs
               value={graphType}
