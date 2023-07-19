@@ -1,3 +1,4 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
@@ -27,11 +28,26 @@ export default function AgencyPage({
   summaryPackage: Backup;
   plotData: AggregateIndexes[];
 }) {
+  const [agencyInfo, setAgencyInfo] = useState<AllAgencyInformation>();
   const router = useRouter();
   function navigateToGivenYear(y: number) {
     router.push(`/orgao/${id}/${y}`);
   }
   const pageTitle = `${id.toUpperCase()} - ${year}`;
+
+  useEffect(() => {
+    fetchMIData();
+  }, []);
+  const fetchMIData = async () => {
+    try {
+      const { data: agencyInfoResponse } = await api.default.get(
+        `/dados/${id}`,
+      );
+      setAgencyInfo(agencyInfoResponse);
+    } catch (error) {
+      setAgencyInfo(null);
+    }
+  };
   return (
     <Page>
       <Head>
@@ -51,6 +67,7 @@ export default function AgencyPage({
         <AgencyWithNavigation
           data={data}
           id={id}
+          agencyInfo={agencyInfo}
           year={year}
           agency={agency}
           dataLoading={false}

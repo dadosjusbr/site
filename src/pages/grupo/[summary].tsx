@@ -24,7 +24,7 @@ import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
 import { normalizePlotData } from '../../functions/normalize';
 import { formatToAgency } from '../../functions/format';
-// this constant is used to placehold the max value of a chart data
+
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `${formatToAgency(summary)}`;
   const [value, setValue] = useState('');
@@ -155,26 +155,28 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [data, setData] = useState<AnnualSummaryData[]>([]);
   const [year, setYear] = useState(getCurrentYear());
   const [agencyData, setAgencyData] = useState<Agency>();
+  const [agencyTotals, setAgencyTotals] = useState<v2AgencyTotalsYear>();
   const [dataLoading, setDataLoading] = useState(true);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
 
   useEffect(() => {
     setDataLoading(true);
-    Promise.all([fetchAgencyData(), fetchPlotData()]).finally(() =>
-      setDataLoading(false),
-    );
+    Promise.all([
+      fetchAgencyData(),
+      fetchPlotData(),
+      fetchAgencyTotalData(),
+    ]).finally(() => setDataLoading(false));
   }, [year]);
   async function fetchAgencyData() {
     try {
       const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
-      setData(agency.dados_anuais ? agency.dados_anuais : null);
-      setAgencyData(agency.orgao);
-      setYear(agency.dados_anuais?.at(-1).ano);
+      setData(agency?.dados_anuais ? agency?.dados_anuais : null);
+      setAgencyData(agency?.orgao);
+      setYear(agency?.dados_anuais?.at(-1).ano);
     } catch (err) {
       router.push('/404');
     }
   }
-
   async function fetchPlotData() {
     try {
       const { data: transparencyPlot } = await api.default.get(
@@ -185,10 +187,32 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       router.push('/404');
     }
   }
+  const fetchAgencyTotalData = async () => {
+    const currentYear = getCurrentYear();
+    await fetchAgencyTotalDataRecursive(currentYear);
+  };
+
+  const fetchAgencyTotalDataRecursive = async (yearParam: number) => {
+    try {
+      const { data: agencyTotalsResponse } = await api.ui.get(
+        `/v2/orgao/totais/${id}/${yearParam}`,
+      );
+
+      if (agencyTotalsResponse.meses) {
+        setAgencyTotals(agencyTotalsResponse);
+      } else {
+        const previousYear = yearParam - 1;
+        await fetchAgencyTotalDataRecursive(previousYear);
+      }
+    } catch (err) {
+      router.push('/404');
+    }
+  };
   return (
     <div id={id}>
       <AgencyWithoutNavigation
         data={data}
+        agencyTotals={agencyTotals}
         dataLoading={dataLoading}
         id={id}
         title={title}

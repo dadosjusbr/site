@@ -27,6 +27,7 @@ import ShareModal from '../Common/ShareModal';
 import light from '../../styles/theme-light';
 import { formatAgency } from '../../functions/format';
 import Drawer from '../Common/Drawer';
+import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./components/RemunerationChart'),
@@ -46,6 +47,7 @@ const IndexTabGraph = dynamic(
 
 export interface AgencyPageWithoutNavigationProps {
   id: string;
+  agencyTotals: v2AgencyTotalsYear;
   year: number;
   agency: Agency;
   title: string;
@@ -56,17 +58,32 @@ export interface AgencyPageWithoutNavigationProps {
 
 const AgencyPageWithoutNavigation: React.FC<
   AgencyPageWithoutNavigationProps
-> = ({ id, title, year, agency, data, dataLoading, plotData }) => {
+> = ({
+  id,
+  agencyTotals,
+  title,
+  year,
+  agency,
+  data,
+  dataLoading,
+  plotData,
+}) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
-
   return (
     <Container fixed sx={{ mb: 12 }}>
       <Box>
-        <Typography variant="h2" textAlign="center">
-          {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
-        </Typography>
+        <MoreInfoAccordion
+          ombudsman={agency?.ouvidoria}
+          twitterHandle={agency?.twitter_handle}
+          timestamp={agencyTotals?.meses?.at(-1).timestamp.seconds}
+          repository=""
+        >
+          <Typography variant="h2" textAlign="center" width="100%">
+            {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
+          </Typography>
+        </MoreInfoAccordion>
         {agency && agency.coletando && !agency.possui_dados ? (
           <></>
         ) : (

@@ -1,4 +1,4 @@
-import { useState, useMemo, Suspense, ButtonHTMLAttributes } from 'react';
+import { useState, useMemo, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import {
   Box,

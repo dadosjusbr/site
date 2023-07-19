@@ -13,14 +13,19 @@ import MONTHS from '../../../@types/MONTHS';
 type NewsProps = {
   title: string;
   date: number;
-  formatedDate?: Date;
+  formatedDate?: string;
   site: string;
   url: string;
 };
 
 function NewsClipping({ news }: { news: NewsProps[] }) {
   const formated = news.map((n: NewsProps) => {
-    n.formatedDate = new Date(n.date * 1000);
+    n.formatedDate = new Date(n.date * 1000).toLocaleDateString('pt-BR', {
+      timeZone: 'UTC',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric',
+    });
     return n;
   });
 
@@ -35,12 +40,7 @@ function NewsClip({ news, id }: { news: NewsProps; id: number }) {
     <Grid id={`clip-${id}`} item sx={{ width: 692 }}>
       <Card id={`clipcard-${id}`}>
         <CardContent>
-          <Typography color="text.secondary">
-            {`${news.formatedDate.getDate()} de ${
-              MONTHS[news.formatedDate.getMonth() + 1]
-            } de
-            ${news.formatedDate.getFullYear()}`}
-          </Typography>
+          <Typography color="text.secondary">{news.formatedDate}</Typography>
           <Typography variant="h5">{news.title}</Typography>
           <Typography color="text.secondary">{news.site}</Typography>
           <Box textAlign="right">
