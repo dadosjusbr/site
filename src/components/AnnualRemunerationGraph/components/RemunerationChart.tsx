@@ -13,7 +13,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { warningMessage } from '../functions';
 import { graphOptions, graphSeries } from '../functions/graphConfigs';
-import NotCollecting from '../../NotCollecting';
+import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });

@@ -27,12 +27,12 @@ import InfoIcon from '@mui/icons-material/Info';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
-import ShareModal from '../ShareModal';
+import ShareModal from '../Common/ShareModal';
 import RemunerationBarGraph from './components/RemunerationChart';
 import * as url from '../../url';
 import light from '../../styles/theme-light';
 import { formatAgency } from '../../functions/format';
-import Drawer from '../Drawer';
+import Drawer from '../Common/Drawer';
 import IndexTabGraph from '../TransparencyChart/IndexTabChart';
 
 export interface AgencyPageWithNavigationProps {

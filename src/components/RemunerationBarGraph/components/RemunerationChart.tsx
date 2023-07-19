@@ -12,8 +12,8 @@ import {
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import { graphOptions, graphSeries } from '../functions/graphConfigs';
-import CrawlingDateTable from '../../CrawlingDateTable';
-import NotCollecting from '../../NotCollecting';
+import CrawlingDateTable from '../../Common/CrawlingDateTable';
+import NotCollecting from '../../Common/NotCollecting';
 import { warningMessage } from '../functions';
 import RemunerationLegend from '../../RemunerationChartLegend';
 

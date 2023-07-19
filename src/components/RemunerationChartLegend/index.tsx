@@ -18,7 +18,7 @@ import RemoveCircle from '@mui/icons-material/CancelPresentation';
 import Add from '@mui/icons-material/Add';
 import Remove from '@mui/icons-material/Remove';
 import Equal from '@mui/icons-material/DragHandle';
-import AlertModal from '../AlertModal';
+import AlertModal from '../Common/AlertModal';
 import { formatCurrencyValue } from '../../functions/format';
 
 const index = ({

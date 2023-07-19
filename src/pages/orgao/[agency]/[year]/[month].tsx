@@ -21,8 +21,8 @@ import Footer from '../../../../components/Essentials/Footer';
 import Header from '../../../../components/Essentials/Header';
 import api from '../../../../services/api';
 import OMASummary from '../../../../components/OmaChart';
-import ErrorTable from '../../../../components/ErrorTable';
-import MonthPopover from '../../../../components/MonthPopover';
+import ErrorTable from '../../../../components/Common/ErrorTable';
+import MonthPopover from '../../../../components/Common/MonthPopover';
 
 function UnixToHumanDate(unix) {
   const d = new Date(unix * 1000);

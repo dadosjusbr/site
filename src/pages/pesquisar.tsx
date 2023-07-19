@@ -37,7 +37,7 @@ import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
 import light from '../styles/theme-light';
 import api from '../services/api';
-import ShareModal from '../components/ShareModal';
+import ShareModal from '../components/Common/ShareModal';
 import { getCurrentYear } from '../functions/currentYear';
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;

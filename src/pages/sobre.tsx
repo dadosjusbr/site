@@ -10,7 +10,7 @@ import {
   Animation3,
   Animation4,
 } from '../components/Animations/index-animations';
-import Team from '../components/Team';
+import Team from '../components/Common/Team';
 
 export default function Index() {
   return (

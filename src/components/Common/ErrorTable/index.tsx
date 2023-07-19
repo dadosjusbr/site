@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Box, Paper, Button, Stack, ThemeProvider } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import MONTHS from '../../@types/MONTHS';
-import light from '../../styles/theme-light';
+import MONTHS from '../../../@types/MONTHS';
+import light from '../../../styles/theme-light';
 import TransitionModal from '../TransitionModal';
 
 const ErrorTable: React.FC<{

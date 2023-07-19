@@ -22,7 +22,7 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import SearchIcon from '@mui/icons-material/Search';
 
 import Header from '../components/Essentials/Header';
-import DropDownGroupSelector from '../components/DropDownGroupSelector';
+import DropDownGroupSelector from '../components/Common/DropDownGroupSelector';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';

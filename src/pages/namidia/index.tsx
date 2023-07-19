@@ -4,7 +4,7 @@ import { Box, Container, Grid } from '@mui/material';
 
 import Footer from '../../components/Essentials/Footer';
 import Nav from '../../components/Essentials/Header';
-import NewsClipping from '../../components/NewsClipping';
+import NewsClipping from '../../components/Common/NewsClipping';
 
 import newsJSON from '../../../public/news.json';
 

@@ -8,7 +8,7 @@ import {
   Typography,
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import MONTHS from '../../@types/MONTHS';
+import MONTHS from '../../../@types/MONTHS';
 
 type NewsProps = {
   title: string;

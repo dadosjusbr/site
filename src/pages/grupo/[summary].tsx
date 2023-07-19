@@ -19,7 +19,7 @@ import {
 import Footer from '../../components/Essentials/Footer';
 import Header from '../../components/Essentials/Header';
 import api from '../../services/api';
-import DropDownGroupSelector from '../../components/DropDownGroupSelector';
+import DropDownGroupSelector from '../../components/Common/DropDownGroupSelector';
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
 import { normalizePlotData } from '../../functions/normalize';

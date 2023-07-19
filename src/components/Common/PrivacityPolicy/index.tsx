@@ -2,7 +2,7 @@ import React from 'react';
 import { Button, Link } from '@mui/material';
 import styled from 'styled-components';
 
-import { usePrivacityPolicy } from '../../contexts/privacity-policy-context';
+import { usePrivacityPolicy } from '../../../contexts/privacity-policy-context';
 
 const PrivacityPolicyPopUp: React.FC = () => {
   const { acceptCookies } = usePrivacityPolicy();
