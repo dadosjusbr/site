@@ -12,7 +12,7 @@ interface Props {
   children: React.ReactChildren | React.ReactChild;
 }
 
-const StyledBox = styled(Box)(({ theme }) => ({
+const StyledBox = styled(Box)(() => ({
   backgroundColor: '#3e5363',
 }));
 

@@ -17,8 +17,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import MONTHS from '../../../../@types/MONTHS';
-import Footer from '../../../../components/Footer';
-import Header from '../../../../components/Header';
+import Footer from '../../../../components/Essentials/Footer';
+import Header from '../../../../components/Essentials/Header';
 import api from '../../../../services/api';
 import OMASummary from '../../../../components/OmaChart';
 import ErrorTable from '../../../../components/ErrorTable';

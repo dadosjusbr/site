@@ -3,7 +3,7 @@ import Popover from '@mui/material/Popover';
 import Typography from '@mui/material/Typography';
 import { useRouter } from 'next/router';
 import { Button } from '@mui/material';
-import MONTHS from '../@types/MONTHS';
+import MONTHS from '../../@types/MONTHS';
 
 export default function MonthPopover({ children, agency, year }) {
   const router = useRouter();

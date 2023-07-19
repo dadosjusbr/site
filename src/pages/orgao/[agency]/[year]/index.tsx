@@ -2,10 +2,10 @@ import styled from 'styled-components';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import Header from '../../../../components/Header';
-import Footer from '../../../../components/Footer';
+import Header from '../../../../components/Essentials/Header';
+import Footer from '../../../../components/Essentials/Footer';
 import api from '../../../../services/api';
-import AgencyWithNavigation from '../../../../components/AgencyWithNavigation';
+import AgencyWithNavigation from '../../../../components/RemunerationBarGraph';
 import { normalizeMonthlyPlotData } from '../../../../functions/normalize';
 
 export default function AgencyPage({

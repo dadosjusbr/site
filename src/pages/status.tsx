@@ -11,8 +11,8 @@ import {
   ListItemIcon,
 } from '@mui/material';
 
-import Footer from '../components/Footer';
-import Nav from '../components/Header';
+import Footer from '../components/Essentials/Footer';
+import Nav from '../components/Essentials/Header';
 import api from '../services/api';
 import { formatAgency } from '../functions/format';
 

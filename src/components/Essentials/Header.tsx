@@ -14,7 +14,7 @@ import {
   Typography,
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
-import DropDownGroupSelector from './DropDownGroupSelector';
+import DropDownGroupSelector from '../DropDownGroupSelector';
 
 function Header() {
   const [pages] = useState([

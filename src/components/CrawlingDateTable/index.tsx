@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import MONTHS from '../@types/MONTHS';
+import MONTHS from '../../@types/MONTHS';
 
 function TableRow(props) {
   const { month, crawlingtimeseconds } = props;

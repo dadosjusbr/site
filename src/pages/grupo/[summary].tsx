@@ -1,6 +1,7 @@
-import { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
 import styled from 'styled-components';
 import {
   Box,
@@ -15,12 +16,12 @@ import {
   Typography,
 } from '@mui/material';
 
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
+import Footer from '../../components/Essentials/Footer';
+import Header from '../../components/Essentials/Header';
 import api from '../../services/api';
 import DropDownGroupSelector from '../../components/DropDownGroupSelector';
 import { getCurrentYear } from '../../functions/currentYear';
-import AgencyWithoutNavigation from '../../components/AgencyWithoutNavigation';
+import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
 import { normalizePlotData } from '../../functions/normalize';
 import { formatToAgency } from '../../functions/format';
 // this constant is used to placehold the max value of a chart data
@@ -149,10 +150,11 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   id,
   title,
 }) => {
+  const router = useRouter();
   // this state is used to store the api fetched data after fetch it
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<AnnualSummaryData[]>([]);
   const [year, setYear] = useState(getCurrentYear());
-  const [agencyData, setAgencyData] = useState<any>();
+  const [agencyData, setAgencyData] = useState<Agency>();
   const [dataLoading, setDataLoading] = useState(true);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
 
@@ -169,7 +171,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       setAgencyData(agency.orgao);
       setYear(agency.dados_anuais?.at(-1).ano);
     } catch (err) {
-      console.log(err);
+      router.push('/404');
     }
   }
 
@@ -180,7 +182,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       );
       setPlotData(transparencyPlot);
     } catch (err) {
-      console.log(err);
+      router.push('/404');
     }
   }
   return (

@@ -1,5 +1,4 @@
 import React from 'react';
-
 import {
   Box,
   Button,
@@ -9,9 +8,29 @@ import {
   Typography,
 } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import MONTHS from '../@types/MONTHS';
+import MONTHS from '../../@types/MONTHS';
 
-function NewsClip({ news, id }) {
+type NewsProps = {
+  title: string;
+  date: number;
+  formatedDate?: Date;
+  site: string;
+  url: string;
+};
+
+function NewsClipping({ news }: { news: NewsProps[] }) {
+  const formated = news.map((n: NewsProps) => {
+    n.formatedDate = new Date(n.date * 1000);
+    return n;
+  });
+
+  const list = formated
+    .sort((a, b) => b.date - a.date)
+    .map((n, i) => <NewsClip id={i} news={n} />);
+  return list;
+}
+
+function NewsClip({ news, id }: { news: NewsProps; id: number }) {
   return (
     <Grid id={`clip-${id}`} item sx={{ width: 692 }}>
       <Card id={`clipcard-${id}`}>
@@ -41,4 +60,4 @@ function NewsClip({ news, id }) {
     </Grid>
   );
 }
-export default NewsClip;
+export default NewsClipping;

@@ -3,14 +3,14 @@ import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { Box, CircularProgress } from '@mui/material';
-import Header from '../../../components/Header';
-import Footer from '../../../components/Footer';
+import Header from '../../../components/Essentials/Header';
+import Footer from '../../../components/Essentials/Footer';
 import api from '../../../services/api';
 import { getCurrentYear } from '../../../functions/currentYear';
 import { normalizePlotData } from '../../../functions/normalize';
 
 const AgencyWithoutNavigation = dynamic(
-  () => import('../../../components/AgencyWithoutNavigation'),
+  () => import('../../../components/AnnualRemunerationGraph'),
   { loading: () => <CircularProgress />, ssr: false },
 );
 

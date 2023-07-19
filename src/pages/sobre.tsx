@@ -2,14 +2,14 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import { Container, Box, Grid, Typography } from '@mui/material';
 
-import Footer from '../components/Footer';
-import Nav from '../components/Header';
+import Footer from '../components/Essentials/Footer';
+import Nav from '../components/Essentials/Header';
 import {
   Animation1,
   Animation2,
   Animation3,
   Animation4,
-} from '../components/index-animations';
+} from '../components/Animations/index-animations';
 import Team from '../components/Team';
 
 export default function Index() {

@@ -5,7 +5,7 @@ import {
   useCallback,
   useEffect,
 } from 'react';
-import PrivacityPolicyPopUp from '../components/PrivacityPolicyPopUp';
+import PrivacityPolicyPopUp from '../components/PrivacityPolicy';
 
 interface PrivacityPolicyData {
   accepted: boolean;

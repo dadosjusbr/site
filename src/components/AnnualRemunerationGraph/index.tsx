@@ -1,182 +1,213 @@
-import { useState, useMemo, Suspense } from 'react';
+import React, { Suspense, useState } from 'react';
 import dynamic from 'next/dynamic';
+import { useRouter } from 'next/router';
 import {
+  Container,
   Box,
-  Button,
-  CircularProgress,
-  Fab,
-  Grid,
-  Paper,
   Typography,
-  useMediaQuery,
+  Button,
+  ThemeProvider,
+  Stack,
+  CircularProgress,
+  Tooltip,
+  Link,
+  IconButton,
+  Accordion,
+  AccordionSummary,
+  AccordionDetails,
 } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import AutoGraphIcon from '@mui/icons-material/AutoGraph';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import SearchIcon from '@mui/icons-material/Search';
+import useMediaQuery from '@mui/material/useMediaQuery';
+import InfoIcon from '@mui/icons-material/Info';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
-import {
-  monthsWithoutData,
-  warningMessage,
-  yearsWithoutData,
-} from './functions';
-import { graphOptions, graphSeries } from './functions/graphConfigs';
-import NotCollecting from '../NotCollecting';
-import RemunerationChartLegend from '../RemunerationChartLegend';
+import ShareModal from '../ShareModal';
+import light from '../../styles/theme-light';
+import { formatAgency } from '../../functions/format';
+import Drawer from '../Drawer';
 
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+const AnnualRemunerationGraph = dynamic(
+  () => import('./components/RemunerationChart'),
+  {
+    loading: () => <CircularProgress />,
+    ssr: false,
+  },
+);
 
-type AnnualRemunerationGraphProps = {
+const IndexTabGraph = dynamic(
+  () => import('../TransparencyChart/IndexTabChart'),
+  {
+    loading: () => <CircularProgress />,
+    ssr: false,
+  },
+);
+
+export interface AgencyPageWithoutNavigationProps {
+  id: string;
   year: number;
   agency: Agency;
+  title: string;
   data: AnnualSummaryData[];
   dataLoading: boolean;
-};
+  plotData: AggregateIndexes[];
+}
 
-const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
-  year,
-  agency,
-  data,
-  dataLoading = true,
-}) => {
-  const matches = useMediaQuery('(max-width:500px)');
-  const [hidingRemunerations, setHidingRemunerations] = useState(false);
-  const [hidingWage, setHidingWage] = useState(false);
-  const [hidingBenefits, setHidingBenefits] = useState(false);
-  const [hidingNoData, setHidingNoData] = useState(false);
-  const [graphType, setGraphType] = useState('media-por-membro');
-
-  const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'remuneracao_base_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'remuneracao_base_por_mes';
-    }
-    return 'remuneracao_base';
-  }, [graphType]);
-
-  const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'outras_remuneracoes_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'outras_remuneracoes_por_mes';
-    }
-    return 'outras_remuneracoes';
-  }, [graphType]);
-
-  const discountsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'descontos_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'descontos_por_mes';
-    }
-    return 'descontos';
-  }, [graphType]);
+const AgencyPageWithoutNavigation: React.FC<
+  AgencyPageWithoutNavigationProps
+> = ({ id, title, year, agency, data, dataLoading, plotData }) => {
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const matches = useMediaQuery('(max-width:900px)');
+  const router = useRouter();
 
   return (
-    <>
-      {agency && agency.coletando && !data ? (
-        <NotCollecting agency={agency} />
-      ) : (
-        <Box>
-          <Paper elevation={0}>
-            <RemunerationChartLegend
-              agency={agency}
-              data={data}
-              year={year}
-              graphType={graphType}
-              setGraphType={setGraphType}
-              baseRemunerationDataTypes={baseRemunerationDataTypes}
-              otherRemunerationsDataTypes={otherRemunerationsDataTypes}
-              discountsDataTypes={discountsDataTypes}
-              hidingRemunerations={hidingRemunerations}
-              setHidingRemunerations={setHidingRemunerations}
-              hidingWage={hidingWage}
-              setHidingWage={setHidingWage}
-              hidingBenefits={hidingBenefits}
-              setHidingBenefits={setHidingBenefits}
-              hidingNoData={hidingNoData}
-              setHidingNoData={setHidingNoData}
-              monthsWithoutData={monthsWithoutData}
-              yearsWithoutData={yearsWithoutData(data)}
-              warningMessage={warningMessage(
-                data,
-                baseRemunerationDataTypes,
-                otherRemunerationsDataTypes,
-              )}
-              annual
-            />
-            <Box px={2}>
-              {agency && data && !dataLoading ? (
-                <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
+    <Container fixed sx={{ mb: 12 }}>
+      <Box>
+        <Typography variant="h2" textAlign="center">
+          {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
+        </Typography>
+        {agency && agency.coletando && !agency.possui_dados ? (
+          <></>
+        ) : (
+          <>
+            {!matches ? (
+              <Box display="flex" justifyContent="space-between">
+                <Stack
+                  spacing={2}
+                  direction="row"
+                  justifyContent="flex-start"
+                  my={4}
+                >
                   <Button
                     variant="outlined"
-                    color="secondary"
-                    endIcon={<ArrowForwardIosIcon />}
-                    href={`/orgao/${agency.id_orgao}/${year}`}
+                    color="info"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => router.back()}
                   >
-                    EXPLORAR
+                    VOLTAR
                   </Button>
-                </Grid>
-              ) : null}
-              {dataLoading ? (
-                <Box
-                  m={4}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
+                </Stack>
+
+                <Stack
+                  spacing={2}
+                  direction="row"
+                  justifyContent="flex-end"
+                  my={4}
                 >
-                  <div>
-                    <CircularProgress color="info" />
-                  </div>
-                  <p>Aguarde...</p>
-                </Box>
-              ) : (
-                <>
-                  {data.length > 0 ? (
-                    <Box>
-                      <Suspense fallback={<CircularProgress />}>
-                        <Chart
-                          options={graphOptions({
-                            agency,
-                            data,
-                            matches,
-                            baseRemunerationDataTypes,
-                            otherRemunerationsDataTypes,
-                          })}
-                          series={graphSeries({
-                            data,
-                            baseRemunerationDataTypes,
-                            otherRemunerationsDataTypes,
-                            discountsDataTypes,
-                            hidingRemunerations,
-                            hidingBenefits,
-                            hidingWage,
-                            hidingNoData,
-                            matches,
-                          })}
-                          width="100%"
-                          height="500"
-                          type="line"
-                        />
-                      </Suspense>
-                    </Box>
-                  ) : (
-                    <Typography variant="body1" mt={2} textAlign="center">
-                      Não há dados para esse ano.
-                    </Typography>
-                  )}
-                </>
-              )}
-            </Box>
-          </Paper>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<IosShareIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    COMPARTILHAR
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<SearchIcon />}
+                    onClick={() => {
+                      router.push(`/pesquisar?orgaos=${agency.id_orgao}`);
+                    }}
+                  >
+                    PESQUISAR
+                  </Button>
+                </Stack>
+              </Box>
+            ) : (
+              <Drawer>
+                <Stack
+                  direction="column"
+                  spacing={1}
+                  justifyContent="flex-start"
+                  mt={3}
+                  mx={6}
+                >
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<IosShareIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    COMPARTILHAR
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<SearchIcon />}
+                    onClick={() => {
+                      router.push(`/pesquisar?orgaos=${agency.id_orgao}`);
+                    }}
+                  >
+                    PESQUISAR
+                  </Button>
+                </Stack>
+              </Drawer>
+            )}
+          </>
+        )}
+      </Box>
+      <ThemeProvider theme={light}>
+        <Box>
+          <AnnualRemunerationGraph
+            data={data}
+            year={year}
+            agency={agency}
+            dataLoading={dataLoading}
+          />
         </Box>
-      )}
-    </>
+        {(!agency?.coletando && !agency?.possui_dados) ||
+        (agency?.coletando && agency?.possui_dados) ? (
+          <Box mt={2}>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6" color="#000">
+                  Índice de transparência
+                  <Tooltip
+                    placement="bottom"
+                    title={
+                      <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                        O Índice de Transparência é composto por duas dimensões:
+                        facilidade e completude. Cada uma das dimensões, por sua
+                        vez, é composta por até seis critérios em cada prestação
+                        de contas, que são avaliados mês a mês. O índice
+                        corresponde à média harmônica das duas dimensões.{' '}
+                        <Link href="/indice" color="inherit">
+                          Saiba mais
+                        </Link>
+                        .
+                      </Typography>
+                    }
+                  >
+                    <IconButton aria-label="Botão de informações">
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Suspense fallback={<CircularProgress />}>
+                  <IndexTabGraph
+                    plotData={plotData}
+                    height={60 * plotData.length}
+                    mobileHeight={95 * plotData.length}
+                    isAgency
+                  />
+                </Suspense>
+              </AccordionDetails>
+            </Accordion>
+          </Box>
+        ) : null}
+      </ThemeProvider>
+
+      <ShareModal
+        isOpen={modalIsOpen}
+        url={`https://dadosjusbr.org/orgao/${id}`}
+        onRequestClose={() => setModalIsOpen(false)}
+      />
+    </Container>
   );
 };
 
-export default AnnualRemunerationGraph;
+export default AgencyPageWithoutNavigation;

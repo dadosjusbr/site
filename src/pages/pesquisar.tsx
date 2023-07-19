@@ -33,8 +33,8 @@ import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 
-import Footer from '../components/Footer';
-import Nav from '../components/Header';
+import Footer from '../components/Essentials/Footer';
+import Nav from '../components/Essentials/Header';
 import light from '../styles/theme-light';
 import api from '../services/api';
 import ShareModal from '../components/ShareModal';

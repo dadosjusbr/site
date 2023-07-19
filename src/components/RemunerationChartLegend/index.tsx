@@ -125,7 +125,7 @@ const index = ({
           {agency && (
             <Tabs
               value={graphType}
-              onChange={(event: React.SyntheticEvent, newValue: any) =>
+              onChange={(event: React.SyntheticEvent, newValue: string) =>
                 setGraphType(newValue)
               }
               variant="scrollable"
