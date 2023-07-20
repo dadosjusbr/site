@@ -1,6 +1,7 @@
-import { GetServerSideProps } from 'next';
-import Head from 'next/head';
 import React, { useEffect, useState } from 'react';
+import { GetServerSideProps } from 'next';
+import { useRouter } from 'next/router';
+import Head from 'next/head';
 import styled from 'styled-components';
 import {
   Box,
@@ -15,15 +16,15 @@ import {
   Typography,
 } from '@mui/material';
 
-import Footer from '../../components/Footer';
-import Header from '../../components/Header';
+import Footer from '../../components/Essentials/Footer';
+import Header from '../../components/Essentials/Header';
 import api from '../../services/api';
-import DropDownGroupSelector from '../../components/DropDownGroupSelector';
+import DropDownGroupSelector from '../../components/Common/DropDownGroupSelector';
 import { getCurrentYear } from '../../functions/currentYear';
-import AgencyWithoutNavigation from '../../components/AgencyWithoutNavigation';
+import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
 import { normalizePlotData } from '../../functions/normalize';
 import { formatToAgency } from '../../functions/format';
-// this constant is used to placehold the max value of a chart data
+
 export default function SummaryPage({ dataList, summary }) {
   const pageTitle = `${formatToAgency(summary)}`;
   const [value, setValue] = useState('');
@@ -149,10 +150,11 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   id,
   title,
 }) => {
+  const router = useRouter();
   // this state is used to store the api fetched data after fetch it
-  const [data, setData] = useState<any[]>([]);
+  const [data, setData] = useState<AnnualSummaryData[]>([]);
   const [year, setYear] = useState(getCurrentYear());
-  const [agencyData, setAgencyData] = useState<any>();
+  const [agencyData, setAgencyData] = useState<Agency>();
   const [agencyTotals, setAgencyTotals] = useState<v2AgencyTotalsYear>();
   const [dataLoading, setDataLoading] = useState(true);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
@@ -168,11 +170,11 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   async function fetchAgencyData() {
     try {
       const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
-      setData(agency.dados_anuais ? agency.dados_anuais : null);
-      setAgencyData(agency.orgao);
-      setYear(agency.dados_anuais?.at(-1).ano);
+      setData(agency?.dados_anuais ? agency?.dados_anuais : null);
+      setAgencyData(agency?.orgao);
+      setYear(agency?.dados_anuais?.at(-1).ano);
     } catch (err) {
-      console.log(err);
+      router.push('/404');
     }
   }
   async function fetchPlotData() {
@@ -182,7 +184,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       );
       setPlotData(transparencyPlot);
     } catch (err) {
-      console.log(err);
+      router.push('/404');
     }
   }
   const fetchAgencyTotalData = async () => {
@@ -193,7 +195,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const fetchAgencyTotalDataRecursive = async (yearParam: number) => {
     try {
       const { data: agencyTotalsResponse } = await api.ui.get(
-        `/v2/orgao/totais/${id}/${year}`,
+        `/v2/orgao/totais/${id}/${yearParam}`,
       );
 
       if (agencyTotalsResponse.meses) {
@@ -203,7 +205,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         await fetchAgencyTotalDataRecursive(previousYear);
       }
     } catch (err) {
-      console.log(err);
+      router.push('/404');
     }
   };
   return (

@@ -1,168 +1,327 @@
-/* eslint-disable no-restricted-syntax */
-import React, { useMemo, useState } from 'react';
-import dynamic from 'next/dynamic';
+import React, { Suspense, useMemo, useState } from 'react';
+import { useRouter } from 'next/router';
+import ReactGA from 'react-ga4';
 import {
+  Container,
   Box,
-  Button,
-  CircularProgress,
   Grid,
-  Paper,
+  IconButton,
   Typography,
+  Button,
+  ThemeProvider,
+  Stack,
+  Accordion,
+  AccordionSummary,
+  Tooltip,
+  AccordionDetails,
+  CircularProgress,
+  Link,
 } from '@mui/material';
+import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import SearchIcon from '@mui/icons-material/Search';
+import InfoIcon from '@mui/icons-material/Info';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import useMediaQuery from '@mui/material/useMediaQuery';
 
-import { graphOptions, graphSeries } from './functions/graphConfigs';
-import CrawlingDateTable from '../CrawlingDateTable';
-import NotCollecting from '../NotCollecting';
-import { monthsWithoutData } from './functions';
-import RemunerationLegend from '../RemunerationChartLegend';
+import ShareModal from '../Common/ShareModal';
+import RemunerationBarGraph from './components/RemunerationChart';
+import * as url from '../../url';
+import light from '../../styles/theme-light';
+import { formatAgency } from '../../functions/format';
+import Drawer from '../Common/Drawer';
+import IndexTabGraph from '../TransparencyChart/IndexTabChart';
+import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 
-const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
-
-export interface RemunerationBarGraphProps {
+export interface AgencyPageWithNavigationProps {
+  id: string;
   year: number;
+  agencyInfo: AllAgencyInformation;
   agency: Agency;
+  title: string;
+  setYear: (y: number) => void;
   data: v2MonthTotals[];
   dataLoading: boolean;
-  selectedMonth?: number;
+  navigableMonth: number;
+  summaryPackage?: Backup;
+  plotData: AggregateIndexes[];
 }
 
-const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
+const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
+  id,
+  agencyInfo,
+  title,
   year,
   agency,
+  setYear,
   data,
-  dataLoading = true,
-  selectedMonth,
+  dataLoading,
+  navigableMonth,
+  summaryPackage,
+  plotData,
 }) => {
-  const [hidingRemunerations, setHidingRemunerations] = useState(false);
-  const [hidingWage, setHidingWage] = useState(false);
-  const [hidingBenefits, setHidingBenefits] = useState(false);
-  const [hidingNoData, setHidingNoData] = useState(false);
-  const [hidingErrors, setHidingErrors] = useState(false);
-  const [graphType, setGraphType] = useState('media-por-membro');
+  const [modalIsOpen, setModalIsOpen] = useState(false);
+  const nextDateIsNavigable = useMemo<boolean>(
+    () => year !== new Date().getFullYear(),
+    [year],
+  );
+  const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
+  const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
+  const matches = useMediaQuery('(max-width:900px)');
+  const router = useRouter();
 
-  const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'remuneracao_base_por_membro';
-    }
-    return 'remuneracao_base';
-  }, [graphType]);
+  function formatBytes(bytes: number, decimals = 2) {
+    if (!+bytes) return '0 Bytes';
 
-  const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'outras_remuneracoes_por_membro';
-    }
-    return 'outras_remuneracoes';
-  }, [graphType]);
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB'];
 
-  const discountsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'descontos_por_membro';
-    }
-    return 'descontos';
-  }, [graphType]);
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+    return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
+  }
 
   return (
-    <>
-      {agency && agency.coletando && !data ? (
-        <NotCollecting agency={agency} />
-      ) : (
-        <>
-          <Paper elevation={0}>
-            <RemunerationLegend
-              agency={agency}
-              data={data}
-              year={year}
-              graphType={graphType}
-              setGraphType={setGraphType}
-              baseRemunerationDataTypes={baseRemunerationDataTypes}
-              otherRemunerationsDataTypes={otherRemunerationsDataTypes}
-              discountsDataTypes={discountsDataTypes}
-              hidingRemunerations={hidingRemunerations}
-              setHidingRemunerations={setHidingRemunerations}
-              hidingWage={hidingWage}
-              setHidingWage={setHidingWage}
-              hidingBenefits={hidingBenefits}
-              setHidingBenefits={setHidingBenefits}
-              hidingNoData={hidingNoData}
-              setHidingNoData={setHidingNoData}
-              monthsWithoutData={monthsWithoutData}
-            />
-            <Box px={2}>
-              {agency && data.length > 0 && !dataLoading && (
-                <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
+    <Container fixed>
+      <Box>
+        <MoreInfoAccordion
+          ombudsman={agencyInfo?.ouvidoria}
+          twitterHandle={agencyInfo?.twitter_handle}
+          timestamp={data?.map(d => d.timestamp.seconds).at(-1)}
+          repository=""
+        >
+          <Typography
+            variant="h2"
+            title="Mais informações sobre o órgão"
+            textAlign="center"
+            width="100%"
+            pb={0}
+          >
+            {title} ({formatAgency(id.toLocaleUpperCase('pt'))})
+          </Typography>
+        </MoreInfoAccordion>
+        {agency && agency.coletando && !data ? (
+          <></>
+        ) : (
+          <>
+            <Grid container justifyContent="center" alignItems="center">
+              <Grid item>
+                <IconButton
+                  aria-label="voltar"
+                  color="info"
+                  onClick={() => setYear(year - 1)}
+                  disabled={!previousDateIsNavigable}
+                >
+                  <ArrowBackIosNewIcon />
+                </IconButton>
+              </Grid>
+              <Grid item>
+                <Typography component="span" variant="h4">
+                  {year}
+                </Typography>
+              </Grid>
+              <Grid item>
+                <IconButton
+                  aria-label="voltar"
+                  color="info"
+                  onClick={() => setYear(year + 1)}
+                  disabled={!nextDateIsNavigable}
+                >
+                  <ArrowForwardIosIcon />
+                </IconButton>
+              </Grid>
+            </Grid>
+
+            {!matches ? (
+              <Box display="flex" justifyContent="space-between">
+                <Stack
+                  spacing={2}
+                  direction="row"
+                  justifyContent="flex-start"
+                  my={4}
+                >
                   <Button
                     variant="outlined"
-                    color="secondary"
-                    endIcon={<ArrowForwardIosIcon />}
-                    href={`/orgao/${agency.id_orgao}/${year}/${selectedMonth}`}
+                    color="info"
+                    startIcon={<ArrowBackIcon />}
+                    onClick={() => router.back()}
                   >
-                    EXPLORAR
+                    VOLTAR
                   </Button>
-                </Grid>
-              )}
-              {dataLoading ? (
-                <Box
-                  m={4}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
+                </Stack>
+
+                <Stack
+                  spacing={2}
+                  direction="row"
+                  justifyContent="flex-end"
+                  my={4}
                 >
-                  <div>
-                    <CircularProgress color="info" />
-                  </div>
-                  <p>Aguarde...</p>
-                </Box>
-              ) : (
-                <>
-                  {data.length > 0 ? (
-                    <Box>
-                      <Chart
-                        options={graphOptions({
-                          agency,
-                          data,
-                          year,
-                          baseRemunerationDataTypes,
-                          otherRemunerationsDataTypes,
-                        })}
-                        series={graphSeries({
-                          data,
-                          year,
-                          agency,
-                          hidingRemunerations,
-                          hidingBenefits,
-                          hidingWage,
-                          hidingErrors,
-                          hidingNoData,
-                          baseRemunerationDataTypes,
-                          otherRemunerationsDataTypes,
-                          discountsDataTypes,
-                        })}
-                        width="100%"
-                        height="500"
-                        type="line"
-                      />
-                    </Box>
-                  ) : (
-                    <Typography variant="body1" mt={2} textAlign="center">
-                      Não há dados para esse ano.
-                    </Typography>
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<IosShareIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    COMPARTILHAR
+                  </Button>
+                  {summaryPackage && (
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      endIcon={<CloudDownloadIcon />}
+                      onClick={() => {
+                        ReactGA.event('file_download', {
+                          category: 'download',
+                          action: `From: ${window.location.pathname}`,
+                        });
+                      }}
+                      href={url.downloadURL(fileLink)}
+                      id="download-button"
+                    >
+                      <Typography variant="button" mr={1}>
+                        BAIXAR
+                      </Typography>
+                      <Typography variant="button" color="#00bfa6">
+                        {formatBytes(summaryPackage.size)}
+                      </Typography>
+                    </Button>
                   )}
-                </>
-              )}
-            </Box>
-            {data && data.length > 0 && agency && (
-              <Box display="flex" justifyContent="center" pb={2}>
-                <CrawlingDateTable data={data} dataLoading={dataLoading} />
+
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<SearchIcon />}
+                    onClick={() => {
+                      router.push(
+                        `/pesquisar?anos=${year}&orgaos=${agency.id_orgao}`,
+                      );
+                    }}
+                  >
+                    PESQUISAR
+                  </Button>
+                </Stack>
               </Box>
+            ) : (
+              <Drawer>
+                <Stack
+                  direction="column"
+                  spacing={1}
+                  justifyContent="flex-start"
+                  mt={3}
+                  mx={6}
+                >
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<IosShareIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    COMPARTILHAR
+                  </Button>
+                  {summaryPackage && (
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      endIcon={<CloudDownloadIcon />}
+                      onClick={() => {
+                        ReactGA.event('file_download', {
+                          category: 'download',
+                          action: `From: ${window.location.pathname}`,
+                        });
+                      }}
+                      href={url.downloadURL(fileLink)}
+                      id="download-button"
+                    >
+                      <Typography variant="button" mr={1}>
+                        BAIXAR
+                      </Typography>
+                      <Typography variant="button" color="#00bfa6">
+                        {formatBytes(summaryPackage.size)}
+                      </Typography>
+                    </Button>
+                  )}
+                  <Button
+                    variant="outlined"
+                    color="info"
+                    endIcon={<SearchIcon />}
+                    onClick={() => {
+                      router.push(
+                        `/pesquisar?anos=${year}&orgaos=${agency.id_orgao}`,
+                      );
+                    }}
+                  >
+                    PESQUISAR
+                  </Button>
+                </Stack>
+              </Drawer>
             )}
-          </Paper>
-        </>
-      )}
-    </>
+          </>
+        )}
+      </Box>
+      <ThemeProvider theme={light}>
+        <Box>
+          <RemunerationBarGraph
+            data={data}
+            year={year}
+            agency={agency}
+            dataLoading={dataLoading}
+            selectedMonth={navigableMonth}
+          />
+        </Box>
+        <Box mt={2} mb={12}>
+          {plotData.length > 0 && (
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6" color="#000">
+                  Índice de transparência
+                  <Tooltip
+                    placement="bottom"
+                    title={
+                      <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                        O Índice de Transparência é composto por duas dimensões:
+                        facilidade e completude. Cada uma das dimensões, por sua
+                        vez, é composta por até seis critérios em cada prestação
+                        de contas, que são avaliados mês a mês. O índice
+                        corresponde à média harmônica das duas dimensões.{' '}
+                        <Link href="/indice" color="inherit">
+                          Saiba mais
+                        </Link>
+                        .
+                      </Typography>
+                    }
+                  >
+                    <IconButton aria-label="Botão de informações">
+                      <InfoIcon />
+                    </IconButton>
+                  </Tooltip>
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Suspense fallback={<CircularProgress />}>
+                  <IndexTabGraph
+                    plotData={plotData}
+                    height={350}
+                    mobileHeight={555}
+                    monthly
+                    isAgency
+                  />
+                </Suspense>
+              </AccordionDetails>
+            </Accordion>
+          )}
+        </Box>
+      </ThemeProvider>
+
+      <ShareModal
+        isOpen={modalIsOpen}
+        url={`https://dadosjusbr.org/orgao/${id}/${year}`}
+        onRequestClose={() => setModalIsOpen(false)}
+      />
+    </Container>
   );
 };
 
-export default RemunerationBarGraph;
+export default AgencyPageWithNavigation;

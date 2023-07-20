@@ -2,7 +2,7 @@ import { useRef, useEffect } from 'react';
 import * as Plot from '@observablehq/plot';
 import { Box, useMediaQuery } from '@mui/material';
 import { formatAgency } from '../../functions/format';
-import IndexChartLegend from '../IndexChartLegend';
+import IndexChartLegend from './components/IndexChartLegend';
 import MONTHS from '../../@types/MONTHS';
 
 export default function IndexTabGraph({
@@ -39,7 +39,7 @@ export default function IndexTabGraph({
     }));
   }
 
-  const tickFormatFunc = (d: any) => {
+  const tickFormatFunc = (d: string | number) => {
     if (monthly && isMobile) {
       return `${MONTHS[d]}`.substring(0, 3);
     }

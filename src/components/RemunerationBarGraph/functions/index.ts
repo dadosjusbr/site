@@ -1,3 +1,4 @@
+import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
 import MONTHS from '../../../@types/MONTHS';
 import { getCurrentYear } from '../../../functions/currentYear';
 
@@ -77,9 +78,14 @@ export const monthsWithoutData = ({
   year: number;
 }): number[] => {
   const months: number[] = [];
+  const date = new Date();
   for (let i = 1; i <= 12; i += 1) {
     if (year === getCurrentYear()) {
-      if (!data?.find(d => d.mes === i) && i < new Date().getMonth()) {
+      if (
+        !data?.find(d => d.mes === i) &&
+        i <= date.getMonth() &&
+        date.getDate() > COLLECT_INFOS.COLLECT_DATE
+      ) {
         months.push(i);
       }
     } else if (!data?.find(d => d.mes === i)) {
@@ -87,4 +93,19 @@ export const monthsWithoutData = ({
     }
   }
   return months;
+};
+
+export const warningMessage = ({
+  data,
+  year,
+}: {
+  data: v2MonthTotals[];
+  year: number;
+}): string => {
+  if (monthsWithoutData({ data, year }).length > 0) {
+    return `Este órgão não publicou os dados de ${
+      monthsWithoutData({ data, year }).length
+    } ${monthsWithoutData({ data, year }).length > 1 ? 'meses.' : 'mês.'}`;
+  }
+  return '';
 };

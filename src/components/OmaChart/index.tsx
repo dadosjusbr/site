@@ -9,9 +9,9 @@ import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 
 import * as url from '../../url';
-import ShareModal from '../ShareModal';
+import ShareModal from '../Common/ShareModal';
 import light from '../../styles/theme-light';
-import Drawer from '../Drawer';
+import Drawer from '../Common/Drawer';
 import { formatBytes } from '../../functions/format';
 import StackButtons from './components/StackButtons';
 import AgencyGenerals from './components/AgencyGenerals';

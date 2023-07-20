@@ -26,7 +26,7 @@ import Snackbar from '@mui/material/Snackbar';
 import {
   setUtmParameters,
   removeUtmParameters,
-} from '../functions/utmParameters';
+} from '../../../functions/utmParameters';
 
 interface ShareModalProps {
   isOpen: boolean;

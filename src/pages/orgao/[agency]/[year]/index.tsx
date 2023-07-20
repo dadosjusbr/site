@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import Header from '../../../../components/Header';
-import Footer from '../../../../components/Footer';
+import Header from '../../../../components/Essentials/Header';
+import Footer from '../../../../components/Essentials/Footer';
 import api from '../../../../services/api';
-import AgencyWithNavigation from '../../../../components/AgencyWithNavigation';
+import AgencyWithNavigation from '../../../../components/RemunerationBarGraph';
 import { normalizeMonthlyPlotData } from '../../../../functions/normalize';
 
 export default function AgencyPage({
@@ -28,7 +28,7 @@ export default function AgencyPage({
   summaryPackage: Backup;
   plotData: AggregateIndexes[];
 }) {
-  const [MI, setMI] = useState<SummaryzedMI[]>([]);
+  const [agencyInfo, setAgencyInfo] = useState<AllAgencyInformation>();
   const router = useRouter();
   function navigateToGivenYear(y: number) {
     router.push(`/orgao/${id}/${y}`);
@@ -40,11 +40,12 @@ export default function AgencyPage({
   }, []);
   const fetchMIData = async () => {
     try {
-      const { data: mi } = await api.default.get(`/dados/${id}/${year}`);
-      setMI(mi);
+      const { data: agencyInfoResponse } = await api.default.get(
+        `/dados/${id}`,
+      );
+      setAgencyInfo(agencyInfoResponse);
     } catch (error) {
-      console.log(error);
-      router.push(`/404`);
+      setAgencyInfo(null);
     }
   };
   return (
@@ -66,7 +67,7 @@ export default function AgencyPage({
         <AgencyWithNavigation
           data={data}
           id={id}
-          mi={MI}
+          agencyInfo={agencyInfo}
           year={year}
           agency={agency}
           dataLoading={false}
@@ -95,27 +96,29 @@ export const getServerSideProps: GetServerSideProps = async context => {
     return {
       props: {
         id,
-        data: agency.meses ? agency.meses : [],
+        data: agency?.meses,
         year: parseInt(year as string, 10),
-        agency: agency.orgao,
+        agency: agency?.orgao,
         nextDateIsNavigable:
           parseInt(year as string, 10) !== new Date().getFullYear(),
         previousDateIsNavigable: parseInt(year as string, 10) !== 2018,
-        navigableMonth: agency.meses
-          ? agency.meses[agency.meses.length - 1].mes
+        navigableMonth: agency?.meses
+          ? agency?.meses[agency?.meses.length - 1].mes
           : 1,
-        fullName: agency.orgao.nome,
-        summaryPackage: agency.package || null,
+        fullName: agency?.orgao?.nome,
+        summaryPackage: agency?.package || null,
         plotData,
       },
     };
   } catch (err) {
-    context.res.writeHead(301, {
-      Location: `/404`,
-    });
-    context.res.end();
+    const { data: agency } = await api.ui.get(`/v2/orgao/totais/${id}/${year}`);
     return {
-      props: {},
+      props: {
+        id,
+        year: parseInt(year as string, 10),
+        fullName: agency?.orgao?.nome || '',
+        data: [],
+      },
     };
   }
 };

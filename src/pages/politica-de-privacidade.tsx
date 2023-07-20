@@ -2,8 +2,8 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import { Grid, Link } from '@mui/material';
 
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Footer from '../components/Essentials/Footer';
+import Header from '../components/Essentials/Header';
 
 export default function PrivacityPolicy() {
   return (

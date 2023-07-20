@@ -1,8 +1,8 @@
 import { Typography, Box, Button } from '@mui/material';
 import Head from 'next/head';
 import Image from 'next/image';
-import Footer from '../components/Footer';
-import Header from '../components/Header';
+import Footer from '../components/Essentials/Footer';
+import Header from '../components/Essentials/Header';
 
 function Error() {
   return (

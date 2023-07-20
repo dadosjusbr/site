@@ -2,8 +2,8 @@ import Head from 'next/head';
 import styled from 'styled-components';
 import { Container, Grid, Typography, Link } from '@mui/material';
 
-import Footer from '../components/Footer';
-import Nav from '../components/Header';
+import Footer from '../components/Essentials/Footer';
+import Nav from '../components/Essentials/Header';
 
 export default function Index() {
   return (

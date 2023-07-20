@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { Box, CircularProgress } from '@mui/material';
-import Header from '../../../components/Header';
-import Footer from '../../../components/Footer';
+import Header from '../../../components/Essentials/Header';
+import Footer from '../../../components/Essentials/Footer';
 import api from '../../../services/api';
 import { getCurrentYear } from '../../../functions/currentYear';
 import { normalizePlotData } from '../../../functions/normalize';
 
 const AgencyWithoutNavigation = dynamic(
-  () => import('../../../components/AgencyWithoutNavigation'),
+  () => import('../../../components/AnnualRemunerationGraph'),
   { loading: () => <CircularProgress />, ssr: false },
 );
 
@@ -27,6 +28,7 @@ export default function AnualAgencyPage({
   fullName: string;
   plotData: AggregateIndexes[];
 }) {
+  const router = useRouter();
   const [year, setYear] = useState(getCurrentYear());
   const [agencyTotals, setAgencyTotals] = useState<v2AgencyTotalsYear>();
   useEffect(() => {
@@ -49,7 +51,7 @@ export default function AnualAgencyPage({
   const fetchAgencyTotalDataRecursive = async (yearParam: number) => {
     try {
       const { data: agencyTotalsResponse } = await api.ui.get(
-        `/v2/orgao/totais/${id}/${year}`,
+        `/v2/orgao/totais/${id}/${yearParam}`,
       );
 
       if (agencyTotalsResponse.meses) {
@@ -59,7 +61,7 @@ export default function AnualAgencyPage({
         await fetchAgencyTotalDataRecursive(previousYear);
       }
     } catch (err) {
-      console.log(err);
+      router.push('/404');
     }
   };
   return (
@@ -96,10 +98,20 @@ export default function AnualAgencyPage({
 
 export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id } = context.params;
+
+  let plotData: AggregateIndexes[] = [];
+
+  try {
+    const { data: plotDataResponse } = await api.default.get(
+      `/indice/orgao/${id}`,
+    );
+    plotData = plotDataResponse;
+  } catch (err) {
+    plotData = [];
+  }
+
   try {
     const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
-    const { data: plotData } = await api.default.get(`/indice/orgao/${id}`);
-
     return {
       props: {
         id,

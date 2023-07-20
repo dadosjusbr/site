@@ -11,8 +11,8 @@ import {
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-import STATE_AGENCIES from '../@types/STATE_AGENCIES';
-import { formatToAgency } from '../functions/format';
+import STATE_AGENCIES from '../../../@types/STATE_AGENCIES';
+import { formatToAgency } from '../../../functions/format';
 
 export interface DropDownGroupSelectorProps
   extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange'> {

@@ -36,7 +36,7 @@ export const yearList = (): number[] => {
   return list;
 };
 
-export const yearsWithoutData = (data: AnnualSummaryData[]): number[] =>
+const yearsWithoutData = (data: AnnualSummaryData[]): number[] =>
   yearList()?.filter(
     returnedYear => !yearsWithData(data)?.includes(returnedYear),
   );
@@ -55,11 +55,7 @@ export const getYearWithIncompleteData = (
         d.meses_com_dados < 9 - new Date().getMonth()),
   );
 
-export const monthsWithoutData = ({
-  data,
-}: {
-  data: AnnualSummaryData[];
-}): number => {
+const monthsWithoutData = ({ data }: { data: AnnualSummaryData[] }): number => {
   let monthsCount = 0;
   data
     ?.map(d => {
@@ -207,7 +203,7 @@ export const warningMessage = (
   data: AnnualSummaryData[],
   baseRemunerationDataTypes: string,
   otherRemunerationsDataTypes: string,
-) => {
+): string => {
   if (
     noData({
       data,

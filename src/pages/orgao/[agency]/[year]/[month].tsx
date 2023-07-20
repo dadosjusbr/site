@@ -17,13 +17,13 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 import MONTHS from '../../../../@types/MONTHS';
-import Footer from '../../../../components/Footer';
-import Header from '../../../../components/Header';
+import Footer from '../../../../components/Essentials/Footer';
+import Header from '../../../../components/Essentials/Header';
 import api from '../../../../services/api';
 import OMASummary from '../../../../components/OmaChart';
-import ErrorTable from '../../../../components/ErrorTable';
-import MonthPopover from '../../../../components/MonthPopover';
-import MoreInfoAccordion from '../../../../components/MoreInfoAccordion';
+import ErrorTable from '../../../../components/Common/ErrorTable';
+import MonthPopover from '../../../../components/Common/MonthPopover';
+import MoreInfoAccordion from '../../../../components/Common/MoreInfoAccordion';
 
 function UnixToHumanDate(unix) {
   const d = new Date(unix * 1000);
@@ -103,7 +103,6 @@ export default function OmaPage({
       );
       setAgencyInfo(agencyObj);
     } catch (error) {
-      console.log(error);
       router.push('/404');
     }
   }
@@ -143,7 +142,7 @@ export default function OmaPage({
             ombudsman={agencyInfo?.ouvidoria}
             timestamp={oma?.timestamp.seconds}
             twitterHandle={agencyInfo?.twitter_handle}
-            repository={mi?.dados_coleta.repositorio_coletor}
+            repository={mi?.dados_coleta?.repositorio_coletor}
           >
             <Typography
               variant="h2"
@@ -275,7 +274,7 @@ export default function OmaPage({
                 />
               );
             }
-            return <ErrorTable agency={agency} month={month} year={year} />;
+            return <ErrorTable agency={agencyInfo} month={month} year={year} />;
           })()}
       </Container>
       <Footer />
@@ -347,7 +346,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
         agency,
         year,
         month,
-        mi,
         previousButtonActive: isAfter(date, new Date(2018, 1, 1)),
         nextButtonActive: isBefore(date, nextMonth),
       },

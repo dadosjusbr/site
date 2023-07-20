@@ -6,7 +6,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import theme from '../styles/theme-dark';
 import { PrivacityPolicyProvider } from '../contexts/privacity-policy-context';
-import GATracker from '../components/GATracker';
+import GATracker from '../components/Common/GATracker';
 /*
 o _app.tsx nesse caso está sendo utilizado para conseguirmos
 usar a api de contextos do next, ela permite compartilharmos funcionalidades

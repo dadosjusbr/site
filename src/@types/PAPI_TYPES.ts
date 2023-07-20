@@ -86,7 +86,7 @@ type IndexInformation = {
   metadados: Metadata;
 };
 
-type allAgencyInformation = {
+type AllAgencyInformation = {
   id_orgao: string;
   nome: string;
   jurisdicao: string;

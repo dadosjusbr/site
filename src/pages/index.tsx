@@ -21,8 +21,8 @@ import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import SearchIcon from '@mui/icons-material/Search';
 
-import Header from '../components/Header';
-import DropDownGroupSelector from '../components/DropDownGroupSelector';
+import Header from '../components/Essentials/Header';
+import DropDownGroupSelector from '../components/Common/DropDownGroupSelector';
 import api from '../services/api';
 import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
@@ -30,7 +30,8 @@ import { getCurrentYear } from '../functions/currentYear';
 import COLLECT_INFOS from '../@types/COLLECT_INFOS';
 
 const RemunerationBarGraph = dynamic(
-  () => import('../components/RemunerationBarGraph'),
+  () =>
+    import('../components/RemunerationBarGraph/components/RemunerationChart'),
   { loading: () => <CircularProgress /> },
 );
 const IndexTabGraph = dynamic(
@@ -39,7 +40,7 @@ const IndexTabGraph = dynamic(
     loading: () => <CircularProgress />,
   },
 );
-const Footer = dynamic(() => import('../components/Footer'));
+const Footer = dynamic(() => import('../components/Essentials/Footer'));
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -406,7 +407,7 @@ export default function Index({
     </Page>
   );
 }
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getServerSideProps: GetServerSideProps = async () => {
   try {
     const { data } = await api.ui.get('/v2/geral/resumo');
     const res = await api.default.get('/orgaos');
