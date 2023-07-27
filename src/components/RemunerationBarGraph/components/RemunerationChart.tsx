@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import React, { useMemo, useState } from 'react';
 import dynamic from 'next/dynamic';
+import Image from 'next/image';
 import {
   Box,
   Button,
@@ -69,24 +70,30 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
       ) : (
         <>
           <Paper elevation={0}>
-            <RemunerationLegend
-              agency={agency}
-              data={data}
-              graphType={graphType}
-              setGraphType={setGraphType}
-              baseRemunerationDataTypes={baseRemunerationDataTypes}
-              otherRemunerationsDataTypes={otherRemunerationsDataTypes}
-              discountsDataTypes={discountsDataTypes}
-              hidingRemunerations={hidingRemunerations}
-              setHidingRemunerations={setHidingRemunerations}
-              hidingWage={hidingWage}
-              setHidingWage={setHidingWage}
-              hidingBenefits={hidingBenefits}
-              setHidingBenefits={setHidingBenefits}
-              hidingNoData={hidingNoData}
-              setHidingNoData={setHidingNoData}
-              warningMessage={warningMessage({ data, year })}
-            />
+            {data.length > 0 ? (
+              <RemunerationLegend
+                agency={agency}
+                data={data}
+                graphType={graphType}
+                setGraphType={setGraphType}
+                baseRemunerationDataTypes={baseRemunerationDataTypes}
+                otherRemunerationsDataTypes={otherRemunerationsDataTypes}
+                discountsDataTypes={discountsDataTypes}
+                hidingRemunerations={hidingRemunerations}
+                setHidingRemunerations={setHidingRemunerations}
+                hidingWage={hidingWage}
+                setHidingWage={setHidingWage}
+                hidingBenefits={hidingBenefits}
+                setHidingBenefits={setHidingBenefits}
+                hidingNoData={hidingNoData}
+                setHidingNoData={setHidingNoData}
+                warningMessage={warningMessage({ data, year })}
+              />
+            ) : (
+              <Box display="flex" alignItems="center" justifyContent="center">
+                <Image src="/img/undraw_cancel.svg" width={200} height={200} />
+              </Box>
+            )}
             <Box px={2}>
               {agency && data.length > 0 && !dataLoading && (
                 <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>

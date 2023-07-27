@@ -77,7 +77,7 @@ export default function index({
             BAIXAR
           </Typography>
           <Typography variant="button" color="#00bfa6">
-            {formatBytes(mi.pacote_de_dados.size)}
+            {formatBytes(mi?.pacote_de_dados?.size)}
           </Typography>
         </Button>
         <Button

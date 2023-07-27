@@ -30,9 +30,9 @@ const index = ({
         <Typography variant="h6" textAlign="center">
           Índice de transparência:{' '}
           <b>
-            {mi.indice_transparencia.indice_transparencia === undefined
+            {mi?.indice_transparencia?.indice_transparencia === undefined
               ? 'Indisponível'
-              : mi.indice_transparencia.indice_transparencia.toFixed(2)}
+              : mi?.indice_transparencia?.indice_transparencia?.toFixed(2)}
           </b>
           <Tooltip
             placement="top"
@@ -62,9 +62,9 @@ const index = ({
               <ListItem>
                 <ListItemText
                   primary={`Índice de completude: ${
-                    mi.indice_transparencia.indice_completude === undefined
+                    mi?.indice_transparencia?.indice_completude === undefined
                       ? 'Indisponível'
-                      : mi.indice_transparencia.indice_completude.toFixed(2)
+                      : mi?.indice_transparencia?.indice_completude.toFixed(2)
                   }`}
                   primaryTypographyProps={{
                     variant: 'h6',
@@ -72,8 +72,8 @@ const index = ({
                 />
               </ListItem>
               <ListItem>
-                {mi.metadados.tem_lotacao == null ||
-                mi.metadados.tem_lotacao === false ? (
+                {mi?.metadados?.tem_lotacao == null ||
+                mi?.metadados?.tem_lotacao === false ? (
                   <ListItemIcon>
                     <Close color="error" />
                   </ListItemIcon>
@@ -85,15 +85,15 @@ const index = ({
                 <ListItemText
                   primary="Tem lotação"
                   sx={{
-                    textDecoration: mi.metadados.tem_lotacao
+                    textDecoration: mi?.metadados?.tem_lotacao
                       ? null
                       : 'line-through',
                   }}
                 />
               </ListItem>
               <ListItem>
-                {mi.metadados.tem_cargo == null ||
-                mi.metadados.tem_cargo === false ? (
+                {mi?.metadados?.tem_cargo == null ||
+                mi?.metadados?.tem_cargo === false ? (
                   <ListItemIcon>
                     <Close color="error" />
                   </ListItemIcon>
@@ -105,15 +105,15 @@ const index = ({
                 <ListItemText
                   primary="Tem cargo"
                   sx={{
-                    textDecoration: mi.metadados.tem_cargo
+                    textDecoration: mi?.metadados?.tem_cargo
                       ? null
                       : 'line-through',
                   }}
                 />
               </ListItem>
               <ListItem>
-                {mi.metadados.tem_matricula == null ||
-                mi.metadados.tem_matricula === false ? (
+                {mi?.metadados?.tem_matricula == null ||
+                mi?.metadados?.tem_matricula === false ? (
                   <ListItemIcon>
                     <Close color="error" />
                   </ListItemIcon>
@@ -125,7 +125,7 @@ const index = ({
                 <ListItemText
                   primary="Tem matrícula e nome"
                   sx={{
-                    textDecoration: mi.metadados.tem_matricula
+                    textDecoration: mi?.metadados?.tem_matricula
                       ? null
                       : 'line-through',
                   }}
@@ -135,7 +135,7 @@ const index = ({
                 <ListItemText
                   primary={
                     <HandleDataTypes
-                      type={mi.metadados.remuneracao_basica}
+                      type={mi?.metadados?.remuneracao_basica}
                       text="remuneração básica"
                     />
                   }
@@ -145,7 +145,7 @@ const index = ({
                 <ListItemText
                   primary={
                     <HandleDataTypes
-                      type={mi.metadados.despesas}
+                      type={mi?.metadados?.despesas}
                       text="descontos"
                     />
                   }
@@ -155,7 +155,7 @@ const index = ({
                 <ListItemText
                   primary={
                     <HandleDataTypes
-                      type={mi.metadados.outras_receitas}
+                      type={mi?.metadados?.outras_receitas}
                       text="outras receitas"
                     />
                   }
@@ -168,9 +168,9 @@ const index = ({
               <ListItem>
                 <ListItemText
                   primary={`Índice de facilidade: ${
-                    mi.indice_transparencia.indice_facilidade === undefined
+                    mi?.indice_transparencia?.indice_facilidade === undefined
                       ? 'Indisponível'
-                      : mi.indice_transparencia.indice_facilidade.toFixed(2)
+                      : mi?.indice_transparencia?.indice_facilidade.toFixed(2)
                   }`}
                   primaryTypographyProps={{
                     variant: 'h6',
@@ -179,13 +179,13 @@ const index = ({
               </ListItem>
               <ListItem>
                 <ListItemText
-                  primary={<HandleAccess text={mi.metadados.acesso} />}
+                  primary={<HandleAccess text={mi?.metadados?.acesso} />}
                 />
               </ListItem>
               <ListItem>
                 <ListItemIcon>
-                  {mi.metadados.manteve_consistencia_no_formato == null ||
-                  mi.metadados.manteve_consistencia_no_formato === false ? (
+                  {mi?.metadados?.manteve_consistencia_no_formato == null ||
+                  mi?.metadados?.manteve_consistencia_no_formato === false ? (
                     <Close color="error" />
                   ) : (
                     <Done color="success" />
@@ -194,7 +194,8 @@ const index = ({
                 <ListItemText
                   primary="Manteve consistência no formato"
                   sx={{
-                    textDecoration: mi.metadados.manteve_consistencia_no_formato
+                    textDecoration: mi?.metadados
+                      ?.manteve_consistencia_no_formato
                       ? null
                       : 'line-through',
                   }}
@@ -202,8 +203,8 @@ const index = ({
               </ListItem>
               <ListItem>
                 <ListItemIcon>
-                  {mi.metadados.dados_estritamente_tabulares == null ||
-                  mi.metadados.dados_estritamente_tabulares === false ? (
+                  {mi?.metadados?.dados_estritamente_tabulares == null ||
+                  mi?.metadados?.dados_estritamente_tabulares === false ? (
                     <Close color="error" />
                   ) : (
                     <Done color="success" />
@@ -212,15 +213,15 @@ const index = ({
                 <ListItemText
                   primary="Dados estritamente tabulares"
                   sx={{
-                    textDecoration: mi.metadados.dados_estritamente_tabulares
+                    textDecoration: mi?.metadados?.dados_estritamente_tabulares
                       ? null
                       : 'line-through',
                   }}
                 />
               </ListItem>
               <ListItem>
-                {mi.metadados.formato_aberto == null ||
-                mi.metadados.formato_aberto === false ? (
+                {mi?.metadados?.formato_aberto == null ||
+                mi?.metadados?.formato_aberto === false ? (
                   <ListItemIcon>
                     <Close color="error" />
                   </ListItemIcon>
@@ -232,7 +233,7 @@ const index = ({
                 <ListItemText
                   primary="Possui formato aberto"
                   sx={{
-                    textDecoration: mi.metadados.formato_aberto
+                    textDecoration: mi?.metadados?.formato_aberto
                       ? null
                       : 'line-through',
                   }}

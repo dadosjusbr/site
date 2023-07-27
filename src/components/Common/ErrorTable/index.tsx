@@ -1,6 +1,13 @@
 import React, { useState } from 'react';
-
-import { Box, Paper, Button, Stack, ThemeProvider } from '@mui/material';
+import Image from 'next/image';
+import {
+  Box,
+  Paper,
+  Button,
+  Stack,
+  ThemeProvider,
+  Typography,
+} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 import MONTHS from '../../../@types/MONTHS';
@@ -58,10 +65,13 @@ const ErrorTable: React.FC<{
             </TransitionModal>
           </Stack>
           <Paper elevation={0}>
-            <Box p={4}>
-              Não temos dados para o{' '}
-              <strong>{agency?.id_orgao.toUpperCase()}</strong> em{' '}
-              {MONTHS[month]} de {year}.
+            <Box textAlign="center">
+              <Image src="/img/undraw_cancel.svg" width={200} height={200} />
+              <Typography variant="body1" py={2}>
+                Não temos dados para o{' '}
+                <strong>{agency?.id_orgao.toUpperCase()}</strong> em{' '}
+                {MONTHS[month]} de {year}.
+              </Typography>
             </Box>
           </Paper>
         </Box>
