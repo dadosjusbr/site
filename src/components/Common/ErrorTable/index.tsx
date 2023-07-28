@@ -69,7 +69,11 @@ const ErrorTable: React.FC<{
               <Image src="/img/undraw_cancel.svg" width={200} height={200} />
               <Typography variant="body1" py={2}>
                 O <strong>{agency?.id_orgao.toUpperCase()}</strong> não
-                disponibilizou os dados de {MONTHS[month]} de {year}.
+                disponibilizou os dados de{' '}
+                <strong>
+                  {MONTHS[month]} de {year}
+                </strong>
+                .
               </Typography>
             </Box>
           </Paper>
