@@ -68,9 +68,8 @@ const ErrorTable: React.FC<{
             <Box textAlign="center">
               <Image src="/img/undraw_cancel.svg" width={200} height={200} />
               <Typography variant="body1" py={2}>
-                Não temos dados para o{' '}
-                <strong>{agency?.id_orgao.toUpperCase()}</strong> em{' '}
-                {MONTHS[month]} de {year}.
+                O <strong>{agency?.id_orgao.toUpperCase()}</strong> não
+                disponibilizou os dados de {MONTHS[month]} de {year}.
               </Typography>
             </Box>
           </Paper>

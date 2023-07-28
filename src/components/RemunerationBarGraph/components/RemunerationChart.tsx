@@ -153,7 +153,8 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                     </Box>
                   ) : (
                     <Typography variant="body1" py={2} textAlign="center">
-                      Não há dados para esse ano.
+                      O <strong>{agency?.id_orgao.toUpperCase()}</strong> não
+                      disponibilizou os dados de <strong>{year}</strong>.
                     </Typography>
                   )}
                 </>
