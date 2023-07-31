@@ -37,19 +37,28 @@ const index = ({
             sx={{ mt: 2, textAlign: 'justify' }}
           >
             Para ajudar a incluir os dados deste tribunal no DadosJusBr, você
-            pode protocolar um requerimento na ouvidoria solicitando mudanças na
-            {agency?.coletando[0].descricao.map((desc: string, i: number) => (
-              <span key={desc}>
-                {` ${desc.split(' ').at(0).toLowerCase()} ${desc
-                  .split(' ')
-                  .at(1)} ${desc.split(' ').at(2)}
+            pode protocolar um requerimento na ouvidoria
+            {agency?.coletando ? (
+              <span>
+                solicitando mudanças na
+                {agency?.coletando[0].descricao.map(
+                  (desc: string, i: number) => (
+                    <span key={desc}>
+                      {` ${desc.split(' ').at(0).toLowerCase()} ${desc
+                        .split(' ')
+                        .at(1)} ${desc.split(' ').at(2)}
                     ${
                       agency?.coletando[0].descricao.length > 1 && i === 0
                         ? 'e'
                         : ''
                     }`}
+                    </span>
+                  ),
+                )}
               </span>
-            ))}
+            ) : (
+              '.'
+            )}
           </Typography>
           <Box display="flex" justifyContent="center" mt={2}>
             <Button

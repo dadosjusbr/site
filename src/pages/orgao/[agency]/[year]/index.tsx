@@ -96,7 +96,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
     return {
       props: {
         id,
-        data: agency?.meses,
+        data: agency?.meses || [],
         year: parseInt(year as string, 10),
         agency: agency?.orgao,
         nextDateIsNavigable:

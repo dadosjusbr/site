@@ -65,14 +65,14 @@ const index = ({ mi, agency }: { mi: SummaryzedMI; agency: string }) => (
           <Grid container>
             <Grid item xs={12} md={6}>
               <List dense>
-                {mi.dados_coleta.repositorio_coletor !== undefined ? (
+                {mi?.dados_coleta?.repositorio_coletor !== undefined ? (
                   <ListItem
                     button
                     component="a"
                     target="_blank"
                     href={formatLink({
-                      version: mi.dados_coleta.versao_coletor,
-                      repository: mi.dados_coleta.repositorio_coletor,
+                      version: mi?.dados_coleta?.versao_coletor,
+                      repository: mi?.dados_coleta?.repositorio_coletor,
                       agency,
                     })}
                   >
@@ -90,9 +90,9 @@ const index = ({ mi, agency }: { mi: SummaryzedMI; agency: string }) => (
                   </ListItemIcon>
                   <ListItemText
                     primary={`Duração da Coleta: ${
-                      mi.dados_coleta.duracao_segundos === undefined
+                      mi?.dados_coleta?.duracao_segundos === undefined
                         ? 'Indisponível'
-                        : new Date(mi.dados_coleta.duracao_segundos * 1000)
+                        : new Date(mi?.dados_coleta?.duracao_segundos * 1000)
                             .toISOString()
                             .slice(11, 19)
                     }`}
@@ -102,14 +102,14 @@ const index = ({ mi, agency }: { mi: SummaryzedMI; agency: string }) => (
             </Grid>
             <Grid item xs={12} md={6}>
               <List dense>
-                {mi.dados_coleta.repositorio_parser !== undefined ? (
+                {mi?.dados_coleta?.repositorio_parser !== undefined ? (
                   <ListItem
                     button
                     component="a"
                     target="_blank"
                     href={formatLink({
-                      version: mi.dados_coleta.versao_parser,
-                      repository: mi.dados_coleta.repositorio_parser,
+                      version: mi?.dados_coleta?.versao_parser,
+                      repository: mi?.dados_coleta?.repositorio_parser,
                       agency,
                     })}
                   >

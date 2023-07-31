@@ -37,10 +37,11 @@ export default function MonthPopover({ children, agency, year }) {
   return (
     <div>
       <Typography
-        component="span"
         variant="h4"
         aria-describedby={id}
         onClick={handleClick}
+        textAlign="center"
+        sx={{ cursor: 'pointer' }}
       >
         {children}
       </Typography>
@@ -54,20 +55,18 @@ export default function MonthPopover({ children, agency, year }) {
           horizontal: 'left',
         }}
       >
-        <Typography sx={{ p: 2 }}>
-          {list.map(month => (
-            <Typography
-              key={month}
-              sx={{
-                width: 145,
-                cursor: 'pointer',
-              }}
-              onClick={selectMonth.bind(this, list.indexOf(month) + 1)}
-            >
-              <Button sx={{ width: '100%' }}>{month}</Button>
-            </Typography>
-          ))}
-        </Typography>
+        {list.map(month => (
+          <Typography
+            key={month}
+            sx={{
+              width: 145,
+              cursor: 'pointer',
+            }}
+            onClick={selectMonth.bind(this, list.indexOf(month) + 1)}
+          >
+            <Button sx={{ width: '100%' }}>{month}</Button>
+          </Typography>
+        ))}
       </Popover>
     </div>
   );

@@ -168,13 +168,7 @@ export default function OmaPage({
             </Grid>
             <Grid item>
               <MonthPopover agency={agency} year={year}>
-                <Typography
-                  variant="h4"
-                  textAlign="center"
-                  sx={{ cursor: 'pointer' }}
-                >
-                  {MONTHS[month]} {year}
-                </Typography>
+                {MONTHS[month]} {year}
               </MonthPopover>
             </Grid>
             <Grid item>
