@@ -127,8 +127,8 @@ const index = ({
                 funcionário de acordo com a lei, como imposto de renda,
                 contribuição para previdência, pensão alimentícia, entre outros.
                 <hr />
-                <b>Membros:</b> Participantes ativos do órgao, incluindo os
-                servidores públicos, os militares e os membros do Poder
+                <b>Membros:</b> Participantes {/* ativos */} do órgao, incluindo
+                os servidores públicos, os militares e os membros do Poder
                 Judiciário.
                 <hr />
                 <b>Servidor:</b> Funcionário público que exerce cargo ou função

@@ -8,6 +8,7 @@ import Footer from '../../../../components/Essentials/Footer';
 import api from '../../../../services/api';
 import AgencyWithNavigation from '../../../../components/RemunerationBarGraph';
 import { normalizeMonthlyPlotData } from '../../../../functions/normalize';
+import { formatAgency } from '../../../../functions/format';
 
 export default function AgencyPage({
   id,
@@ -33,7 +34,7 @@ export default function AgencyPage({
   function navigateToGivenYear(y: number) {
     router.push(`/orgao/${id}/${y}`);
   }
-  const pageTitle = `${id.toUpperCase()} - ${year}`;
+  const pageTitle = `${formatAgency(id).toUpperCase()} / ${year}`;
 
   useEffect(() => {
     fetchMIData();

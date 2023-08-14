@@ -23,9 +23,32 @@ import DropDownGroupSelector from '../../components/Common/DropDownGroupSelector
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
 import { normalizePlotData } from '../../functions/normalize';
-import { formatToAgency } from '../../functions/format';
+import { extractNumbers, formatToAgency } from '../../functions/format';
 
-export default function SummaryPage({ dataList, summary }) {
+function orderStringsWithNum(string1: string, string2: string) {
+  const num1 = extractNumbers(string1);
+  const num2 = extractNumbers(string2);
+
+  const texto1 = string1.replace(/\d+$/, '');
+  const texto2 = string2.replace(/\d+$/, '');
+
+  if (texto1 < texto2) {
+    return -1;
+  }
+  if (texto1 > texto2) {
+    return 1;
+  }
+
+  return num1 - num2;
+}
+
+export default function SummaryPage({
+  dataList,
+  summary,
+}: {
+  dataList: v2AgencyBasic[];
+  summary: string;
+}) {
   const pageTitle = `${formatToAgency(summary)}`;
   const [value, setValue] = useState('');
   return (
@@ -87,15 +110,7 @@ export default function SummaryPage({ dataList, summary }) {
                 </ListSubheader>
 
                 {dataList
-                  .sort((a, b) => {
-                    if (a.id_orgao < b.id_orgao) {
-                      return -1;
-                    }
-                    if (a.id_orgao > b.id_orgao) {
-                      return 1;
-                    }
-                    return 1;
-                  })
+                  .sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao))
                   .map(ag => (
                     <MenuItem
                       key={ag.id_orgao}

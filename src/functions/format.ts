@@ -1,14 +1,23 @@
 function formatAgency(aid: string): string {
+  const strNumbers = extractNumbers(aid);
+
   if (aid.toLowerCase() === 'tjdft' || aid.toLowerCase() === 'mpdft')
     return `${aid.substring(0, 2)}-${aid.substring(2, 5)}`;
-  if (
-    aid.toLowerCase().startsWith('trt') ||
-    aid.toLowerCase().startsWith('trf')
-  )
-    return aid;
-  if (aid.length === 4) return `${aid.substring(0, 2)}-${aid.substring(2, 4)}`;
-  if (aid.length === 5) return `${aid.substring(0, 3)}-${aid.substring(3, 5)}`;
+
+  if (strNumbers > 0) return `${aid.replace(/\d+/g, '')}-${strNumbers}`;
+
+  if (aid.length > 3)
+    return `${aid.substring(0, aid.length - 2)}-${aid.substring(
+      aid.length - 2,
+      aid.length,
+    )}`;
+
   return aid;
+}
+
+function extractNumbers(str: string): number {
+  const matches = str.match(/\d+$/);
+  return matches ? parseInt(matches[0], 10) : -1;
 }
 
 function formatToAgency(input: string): string {
@@ -42,4 +51,11 @@ const formatBytes = (bytes: number, decimals = 2) => {
 
   return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
 };
-export { formatAgency, formatToAgency, formatCurrencyValue, formatBytes };
+
+export {
+  formatAgency,
+  extractNumbers,
+  formatToAgency,
+  formatCurrencyValue,
+  formatBytes,
+};
