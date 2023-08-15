@@ -9,7 +9,7 @@ const index = ({ chartData }: { chartData: AgencyRemuneration }) => (
     <Paper elevation={0}>
       <Box pt={4} py={4} px={2}>
         <Typography variant="h6" textAlign="center">
-          Distribuição de remunerações de membros {/* ativos */}
+          Distribuição de remunerações de membros
         </Typography>
         <Box px={2}>
           {!chartData.histograma ? (
