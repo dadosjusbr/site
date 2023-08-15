@@ -44,7 +44,7 @@ const index = ({
     <Paper elevation={0}>
       <Box p={2} pb={0} textAlign="center">
         <Typography variant="h6">
-          Resumo de remunerações de membros {/* ativo */}
+          Resumo de remunerações de membros
           <Tooltip
             placement="bottom"
             title={
