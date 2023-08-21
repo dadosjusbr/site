@@ -7,27 +7,16 @@ import {
   Container,
   Box,
   Typography,
-  TextField,
-  Autocomplete,
-  Checkbox,
   Grid,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  SelectChangeEvent,
   Paper,
   Button,
   CircularProgress,
   Link,
   Alert,
 } from '@mui/material';
-import { createFilterOptions } from '@mui/material/Autocomplete';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import { ThemeProvider } from '@mui/material/styles';
 import LoadingButton from '@mui/lab/LoadingButton';
-import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
@@ -37,11 +26,9 @@ import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
 import light from '../styles/theme-light';
 import api from '../services/api';
+import Search from '../components/Search';
 import ShareModal from '../components/Common/ShareModal';
 import { getCurrentYear } from '../functions/currentYear';
-
-const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
-const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 const columns: GridColDef[] = [
   { field: 'id', headerName: '#', width: 50 },
@@ -65,8 +52,8 @@ const columns: GridColDef[] = [
   { field: 'valor', headerName: 'Valor', width: 120 },
 ];
 
-export default function Index({ ais }) {
-  const years = [];
+export default function Index({ ais }: { ais: Agency[] }) {
+  const years: number[] = [];
   for (let i = getCurrentYear(); i >= 2018; i--) {
     years.push(i);
   }
@@ -88,7 +75,7 @@ export default function Index({ ais }) {
   const [selectedYears, setSelectedYears] = React.useState(getCurrentYear());
   const [selectedMonths, setSelectedMonths] = React.useState(months);
   const [selectedAgencies, setSelectedAgencies] = React.useState([]);
-  const [agencies, setAgencies] = React.useState(ais);
+  const [agencies, setAgencies] = React.useState<Agency[]>(ais);
   const [loading, setLoading] = React.useState(false);
   const [type, setType] = React.useState('Tudo');
   const [category, setCategory] = React.useState('Tudo');
@@ -153,13 +140,6 @@ export default function Index({ ais }) {
         'meses',
         selectedMonths.map(m => String(m.value)),
       );
-      // O tipo está sendo usado apenas para filtro dos órgãos na interface
-      // const qType = makeQueryFromValue(
-      //   'tipos',
-      //   type,
-      //   ['Ministérios Públicos', 'Tribunais de Justiça', 'Tudo'],
-      //   ['mp', 'tj', ''],
-      // );
       const qSelectedAgencies = makeQueryFromList(
         'orgaos',
         selectedAgencies.map(m => m.id_orgao),
@@ -190,41 +170,6 @@ export default function Index({ ais }) {
     }
     setLoading(false);
   };
-
-  const monthsHandleChange = newValue => {
-    setSelectedMonths(newValue);
-  };
-
-  const typeHandleChange = (event: SelectChangeEvent) => {
-    setType(event.target.value as string);
-    if (event.target.value === 'Ministérios Públicos') {
-      setAgencies(ais.filter(a => a.jurisdicao === 'Ministério'));
-    } else if (event.target.value === 'Justiça Estadual') {
-      setAgencies(ais.filter(a => a.jurisdicao === 'Estadual'));
-    } else if (event.target.value === 'Justiça Militar') {
-      setAgencies(ais.filter(a => a.jurisdicao === 'Militar'));
-    } else if (event.target.value === 'Justiça do Trabalho') {
-      setAgencies(ais.filter(a => a.jurisdicao === 'Trabalho'));
-    } else if (event.target.value === 'Justiça Superior') {
-      setAgencies(ais.filter(a => a.jurisdicao === 'Superior'));
-    } else if (event.target.value === 'Justiça Federal') {
-      setAgencies(ais.filter(a => a.jurisdicao === 'Federal'));
-    } else if (event.target.value === 'Justiça Eleitoral') {
-      setAgencies(ais.filter(a => a.jurisdicao === 'Eleitoral'));
-    } else if (event.target.value === 'Conselhos de Justiça') {
-      setAgencies(ais.filter(a => a.jurisdicao === 'Conselho'));
-    } else {
-      setAgencies(ais);
-    }
-  };
-
-  const categoryHandleChange = (event: SelectChangeEvent) => {
-    setCategory(event.target.value as string);
-  };
-
-  const agencyFilterOptions = createFilterOptions({
-    stringify: (option: AgencyOptionType) => option.id_orgao + option.nome,
-  });
 
   const firstRequest = async () => {
     setLoading(true);
@@ -339,11 +284,6 @@ export default function Index({ ais }) {
     window.history.replaceState({}, '', `${url}`);
   }, [selectedYears, selectedMonths, selectedAgencies, category]);
 
-  interface AgencyOptionType {
-    id_orgao: string;
-    nome: string;
-  }
-
   return (
     <Page>
       <Head>
@@ -370,116 +310,32 @@ export default function Index({ ais }) {
           </Box>
           <Grid container spacing={3}>
             <Grid item xs={12}>
-              <Autocomplete
-                id="autocomplete-anos"
-                options={years}
-                getOptionLabel={option => `${option}`}
-                value={selectedYears}
-                onChange={(event, newValue) => {
-                  setSelectedYears(newValue);
-                }}
-                renderOption={(props, option) => (
-                  <MenuItem key={option} {...props} value={option}>
-                    {option}
-                  </MenuItem>
-                )}
-                renderInput={params => <TextField {...params} label="Ano" />}
+              <Search.YearsAutocomplete
+                selectedYears={selectedYears}
+                setSelectedYears={setSelectedYears}
+                years={years}
               />
             </Grid>
             <Grid item xs={12}>
-              <Autocomplete
-                multiple
-                id="autocomplete-meses"
-                options={months}
-                disableCloseOnSelect
-                getOptionLabel={option => option.name}
-                value={selectedMonths}
-                onChange={(event, newValue) => {
-                  monthsHandleChange(newValue);
-                }}
-                isOptionEqualToValue={(option, value) =>
-                  option.value === value.value
-                }
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.name}
-                  </li>
-                )}
-                renderInput={params => <TextField {...params} label="Meses" />}
+              <Search.MonthsAutocomplete
+                selectedMonths={selectedMonths}
+                setSelectedMonths={setSelectedMonths}
+                months={months}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Tipo de órgão
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={type}
-                  label="Tipo de órgão"
-                  onChange={typeHandleChange}
-                >
-                  <MenuItem value="Tudo" selected>
-                    Tudo
-                  </MenuItem>
-                  <MenuItem value="Justiça Estadual">Justiça Estadual</MenuItem>
-                  <MenuItem value="Ministérios Públicos">
-                    Ministérios Públicos
-                  </MenuItem>
-                  <MenuItem value="Justiça do Trabalho">
-                    Justiça do Trabalho
-                  </MenuItem>
-                  <MenuItem value="Justiça Militar">Justiça Militar</MenuItem>
-                  <MenuItem value="Justiça Federal">Justiça Federal</MenuItem>
-                  <MenuItem value="Justiça Eleitoral">
-                    Justiça Eleitoral
-                  </MenuItem>
-                  <MenuItem value="Justiça Superior">Justiça Superior</MenuItem>
-                  <MenuItem value="Conselhos de Justiça">
-                    Conselhos de Justiça
-                  </MenuItem>
-                </Select>
-              </FormControl>
+              <Search.AgencyTypeSelect
+                type={type}
+                ais={ais}
+                setAgencies={setAgencies}
+                setType={setType}
+              />
             </Grid>
             <Grid item xs={12}>
-              <Autocomplete
-                multiple
-                id="autocomplete-orgaos"
-                options={agencies}
-                disableCloseOnSelect
-                getOptionLabel={option => option.id_orgao}
-                value={selectedAgencies}
-                onChange={(event, newValue) => {
-                  if (selectedAgencies.length < 3) {
-                    setSelectedAgencies(newValue);
-                  }
-                  if (selectedAgencies.includes(newValue.at(-1))) {
-                    setSelectedAgencies(newValue);
-                  }
-                }}
-                isOptionEqualToValue={(option, value) =>
-                  option.id_orgao === value.id_orgao
-                }
-                renderOption={(props, option, { selected }) => (
-                  <li {...props}>
-                    <Checkbox
-                      icon={icon}
-                      checkedIcon={checkedIcon}
-                      style={{ marginRight: 8 }}
-                      checked={selected}
-                    />
-                    {option.nome}
-                  </li>
-                )}
-                renderInput={params => <TextField {...params} label="Órgãos" />}
-                filterOptions={agencyFilterOptions}
+              <Search.AgencyAutocomplete
+                agencies={agencies}
+                selectedAgencies={selectedAgencies}
+                setSelectedAgencies={setSelectedAgencies}
               />
               <Typography variant="body2" pt={1} pl={1}>
                 Listados apenas os{' '}
@@ -487,25 +343,10 @@ export default function Index({ ais }) {
               </Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
-              <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">
-                  Categoria de remuneração
-                </InputLabel>
-                <Select
-                  labelId="demo-simple-select-label"
-                  id="demo-simple-select"
-                  value={category}
-                  label="Categoria de remuneração"
-                  onChange={categoryHandleChange}
-                >
-                  <MenuItem value="Tudo">Tudo</MenuItem>
-                  <MenuItem value="Remuneração base">Remuneração base</MenuItem>
-                  <MenuItem value="Outras remunerações">
-                    Outras remunerações
-                  </MenuItem>
-                  <MenuItem value="Descontos">Descontos</MenuItem>
-                </Select>
-              </FormControl>
+              <Search.CategorySelect
+                category={category}
+                setCategory={setCategory}
+              />
             </Grid>
           </Grid>
           <Grid container spacing={3} py={3}>
@@ -652,7 +493,7 @@ export default function Index({ ais }) {
 export async function getServerSideProps() {
   try {
     const res = await api.default.get('/orgaos');
-    const agencies = res.data.filter(
+    const agencies: Agency[] = res.data.filter(
       ag => ag.collecting == null || ag.collecting[0].collecting == true,
     );
     return {
