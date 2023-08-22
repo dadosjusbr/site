@@ -4,9 +4,12 @@ import {
   Typography,
   AccordionDetails,
   Grid,
+  IconButton,
+  Tooltip,
 } from '@mui/material';
 import { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import InfoIcon from '@mui/icons-material/Info';
 import Search from '../../Search';
 
 const SearchAccordion = () => {
@@ -22,6 +25,19 @@ const SearchAccordion = () => {
         >
           <Typography align="center" variant="h6">
             Investigar dados de remunerações
+            <Tooltip
+              placement="bottom"
+              title={
+                <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                  <b>Chave:</b> Valor.
+                  <hr />
+                </Typography>
+              }
+            >
+              <IconButton aria-label="Botão de informações">
+                <InfoIcon />
+              </IconButton>
+            </Tooltip>
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
