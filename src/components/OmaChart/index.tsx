@@ -18,6 +18,7 @@ import AgencyGenerals from './components/AgencyGenerals';
 import TransparencyMetrics from './components/TransparencyMetrics';
 import MembersGraph from './components/MembersGraph';
 import CollectInfos from './components/CollectInfos';
+import SearchAccordion from './components/SearchAccordion';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -116,6 +117,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       )}
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
+          <SearchAccordion />
           <AgencyGenerals
             maxPerk={maxPerk}
             maxWage={maxWage}
