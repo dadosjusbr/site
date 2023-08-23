@@ -19,6 +19,7 @@ import TransparencyMetrics from './components/TransparencyMetrics';
 import MembersGraph from './components/MembersGraph';
 import CollectInfos from './components/CollectInfos';
 import SearchAccordion from './components/SearchAccordion';
+import { months } from '../../@types/MONTHS';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -35,6 +36,7 @@ export interface OMASummaryProps {
   year: number;
   month: number;
   agency: string;
+  selectedAgencies: Agency[];
 }
 
 const OMASummary: React.FC<OMASummaryProps> = ({
@@ -52,6 +54,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   year,
   month,
   agency,
+  selectedAgencies,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const fileLink = `${process.env.S3_REPO_URL}/${agency}/datapackage/${agency}-${year}-${month}.zip`;
@@ -117,7 +120,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       )}
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
-          <SearchAccordion />
+          <SearchAccordion
+            selectedYears={year}
+            selectedMonths={[months[month - 1]]}
+            selectedAgencies={selectedAgencies}
+          />
           <AgencyGenerals
             maxPerk={maxPerk}
             maxWage={maxWage}

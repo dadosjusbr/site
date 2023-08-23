@@ -2,16 +2,10 @@ import { Autocomplete, Checkbox, TextField } from '@mui/material';
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-type Month = {
-  name: string;
-  value: number;
-};
-
 type MonthsAutocompleteProps = {
   months: Month[];
   selectedMonths: Month[];
   setSelectedMonths: React.Dispatch<React.SetStateAction<Month[]>>;
-  // monthsHandleChange: (newValue: Month[]) => void;
 };
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;

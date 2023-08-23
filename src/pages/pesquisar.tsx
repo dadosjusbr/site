@@ -1,76 +1,23 @@
 /* eslint-disable */
 import * as React from 'react';
-import ReactGA from 'react-ga4';
 import Head from 'next/head';
 import styled from 'styled-components';
-import {
-  Container,
-  Box,
-  Typography,
-  Grid,
-  Paper,
-  Button,
-  CircularProgress,
-  Link,
-  Alert,
-} from '@mui/material';
-import IosShareIcon from '@mui/icons-material/IosShare';
-import { ThemeProvider } from '@mui/material/styles';
-import LoadingButton from '@mui/lab/LoadingButton';
-import { DataGrid, GridColDef } from '@mui/x-data-grid';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
-import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
+import { Container, Box, Typography, Grid, Link } from '@mui/material';
 
 import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
-import light from '../styles/theme-light';
 import api from '../services/api';
 import Search from '../components/Search';
 import ShareModal from '../components/Common/ShareModal';
 import { getCurrentYear } from '../functions/currentYear';
-
-const columns: GridColDef[] = [
-  { field: 'id', headerName: '#', width: 50 },
-  { field: 'orgao', headerName: 'Órgão', width: 70 },
-  { field: 'mes', headerName: 'Mês', width: 70 },
-  { field: 'ano', headerName: 'Ano', width: 70 },
-  { field: 'matricula', headerName: 'Matrícula', width: 90 },
-  { field: 'nome', headerName: 'Nome', width: 200 },
-  { field: 'cargo', headerName: 'Cargo', width: 150 },
-  { field: 'lotacao', headerName: 'Lotação', width: 150 },
-  {
-    field: 'categoria_contracheque',
-    headerName: 'Categoria de remuneração',
-    width: 90,
-  },
-  {
-    field: 'detalhamento_contracheque',
-    headerName: 'Descrição de remuneração',
-    width: 150,
-  },
-  { field: 'valor', headerName: 'Valor', width: 120 },
-];
+import { searchHandleClick } from '../functions/query';
+import { months } from '../@types/MONTHS';
 
 export default function Index({ ais }: { ais: Agency[] }) {
   const years: number[] = [];
   for (let i = getCurrentYear(); i >= 2018; i--) {
     years.push(i);
   }
-  const months = [
-    { name: 'Jan', value: 1 },
-    { name: 'Fev', value: 2 },
-    { name: 'Mar', value: 3 },
-    { name: 'Abr', value: 4 },
-    { name: 'Mai', value: 5 },
-    { name: 'Jun', value: 6 },
-    { name: 'Jul', value: 7 },
-    { name: 'Ago', value: 8 },
-    { name: 'Set', value: 9 },
-    { name: 'Out', value: 10 },
-    { name: 'Nov', value: 11 },
-    { name: 'Dez', value: 12 },
-  ];
 
   const [selectedYears, setSelectedYears] = React.useState(getCurrentYear());
   const [selectedMonths, setSelectedMonths] = React.useState(months);
@@ -95,80 +42,6 @@ export default function Index({ ais }: { ais: Agency[] }) {
     setType('Tudo');
     setCategory('Tudo');
     setShowResults(false);
-  };
-
-  const makeQueryFromList = (word: string, list: Array<string>) => {
-    if (list.length === 0) {
-      return '';
-    }
-    let q = '&';
-    q += `${word}=`;
-    list.forEach(item => {
-      q += `${item},`;
-    });
-    q = q.slice(0, -1);
-    return q;
-  };
-  const makeQueryFromValue = (
-    word: string,
-    value: string,
-    values: Array<string>,
-    equivalents: Array<string>,
-  ) => {
-    if (!value) return '';
-    for (let i = 0; i < values.length; i++) {
-      if (value === values[i]) {
-        if (!equivalents[i]) return '';
-        return `&${word}=${equivalents[i]}`;
-      }
-    }
-    return ``;
-  };
-
-  const searchHandleClick = async () => {
-    setLoading(true);
-    setShowResults(false);
-    try {
-      let q = '?';
-      const qSelectedYears = makeQueryFromValue(
-        'anos',
-        selectedYears.toString(),
-        years.map(y => y.toString()),
-        years.map(y => y.toString()),
-      );
-      const qSelectedMonths = makeQueryFromList(
-        'meses',
-        selectedMonths.map(m => String(m.value)),
-      );
-      const qSelectedAgencies = makeQueryFromList(
-        'orgaos',
-        selectedAgencies.map(m => m.id_orgao),
-      );
-      const qCategories = makeQueryFromValue(
-        'categorias',
-        category,
-        ['Remuneração base', 'Outras remunerações', 'Descontos', 'Tudo'],
-        ['base', 'outras', 'descontos', ''],
-      );
-      q = `${q}${qSelectedYears}${qSelectedMonths}${qSelectedAgencies}${qCategories}`;
-      setQuery(q);
-      const res = await api.ui.get(`/v2/pesquisar${q}`);
-      const data = res.data.result.map((d, i) => {
-        const item = d;
-        item.id = i + 1;
-        return item;
-      });
-      setResult(data);
-      setDownloadAvailable(res.data.download_available);
-      setDownloadLimit(res.data.download_limit);
-      setNumRowsIfAvailable(res.data.num_rows_if_available);
-      setShowResults(true);
-    } catch (err) {
-      setResult([]);
-      setDownloadAvailable(false);
-      setShowResults(false);
-    }
-    setLoading(false);
   };
 
   const firstRequest = async () => {
@@ -351,133 +224,40 @@ export default function Index({ ais }: { ais: Agency[] }) {
           </Grid>
           <Grid container spacing={3} py={3}>
             <Grid item xs={12} sm={3}>
-              <LoadingButton
-                size="large"
-                onClick={searchHandleClick}
+              <Search.SearchButton
                 loading={loading}
-                variant="outlined"
-                startIcon={<SearchOutlinedIcon />}
-              >
-                Pesquisar
-              </LoadingButton>
+                searchHandleClick={() =>
+                  searchHandleClick({
+                    selectedYears,
+                    years,
+                    selectedMonths,
+                    selectedAgencies,
+                    category,
+                    setLoading,
+                    setResult,
+                    setDownloadAvailable,
+                    setNumRowsIfAvailable,
+                    setShowResults,
+                    setQuery,
+                    setDownloadLimit,
+                  })
+                }
+              />
             </Grid>
             <Grid item xs={12} sm={9} display="flex" justifyContent="right">
-              <LoadingButton
-                size="large"
-                onClick={clearSearch}
-                variant="outlined"
-                startIcon={<SearchOffOutlinedIcon />}
-              >
-                Limpar pesquisa
-              </LoadingButton>
+              <Search.ClearButton clearSearch={clearSearch} />
             </Grid>
           </Grid>
-          {loading && (
-            <Box
-              m={4}
-              sx={{
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <div>
-                <CircularProgress color="info" />
-              </div>
-              <p>Aguarde...</p>
-            </Box>
-          )}
-          {showResults && (
-            <Box>
-              <Box
-                pt={4}
-                sx={{
-                  borderTop: '2px solid',
-                }}
-              >
-                <Typography variant="h3" gutterBottom>
-                  Resultados
-                </Typography>
-                {numRowsIfAvailable === 0 && (
-                  <Typography variant="body1" gutterBottom>
-                    O órgão não prestou contas neste período.
-                  </Typography>
-                )}
-                {numRowsIfAvailable > 0 && (
-                  <Box>
-                    {!downloadAvailable && (
-                      <ThemeProvider theme={light}>
-                        <Alert severity="warning">
-                          <Typography variant="body1" gutterBottom>
-                            A pesquisa retorna mais linhas que o número máximo
-                            permitido para download ({`${downloadLimit / 1000}`}
-                            {` `}
-                            mil).
-                            <br />
-                            Refaça a sua busca com menos órgãos ou com um
-                            período mais curto.
-                            <br />
-                            Abaixo, uma amostra dos dados:
-                          </Typography>
-                        </Alert>
-                      </ThemeProvider>
-                    )}
-                    {downloadAvailable && (
-                      <Typography variant="body1" gutterBottom>
-                        A pesquisa retornou{' '}
-                        <strong>{numRowsIfAvailable}</strong> linhas. Abaixo,
-                        uma amostra dos dados:
-                      </Typography>
-                    )}
-                  </Box>
-                )}
-
-                <Box py={4} textAlign="right">
-                  <Button
-                    sx={{ mr: 2 }}
-                    variant="outlined"
-                    color="info"
-                    endIcon={<IosShareIcon />}
-                    onClick={() => setModalIsOpen(true)}
-                  >
-                    COMPARTILHAR
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    endIcon={<CloudDownloadIcon />}
-                    disabled={!downloadAvailable}
-                    onClick={() => {
-                      ReactGA.event('file_download', {
-                        category: 'download',
-                        action: `From: ${window.location.pathname}`,
-                      });
-                    }}
-                    href={`${process.env.API_BASE_URL}/v2/download${query}`}
-                    id="download-button"
-                  >
-                    BAIXAR DADOS
-                  </Button>
-                </Box>
-              </Box>
-              {numRowsIfAvailable > 0 && (
-                <ThemeProvider theme={light}>
-                  <Paper>
-                    <Box sx={{ width: '100%' }}>
-                      <DataGrid
-                        rows={result}
-                        columns={columns}
-                        pageSize={10}
-                        rowsPerPageOptions={[10]}
-                        disableSelectionOnClick
-                        rowHeight={35}
-                        autoHeight
-                      />
-                    </Box>
-                  </Paper>
-                </ThemeProvider>
-              )}
-            </Box>
-          )}
+          <Search.Result
+            loading={loading}
+            showResults={showResults}
+            numRowsIfAvailable={numRowsIfAvailable}
+            downloadAvailable={downloadAvailable}
+            downloadLimit={downloadLimit}
+            result={result}
+            query={query}
+            setModalIsOpen={setModalIsOpen}
+          />
         </Box>
         <ShareModal
           isOpen={modalIsOpen}

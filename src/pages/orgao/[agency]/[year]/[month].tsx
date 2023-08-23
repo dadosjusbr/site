@@ -38,6 +38,7 @@ export default function OmaPage({
   oma,
   previousButtonActive,
   nextButtonActive,
+  ais,
 }: {
   agency: string;
   year: number;
@@ -46,6 +47,7 @@ export default function OmaPage({
   oma: v2AgencySummary;
   previousButtonActive: boolean;
   nextButtonActive: boolean;
+  ais: Agency[];
 }) {
   const [chartData, setChartData] = useState<AgencyRemuneration>();
   const [loading, setLoading] = useState(true);
@@ -265,6 +267,7 @@ export default function OmaPage({
                   year={year}
                   month={month}
                   mi={mi}
+                  selectedAgencies={ais.filter(d => d.id_orgao === agency)}
                 />
               );
             }
@@ -317,6 +320,18 @@ export const getServerSideProps: GetServerSideProps = async context => {
     mi = err.response.data;
   }
 
+  let ais: Agency[];
+  try {
+    const res = await api.default.get('/orgaos');
+    const agencies: Agency[] = res.data.filter(
+      ag => ag.collecting == null || ag.collecting[0].collecting == true,
+    );
+
+    ais = agencies;
+  } catch (err) {
+    ais = [];
+  }
+
   try {
     const { data: d2 }: { data: v2AgencySummary } = await api.ui.get(
       `/v2/orgao/resumo/${agency}/${year}/${month}`,
@@ -330,6 +345,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         previousButtonActive: d2.tem_anterior,
         nextButtonActive: d2.tem_proximo,
         oma: d2,
+        ais,
       },
     };
   } catch (err) {
@@ -342,6 +358,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         month,
         previousButtonActive: isAfter(date, new Date(2018, 1, 1)),
         nextButtonActive: isBefore(date, nextMonth),
+        ais,
       },
     };
   }

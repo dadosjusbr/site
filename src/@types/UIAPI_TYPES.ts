@@ -191,3 +191,8 @@ type MensalRemuneration = {
   descontos: number;
   remuneracoes: number;
 };
+
+type Month = {
+  name: string;
+  value: number;
+};
