@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga4';
 
@@ -20,6 +20,7 @@ import MembersGraph from './components/MembersGraph';
 import CollectInfos from './components/CollectInfos';
 import SearchAccordion from './components/SearchAccordion';
 import { months } from '../../@types/MONTHS';
+import { getParameter } from '../../functions/utmParameters';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -57,9 +58,14 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   selectedAgencies,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [devMode, setDevMode] = useState(false);
   const fileLink = `${process.env.S3_REPO_URL}/${agency}/datapackage/${agency}-${year}-${month}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
+
+  useEffect(() => {
+    setDevMode(getParameter(location.href, 'dev_mode'));
+  }, []);
 
   return (
     <>
@@ -120,11 +126,13 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       )}
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
-          <SearchAccordion
-            selectedYears={year}
-            selectedMonths={[months[month - 1]]}
-            selectedAgencies={selectedAgencies}
-          />
+          {devMode && (
+            <SearchAccordion
+              selectedYears={year}
+              selectedMonths={[months[month - 1]]}
+              selectedAgencies={selectedAgencies}
+            />
+          )}
           <AgencyGenerals
             maxPerk={maxPerk}
             maxWage={maxWage}

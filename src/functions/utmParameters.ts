@@ -20,3 +20,8 @@ export const removeUtmParameters = (url: string) => {
 
   return urlObject.toString();
 };
+
+export const getParameter = (url: string, param: string): boolean => {
+  const urlObject = new URL(url);
+  return Boolean(urlObject.searchParams.get(param));
+};
