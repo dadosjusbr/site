@@ -3,6 +3,8 @@ import * as React from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
 import { Container, Box, Typography, Grid, Link } from '@mui/material';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 
 import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
@@ -224,9 +226,9 @@ export default function Index({ ais }: { ais: Agency[] }) {
           </Grid>
           <Grid container spacing={3} py={3}>
             <Grid item xs={12} sm={3}>
-              <Search.SearchButton
+              <Search.Button
                 loading={loading}
-                searchHandleClick={() =>
+                onClick={() =>
                   searchHandleClick({
                     selectedYears,
                     years,
@@ -242,13 +244,22 @@ export default function Index({ ais }: { ais: Agency[] }) {
                     setDownloadLimit,
                   })
                 }
-              />
+                startIcon={<SearchOutlinedIcon />}
+              >
+                Pesquisar
+              </Search.Button>
             </Grid>
             <Grid item xs={12} sm={9} display="flex" justifyContent="right">
-              <Search.ClearButton clearSearch={clearSearch} />
+              <Search.Button
+                startIcon={<SearchOffOutlinedIcon />}
+                onClick={clearSearch}
+              >
+                Limpar pesquisa
+              </Search.Button>
             </Grid>
           </Grid>
           <Search.Result
+            downloadble={true}
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}

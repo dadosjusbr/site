@@ -3,8 +3,7 @@ import MonthsAutocomplete from './MonthsAutocomplete';
 import AgencyTypeSelect from './AgencyTypeSelect';
 import AgencyAutocomplete from './AgencyAutocomplete';
 import CategorySelect from './CategorySelect';
-import ClearButton from './ClearButton';
-import SearchButton from './SearchButton';
+import Button from './Button';
 import Result from './Result';
 
 const Search = {
@@ -13,8 +12,7 @@ const Search = {
   AgencyTypeSelect: AgencyTypeSelect,
   AgencyAutocomplete: AgencyAutocomplete,
   CategorySelect: CategorySelect,
-  ClearButton: ClearButton,
-  SearchButton: SearchButton,
+  Button: Button,
   Result: Result,
 };
 

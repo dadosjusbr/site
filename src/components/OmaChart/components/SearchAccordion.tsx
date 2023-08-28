@@ -11,6 +11,8 @@ import Search from '../../Search';
 import { searchHandleClick } from '../../../functions/query';
 import { getCurrentYear } from '../../../functions/currentYear';
 import ShareModal from '../../Common/ShareModal';
+import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
+import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 
 type SearchAccordionProps = {
   selectedYears: number;
@@ -65,9 +67,10 @@ const SearchAccordion = ({
           </Grid>
           <Grid container spacing={3} py={3}>
             <Grid item xs={12} sm={3}>
-              <Search.SearchButton
+              <Search.Button
+                color="secondary"
                 loading={loading}
-                searchHandleClick={() =>
+                onClick={() =>
                   searchHandleClick({
                     selectedYears,
                     years,
@@ -83,13 +86,23 @@ const SearchAccordion = ({
                     setDownloadLimit,
                   })
                 }
-              />
+                startIcon={<SearchOutlinedIcon />}
+              >
+                Pesquisar
+              </Search.Button>
             </Grid>
             <Grid item xs={12} sm={9} display="flex" justifyContent="right">
-              <Search.ClearButton clearSearch={clearSearch} />
+              <Search.Button
+                color="secondary"
+                onClick={clearSearch}
+                startIcon={<SearchOffOutlinedIcon />}
+              >
+                Limpar pesquisa
+              </Search.Button>
             </Grid>
           </Grid>
           <Search.Result
+            downloadble={false}
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}

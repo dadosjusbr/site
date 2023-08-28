@@ -90,7 +90,6 @@ export const searchHandleClick = async ({
       item.id = i + 1;
       return item;
     });
-    console.log(res);
     setResult(data);
     setDownloadAvailable(res.data.download_available);
     setDownloadLimit(res.data.download_limit);
