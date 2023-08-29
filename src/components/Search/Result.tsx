@@ -10,8 +10,6 @@ import light from '../../styles/theme-light';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ThemeProvider } from '@mui/material/styles';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import ReactGA from 'react-ga4';
 
 type ResultProps = {
   loading: boolean;
@@ -21,7 +19,8 @@ type ResultProps = {
   downloadLimit: number;
   result: any[];
   query: string;
-  downloadble: boolean;
+  sharable: boolean;
+  downloadButton: React.ReactNode;
   setModalIsOpen: (isOpen: boolean) => void;
 };
 
@@ -55,7 +54,8 @@ const Result = ({
   downloadLimit,
   result,
   query,
-  downloadble,
+  sharable,
+  downloadButton,
   setModalIsOpen,
 }: ResultProps) => {
   return (
@@ -119,8 +119,8 @@ const Result = ({
               </Box>
             )}
 
-            {downloadble && (
-              <Box py={4} textAlign="right">
+            <Box py={4} textAlign="right">
+              {sharable && (
                 <Button
                   sx={{ mr: 2 }}
                   variant="outlined"
@@ -130,23 +130,9 @@ const Result = ({
                 >
                   COMPARTILHAR
                 </Button>
-                <Button
-                  variant="outlined"
-                  endIcon={<CloudDownloadIcon />}
-                  disabled={!downloadAvailable}
-                  onClick={() => {
-                    ReactGA.event('file_download', {
-                      category: 'download',
-                      action: `From: ${window.location.pathname}`,
-                    });
-                  }}
-                  href={`${process.env.API_BASE_URL}/v2/download${query}`}
-                  id="download-button"
-                >
-                  BAIXAR DADOS
-                </Button>
-              </Box>
-            )}
+              )}
+              {downloadButton}
+            </Box>
           </Box>
           {numRowsIfAvailable > 0 && (
             <ThemeProvider theme={light}>

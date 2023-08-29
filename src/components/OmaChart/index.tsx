@@ -126,13 +126,6 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       )}
       <ThemeProvider theme={light}>
         <Grid container spacing={2}>
-          {devMode && (
-            <SearchAccordion
-              selectedYears={year}
-              selectedMonths={[months[month - 1]]}
-              selectedAgencies={selectedAgencies}
-            />
-          )}
           <AgencyGenerals
             maxPerk={maxPerk}
             maxWage={maxWage}
@@ -144,8 +137,15 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             maxDiscounts={maxDiscounts}
             totalMembers={totalMembers}
           />
-          <TransparencyMetrics mi={mi} month={month} year={year} />
           <MembersGraph chartData={chartData} />
+          <TransparencyMetrics mi={mi} month={month} year={year} />
+          {devMode && (
+            <SearchAccordion
+              selectedYears={year}
+              selectedMonths={[months[month - 1]]}
+              selectedAgencies={selectedAgencies}
+            />
+          )}
           <CollectInfos mi={mi} agency={agency} />
         </Grid>
 

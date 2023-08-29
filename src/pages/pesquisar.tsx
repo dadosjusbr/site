@@ -2,9 +2,11 @@
 import * as React from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
-import { Container, Box, Typography, Grid, Link } from '@mui/material';
+import { Container, Box, Typography, Grid, Link, Button } from '@mui/material';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import ReactGA from 'react-ga4';
 
 import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
@@ -259,7 +261,7 @@ export default function Index({ ais }: { ais: Agency[] }) {
             </Grid>
           </Grid>
           <Search.Result
-            downloadble={true}
+            sharable={true}
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}
@@ -268,6 +270,23 @@ export default function Index({ ais }: { ais: Agency[] }) {
             result={result}
             query={query}
             setModalIsOpen={setModalIsOpen}
+            downloadButton={
+              <Button
+                variant="outlined"
+                endIcon={<CloudDownloadIcon />}
+                disabled={!downloadAvailable}
+                onClick={() => {
+                  ReactGA.event('file_download', {
+                    category: 'download',
+                    action: `From: ${window.location.pathname}`,
+                  });
+                }}
+                href={`${process.env.API_BASE_URL}/v2/download${query}`}
+                id="download-button"
+              >
+                BAIXAR DADOS
+              </Button>
+            }
           />
         </Box>
         <ShareModal

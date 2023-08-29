@@ -4,6 +4,7 @@ import {
   Typography,
   AccordionDetails,
   Grid,
+  Button,
 } from '@mui/material';
 import { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -13,6 +14,8 @@ import { getCurrentYear } from '../../../functions/currentYear';
 import ShareModal from '../../Common/ShareModal';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
+import ReactGA from 'react-ga4';
 
 type SearchAccordionProps = {
   selectedYears: number;
@@ -53,7 +56,7 @@ const SearchAccordion = ({
           id="panel1a-header"
         >
           <Typography align="center" variant="h6">
-            Investigar dados de remunerações
+            Pesquisar dados coletados
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
@@ -102,7 +105,7 @@ const SearchAccordion = ({
             </Grid>
           </Grid>
           <Search.Result
-            downloadble={false}
+            sharable={false}
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}
@@ -111,6 +114,24 @@ const SearchAccordion = ({
             result={result}
             query={query}
             setModalIsOpen={setModalIsOpen}
+            downloadButton={
+              <Button
+                variant="outlined"
+                color="secondary"
+                endIcon={<CloudDownloadIcon />}
+                disabled={!downloadAvailable}
+                onClick={() => {
+                  ReactGA.event('file_download', {
+                    category: 'download',
+                    action: `From: ${window.location.pathname}`,
+                  });
+                }}
+                href={`${process.env.API_BASE_URL}/v2/download${query}`}
+                id="download-button"
+              >
+                BAIXAR DADOS FILTRADOS
+              </Button>
+            }
           />
           <ShareModal
             isOpen={modalIsOpen}
