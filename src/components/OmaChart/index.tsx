@@ -20,7 +20,7 @@ import MembersGraph from './components/MembersGraph';
 import CollectInfos from './components/CollectInfos';
 import SearchAccordion from './components/SearchAccordion';
 import { months } from '../../@types/MONTHS';
-import { getParameter } from '../../functions/utmParameters';
+import { getParameter } from '../../functions/url';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -64,7 +64,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   const router = useRouter();
 
   useEffect(() => {
-    setDevMode(getParameter(location.href, 'dev_mode'));
+    setDevMode(Boolean(getParameter('dev_mode')));
   }, []);
 
   return (

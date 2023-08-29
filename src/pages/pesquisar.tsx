@@ -70,7 +70,7 @@ export default function Index({ ais }: { ais: Agency[] }) {
     setLoading(false);
   };
 
-  function getUrlParameter(paramKey) {
+  function getUrlParameter(paramKey: string) {
     const url = window.location.href;
     var r = new URL(url);
     switch (paramKey) {
