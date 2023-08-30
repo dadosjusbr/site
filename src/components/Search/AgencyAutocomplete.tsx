@@ -7,15 +7,10 @@ import {
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 
-type AgencyOptionType = {
-  id_orgao: string;
-  nome: string;
-};
-
 type AgencyAutocompleteProps = {
   agencies: Agency[];
-  selectedAgencies: any[];
-  setSelectedAgencies: (value: React.SetStateAction<any[]>) => void;
+  selectedAgencies: Agency[];
+  setSelectedAgencies: (value: React.SetStateAction<Agency[]>) => void;
 };
 
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -27,7 +22,7 @@ const AgencyAutocomplete = ({
   setSelectedAgencies,
 }: AgencyAutocompleteProps) => {
   const agencyFilterOptions = createFilterOptions({
-    stringify: (option: AgencyOptionType) => option.id_orgao + option.nome,
+    stringify: (option: Agency) => option.id_orgao + option.nome,
   });
 
   return (

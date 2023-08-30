@@ -20,7 +20,7 @@ const makeQueryFromValue = (
   equivalents: Array<string>,
 ) => {
   if (!value) return '';
-  for (let i = 0; i < values.length; i++) {
+  for (let i = 0; i < values.length; i += 1) {
     if (value === values[i]) {
       if (!equivalents[i]) return '';
       return `&${word}=${equivalents[i]}`;
@@ -38,7 +38,7 @@ type SearchHandleClickProps = {
   setLoading: (loading: boolean) => void;
   setShowResults: (showResults: boolean) => void;
   setQuery: (query: string) => void;
-  setResult: (result: Array<any>) => void;
+  setResult: (result: Array<SearchResult>) => void;
   setDownloadAvailable: (downloadAvailable: boolean) => void;
   setDownloadLimit: (downloadLimit: number) => void;
   setNumRowsIfAvailable: (numRowsIfAvailable: number) => void;

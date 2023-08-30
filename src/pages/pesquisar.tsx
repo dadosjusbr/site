@@ -25,7 +25,7 @@ export default function Index({ ais }: { ais: Agency[] }) {
 
   const [selectedYears, setSelectedYears] = React.useState(getCurrentYear());
   const [selectedMonths, setSelectedMonths] = React.useState(months);
-  const [selectedAgencies, setSelectedAgencies] = React.useState([]);
+  const [selectedAgencies, setSelectedAgencies] = React.useState<Agency[]>([]);
   const [agencies, setAgencies] = React.useState<Agency[]>(ais);
   const [loading, setLoading] = React.useState(false);
   const [type, setType] = React.useState('Tudo');
@@ -268,7 +268,6 @@ export default function Index({ ais }: { ais: Agency[] }) {
             downloadAvailable={downloadAvailable}
             downloadLimit={downloadLimit}
             result={result}
-            query={query}
             setModalIsOpen={setModalIsOpen}
             downloadButton={
               <Button

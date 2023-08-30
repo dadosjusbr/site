@@ -8,14 +8,15 @@ import {
 } from '@mui/material';
 import { useState } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import Search from '../../Search';
-import { searchHandleClick } from '../../../functions/query';
-import { getCurrentYear } from '../../../functions/currentYear';
-import ShareModal from '../../Common/ShareModal';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import ReactGA from 'react-ga4';
+
+import Search from '../../Search';
+import { searchHandleClick } from '../../../functions/query';
+import { getCurrentYear } from '../../../functions/currentYear';
+import ShareModal from '../../Common/ShareModal';
 
 type SearchAccordionProps = {
   selectedYears: number;
@@ -29,7 +30,7 @@ const SearchAccordion = ({
   selectedAgencies,
 }: SearchAccordionProps) => {
   const years: number[] = [];
-  for (let i = getCurrentYear(); i >= 2018; i--) {
+  for (let i = getCurrentYear(); i >= 2018; i -= 1) {
     years.push(i);
   }
 
@@ -112,7 +113,6 @@ const SearchAccordion = ({
             downloadAvailable={downloadAvailable}
             downloadLimit={downloadLimit}
             result={result}
-            query={query}
             setModalIsOpen={setModalIsOpen}
             downloadButton={
               <Button

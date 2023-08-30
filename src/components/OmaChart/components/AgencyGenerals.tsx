@@ -81,7 +81,7 @@ const index = ({
           </Tooltip>
         </Typography>
       </Box>
-      <Box p={2} pt={0} ml={'6%'}>
+      <Box p={2} pt={0} ml="6%">
         <List dense>
           <Grid container justifyContent="flex-start" alignItems="center">
             <Grid item>
