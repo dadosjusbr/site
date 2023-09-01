@@ -13,4 +13,20 @@ enum MONTHS {
   Novembro = 11,
   Dezembro = 12,
 }
+
+export const months: Month[] = [
+  { name: 'Jan', value: 1 },
+  { name: 'Fev', value: 2 },
+  { name: 'Mar', value: 3 },
+  { name: 'Abr', value: 4 },
+  { name: 'Mai', value: 5 },
+  { name: 'Jun', value: 6 },
+  { name: 'Jul', value: 7 },
+  { name: 'Ago', value: 8 },
+  { name: 'Set', value: 9 },
+  { name: 'Out', value: 10 },
+  { name: 'Nov', value: 11 },
+  { name: 'Dez', value: 12 },
+];
+
 export default MONTHS;

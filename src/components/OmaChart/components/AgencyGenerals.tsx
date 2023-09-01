@@ -42,7 +42,7 @@ const index = ({
 }) => (
   <Grid item xs={12} md={20}>
     <Paper elevation={0}>
-      <Box p={2} pb={0} textAlign="center">
+      <Box pt={2} textAlign="center">
         <Typography variant="h6">
           Resumo de remunerações de membros
           <Tooltip
@@ -80,7 +80,7 @@ const index = ({
           </Tooltip>
         </Typography>
       </Box>
-      <Box p={2} pt={0} maxWidth={905} margin="0 auto">
+      <Box p={2} pt={0} ml="6%">
         <List dense>
           <Grid container justifyContent="flex-start" alignItems="center">
             <Grid item>
@@ -164,7 +164,7 @@ const index = ({
                 </Box>
               </ListItem>
             </Grid>
-            <Grid item md={3.8}>
+            <Grid item>
               <ListItem>
                 <ListItemAvatar>
                   <Avatar>

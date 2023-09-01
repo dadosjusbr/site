@@ -23,10 +23,7 @@ import ContentCopy from '@mui/icons-material/ContentCopy';
 import CloseIcon from '@mui/icons-material/Close';
 import { Link as LinkButton } from '@mui/icons-material';
 import Snackbar from '@mui/material/Snackbar';
-import {
-  setUtmParameters,
-  removeUtmParameters,
-} from '../../../functions/utmParameters';
+import { setUtmParameters, removeUtmParameters } from '../../../functions/url';
 
 interface ShareModalProps {
   isOpen: boolean;

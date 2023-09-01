@@ -1,16 +1,18 @@
 import {
-  Box,
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
   Grid,
   IconButton,
   List,
   ListItem,
   ListItemIcon,
   ListItemText,
-  Paper,
   Tooltip,
   Typography,
 } from '@mui/material';
 import InfoIcon from '@mui/icons-material/Info';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { Close, Done } from '@mui/icons-material';
 import MONTHS from '../../../@types/MONTHS';
 import { HandleAccess, HandleDataTypes } from './HandleMetadata';
@@ -25,8 +27,12 @@ const index = ({
   year: number;
 }) => (
   <Grid item xs={12}>
-    <Paper elevation={0}>
-      <Box p={2}>
+    <Accordion>
+      <AccordionSummary
+        expandIcon={<ExpandMoreIcon />}
+        aria-controls="panel1a-content"
+        id="panel1a-header"
+      >
         <Typography variant="h6" textAlign="center">
           Índice de transparência:{' '}
           <b>
@@ -55,7 +61,8 @@ const index = ({
             </IconButton>
           </Tooltip>
         </Typography>
-
+      </AccordionSummary>
+      <AccordionDetails>
         <Grid container>
           <Grid item xs={12} md={6}>
             <List dense>
@@ -242,8 +249,8 @@ const index = ({
             </List>
           </Grid>
         </Grid>
-      </Box>
-    </Paper>
+      </AccordionDetails>
+    </Accordion>
   </Grid>
 );
 
