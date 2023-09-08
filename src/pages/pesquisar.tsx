@@ -16,6 +16,7 @@ import ShareModal from '../components/Common/ShareModal';
 import { getCurrentYear } from '../functions/currentYear';
 import { searchHandleClick } from '../functions/query';
 import { months } from '../@types/MONTHS';
+import { getSearchUrlParameter } from '../functions/url';
 
 export default function Index({ ais }: { ais: Agency[] }) {
   const years: number[] = [];
@@ -72,72 +73,11 @@ export default function Index({ ais }: { ais: Agency[] }) {
     setLoading(false);
   };
 
-  function getUrlParameter(paramKey: string) {
-    const url = window.location.href;
-    var r = new URL(url);
-    switch (paramKey) {
-      case 'anos':
-        setSelectedYears(
-          r.searchParams.get(paramKey)
-            ? parseInt(r.searchParams.get(paramKey), 10)
-            : getCurrentYear(),
-        );
-        return +r.searchParams.get(paramKey);
-
-      case 'meses':
-        const meses = r.searchParams.get(paramKey)
-          ? r.searchParams.get(paramKey).split(',')
-          : [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-        const mesesSelecionados = meses.map(m => {
-          return { label: months[parseInt(m, 10) - 1] };
-        });
-
-        setSelectedMonths(mesesSelecionados.map(m => m.label));
-        return mesesSelecionados.map(m => m.label.value);
-
-      case 'categorias':
-        switch (r.searchParams.get(paramKey)) {
-          case 'descontos':
-            setCategory('Descontos');
-            return 'descontos';
-
-          case 'base':
-            setCategory('Remuneração base');
-            return 'base';
-
-          case 'outras':
-            setCategory('Outras remunerações');
-            return 'outras';
-
-          case 'Tudo':
-            setCategory('Tudo');
-            return 'Tudo';
-
-          default:
-            break;
-        }
-        break;
-
-      case 'orgaos':
-        const orgaos = r.searchParams.get(paramKey)
-          ? r.searchParams.get(paramKey).split(',')
-          : [];
-        const orgaosSelecionados = orgaos.map(o => {
-          return ais.find(a => a.id_orgao === o);
-        });
-        setSelectedAgencies(orgaosSelecionados);
-        return orgaosSelecionados;
-
-      default:
-        break;
-    }
-  }
-
   React.useEffect(() => {
-    getUrlParameter('anos');
-    getUrlParameter('meses');
-    getUrlParameter('categorias');
-    getUrlParameter('orgaos');
+    setSelectedYears(getSearchUrlParameter('anos', ais) as number);
+    setSelectedMonths(getSearchUrlParameter('meses', ais) as Month[]);
+    setCategory(getSearchUrlParameter('categorias', ais) as string);
+    setAgencies(getSearchUrlParameter('orgaos', ais) as Agency[]);
     location.search !== '' && firstRequest();
   }, []);
 
