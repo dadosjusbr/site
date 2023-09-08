@@ -35,7 +35,7 @@ export const setParameter = (param: string, value: string): string => {
   return urlObject.toString();
 };
 
-export const getSearchUrlParameter = (paramKey: string, ais: Agency[]) => {
+export const getSearchUrlParameter = (paramKey: string, ais?: Agency[]) => {
   const r = new URL(window.location.href);
   switch (paramKey) {
     case 'anos':

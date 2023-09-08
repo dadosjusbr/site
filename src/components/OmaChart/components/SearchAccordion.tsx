@@ -6,7 +6,7 @@ import {
   Grid,
   Button,
 } from '@mui/material';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
@@ -17,6 +17,8 @@ import Search from '../../Search';
 import { searchHandleClick } from '../../../functions/query';
 import { getCurrentYear } from '../../../functions/currentYear';
 import ShareModal from '../../Common/ShareModal';
+import { getSearchUrlParameter } from '../../../functions/url';
+import api from '../../../services/api';
 
 type SearchAccordionProps = {
   selectedYears: number;
@@ -43,10 +45,63 @@ const SearchAccordion = ({
   const [numRowsIfAvailable, setNumRowsIfAvailable] = useState(0);
   const [query, setQuery] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const isFirstRender = useRef(true);
 
   const clearSearch = () => {
     setCategory('Tudo');
   };
+
+  const firstRequest = async () => {
+    setLoading(true);
+    setShowResults(false);
+    try {
+      const url = new URL(window.location.href);
+      url.searchParams.delete('dev_mode');
+      setQuery(url.search);
+      const res = await api.ui.get(`/v2/pesquisar${url.search}`);
+      const data = res.data.result.map((d, i) => {
+        const item = d;
+        item.id = i + 1;
+        return item;
+      });
+      setResult(data);
+      setDownloadAvailable(res.data.download_available);
+      setDownloadLimit(res.data.download_limit);
+      setNumRowsIfAvailable(res.data.num_rows_if_available);
+      setShowResults(true);
+    } catch (error) {
+      setResult([]);
+      setDownloadAvailable(false);
+      setShowResults(false);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    setCategory(getSearchUrlParameter('categorias') as string);
+    console.log(location.search !== '');
+    location.search !== '' && firstRequest();
+  }, []);
+
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const url = new URL(window.location.href);
+    const params = url.searchParams;
+    params.set('anos', selectedYears != null ? selectedYears.toString() : '');
+    params.set('meses', selectedMonths.map(m => String(m.value)).join(','));
+    params.set('orgaos', selectedAgencies.map(a => a.id_orgao).join(','));
+    params.set(
+      'categorias',
+      category
+        .split(' ')
+        .at(category === 'Remuneração base' ? -1 : 0)
+        .toLowerCase(),
+    );
+    window.history.replaceState({}, '', `${url}`);
+  }, [category]);
 
   return (
     <Grid item xs={12} md={20}>

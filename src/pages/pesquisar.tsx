@@ -74,9 +74,9 @@ export default function Index({ ais }: { ais: Agency[] }) {
   };
 
   React.useEffect(() => {
-    setSelectedYears(getSearchUrlParameter('anos', ais) as number);
-    setSelectedMonths(getSearchUrlParameter('meses', ais) as Month[]);
-    setCategory(getSearchUrlParameter('categorias', ais) as string);
+    setSelectedYears(getSearchUrlParameter('anos') as number);
+    setSelectedMonths(getSearchUrlParameter('meses') as Month[]);
+    setCategory(getSearchUrlParameter('categorias') as string);
     setAgencies(getSearchUrlParameter('orgaos', ais) as Agency[]);
     location.search !== '' && firstRequest();
   }, []);
