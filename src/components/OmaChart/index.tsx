@@ -204,7 +204,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         )}
       </ThemeProvider>
       <ShareModal
-        url={`https://dadosjusbr.org/orgao/${agency}/${year}/${month}`}
+        url={window.location.href}
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
       />

@@ -47,6 +47,8 @@ const SearchAccordion = ({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const isFirstRender = useRef(true);
 
+  const [expanded, setExpanded] = useState(false);
+
   const clearSearch = () => {
     setCategory('Tudo');
   };
@@ -73,14 +75,27 @@ const SearchAccordion = ({
       setResult([]);
       setDownloadAvailable(false);
       setShowResults(false);
+    } finally {
+      setLoading(false);
+      setExpanded(true);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     setCategory(getSearchUrlParameter('categorias') as string);
-    console.log(location.search !== '');
-    location.search !== '' && firstRequest();
+
+    // stop removing dev_mode from url when turning off dev_mode
+    const url = new URL(window.location.href);
+    url.searchParams.delete('dev_mode');
+
+    // turn this into location.search !== '' when removing dev_mode feature
+    url.search !== '' && firstRequest();
+
+    const timer = setTimeout(() => {
+      url.search !== '' && window.location.assign('#search-accordion');
+    }, 2000);
+
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -105,11 +120,11 @@ const SearchAccordion = ({
 
   return (
     <Grid item xs={12} md={20}>
-      <Accordion>
+      <Accordion expanded={expanded} onChange={() => setExpanded(!expanded)}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
-          id="panel1a-header"
+          id="search-accordion"
         >
           <Typography align="center" variant="h6">
             Pesquisar dados coletados
