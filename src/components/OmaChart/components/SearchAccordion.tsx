@@ -89,11 +89,13 @@ const SearchAccordion = ({
     url.searchParams.delete('dev_mode');
 
     // turn this into location.search !== '' when removing dev_mode feature
-    url.search !== '' && firstRequest();
-
-    const timer = setTimeout(() => {
-      url.search !== '' && window.location.assign('#search-accordion');
-    }, 2000);
+    let timer: NodeJS.Timeout;
+    if (url.search !== '') {
+      firstRequest();
+      timer = setTimeout(() => {
+        window.location.assign('#search-accordion');
+      }, 1500);
+    }
 
     return () => clearTimeout(timer);
   }, []);
