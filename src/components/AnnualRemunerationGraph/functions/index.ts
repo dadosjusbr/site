@@ -49,10 +49,10 @@ export const getYearWithIncompleteData = (
       (d.meses_com_dados < 12 && d.ano < getCurrentYear()) ||
       (d.ano === getCurrentYear() &&
         new Date().getDate() > COLLECT_INFOS.COLLECT_DATE &&
-        d.meses_com_dados <= 11 - new Date().getMonth()) ||
+        d.meses_com_dados < new Date().getMonth()) ||
       (d.ano === getCurrentYear() &&
         new Date().getDate() < COLLECT_INFOS.COLLECT_DATE &&
-        d.meses_com_dados <= 10 - new Date().getMonth()),
+        d.meses_com_dados < new Date().getMonth() - 1),
   );
 
 const monthsWithoutData = ({ data }: { data: AnnualSummaryData[] }): number => {

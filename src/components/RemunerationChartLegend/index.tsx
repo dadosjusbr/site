@@ -207,7 +207,7 @@ const index = ({
                   total += w;
                 });
 
-                if (graphType === 'total') {
+                if (graphType === 'total' || !agency) {
                   return formatCurrencyValue(total, 1);
                 }
 
@@ -247,7 +247,7 @@ const index = ({
                   total += w;
                 });
 
-                if (graphType === 'total') {
+                if (graphType === 'total' || !agency) {
                   return formatCurrencyValue(total, 1);
                 }
 
@@ -281,7 +281,7 @@ const index = ({
                   total += w;
                 });
 
-                if (graphType === 'total') {
+                if (graphType === 'total' || !agency) {
                   return formatCurrencyValue(total, 1);
                 }
 
@@ -324,7 +324,7 @@ const index = ({
                   total += w;
                 });
 
-                if (graphType === 'total') {
+                if (graphType === 'total' || !agency) {
                   return formatCurrencyValue(total, 1);
                 }
 
