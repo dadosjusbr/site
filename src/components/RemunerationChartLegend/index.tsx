@@ -62,6 +62,19 @@ const index = ({
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
 
+  const calculateTotal = (totalsMap: number[]) => {
+    let total = 0;
+    totalsMap.forEach(w => {
+      total += w;
+    });
+
+    if (graphType === 'total' || !agency) {
+      return formatCurrencyValue(total, 1);
+    }
+
+    return formatCurrencyValue(total / data.length, 1);
+  };
+
   return (
     <>
       <Box
@@ -198,20 +211,12 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                let total = 0;
                 const yearlyTotals = data.map(
-                  d => d[baseRemunerationDataTypes],
+                  (d: v2MonthTotals | AnnualSummaryData) =>
+                    d[baseRemunerationDataTypes],
                 );
 
-                yearlyTotals.forEach(w => {
-                  total += w;
-                });
-
-                if (graphType === 'total' || !agency) {
-                  return formatCurrencyValue(total, 1);
-                }
-
-                return formatCurrencyValue(total / data.length, 1);
+                return calculateTotal(yearlyTotals);
               })()}
             </Typography>
           </Grid>
@@ -238,20 +243,12 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                let total = 0;
                 const yearlyTotals = data.map(
-                  d => d[otherRemunerationsDataTypes],
+                  (d: v2MonthTotals | AnnualSummaryData) =>
+                    d[otherRemunerationsDataTypes],
                 );
 
-                yearlyTotals.forEach(w => {
-                  total += w;
-                });
-
-                if (graphType === 'total' || !agency) {
-                  return formatCurrencyValue(total, 1);
-                }
-
-                return formatCurrencyValue(total / data.length, 1);
+                return calculateTotal(yearlyTotals);
               })()}
             </Typography>
           </Grid>
@@ -274,18 +271,12 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                let total = 0;
-                const yearlyTotals = data.map(d => d[discountsDataTypes]);
+                const yearlyTotals = data.map(
+                  (d: v2MonthTotals | AnnualSummaryData) =>
+                    d[discountsDataTypes],
+                );
 
-                yearlyTotals.forEach(w => {
-                  total += w;
-                });
-
-                if (graphType === 'total' || !agency) {
-                  return formatCurrencyValue(total, 1);
-                }
-
-                return formatCurrencyValue(total / data.length, 1);
+                return calculateTotal(yearlyTotals);
               })()}
             </Typography>
           </Grid>
@@ -312,23 +303,14 @@ const index = ({
             </Typography>
             <Typography pb={0} fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                let total = 0;
                 const yearlyTotals = data.map(
-                  d =>
+                  (d: v2MonthTotals | AnnualSummaryData) =>
                     d[baseRemunerationDataTypes] +
                     d[otherRemunerationsDataTypes] -
                     d[discountsDataTypes],
                 );
 
-                yearlyTotals.forEach(w => {
-                  total += w;
-                });
-
-                if (graphType === 'total' || !agency) {
-                  return formatCurrencyValue(total, 1);
-                }
-
-                return formatCurrencyValue(total / data.length, 1);
+                return calculateTotal(yearlyTotals);
               })()}
             </Typography>
           </Grid>
