@@ -28,6 +28,7 @@ import light from '../../styles/theme-light';
 import { formatAgency } from '../../functions/format';
 import Drawer from '../Common/Drawer';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
+import SearchAccordion from './components/SearchAccordion';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./components/RemunerationChart'),
@@ -174,6 +175,9 @@ const AgencyPageWithoutNavigation: React.FC<
             dataLoading={dataLoading}
           />
         </Box>
+        <Box mt={2}>
+          <SearchAccordion selectedAgencies={[agency]} />
+        </Box>
         {(!agency?.coletando && !agency?.possui_dados) ||
         (agency?.coletando && agency?.possui_dados) ? (
           <Box mt={2}>
@@ -220,7 +224,7 @@ const AgencyPageWithoutNavigation: React.FC<
 
       <ShareModal
         isOpen={modalIsOpen}
-        url={`https://dadosjusbr.org/orgao/${id}`}
+        url={window.location.href}
         onRequestClose={() => setModalIsOpen(false)}
       />
     </Container>

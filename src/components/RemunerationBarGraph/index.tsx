@@ -35,6 +35,7 @@ import { formatAgency } from '../../functions/format';
 import Drawer from '../Common/Drawer';
 import IndexTabGraph from '../TransparencyChart/IndexTabChart';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
+import SearchAccordion from './components/SearchAccordion';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -270,6 +271,9 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             dataLoading={dataLoading}
             selectedMonth={navigableMonth}
           />
+        </Box>
+        <Box mt={2}>
+          <SearchAccordion selectedAgencies={[agency]} selectedYears={year} />
         </Box>
         <Box mt={2} mb={12}>
           {plotData.length > 0 && (
