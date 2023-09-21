@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
@@ -29,6 +29,7 @@ import { formatAgency } from '../../functions/format';
 import Drawer from '../Common/Drawer';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 import SearchAccordion from './components/SearchAccordion';
+import { getParameter } from '../../functions/url';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./components/RemunerationChart'),
@@ -70,8 +71,14 @@ const AgencyPageWithoutNavigation: React.FC<
   plotData,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [devMode, setDevMode] = useState(false);
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
+
+  useEffect(() => {
+    setDevMode(Boolean(getParameter('dev_mode')));
+  }, []);
+
   return (
     <Container fixed sx={{ mb: 12 }}>
       <Box>
@@ -175,9 +182,11 @@ const AgencyPageWithoutNavigation: React.FC<
             dataLoading={dataLoading}
           />
         </Box>
-        <Box mt={2}>
-          {agency && <SearchAccordion selectedAgencies={[agency]} />}
-        </Box>
+        {devMode && (
+          <Box mt={2}>
+            {agency && <SearchAccordion selectedAgencies={[agency]} />}
+          </Box>
+        )}
         {(!agency?.coletando && !agency?.possui_dados) ||
         (agency?.coletando && agency?.possui_dados) ? (
           <Box mt={2}>
