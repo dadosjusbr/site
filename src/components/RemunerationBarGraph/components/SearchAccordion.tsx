@@ -51,6 +51,7 @@ const SearchAccordion = ({
 
   const clearSearch = () => {
     setCategory('Tudo');
+    setSelectedMonths(months);
   };
 
   const firstRequest = async () => {
@@ -119,7 +120,7 @@ const SearchAccordion = ({
         .toLowerCase(),
     );
     window.history.replaceState({}, '', `${url}`);
-  }, [category]);
+  }, [category, selectedMonths]);
 
   return (
     <Grid item xs={12} md={20}>
@@ -186,7 +187,7 @@ const SearchAccordion = ({
             </Grid>
           </Grid>
           <Search.Result
-            sharable={false}
+            shareButtonProps={{ color: 'secondary' }}
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}
@@ -215,7 +216,18 @@ const SearchAccordion = ({
           />
           <ShareModal
             isOpen={modalIsOpen}
-            url={`https://dadosjusbr.org/pesquisar${query}`}
+            url={`https://dadosjusbr.org/orgao/${selectedAgencies
+              .map(a => a.id_orgao)
+              .join(',')}/${selectedYears.toString()}?orgaos=${selectedAgencies
+              .map(a => a.id_orgao)
+              .join(
+                ',',
+              )}&anos=${selectedYears.toString()}&meses=${selectedMonths
+              .map(m => String(m.value))
+              .join(',')}&categorias=${category
+              .split(' ')
+              .at(category === 'Remuneração base' ? -1 : 0)
+              .toLowerCase()}`}
             onRequestClose={() => setModalIsOpen(false)}
           />
         </AccordionDetails>

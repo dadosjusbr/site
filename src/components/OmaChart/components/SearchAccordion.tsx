@@ -178,7 +178,7 @@ const SearchAccordion = ({
             </Grid>
           </Grid>
           <Search.Result
-            sharable={false}
+            shareButtonProps={{ color: 'secondary' }}
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}
@@ -207,7 +207,7 @@ const SearchAccordion = ({
           />
           <ShareModal
             isOpen={modalIsOpen}
-            url={`https://dadosjusbr.org/pesquisar${query}`}
+            url={`${window.location.href.replace(window.location.hash, '')}`}
             onRequestClose={() => setModalIsOpen(false)}
           />
         </AccordionDetails>

@@ -48,6 +48,8 @@ const SearchAccordion = ({ selectedAgencies }: SearchAccordionProps) => {
 
   const clearSearch = () => {
     setCategory('Tudo');
+    setSelectedMonths(months);
+    setSelectedYears(getCurrentYear());
   };
 
   const firstRequest = async () => {
@@ -79,45 +81,50 @@ const SearchAccordion = ({ selectedAgencies }: SearchAccordionProps) => {
   };
 
   useEffect(() => {
-    setCategory(getSearchUrlParameter('categorias') as string);
-    setSelectedMonths(getSearchUrlParameter('meses') as Month[]);
-    setSelectedYears(getSearchUrlParameter('anos') as number);
-
-    // stop removing dev_mode from url when turning off dev_mode
-    const url = new URL(window.location.href);
-    url.searchParams.delete('dev_mode');
-
-    // turn this into location.search !== '' when removing dev_mode feature
     let timer: NodeJS.Timeout;
-    if (url.search !== '') {
-      firstRequest();
-      timer = setTimeout(() => {
-        window.location.assign('#search-accordion');
-      }, 1500);
+
+    if (window.location.pathname.split('/').includes('orgao')) {
+      setCategory(getSearchUrlParameter('categorias') as string);
+      setSelectedMonths(getSearchUrlParameter('meses') as Month[]);
+      setSelectedYears(getSearchUrlParameter('anos') as number);
+
+      // stop removing dev_mode from url when turning off dev_mode
+      const url = new URL(window.location.href);
+      url.searchParams.delete('dev_mode');
+
+      // turn this into location.search !== '' when removing dev_mode feature
+      if (url.search !== '') {
+        firstRequest();
+        timer = setTimeout(() => {
+          window.location.assign('#search-accordion');
+        }, 1500);
+      }
     }
 
     return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
+    if (window.location.pathname.split('/').includes('orgao')) {
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        return;
+      }
+      const url = new URL(window.location.href);
+      const params = url.searchParams;
+      params.set('anos', selectedYears != null ? selectedYears.toString() : '');
+      params.set('meses', selectedMonths.map(m => String(m.value)).join(','));
+      params.set('orgaos', selectedAgencies.map(a => a.id_orgao).join(','));
+      params.set(
+        'categorias',
+        category
+          .split(' ')
+          .at(category === 'Remuneração base' ? -1 : 0)
+          .toLowerCase(),
+      );
+      window.history.replaceState({}, '', `${url}`);
     }
-    const url = new URL(window.location.href);
-    const params = url.searchParams;
-    params.set('anos', selectedYears != null ? selectedYears.toString() : '');
-    params.set('meses', selectedMonths.map(m => String(m.value)).join(','));
-    params.set('orgaos', selectedAgencies.map(a => a.id_orgao).join(','));
-    params.set(
-      'categorias',
-      category
-        .split(' ')
-        .at(category === 'Remuneração base' ? -1 : 0)
-        .toLowerCase(),
-    );
-    window.history.replaceState({}, '', `${url}`);
-  }, [category]);
+  }, [category, selectedMonths, selectedYears]);
 
   return (
     <Grid item xs={12} md={20}>
@@ -191,7 +198,7 @@ const SearchAccordion = ({ selectedAgencies }: SearchAccordionProps) => {
             </Grid>
           </Grid>
           <Search.Result
-            sharable={false}
+            shareButtonProps={{ color: 'secondary' }}
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}
@@ -220,7 +227,18 @@ const SearchAccordion = ({ selectedAgencies }: SearchAccordionProps) => {
           />
           <ShareModal
             isOpen={modalIsOpen}
-            url={`https://dadosjusbr.org/pesquisar${query}`}
+            url={`https://dadosjusbr.org/orgao/${selectedAgencies
+              .map(a => a.id_orgao)
+              .join(',')}?orgaos=${selectedAgencies
+              .map(a => a.id_orgao)
+              .join(
+                ',',
+              )}&anos=${selectedYears.toString()}&meses=${selectedMonths
+              .map(m => String(m.value))
+              .join(',')}&categorias=${category
+              .split(' ')
+              .at(category === 'Remuneração base' ? -1 : 0)
+              .toLowerCase()}`}
             onRequestClose={() => setModalIsOpen(false)}
           />
         </AccordionDetails>

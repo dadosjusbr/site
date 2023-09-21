@@ -176,7 +176,7 @@ const AgencyPageWithoutNavigation: React.FC<
           />
         </Box>
         <Box mt={2}>
-          <SearchAccordion selectedAgencies={[agency]} />
+          {agency && <SearchAccordion selectedAgencies={[agency]} />}
         </Box>
         {(!agency?.coletando && !agency?.possui_dados) ||
         (agency?.coletando && agency?.possui_dados) ? (
@@ -224,7 +224,7 @@ const AgencyPageWithoutNavigation: React.FC<
 
       <ShareModal
         isOpen={modalIsOpen}
-        url={window.location.href}
+        url={`https://dadosjusbr.org/orgao/${id}`}
         onRequestClose={() => setModalIsOpen(false)}
       />
     </Container>
