@@ -28,7 +28,7 @@ import light from '../../styles/theme-light';
 import { formatAgency } from '../../functions/format';
 import Drawer from '../Common/Drawer';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
-import SearchAccordion from './components/SearchAccordion';
+import SearchAccordion from './components/AnnualSearchAccordion';
 import { getParameter } from '../../functions/url';
 
 const AnnualRemunerationGraph = dynamic(

@@ -18,7 +18,7 @@ import AgencyGenerals from './components/AgencyGenerals';
 import TransparencyMetrics from './components/TransparencyMetrics';
 import MembersGraph from './components/MembersGraph';
 import CollectInfos from './components/CollectInfos';
-import SearchAccordion from './components/SearchAccordion';
+import SearchAccordion from './components/OMASearchAccordion';
 import { months } from '../../@types/MONTHS';
 import { getParameter } from '../../functions/url';
 
