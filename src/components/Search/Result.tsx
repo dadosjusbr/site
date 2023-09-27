@@ -5,6 +5,7 @@ import {
   Alert,
   Button,
   Paper,
+  ButtonProps,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ThemeProvider } from '@mui/material/styles';
@@ -18,7 +19,7 @@ type ResultProps = {
   downloadAvailable: boolean;
   downloadLimit: number;
   result: SearchResult[];
-  sharable: boolean;
+  shareButtonProps?: ButtonProps;
   downloadButton: React.ReactNode;
   setModalIsOpen: (isOpen: boolean) => void;
 };
@@ -52,7 +53,7 @@ const Result = ({
   downloadAvailable,
   downloadLimit,
   result,
-  sharable,
+  shareButtonProps,
   downloadButton,
   setModalIsOpen,
 }: ResultProps) => (
@@ -117,17 +118,15 @@ const Result = ({
           )}
 
           <Box py={4} textAlign="right">
-            {sharable && (
-              <Button
-                sx={{ mr: 2 }}
-                variant="outlined"
-                color="info"
-                endIcon={<IosShareIcon />}
-                onClick={() => setModalIsOpen(true)}
-              >
-                COMPARTILHAR
-              </Button>
-            )}
+            <Button
+              {...shareButtonProps}
+              sx={{ mr: 2 }}
+              variant="outlined"
+              endIcon={<IosShareIcon />}
+              onClick={() => setModalIsOpen(true)}
+            >
+              COMPARTILHAR
+            </Button>
             {downloadButton}
           </Box>
         </Box>

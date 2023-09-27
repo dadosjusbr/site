@@ -105,7 +105,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             transform: 'translate(-50%, -50%)',
             width: '90%',
             maxWidth: 650,
-            bgcolor: 'background.paper',
+            bgcolor: 'secondary.main',
             border: '2px solid #fff',
             borderRadius: 2,
             boxShadow: 24,
@@ -122,7 +122,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             title="Copiar link"
             onClick={() => setQuote(false)}
           >
-            <LinkButton />
+            <LinkButton color="info" />
           </IconButton>
           <IconButton
             aria-label="quote"
@@ -130,7 +130,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
             title="Fazer citação"
             onClick={() => setQuote(true)}
           >
-            <FormatQuote />
+            <FormatQuote color="info" />
           </IconButton>
           <WhatsappShareButton
             url={setUtmParameters(
@@ -151,7 +151,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               size="large"
               title="Compartilhar no Whatsapp"
             >
-              <WhatsAppIcon />
+              <WhatsAppIcon color="info" />
             </IconButton>
           </WhatsappShareButton>
           <TwitterShareButton
@@ -173,7 +173,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               size="large"
               title="Compartilhar no Twitter"
             >
-              <TwitterIcon />
+              <TwitterIcon color="info" />
             </IconButton>
           </TwitterShareButton>
           <FacebookShareButton
@@ -195,7 +195,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               size="large"
               title="Compartilhar no Facebook"
             >
-              <FacebookOutlinedIcon />
+              <FacebookOutlinedIcon color="info" />
             </IconButton>
           </FacebookShareButton>
           <EmailShareButton
@@ -217,13 +217,17 @@ const ShareModal: React.FC<ShareModalProps> = ({
               size="large"
               title="Compartilhar com Email"
             >
-              <EmailOutlinedIcon />
+              <EmailOutlinedIcon color="info" />
             </IconButton>
           </EmailShareButton>
 
           <Box mt={4} mx={1} mb={2}>
             <OutlinedInput
               id="outlined-basic"
+              color="info"
+              sx={{
+                color: 'white',
+              }}
               fullWidth
               multiline
               value={
@@ -239,6 +243,7 @@ const ShareModal: React.FC<ShareModalProps> = ({
               endAdornment={
                 <InputAdornment position="end">
                   <ContentCopy
+                    color="info"
                     titleAccess="Copiar link"
                     sx={{ cursor: 'pointer' }}
                     onClick={handleClick}
