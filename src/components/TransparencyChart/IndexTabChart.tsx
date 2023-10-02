@@ -26,16 +26,16 @@ export default function IndexTabGraph({
   if (isAgency) {
     data = plotData?.map((item: AggregateIndexes) => ({
       nome: item.id_orgao,
-      facilidade: item.agregado.indice_facilidade,
-      completude: item.agregado.indice_completude,
-      transparencia: item.agregado.indice_transparencia,
+      facilidade: item.agregado.indice_facilidade.toFixed(2),
+      completude: item.agregado.indice_completude.toFixed(2),
+      transparencia: item.agregado.indice_transparencia.toFixed(2),
     }));
   } else {
     data = plotData?.map((item: AggregateIndexes) => ({
       nome: formatAgency(item.id_orgao).toUpperCase(),
-      facilidade: item.agregado.indice_facilidade,
-      completude: item.agregado.indice_completude,
-      transparencia: item.agregado.indice_transparencia,
+      facilidade: item.agregado.indice_facilidade.toFixed(2),
+      completude: item.agregado.indice_completude.toFixed(2),
+      transparencia: item.agregado.indice_transparencia.toFixed(2),
     }));
   }
 
@@ -46,7 +46,7 @@ export default function IndexTabGraph({
     if (monthly && !isMobile) {
       return `${MONTHS[d]}`;
     }
-    return `${d}`.replace('.', ',');
+    return `${d}`;
   };
 
   useEffect(() => {
@@ -89,7 +89,6 @@ export default function IndexTabGraph({
             y1: 'facilidade',
           }),
           Plot.dot(data, {
-            title: d => `${d.completude.toFixed(2)}`.replace('.', ','),
             y: 'completude',
             x: 'nome',
             r: !isMobile ? 6 : 14,
@@ -98,7 +97,6 @@ export default function IndexTabGraph({
             strokeWidth: 1,
           }),
           Plot.dot(data, {
-            title: d => `${d.facilidade.toFixed(2)}`.replace('.', ','),
             y: 'facilidade',
             x: 'nome',
             r: !isMobile ? 6 : 14,
@@ -113,12 +111,28 @@ export default function IndexTabGraph({
             fill: 'black',
           }),
           Plot.dot(data, {
-            title: d => `${d.transparencia.toFixed(2)}`.replace('.', ','),
             y: 'transparencia',
             x: 'nome',
             r: !isMobile ? 10 : 20,
             fill: '#3edbb1',
             opacity: 0.65,
+          }),
+          Plot.link(data, {
+            x: 'nome',
+            y1: 0,
+            y2: 1,
+            stroke: 'transparent',
+            strokeWidth: 45,
+            title: d =>
+              `${tickFormatFunc(
+                d.nome,
+              )}\nTransparência: ${d.transparencia.replace(
+                '.',
+                ',',
+              )}\nCompletude: ${d.completude.replace(
+                '.',
+                ',',
+              )}\nFacilidade: ${d.facilidade.replace('.', ',')}`,
           }),
         ],
       });
@@ -152,9 +166,9 @@ export default function IndexTabGraph({
             x1: 'facilidade',
             x2: 'completude',
             y: 'nome',
+            stroke: '#3e5363',
           }),
           Plot.dot(data, {
-            title: d => `${d.completude.toFixed(2)}`.replace('.', ','),
             x: 'completude',
             y: 'nome',
             r: !isMobile ? 6 : 14,
@@ -163,7 +177,6 @@ export default function IndexTabGraph({
             strokeWidth: 1,
           }),
           Plot.dot(data, {
-            title: d => `${d.facilidade.toFixed(2)}`.replace('.', ','),
             x: 'facilidade',
             y: 'nome',
             r: !isMobile ? 6 : 14,
@@ -178,13 +191,27 @@ export default function IndexTabGraph({
             fill: 'black',
           }),
           Plot.dot(data, {
-            title: d => `${d.transparencia.toFixed(2)}`.replace('.', ','),
             x: 'transparencia',
             y: 'nome',
             r: !isMobile ? 10 : 20,
             fill: '#3edbb1',
             opacity: 0.65,
             sort: { y: 'x', reverse: true },
+          }),
+          Plot.link(data, {
+            x1: 0,
+            x2: 1,
+            y: 'nome',
+            stroke: 'transparent',
+            strokeWidth: 20,
+            title: d =>
+              `${d.nome}\nTransparência: ${d.transparencia.replace(
+                '.',
+                ',',
+              )}\nCompletude: ${d.completude.replace(
+                '.',
+                ',',
+              )}\nFacilidade: ${d.facilidade.replace('.', ',')}`,
           }),
         ],
       });

@@ -1,4 +1,4 @@
-import React, { Suspense, useMemo, useState } from 'react';
+import React, { Suspense, useEffect, useMemo, useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga4';
 import {
@@ -35,6 +35,8 @@ import { formatAgency } from '../../functions/format';
 import Drawer from '../Common/Drawer';
 import IndexTabGraph from '../TransparencyChart/IndexTabChart';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
+import SearchAccordion from './components/SearchAccordion';
+import { getParameter } from '../../functions/url';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -70,6 +72,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   );
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
+  const [devMode, setDevMode] = useState(false);
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
@@ -83,6 +86,10 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
 
     return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
   }
+
+  useEffect(() => {
+    setDevMode(Boolean(getParameter('dev_mode')));
+  }, []);
 
   return (
     <Container fixed>
@@ -271,6 +278,11 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             selectedMonth={navigableMonth}
           />
         </Box>
+        {devMode && (
+          <Box mt={2}>
+            <SearchAccordion selectedAgencies={[agency]} selectedYears={year} />
+          </Box>
+        )}
         <Box mt={2} mb={12}>
           {plotData.length > 0 && (
             <Accordion>

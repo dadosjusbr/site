@@ -201,7 +201,7 @@ export default function Index({ ais }: { ais: Agency[] }) {
             </Grid>
           </Grid>
           <Search.Result
-            sharable={true}
+            shareButtonProps={{ color: 'info' }}
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}
