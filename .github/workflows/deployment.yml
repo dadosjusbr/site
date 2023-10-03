@@ -2,7 +2,7 @@ name: Continuous Delivery
 
 on:
   push:
-    branches: [main]
+    branches: [deployment-environment]
   schedule:
     - cron: '0 3 * * *'
 jobs:
