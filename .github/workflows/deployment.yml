@@ -38,9 +38,7 @@ jobs:
         run: npm run build
 
       - name: Initialize EB Environment
-        run: |
-          eb init -r ${{ env.AWS_DEFAULT_REGION }} ${{ env.AWS_APPLICATION_NAME }}
-          echo -e "1\n"
+        run: echo "1" | eb init -r ${{ env.AWS_DEFAULT_REGION }} ${{ env.AWS_APPLICATION_NAME }}
 
       - name: Deploy to EB
         run: |
