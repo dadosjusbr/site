@@ -40,7 +40,7 @@ jobs:
       - name: Initialize EB Environment
         run: |
           eb init -r ${{ env.AWS_DEFAULT_REGION }} ${{ env.AWS_APPLICATION_NAME }}
-          eb use ${{ env.AWS_ENVIRONMENT_NAME }} -r ${{ env.AWS_DEFAULT_REGION }}
+          echo -e "1\n"
 
       - name: Deploy to EB
         run: |
