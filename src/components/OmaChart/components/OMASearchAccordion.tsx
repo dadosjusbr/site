@@ -129,7 +129,7 @@ const SearchAccordion = ({
           id="search-accordion"
         >
           <Typography align="center" variant="h6">
-            Pesquisar dados coletados
+            Baixar um subconjunto desses dados
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
