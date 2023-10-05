@@ -278,12 +278,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             selectedMonth={navigableMonth}
           />
         </Box>
-        {devMode && (
-          <Box mt={2}>
-            <SearchAccordion selectedAgencies={[agency]} selectedYears={year} />
-          </Box>
-        )}
-        <Box mt={2} mb={12}>
+        <Box mt={2} mb={devMode ? 0 : 12}>
           {plotData.length > 0 && (
             <Accordion>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
@@ -325,6 +320,11 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
             </Accordion>
           )}
         </Box>
+        {devMode && (
+          <Box mt={2} mb={12}>
+            <SearchAccordion selectedAgencies={[agency]} selectedYears={year} />
+          </Box>
+        )}
       </ThemeProvider>
 
       <ShareModal

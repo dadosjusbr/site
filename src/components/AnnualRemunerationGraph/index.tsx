@@ -182,11 +182,6 @@ const AgencyPageWithoutNavigation: React.FC<
             dataLoading={dataLoading}
           />
         </Box>
-        {devMode && (
-          <Box mt={2}>
-            {agency && <SearchAccordion selectedAgencies={[agency]} />}
-          </Box>
-        )}
         {(!agency?.coletando && !agency?.possui_dados) ||
         (agency?.coletando && agency?.possui_dados) ? (
           <Box mt={2}>
@@ -229,6 +224,11 @@ const AgencyPageWithoutNavigation: React.FC<
             </Accordion>
           </Box>
         ) : null}
+        {devMode && (
+          <Box mt={2}>
+            {agency && <SearchAccordion selectedAgencies={[agency]} />}
+          </Box>
+        )}
       </ThemeProvider>
 
       <ShareModal
