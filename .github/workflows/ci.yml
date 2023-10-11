@@ -5,6 +5,9 @@ on:
 jobs:
   building:
     runs-on: ubuntu-latest
+    env:
+      NEW_RELIC_APP_NAME: ${{ secrets.NEW_RELIC_APP_NAME }}
+      NEW_RELIC_LICENSE_KEY: ${{ secrets.NEW_RELIC_LICENSE_KEY }}
     steps:
       - uses: actions/checkout@v2
 
@@ -19,8 +22,8 @@ jobs:
       - name: Build
         run: |
           if npm run build; then
-            echo "Deployment succeeded✅"
+            echo "Build succeeded✅"
           else
-            echo "Deployment failed❌"
+            echo "Build failed❌"
             exit 1
           fi
