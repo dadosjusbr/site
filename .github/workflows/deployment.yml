@@ -32,9 +32,6 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Build
-        run: npm run build
-
       - name: Initialize EB Environment
         run: (echo "1"; echo "n") | eb init -r ${{ env.AWS_DEFAULT_REGION }} ${{ env.AWS_APPLICATION_NAME }}
 
