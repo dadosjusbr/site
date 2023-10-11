@@ -22,7 +22,6 @@ import api from '../../services/api';
 import DropDownGroupSelector from '../../components/Common/DropDownGroupSelector';
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
-import { normalizePlotData } from '../../functions/normalize';
 import { extractNumbers, formatToAgency } from '../../functions/format';
 
 function orderStringsWithNum(string1: string, string2: string) {
@@ -172,16 +171,14 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   const [agencyData, setAgencyData] = useState<Agency>();
   const [agencyTotals, setAgencyTotals] = useState<v2AgencyTotalsYear>();
   const [dataLoading, setDataLoading] = useState(true);
-  const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
 
   useEffect(() => {
     setDataLoading(true);
-    Promise.all([
-      fetchAgencyData(),
-      fetchPlotData(),
-      fetchAgencyTotalData(),
-    ]).finally(() => setDataLoading(false));
+    Promise.all([fetchAgencyData(), fetchAgencyTotalData()]).finally(() =>
+      setDataLoading(false),
+    );
   }, [year]);
+
   async function fetchAgencyData() {
     try {
       const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
@@ -192,37 +189,20 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
       router.push('/404');
     }
   }
-  async function fetchPlotData() {
-    try {
-      const { data: transparencyPlot } = await api.default.get(
-        `/indice/orgao/${id}`,
-      );
-      setPlotData(transparencyPlot);
-    } catch (err) {
-      router.push('/404');
-    }
-  }
+
   const fetchAgencyTotalData = async () => {
-    const currentYear = getCurrentYear();
-    await fetchAgencyTotalDataRecursive(currentYear);
-  };
-
-  const fetchAgencyTotalDataRecursive = async (yearParam: number) => {
-    try {
-      const { data: agencyTotalsResponse } = await api.ui.get(
-        `/v2/orgao/totais/${id}/${yearParam}`,
-      );
-
-      if (agencyTotalsResponse.meses) {
+    if (year != undefined) {
+      try {
+        const { data: agencyTotalsResponse } = await api.ui.get(
+          `/v2/orgao/totais/${id}/${year}`,
+        );
         setAgencyTotals(agencyTotalsResponse);
-      } else {
-        const previousYear = yearParam - 1;
-        await fetchAgencyTotalDataRecursive(previousYear);
+      } catch (err) {
+        router.push('/404');
       }
-    } catch (err) {
-      router.push('/404');
     }
   };
+
   return (
     <div id={id}>
       <AgencyWithoutNavigation
@@ -233,7 +213,6 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
         title={title}
         year={year}
         agency={agencyData}
-        plotData={normalizePlotData(plotData)}
       />
     </div>
   );
