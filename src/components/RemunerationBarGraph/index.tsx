@@ -107,8 +107,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     setExpanded(false);
   }, [year]);
 
-  console.log(plotData.length);
-
   useEffect(() => {
     setDevMode(Boolean(getParameter('dev_mode')));
   }, []);

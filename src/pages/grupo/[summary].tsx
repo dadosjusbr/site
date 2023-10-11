@@ -191,7 +191,7 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
   }
 
   const fetchAgencyTotalData = async () => {
-    if (year != undefined) {
+    if (year !== undefined) {
       try {
         const { data: agencyTotalsResponse } = await api.ui.get(
           `/v2/orgao/totais/${id}/${year}`,
