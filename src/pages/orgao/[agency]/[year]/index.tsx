@@ -7,7 +7,6 @@ import Header from '../../../../components/Essentials/Header';
 import Footer from '../../../../components/Essentials/Footer';
 import api from '../../../../services/api';
 import AgencyWithNavigation from '../../../../components/RemunerationBarGraph';
-import { normalizeMonthlyPlotData } from '../../../../functions/normalize';
 import { formatAgency } from '../../../../functions/format';
 
 export default function AgencyPage({
@@ -18,7 +17,6 @@ export default function AgencyPage({
   navigableMonth,
   fullName,
   summaryPackage,
-  plotData,
 }: {
   id: string;
   year: number;
@@ -27,7 +25,6 @@ export default function AgencyPage({
   navigableMonth: number;
   fullName: string;
   summaryPackage: Backup;
-  plotData: AggregateIndexes[];
 }) {
   const [agencyInfo, setAgencyInfo] = useState<AllAgencyInformation>();
   const router = useRouter();
@@ -76,7 +73,6 @@ export default function AgencyPage({
           navigableMonth={navigableMonth}
           setYear={navigateToGivenYear}
           summaryPackage={summaryPackage && summaryPackage}
-          plotData={normalizeMonthlyPlotData(plotData)}
         />
       </Container>
       <Footer />
@@ -90,9 +86,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
   const { agency: id, year } = context.params;
   try {
     const { data: agency } = await api.ui.get(`/v2/orgao/totais/${id}/${year}`);
-    const { data: plotData } = await api.default.get(
-      `/indice/orgao/${id}/${year}`,
-    );
 
     return {
       props: {
@@ -108,7 +101,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
           : 1,
         fullName: agency?.orgao?.nome,
         summaryPackage: agency?.package || null,
-        plotData,
       },
     };
   } catch (err) {

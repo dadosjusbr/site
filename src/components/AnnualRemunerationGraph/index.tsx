@@ -30,6 +30,8 @@ import Drawer from '../Common/Drawer';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 import SearchAccordion from './components/AnnualSearchAccordion';
 import { getParameter } from '../../functions/url';
+import api from '../../services/api';
+import { normalizePlotData } from '../../functions/normalize';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./components/RemunerationChart'),
@@ -55,25 +57,29 @@ export interface AgencyPageWithoutNavigationProps {
   title: string;
   data: AnnualSummaryData[];
   dataLoading: boolean;
-  plotData: AggregateIndexes[];
 }
 
 const AgencyPageWithoutNavigation: React.FC<
   AgencyPageWithoutNavigationProps
-> = ({
-  id,
-  agencyTotals,
-  title,
-  year,
-  agency,
-  data,
-  dataLoading,
-  plotData,
-}) => {
+> = ({ id, agencyTotals, title, year, agency, data, dataLoading }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [devMode, setDevMode] = useState(false);
+  const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
+
+  async function fetchPlotData() {
+    if (!plotData.length) {
+      try {
+        const { data: transparencyPlot } = await api.default.get(
+          `/indice/orgao/${id}`,
+        );
+        setPlotData(normalizePlotData(transparencyPlot));
+      } catch (err) {
+        router.push('/404');
+      }
+    }
+  }
 
   useEffect(() => {
     setDevMode(Boolean(getParameter('dev_mode')));
@@ -185,7 +191,7 @@ const AgencyPageWithoutNavigation: React.FC<
         {(!agency?.coletando && !agency?.possui_dados) ||
         (agency?.coletando && agency?.possui_dados) ? (
           <Box mt={2}>
-            <Accordion>
+            <Accordion onChange={fetchPlotData}>
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="h6" color="#000">
                   Índice de transparência
@@ -213,12 +219,16 @@ const AgencyPageWithoutNavigation: React.FC<
               </AccordionSummary>
               <AccordionDetails>
                 <Suspense fallback={<CircularProgress />}>
-                  <IndexTabGraph
-                    plotData={plotData}
-                    height={60 * plotData.length}
-                    mobileHeight={95 * plotData.length}
-                    isAgency
-                  />
+                  {plotData.length > 0 ? (
+                    <IndexTabGraph
+                      plotData={plotData}
+                      height={60 * plotData.length}
+                      mobileHeight={95 * plotData.length}
+                      isAgency
+                    />
+                  ) : (
+                    <CircularProgress />
+                  )}
                 </Suspense>
               </AccordionDetails>
             </Accordion>

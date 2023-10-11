@@ -8,7 +8,6 @@ import Header from '../../../components/Essentials/Header';
 import Footer from '../../../components/Essentials/Footer';
 import api from '../../../services/api';
 import { getCurrentYear } from '../../../functions/currentYear';
-import { normalizePlotData } from '../../../functions/normalize';
 
 const AgencyWithoutNavigation = dynamic(
   () => import('../../../components/AnnualRemunerationGraph'),
@@ -20,13 +19,11 @@ export default function AnualAgencyPage({
   agency,
   data,
   fullName,
-  plotData,
 }: {
   id: string;
   agency: Agency;
   data: AnnualSummaryData[];
   fullName: string;
-  plotData: AggregateIndexes[];
 }) {
   const router = useRouter();
   const [year, setYear] = useState(getCurrentYear());
@@ -44,22 +41,12 @@ export default function AnualAgencyPage({
   }, [data]);
 
   const fetchAgencyTotalData = async () => {
-    const currentYear = getCurrentYear();
-    await fetchAgencyTotalDataRecursive(currentYear);
-  };
-
-  const fetchAgencyTotalDataRecursive = async (yearParam: number) => {
     try {
       const { data: agencyTotalsResponse } = await api.ui.get(
-        `/v2/orgao/totais/${id}/${yearParam}`,
+        `/v2/orgao/totais/${id}/${year}`,
       );
 
-      if (agencyTotalsResponse.meses) {
-        setAgencyTotals(agencyTotalsResponse);
-      } else {
-        const previousYear = yearParam - 1;
-        await fetchAgencyTotalDataRecursive(previousYear);
-      }
+      setAgencyTotals(agencyTotalsResponse);
     } catch (err) {
       router.push('/404');
     }
@@ -88,7 +75,6 @@ export default function AnualAgencyPage({
           agency={agency}
           dataLoading={false}
           title={fullName}
-          plotData={normalizePlotData(plotData)}
         />
       </Box>
       <Footer />

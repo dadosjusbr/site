@@ -37,6 +37,8 @@ import IndexTabGraph from '../TransparencyChart/IndexTabChart';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 import SearchAccordion from './components/SearchAccordion';
 import { getParameter } from '../../functions/url';
+import api from '../../services/api';
+import { normalizeMonthlyPlotData } from '../../functions/normalize';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -49,7 +51,6 @@ export interface AgencyPageWithNavigationProps {
   dataLoading: boolean;
   navigableMonth: number;
   summaryPackage?: Backup;
-  plotData: AggregateIndexes[];
 }
 
 const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
@@ -63,9 +64,10 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   dataLoading,
   navigableMonth,
   summaryPackage,
-  plotData,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
+  const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
+  const [expanded, setExpanded] = useState(false);
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -86,6 +88,24 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
 
     return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
   }
+
+  async function fetchPlotData() {
+    if (!plotData.length) {
+      try {
+        const { data: transparencyPlot } = await api.default.get(
+          `/indice/orgao/${id}/${year}`,
+        );
+        setPlotData(normalizeMonthlyPlotData(transparencyPlot));
+      } catch (err) {
+        router.push('/404');
+      }
+    }
+  }
+
+  useEffect(() => {
+    setPlotData([]);
+    setExpanded(false);
+  }, [year]);
 
   useEffect(() => {
     setDevMode(Boolean(getParameter('dev_mode')));
@@ -268,65 +288,80 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           </>
         )}
       </Box>
-      <ThemeProvider theme={light}>
-        <Box>
-          <RemunerationBarGraph
-            data={data}
-            year={year}
-            agency={agency}
-            dataLoading={dataLoading}
-            selectedMonth={navigableMonth}
-          />
-        </Box>
-        <Box mt={2} mb={devMode ? 0 : 12}>
-          {plotData.length > 0 && (
-            <Accordion>
-              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                <Typography variant="h6" color="#000">
-                  Índice de transparência
-                  <Tooltip
-                    placement="bottom"
-                    title={
-                      <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                        O Índice de Transparência é composto por duas dimensões:
-                        facilidade e completude. Cada uma das dimensões, por sua
-                        vez, é composta por até seis critérios em cada prestação
-                        de contas, que são avaliados mês a mês. O índice
-                        corresponde à média harmônica das duas dimensões.{' '}
-                        <Link href="/indice" color="inherit">
-                          Saiba mais
-                        </Link>
-                        .
-                      </Typography>
-                    }
-                  >
-                    <IconButton aria-label="Botão de informações">
-                      <InfoIcon />
-                    </IconButton>
-                  </Tooltip>
-                </Typography>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Suspense fallback={<CircularProgress />}>
-                  <IndexTabGraph
-                    plotData={plotData}
-                    height={350}
-                    mobileHeight={555}
-                    monthly
-                    isAgency
-                  />
-                </Suspense>
-              </AccordionDetails>
-            </Accordion>
-          )}
-        </Box>
-        {devMode && (
-          <Box mt={2} mb={12}>
-            <SearchAccordion selectedAgencies={[agency]} selectedYears={year} />
+      <Box mb={12}>
+        <ThemeProvider theme={light}>
+          <Box>
+            <RemunerationBarGraph
+              data={data}
+              year={year}
+              agency={agency}
+              dataLoading={dataLoading}
+              selectedMonth={navigableMonth}
+            />
           </Box>
-        )}
-      </ThemeProvider>
-
+          {data?.length > 0 && (
+            <Box mt={2}>
+              <Accordion
+                onChange={() => {
+                  fetchPlotData();
+                  setExpanded(!expanded);
+                }}
+                expanded={expanded}
+              >
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography variant="h6" color="#000">
+                    Índice de transparência
+                    <Tooltip
+                      placement="bottom"
+                      title={
+                        <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                          O Índice de Transparência é composto por duas
+                          dimensões: facilidade e completude. Cada uma das
+                          dimensões, por sua vez, é composta por até seis
+                          critérios em cada prestação de contas, que são
+                          avaliados mês a mês. O índice corresponde à média
+                          harmônica das duas dimensões.{' '}
+                          <Link href="/indice" color="inherit">
+                            Saiba mais
+                          </Link>
+                          .
+                        </Typography>
+                      }
+                    >
+                      <IconButton aria-label="Botão de informações">
+                        <InfoIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Suspense fallback={<CircularProgress />}>
+                    {plotData.length > 0 ? (
+                      <IndexTabGraph
+                        plotData={plotData}
+                        height={350}
+                        mobileHeight={555}
+                        monthly
+                        isAgency
+                      />
+                    ) : (
+                      <CircularProgress />
+                    )}
+                  </Suspense>
+                </AccordionDetails>
+              </Accordion>
+            </Box>
+          )}
+          {devMode && (
+            <Box mt={2}>
+              <SearchAccordion
+                selectedAgencies={[agency]}
+                selectedYears={year}
+              />
+            </Box>
+          )}
+        </ThemeProvider>
+      </Box>
       <ShareModal
         isOpen={modalIsOpen}
         url={`https://dadosjusbr.org/orgao/${id}/${year}`}
