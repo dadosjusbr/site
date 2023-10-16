@@ -22,7 +22,6 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import SearchIcon from '@mui/icons-material/Search';
 import InfoIcon from '@mui/icons-material/Info';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -36,7 +35,6 @@ import Drawer from '../Common/Drawer';
 import IndexTabGraph from '../TransparencyChart/IndexTabChart';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 import SearchAccordion from './components/SearchAccordion';
-import { getParameter } from '../../functions/url';
 import api from '../../services/api';
 import { normalizeMonthlyPlotData } from '../../functions/normalize';
 
@@ -74,7 +72,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   );
   const previousDateIsNavigable = useMemo<boolean>(() => year !== 2018, [year]);
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
-  const [devMode, setDevMode] = useState(false);
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
@@ -106,10 +103,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     setPlotData([]);
     setExpanded(false);
   }, [year]);
-
-  useEffect(() => {
-    setDevMode(Boolean(getParameter('dev_mode')));
-  }, []);
 
   return (
     <Container fixed>
@@ -216,19 +209,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       </Typography>
                     </Button>
                   )}
-
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    endIcon={<SearchIcon />}
-                    onClick={() => {
-                      router.push(
-                        `/pesquisar?anos=${year}&orgaos=${agency.id_orgao}`,
-                      );
-                    }}
-                  >
-                    PESQUISAR
-                  </Button>
                 </Stack>
               </Box>
             ) : (
@@ -270,18 +250,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       </Typography>
                     </Button>
                   )}
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    endIcon={<SearchIcon />}
-                    onClick={() => {
-                      router.push(
-                        `/pesquisar?anos=${year}&orgaos=${agency.id_orgao}`,
-                      );
-                    }}
-                  >
-                    PESQUISAR
-                  </Button>
                 </Stack>
               </Drawer>
             )}
@@ -352,14 +320,9 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
               </Accordion>
             </Box>
           )}
-          {devMode && (
-            <Box mt={2}>
-              <SearchAccordion
-                selectedAgencies={[agency]}
-                selectedYears={year}
-              />
-            </Box>
-          )}
+          <Box mt={2}>
+            <SearchAccordion selectedAgencies={[agency]} selectedYears={year} />
+          </Box>
         </ThemeProvider>
       </Box>
       <ShareModal

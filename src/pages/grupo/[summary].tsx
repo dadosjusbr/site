@@ -126,11 +126,13 @@ export default function SummaryPage({
           {(() => {
             if (typeof dataList !== 'undefined' && dataList.length > 0) {
               return dataList.map(agency => (
-                <GraphWithNavigation
-                  key={agency.id_orgao}
-                  title={agency.nome}
-                  id={agency.id_orgao}
-                />
+                <Box mb={12}>
+                  <GraphWithNavigation
+                    key={agency.id_orgao}
+                    title={agency.nome}
+                    id={agency.id_orgao}
+                  />
+                </Box>
               ));
             }
             return (

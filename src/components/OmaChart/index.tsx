@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga4';
 
@@ -20,7 +20,6 @@ import MembersGraph from './components/MembersGraph';
 import CollectInfos from './components/CollectInfos';
 import SearchAccordion from './components/OMASearchAccordion';
 import { months } from '../../@types/MONTHS';
-import { getParameter } from '../../functions/url';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -58,14 +57,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   selectedAgencies,
 }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [devMode, setDevMode] = useState(false);
   const fileLink = `${process.env.S3_REPO_URL}/${agency}/datapackage/${agency}-${year}-${month}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
-
-  useEffect(() => {
-    setDevMode(Boolean(getParameter('dev_mode')));
-  }, []);
 
   return (
     <>
@@ -73,10 +67,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         <StackButtons
           router={router}
           setModalIsOpen={setModalIsOpen}
-          agency={agency}
           fileLink={fileLink}
-          month={month}
-          year={year}
           mi={mi}
         />
       ) : (
@@ -109,18 +100,6 @@ const OMASummary: React.FC<OMASummaryProps> = ({
                 {formatBytes(mi.pacote_de_dados.size)}
               </Typography>
             </Button>
-            <Button
-              variant="outlined"
-              color="info"
-              endIcon={<SearchIcon />}
-              onClick={() => {
-                router.push(
-                  `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
-                );
-              }}
-            >
-              PESQUISAR
-            </Button>
           </Stack>
         </Drawer>
       )}
@@ -139,13 +118,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           />
           <MembersGraph chartData={chartData} />
           <TransparencyMetrics mi={mi} month={month} year={year} />
-          {devMode && (
-            <SearchAccordion
-              selectedYears={year}
-              selectedMonths={[months[month - 1]]}
-              selectedAgencies={selectedAgencies}
-            />
-          )}
+          <SearchAccordion
+            selectedYears={year}
+            selectedMonths={[months[month - 1]]}
+            selectedAgencies={selectedAgencies}
+          />
           <CollectInfos mi={mi} agency={agency} />
         </Grid>
 
@@ -153,10 +130,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <StackButtons
             router={router}
             setModalIsOpen={setModalIsOpen}
-            agency={agency}
             fileLink={fileLink}
-            month={month}
-            year={year}
             mi={mi}
           />
         ) : (
@@ -204,7 +178,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         )}
       </ThemeProvider>
       <ShareModal
-        url={window.location.href}
+        url={`https://dadosjusbr.org/orgao/${agency}/${year}/${month}`}
         isOpen={modalIsOpen}
         onRequestClose={() => setModalIsOpen(false)}
       />
