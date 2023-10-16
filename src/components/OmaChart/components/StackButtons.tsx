@@ -3,7 +3,6 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import SearchIcon from '@mui/icons-material/Search';
 import ReactGA from 'react-ga4';
 import { NextRouter } from 'next/router';
 import { formatBytes } from '../../../functions/format';
@@ -13,17 +12,11 @@ export default function index({
   router,
   setModalIsOpen,
   fileLink,
-  year,
-  month,
-  agency,
   mi,
 }: {
   router: NextRouter;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   fileLink: string;
-  year: number;
-  month: number;
-  agency: string;
   mi: SummaryzedMI;
 }) {
   return (
@@ -79,18 +72,6 @@ export default function index({
           <Typography variant="button" color="#00bfa6">
             {formatBytes(mi?.pacote_de_dados?.size)}
           </Typography>
-        </Button>
-        <Button
-          variant="outlined"
-          color="info"
-          endIcon={<SearchIcon />}
-          onClick={() => {
-            router.push(
-              `/pesquisar?anos=${year}&meses=${month}&orgaos=${agency}`,
-            );
-          }}
-        >
-          PESQUISAR
         </Button>
       </Stack>
     </Box>

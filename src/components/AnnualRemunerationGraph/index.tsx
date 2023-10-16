@@ -1,4 +1,4 @@
-import React, { Suspense, useEffect, useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import {
@@ -18,7 +18,6 @@ import {
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import SearchIcon from '@mui/icons-material/Search';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import InfoIcon from '@mui/icons-material/Info';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -29,7 +28,6 @@ import { formatAgency } from '../../functions/format';
 import Drawer from '../Common/Drawer';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 import SearchAccordion from './components/AnnualSearchAccordion';
-import { getParameter } from '../../functions/url';
 import api from '../../services/api';
 import { normalizePlotData } from '../../functions/normalize';
 
@@ -63,7 +61,6 @@ const AgencyPageWithoutNavigation: React.FC<
   AgencyPageWithoutNavigationProps
 > = ({ id, agencyTotals, title, year, agency, data, dataLoading }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [devMode, setDevMode] = useState(false);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
@@ -81,12 +78,8 @@ const AgencyPageWithoutNavigation: React.FC<
     }
   }
 
-  useEffect(() => {
-    setDevMode(Boolean(getParameter('dev_mode')));
-  }, []);
-
   return (
-    <Container fixed sx={{ mb: 12 }}>
+    <Container fixed>
       <Box>
         <MoreInfoAccordion
           ombudsman={agency?.ouvidoria}
@@ -134,16 +127,6 @@ const AgencyPageWithoutNavigation: React.FC<
                   >
                     COMPARTILHAR
                   </Button>
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    endIcon={<SearchIcon />}
-                    onClick={() => {
-                      router.push(`/pesquisar?orgaos=${agency.id_orgao}`);
-                    }}
-                  >
-                    PESQUISAR
-                  </Button>
                 </Stack>
               </Box>
             ) : (
@@ -162,16 +145,6 @@ const AgencyPageWithoutNavigation: React.FC<
                     onClick={() => setModalIsOpen(true)}
                   >
                     COMPARTILHAR
-                  </Button>
-                  <Button
-                    variant="outlined"
-                    color="info"
-                    endIcon={<SearchIcon />}
-                    onClick={() => {
-                      router.push(`/pesquisar?orgaos=${agency.id_orgao}`);
-                    }}
-                  >
-                    PESQUISAR
                   </Button>
                 </Stack>
               </Drawer>
@@ -234,11 +207,9 @@ const AgencyPageWithoutNavigation: React.FC<
             </Accordion>
           </Box>
         ) : null}
-        {devMode && (
-          <Box mt={2}>
-            {agency && <SearchAccordion selectedAgencies={[agency]} />}
-          </Box>
-        )}
+        <Box mt={2}>
+          {agency && <SearchAccordion selectedAgencies={[agency]} />}
+        </Box>
       </ThemeProvider>
 
       <ShareModal

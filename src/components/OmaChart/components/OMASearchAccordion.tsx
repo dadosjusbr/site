@@ -58,7 +58,6 @@ const SearchAccordion = ({
     setShowResults(false);
     try {
       const url = new URL(window.location.href);
-      url.searchParams.delete('dev_mode');
       setQuery(url.search);
       const res = await api.ui.get(`/v2/pesquisar${url.search}`);
       const data = res.data.result.map((d, i) => {
@@ -84,11 +83,7 @@ const SearchAccordion = ({
   useEffect(() => {
     setCategory(getSearchUrlParameter('categorias') as string);
 
-    // stop removing dev_mode from url when turning off dev_mode
     const url = new URL(window.location.href);
-    url.searchParams.delete('dev_mode');
-
-    // turn this into location.search !== '' when removing dev_mode feature
     let timer: NodeJS.Timeout;
     if (url.search !== '') {
       firstRequest();
@@ -105,19 +100,12 @@ const SearchAccordion = ({
       isFirstRender.current = false;
       return;
     }
-    const url = new URL(window.location.href);
-    const params = url.searchParams;
-    params.set('anos', selectedYears != null ? selectedYears.toString() : '');
-    params.set('meses', selectedMonths.map(m => String(m.value)).join(','));
-    params.set('orgaos', selectedAgencies.map(a => a.id_orgao).join(','));
-    params.set(
-      'categorias',
-      category
-        .split(' ')
-        .at(category === 'Remuneração base' ? -1 : 0)
-        .toLowerCase(),
+    Search.setSearchURLFunc(
+      selectedYears,
+      selectedMonths,
+      selectedAgencies,
+      category,
     );
-    window.history.replaceState({}, '', `${url}`);
   }, [category]);
 
   return (
