@@ -30,7 +30,7 @@ import ShareModal from '../Common/ShareModal';
 import RemunerationBarGraph from './components/RemunerationChart';
 import * as url from '../../url';
 import light from '../../styles/theme-light';
-import { formatAgency } from '../../functions/format';
+import { formatAgency, formatBytes } from '../../functions/format';
 import Drawer from '../Common/Drawer';
 import IndexTabGraph from '../TransparencyChart/IndexTabChart';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
@@ -74,17 +74,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
-
-  function formatBytes(bytes: number, decimals = 2) {
-    if (!+bytes) return '0 Bytes';
-
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB'];
-
-    const i = Math.floor(Math.log(bytes) / Math.log(1024));
-
-    return `${parseFloat((bytes / 1024 ** i).toFixed(dm))} ${sizes[i]}`;
-  }
 
   async function fetchPlotData() {
     if (!plotData.length) {
