@@ -1,6 +1,7 @@
 import React, { Suspense, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
+import ReactGA from 'react-ga4';
 import {
   Container,
   Box,
@@ -20,16 +21,18 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import InfoIcon from '@mui/icons-material/Info';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 import ShareModal from '../Common/ShareModal';
 import light from '../../styles/theme-light';
-import { formatAgency } from '../../functions/format';
+import { formatAgency, formatBytes } from '../../functions/format';
 import Drawer from '../Common/Drawer';
 import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 import SearchAccordion from './components/AnnualSearchAccordion';
 import api from '../../services/api';
 import { normalizePlotData } from '../../functions/normalize';
+import * as url from '../../url';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./components/RemunerationChart'),
@@ -62,6 +65,7 @@ const AgencyPageWithoutNavigation: React.FC<
 > = ({ id, agencyTotals, title, year, agency, data, dataLoading }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
+  const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
@@ -127,6 +131,28 @@ const AgencyPageWithoutNavigation: React.FC<
                   >
                     COMPARTILHAR
                   </Button>
+                  {agencyTotals?.package && (
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      endIcon={<CloudDownloadIcon />}
+                      onClick={() => {
+                        ReactGA.event('file_download', {
+                          category: 'download',
+                          action: `From: ${window.location.pathname}`,
+                        });
+                      }}
+                      href={url.downloadURL(fileLink)}
+                      id="download-button"
+                    >
+                      <Typography variant="button" mr={1}>
+                        BAIXAR
+                      </Typography>
+                      <Typography variant="button" color="#00bfa6">
+                        {formatBytes(agencyTotals?.package.size)}
+                      </Typography>
+                    </Button>
+                  )}
                 </Stack>
               </Box>
             ) : (
@@ -146,6 +172,28 @@ const AgencyPageWithoutNavigation: React.FC<
                   >
                     COMPARTILHAR
                   </Button>
+                  {agencyTotals?.package && (
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      endIcon={<CloudDownloadIcon />}
+                      onClick={() => {
+                        ReactGA.event('file_download', {
+                          category: 'download',
+                          action: `From: ${window.location.pathname}`,
+                        });
+                      }}
+                      href={url.downloadURL(fileLink)}
+                      id="download-button"
+                    >
+                      <Typography variant="button" mr={1}>
+                        BAIXAR
+                      </Typography>
+                      <Typography variant="button" color="#00bfa6">
+                        {formatBytes(agencyTotals?.package.size)}
+                      </Typography>
+                    </Button>
+                  )}
                 </Stack>
               </Drawer>
             )}
