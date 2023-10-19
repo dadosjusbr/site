@@ -65,7 +65,7 @@ const AgencyPageWithoutNavigation: React.FC<
 > = ({ id, agencyTotals, title, year, agency, data, dataLoading }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
-  const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
+  const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
