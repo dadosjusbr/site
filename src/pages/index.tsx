@@ -286,6 +286,12 @@ export default function Index({
                   cursor: 'pointer',
                   display: 'flex',
                 }}
+                onClick={() => {
+                  ReactGA.event('file_download', {
+                    category: 'download',
+                    action: `From: ${window.location.pathname}`,
+                  });
+                }}
               >
                 <Typography ml={1} mr={2}>
                   PESQUISAR
