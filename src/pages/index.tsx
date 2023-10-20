@@ -512,7 +512,7 @@ const Page = styled.div`
   background: #3e5363;
 `;
 const Headline = styled.div`
-  padding-top: 8rem;
+  padding-top: 4rem;
   padding-bottom: 8rem;
   padding-right: 1rem;
   padding-left: 1rem;
