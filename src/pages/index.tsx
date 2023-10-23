@@ -455,7 +455,7 @@ export default function Index({
                   id="download-button"
                 >
                   <Typography variant="button" mr={1}>
-                    BAIXAR DUMP
+                    BAIXAR
                   </Typography>
                   <Typography variant="button" color="#00bfa6">
                     {createdAt.toLocaleDateString('pt-BR', {
