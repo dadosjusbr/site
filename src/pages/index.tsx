@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AxiosResponse } from 'axios';
 import { GetServerSideProps } from 'next';
+import ReactGA from 'react-ga4';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import styled from 'styled-components';
@@ -15,10 +16,14 @@ import {
   Tabs,
   Tab,
   CircularProgress,
+  Button,
+  Stack,
 } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import IosShareIcon from '@mui/icons-material/IosShare';
+import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import SearchIcon from '@mui/icons-material/Search';
 
 import Header from '../components/Essentials/Header';
@@ -28,6 +33,7 @@ import MONTHS from '../@types/MONTHS';
 import light from '../styles/theme-light';
 import { getCurrentYear } from '../functions/currentYear';
 import COLLECT_INFOS from '../@types/COLLECT_INFOS';
+import ShareModal from '../components/Common/ShareModal';
 
 const RemunerationBarGraph = dynamic(
   () =>
@@ -97,8 +103,15 @@ export default function Index({
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
   const [plotLoading, setPlotLoading] = useState(true);
+  const [modalIsOpen, setModalIsOpen] = useState(false);
   const [value, setValue] = useState(0);
-  const [createdAt, setCreatedAt] = useState<string>('');
+  const [createdAt, setCreatedAt] = useState<Date>(new Date());
+  const fileLink = `https://dadosjusbr.org/download/dumps/dadosjusbr-${getCurrentYear()}-${createdAt.toLocaleDateString(
+    'pt-BR',
+    {
+      month: 'numeric',
+    },
+  )}.zip`;
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -108,17 +121,11 @@ export default function Index({
     fetchGeneralChartData();
     const date = new Date(
       getCurrentYear(),
-      new Date().getDate() < COLLECT_INFOS.COLLECT_DATE
+      new Date().getDate() <= COLLECT_INFOS.COLLECT_DATE
         ? new Date().getMonth() - 1
         : new Date().getMonth(),
-      16,
-    ).toLocaleDateString('pt-BR', {
-      calendar: 'gregory',
-      day: '2-digit',
-      month: 'long',
-      year: 'numeric',
-      timeZone: 'UTC',
-    });
+      17,
+    );
 
     setCreatedAt(date);
   }, [year]);
@@ -243,6 +250,19 @@ export default function Index({
             </Typography>{' '}
             em recursos públicos.
           </Typography>
+          <Typography component="p" textAlign="justify">
+            Você pode fazer o{' '}
+            <Link href={fileLink}>
+              <Typography
+                variant="inherit"
+                component="span"
+                color="success.main"
+              >
+                download
+              </Typography>
+            </Link>{' '}
+            de todas a informações de remunerações da nossa base de dados!
+          </Typography>
           <Grid
             container
             display="flex"
@@ -265,6 +285,12 @@ export default function Index({
                   textDecoration: 'none',
                   cursor: 'pointer',
                   display: 'flex',
+                }}
+                onClick={() => {
+                  ReactGA.event('file_download', {
+                    category: 'download',
+                    action: `From: ${window.location.pathname}`,
+                  });
                 }}
               >
                 <Typography ml={1} mr={2}>
@@ -299,7 +325,15 @@ export default function Index({
                   <p>
                     Este gráfico representa dados de <b>janeiro de 2018</b> até{' '}
                     <b>{formatedEndDate.toLowerCase()}</b> e foi gerado em{' '}
-                    <b>{createdAt}</b>
+                    <b>
+                      {createdAt.toLocaleDateString('pt-BR', {
+                        calendar: 'gregory',
+                        day: '2-digit',
+                        month: 'long',
+                        year: 'numeric',
+                        timeZone: 'UTC',
+                      })}
+                    </b>
                   </p>
                 </Grid>
                 <Grid item width={900}>
@@ -393,14 +427,59 @@ export default function Index({
               </IconButton>
             </Box>
             <Box my={4}>
-              <RemunerationBarGraph
-                year={year}
-                agency={null}
-                data={completeChartData}
-                dataLoading={loading}
-              />
+              <Stack
+                spacing={2}
+                direction="row"
+                justifyContent="flex-end"
+                my={4}
+              >
+                <Button
+                  variant="outlined"
+                  color="info"
+                  endIcon={<IosShareIcon />}
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  COMPARTILHAR
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="info"
+                  endIcon={<CloudDownloadIcon />}
+                  onClick={() => {
+                    ReactGA.event('file_download', {
+                      category: 'download',
+                      action: `From: ${window.location.pathname}`,
+                    });
+                  }}
+                  href={fileLink}
+                  id="download-button"
+                >
+                  <Typography variant="button" mr={1}>
+                    BAIXAR
+                  </Typography>
+                  <Typography variant="button" color="#00bfa6">
+                    {createdAt.toLocaleDateString('pt-BR', {
+                      month: '2-digit',
+                      year: 'numeric',
+                    })}
+                  </Typography>
+                </Button>
+              </Stack>
+              <Box id="remuneration-graph">
+                <RemunerationBarGraph
+                  year={year}
+                  agency={null}
+                  data={completeChartData}
+                  dataLoading={loading}
+                />
+              </Box>
             </Box>
           </Box>
+          <ShareModal
+            isOpen={modalIsOpen}
+            url="https://dadosjusbr.org#remuneration-graph"
+            onRequestClose={() => setModalIsOpen(false)}
+          />
         </Container>
       </ThemeProvider>
       <Footer />
@@ -433,8 +512,8 @@ const Page = styled.div`
   background: #3e5363;
 `;
 const Headline = styled.div`
-  padding-top: 3rem;
-  padding-bottom: 3rem;
+  padding-top: 4rem;
+  padding-bottom: 8rem;
   padding-right: 1rem;
   padding-left: 1rem;
   font-size: 1.5rem;
