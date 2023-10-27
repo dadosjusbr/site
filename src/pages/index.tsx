@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import ReactGA from 'react-ga4';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -83,12 +83,14 @@ export default function Index({
   recordAmount,
   finalValue,
   ais,
+  plotDataTest,
 }: {
   startDate: string;
   endDate: string;
   recordAmount: number;
   finalValue: number;
   ais: Agency[];
+  plotDataTest: any;
 }) {
   const formatedStartDate = useMemo<string>(() => {
     const d = new Date(startDate);
@@ -130,53 +132,53 @@ export default function Index({
     setCreatedAt(date);
   }, [year]);
 
-  const handleChange = async (
-    event: React.SyntheticEvent,
-    newValue: number,
-  ) => {
-    const agencyIndexes = [
-      'estadual',
-      'ministerios',
-      'trabalho',
-      'militar',
-      'federal',
-      'eleitoral',
-      'superior',
-      'conselhos',
-    ];
+  // const handleChange = async (
+  //   event: React.SyntheticEvent,
+  //   newValue: number,
+  // ) => {
+  //   const agencyIndexes = [
+  //     'estadual',
+  //     'ministerios',
+  //     'trabalho',
+  //     'militar',
+  //     'federal',
+  //     'eleitoral',
+  //     'superior',
+  //     'conselhos',
+  //   ];
 
-    if (
-      !Object.prototype.hasOwnProperty.call(plotData, agencyIndexes[newValue])
-    ) {
-      const agencyTypes = [
-        'justica-estadual',
-        'ministerios-publicos',
-        'justica-do-trabalho',
-        'justica-militar',
-        'justica-federal',
-        'justica-eleitoral',
-        'justica-superior',
-        'conselhos-de-justica',
-      ];
+  //   if (
+  //     !Object.prototype.hasOwnProperty.call(plotData, agencyIndexes[newValue])
+  //   ) {
+  //     const agencyTypes = [
+  //       'justica-estadual',
+  //       'ministerios-publicos',
+  //       'justica-do-trabalho',
+  //       'justica-militar',
+  //       'justica-federal',
+  //       'justica-eleitoral',
+  //       'justica-superior',
+  //       'conselhos-de-justica',
+  //     ];
 
-      try {
-        setPlotLoading(true);
-        const { data } = await api.default.get(
-          `indice/grupo/${agencyTypes[newValue]}?agregado=true`,
-        );
+  //     try {
+  //       setPlotLoading(true);
+  //       const { data } = await api.default.get(
+  //         `indice/grupo/${agencyTypes[newValue]}?agregado=true`,
+  //       );
 
-        setPlotData({
-          ...plotData,
-          [agencyIndexes[newValue]]: data,
-        });
-        setPlotLoading(false);
-      } catch (error) {
-        setPlotData([error]);
-      }
-    }
+  //       setPlotData({
+  //         ...plotData,
+  //         [agencyIndexes[newValue]]: data,
+  //       });
+  //       setPlotLoading(false);
+  //     } catch (error) {
+  //       setPlotData([error]);
+  //     }
+  //   }
 
-    setValue(newValue);
-  };
+  //   setValue(newValue);
+  // };
   async function fetchGeneralChartData() {
     try {
       const [{ data }, tabGraph]: [
@@ -342,7 +344,9 @@ export default function Index({
                       <Box sx={{ maxWidth: { xs: 320, sm: 720 } }}>
                         <Tabs
                           value={value}
-                          onChange={handleChange}
+                          onChange={(event, newValue) => {
+                            setValue(newValue);
+                          }}
                           variant="scrollable"
                           scrollButtons
                           allowScrollButtonsMobile
@@ -360,40 +364,30 @@ export default function Index({
                       </Box>
                     </Grid>
                   </Grid>
-                  {plotLoading ? (
-                    <Grid container justifyContent="center">
-                      <Grid item>
-                        <CircularProgress />
-                      </Grid>
-                    </Grid>
-                  ) : (
-                    <>
-                      <TabPanel value={value} index={0}>
-                        <IndexTabGraph plotData={plotData.estadual} />
-                      </TabPanel>
-                      <TabPanel value={value} index={1}>
-                        <IndexTabGraph plotData={plotData.ministerios} />
-                      </TabPanel>
-                      <TabPanel value={value} index={2}>
-                        <IndexTabGraph plotData={plotData.trabalho} />
-                      </TabPanel>
-                      <TabPanel value={value} index={3}>
-                        <IndexTabGraph plotData={plotData.militar} />
-                      </TabPanel>
-                      <TabPanel value={value} index={4}>
-                        <IndexTabGraph plotData={plotData.federal} />
-                      </TabPanel>
-                      <TabPanel value={value} index={5}>
-                        <IndexTabGraph plotData={plotData.eleitoral} />
-                      </TabPanel>
-                      <TabPanel value={value} index={6}>
-                        <IndexTabGraph plotData={plotData.superior} />
-                      </TabPanel>
-                      <TabPanel value={value} index={7}>
-                        <IndexTabGraph plotData={plotData.conselhos} />
-                      </TabPanel>
-                    </>
-                  )}
+                  <TabPanel value={value} index={0}>
+                    <IndexTabGraph plotData={plotDataTest.estadual} />
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    <IndexTabGraph plotData={plotDataTest.ministerios} />
+                  </TabPanel>
+                  <TabPanel value={value} index={2}>
+                    <IndexTabGraph plotData={plotDataTest.trabalho} />
+                  </TabPanel>
+                  <TabPanel value={value} index={3}>
+                    <IndexTabGraph plotData={plotDataTest.militar} />
+                  </TabPanel>
+                  <TabPanel value={value} index={4}>
+                    <IndexTabGraph plotData={plotDataTest.federal} />
+                  </TabPanel>
+                  <TabPanel value={value} index={5}>
+                    <IndexTabGraph plotData={plotDataTest.eleitoral} />
+                  </TabPanel>
+                  <TabPanel value={value} index={6}>
+                    <IndexTabGraph plotData={plotDataTest.superior} />
+                  </TabPanel>
+                  <TabPanel value={value} index={7}>
+                    <IndexTabGraph plotData={plotDataTest.conselhos} />
+                  </TabPanel>
                 </Grid>
               </Grid>
             </Box>
@@ -486,10 +480,46 @@ export default function Index({
     </Page>
   );
 }
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   try {
     const { data } = await api.ui.get('/v2/geral/resumo');
     const res = await api.default.get('/orgaos');
+    const { data: estadual } = await api.default.get(
+      'indice/grupo/justica-estadual?agregado=true',
+    );
+    const { data: ministerios } = await api.default.get(
+      'indice/grupo/ministerios-publicos?agregado=true',
+    );
+    const { data: trabalho } = await api.default.get(
+      'indice/grupo/justica-do-trabalho?agregado=true',
+    );
+    const { data: militar } = await api.default.get(
+      'indice/grupo/justica-militar?agregado=true',
+    );
+    const { data: federal } = await api.default.get(
+      'indice/grupo/justica-federal?agregado=true',
+    );
+    const { data: eleitoral } = await api.default.get(
+      'indice/grupo/justica-eleitoral?agregado=true',
+    );
+    const { data: superior } = await api.default.get(
+      'indice/grupo/justica-superior?agregado=true',
+    );
+    const { data: conselhos } = await api.default.get(
+      'indice/grupo/conselhos-de-justica?agregado=true',
+    );
+
+    const plotDataTest = {
+      estadual,
+      ministerios,
+      trabalho,
+      militar,
+      federal,
+      eleitoral,
+      superior,
+      conselhos,
+    };
+
     return {
       props: {
         agencyAmount: data.num_orgaos,
@@ -498,7 +528,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
         recordAmount: `${data.num_meses_coletados}`,
         finalValue: `${data.remuneracao_total}`,
         ais: res.data,
+        plotDataTest,
       },
+      revalidate: 60 * 60 * 24,
     };
   } catch (err) {
     // context.res.writeHead(301, {
