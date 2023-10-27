@@ -261,7 +261,7 @@ export default function Index({
                 download
               </Typography>
             </Link>{' '}
-            de todas a informações de remunerações da nossa base de dados!
+            de todas as informações de remunerações da nossa base de dados!
           </Typography>
           <Grid
             container
