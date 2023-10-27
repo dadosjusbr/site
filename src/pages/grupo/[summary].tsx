@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { GetServerSideProps } from 'next';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import Head from 'next/head';
 import styled from 'styled-components';
@@ -109,7 +109,7 @@ export default function SummaryPage({
                 </ListSubheader>
 
                 {dataList
-                  .sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao))
+                  ?.sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao))
                   .map(ag => (
                     <MenuItem
                       key={ag.id_orgao}
@@ -219,8 +219,31 @@ const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
     </div>
   );
 };
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const paths = [
+      { params: { summary: 'justica-estadual' } },
+      { params: { summary: 'ministerios-publicos' } },
+      { params: { summary: 'justica-do-trabalho' } },
+      { params: { summary: 'justica-militar' } },
+      { params: { summary: 'justica-federal' } },
+      { params: { summary: 'justica-eleitoral' } },
+      { params: { summary: 'justica-superior' } },
+      { params: { summary: 'conselhos-de-justica' } },
+    ];
+    return {
+      paths,
+      fallback: true,
+    };
+  } catch (error) {
+    return {
+      paths: [],
+      fallback: true,
+    };
+  }
+};
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getStaticProps: GetStaticProps = async context => {
   const { summary } = context.params;
   try {
     const { data } = await api.ui.get(`/v2/orgao/${summary}`);
@@ -236,6 +259,7 @@ export const getServerSideProps: GetServerSideProps = async context => {
         dataList: data.orgaos,
         summary: data.grupo,
       },
+      revalidate: 60 * 60 * 24,
     };
   } catch (error) {
     // context.res.writeHead(301, {
