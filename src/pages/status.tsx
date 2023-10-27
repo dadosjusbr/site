@@ -101,13 +101,14 @@ export default function Index({ ais }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
     const res = await api.default.get('/orgaos');
     return {
       props: {
         ais: res.data,
       },
+      revalidate: 60 * 60 * 24,
     };
   } catch (err) {
     return {

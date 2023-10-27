@@ -239,7 +239,7 @@ export default function Index({ ais }: { ais: Agency[] }) {
   );
 }
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   try {
     const res = await api.default.get('/orgaos');
     const agencies: Agency[] = res.data.filter(
@@ -249,6 +249,7 @@ export async function getServerSideProps() {
       props: {
         ais: agencies,
       },
+      revalidate: 60 * 60 * 24,
     };
   } catch (err) {
     return {
