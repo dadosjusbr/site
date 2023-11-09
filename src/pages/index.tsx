@@ -83,14 +83,14 @@ export default function Index({
   recordAmount,
   finalValue,
   ais,
-  plotDataTest,
+  transparencyData,
 }: {
   startDate: string;
   endDate: string;
   recordAmount: number;
   finalValue: number;
   ais: Agency[];
-  plotDataTest: any;
+  transparencyData: any[];
 }) {
   const formatedStartDate = useMemo<string>(() => {
     const d = new Date(startDate);
@@ -101,10 +101,8 @@ export default function Index({
     return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
-  const [plotData, setPlotData] = useState<any>([]);
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
-  const [plotLoading, setPlotLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [createdAt, setCreatedAt] = useState<Date>(new Date());
@@ -132,67 +130,11 @@ export default function Index({
     setCreatedAt(date);
   }, [year]);
 
-  // const handleChange = async (
-  //   event: React.SyntheticEvent,
-  //   newValue: number,
-  // ) => {
-  //   const agencyIndexes = [
-  //     'estadual',
-  //     'ministerios',
-  //     'trabalho',
-  //     'militar',
-  //     'federal',
-  //     'eleitoral',
-  //     'superior',
-  //     'conselhos',
-  //   ];
-
-  //   if (
-  //     !Object.prototype.hasOwnProperty.call(plotData, agencyIndexes[newValue])
-  //   ) {
-  //     const agencyTypes = [
-  //       'justica-estadual',
-  //       'ministerios-publicos',
-  //       'justica-do-trabalho',
-  //       'justica-militar',
-  //       'justica-federal',
-  //       'justica-eleitoral',
-  //       'justica-superior',
-  //       'conselhos-de-justica',
-  //     ];
-
-  //     try {
-  //       setPlotLoading(true);
-  //       const { data } = await api.default.get(
-  //         `indice/grupo/${agencyTypes[newValue]}?agregado=true`,
-  //       );
-
-  //       setPlotData({
-  //         ...plotData,
-  //         [agencyIndexes[newValue]]: data,
-  //       });
-  //       setPlotLoading(false);
-  //     } catch (error) {
-  //       setPlotData([error]);
-  //     }
-  //   }
-
-  //   setValue(newValue);
-  // };
   async function fetchGeneralChartData() {
     try {
-      const [{ data }, tabGraph]: [
-        AxiosResponse<MensalRemuneration[]>,
-        AxiosResponse<AggregateIndexes[]>,
-      ] = await Promise.all([
-        api.ui.get(`/v2/geral/remuneracao/${year}`),
-        api.default.get('indice/grupo/justica-estadual?agregado=true'),
-      ]);
-
-      setPlotData({
-        ...plotData,
-        estadual: tabGraph.data,
-      });
+      const { data }: AxiosResponse<MensalRemuneration[]> = await api.ui.get(
+        `/v2/geral/remuneracao/${year}`,
+      );
 
       setCompleteChartData(
         data.map(d => ({
@@ -207,7 +149,6 @@ export default function Index({
       setCompleteChartData([]);
     }
     setLoading(false);
-    setPlotLoading(false);
   }
 
   const collecting = ais.filter(ag => ag.coletando === undefined);
@@ -365,28 +306,44 @@ export default function Index({
                     </Grid>
                   </Grid>
                   <TabPanel value={value} index={0}>
-                    <IndexTabGraph plotData={plotDataTest.estadual} />
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-estadual']}
+                    />
                   </TabPanel>
                   <TabPanel value={value} index={1}>
-                    <IndexTabGraph plotData={plotDataTest.ministerios} />
+                    <IndexTabGraph
+                      plotData={transparencyData['ministerios-publicos']}
+                    />
                   </TabPanel>
                   <TabPanel value={value} index={2}>
-                    <IndexTabGraph plotData={plotDataTest.trabalho} />
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-do-trabalho']}
+                    />
                   </TabPanel>
                   <TabPanel value={value} index={3}>
-                    <IndexTabGraph plotData={plotDataTest.militar} />
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-militar']}
+                    />
                   </TabPanel>
                   <TabPanel value={value} index={4}>
-                    <IndexTabGraph plotData={plotDataTest.federal} />
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-federal']}
+                    />
                   </TabPanel>
                   <TabPanel value={value} index={5}>
-                    <IndexTabGraph plotData={plotDataTest.eleitoral} />
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-eleitoral']}
+                    />
                   </TabPanel>
                   <TabPanel value={value} index={6}>
-                    <IndexTabGraph plotData={plotDataTest.superior} />
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-superior']}
+                    />
                   </TabPanel>
                   <TabPanel value={value} index={7}>
-                    <IndexTabGraph plotData={plotDataTest.conselhos} />
+                    <IndexTabGraph
+                      plotData={transparencyData['conselhos-de-justica']}
+                    />
                   </TabPanel>
                 </Grid>
               </Grid>
@@ -484,41 +441,9 @@ export const getStaticProps: GetStaticProps = async () => {
   try {
     const { data } = await api.ui.get('/v2/geral/resumo');
     const res = await api.default.get('/orgaos');
-    const { data: estadual } = await api.default.get(
-      'indice/grupo/justica-estadual?agregado=true',
+    const { data: transparencyData } = await api.default.get(
+      'indice?agregado=true',
     );
-    const { data: ministerios } = await api.default.get(
-      'indice/grupo/ministerios-publicos?agregado=true',
-    );
-    const { data: trabalho } = await api.default.get(
-      'indice/grupo/justica-do-trabalho?agregado=true',
-    );
-    const { data: militar } = await api.default.get(
-      'indice/grupo/justica-militar?agregado=true',
-    );
-    const { data: federal } = await api.default.get(
-      'indice/grupo/justica-federal?agregado=true',
-    );
-    const { data: eleitoral } = await api.default.get(
-      'indice/grupo/justica-eleitoral?agregado=true',
-    );
-    const { data: superior } = await api.default.get(
-      'indice/grupo/justica-superior?agregado=true',
-    );
-    const { data: conselhos } = await api.default.get(
-      'indice/grupo/conselhos-de-justica?agregado=true',
-    );
-
-    const plotDataTest = {
-      estadual,
-      ministerios,
-      trabalho,
-      militar,
-      federal,
-      eleitoral,
-      superior,
-      conselhos,
-    };
 
     return {
       props: {
@@ -528,7 +453,7 @@ export const getStaticProps: GetStaticProps = async () => {
         recordAmount: `${data.num_meses_coletados}`,
         finalValue: `${data.remuneracao_total}`,
         ais: res.data,
-        plotDataTest,
+        transparencyData,
       },
       revalidate: 60 * 60 * 24,
     };
