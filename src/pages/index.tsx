@@ -163,13 +163,20 @@ export default function Index({
           property="og:description"
           content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
         />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/img/icon_dadosjus_background.png"
+        />
       </Head>
       <Header />
       <Container fixed>
         <Headline>
-          Acesse as remunerações do Sistema de Justiça.
+          <Typography variant="h1" p={0} lineHeight={1}>
+            Acesse as remunerações do Sistema de Justiça.
+          </Typography>
           <br />
-          <Typography component="p" mt={2} textAlign="justify">
+          <Typography component="p" textAlign="justify">
             Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
             <Lowercase>{formatedEndDate}</Lowercase> e são provenientes de{' '}
             <Link href="/status">
