@@ -151,7 +151,7 @@ export default function Index({
     setLoading(false);
   }
 
-  const collecting = ais.filter(ag => ag.coletando === undefined);
+  const collecting = ais?.filter(ag => ag.coletando === undefined);
 
   return (
     <Page>
