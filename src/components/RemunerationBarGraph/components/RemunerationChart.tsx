@@ -65,7 +65,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
 
   return (
     <>
-      {agency && agency.coletando && !data ? (
+      {agency && agency?.coletando && !data ? (
         <NotCollecting agency={agency} />
       ) : (
         <>

@@ -21,15 +21,15 @@ function extractNumbers(str: string): number {
 }
 
 function formatToAgency(input: string): string {
-  const words = input.split('-');
+  const words = input?.split('-');
 
-  const formattedWords = words.map(word => {
+  const formattedWords = words?.map(word => {
     const firstLetter = word.charAt(0).toUpperCase();
     const remainingLetters = word.slice(1).toLowerCase();
     return `${firstLetter}${remainingLetters}`;
   });
 
-  return formattedWords.join(' ');
+  return formattedWords?.join(' ');
 }
 
 const formatCurrencyValue = (value: number, decimal_places = 0): string =>

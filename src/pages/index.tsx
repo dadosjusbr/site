@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { AxiosResponse } from 'axios';
-import { GetServerSideProps } from 'next';
+import { GetStaticProps } from 'next';
 import ReactGA from 'react-ga4';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
@@ -83,12 +83,14 @@ export default function Index({
   recordAmount,
   finalValue,
   ais,
+  transparencyData,
 }: {
   startDate: string;
   endDate: string;
   recordAmount: number;
   finalValue: number;
   ais: Agency[];
+  transparencyData: any[];
 }) {
   const formatedStartDate = useMemo<string>(() => {
     const d = new Date(startDate);
@@ -99,10 +101,8 @@ export default function Index({
     return `${MONTHS[d.getMonth() + 1]} de ${d.getFullYear()}`;
   }, [endDate]);
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
-  const [plotData, setPlotData] = useState<any>([]);
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
-  const [plotLoading, setPlotLoading] = useState(true);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [createdAt, setCreatedAt] = useState<Date>(new Date());
@@ -130,67 +130,11 @@ export default function Index({
     setCreatedAt(date);
   }, [year]);
 
-  const handleChange = async (
-    event: React.SyntheticEvent,
-    newValue: number,
-  ) => {
-    const agencyIndexes = [
-      'estadual',
-      'ministerios',
-      'trabalho',
-      'militar',
-      'federal',
-      'eleitoral',
-      'superior',
-      'conselhos',
-    ];
-
-    if (
-      !Object.prototype.hasOwnProperty.call(plotData, agencyIndexes[newValue])
-    ) {
-      const agencyTypes = [
-        'justica-estadual',
-        'ministerios-publicos',
-        'justica-do-trabalho',
-        'justica-militar',
-        'justica-federal',
-        'justica-eleitoral',
-        'justica-superior',
-        'conselhos-de-justica',
-      ];
-
-      try {
-        setPlotLoading(true);
-        const { data } = await api.default.get(
-          `indice/grupo/${agencyTypes[newValue]}?agregado=true`,
-        );
-
-        setPlotData({
-          ...plotData,
-          [agencyIndexes[newValue]]: data,
-        });
-        setPlotLoading(false);
-      } catch (error) {
-        setPlotData([error]);
-      }
-    }
-
-    setValue(newValue);
-  };
   async function fetchGeneralChartData() {
     try {
-      const [{ data }, tabGraph]: [
-        AxiosResponse<MensalRemuneration[]>,
-        AxiosResponse<AggregateIndexes[]>,
-      ] = await Promise.all([
-        api.ui.get(`/v2/geral/remuneracao/${year}`),
-        api.default.get('indice/grupo/justica-estadual?agregado=true'),
-      ]);
-
-      setPlotData({
-        ...plotData,
-        estadual: tabGraph.data,
-      });
+      const { data }: AxiosResponse<MensalRemuneration[]> = await api.ui.get(
+        `/v2/geral/remuneracao/${year}`,
+      );
 
       setCompleteChartData(
         data.map(d => ({
@@ -205,10 +149,9 @@ export default function Index({
       setCompleteChartData([]);
     }
     setLoading(false);
-    setPlotLoading(false);
   }
 
-  const collecting = ais.filter(ag => ag.coletando === undefined);
+  const collecting = ais?.filter(ag => ag.coletando === undefined);
 
   return (
     <Page>
@@ -220,13 +163,20 @@ export default function Index({
           property="og:description"
           content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
         />
+        <link
+          rel="apple-touch-icon"
+          sizes="180x180"
+          href="/img/icon_dadosjus_background.png"
+        />
       </Head>
       <Header />
       <Container fixed>
         <Headline>
-          Acesse as remunerações do Sistema de Justiça.
+          <Typography variant="h1" p={0} lineHeight={1}>
+            Acesse as remunerações do Sistema de Justiça.
+          </Typography>
           <br />
-          <Typography component="p" mt={2} textAlign="justify">
+          <Typography component="p" textAlign="justify">
             Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
             <Lowercase>{formatedEndDate}</Lowercase> e são provenientes de{' '}
             <Link href="/status">
@@ -342,7 +292,9 @@ export default function Index({
                       <Box sx={{ maxWidth: { xs: 320, sm: 720 } }}>
                         <Tabs
                           value={value}
-                          onChange={handleChange}
+                          onChange={(event, newValue) => {
+                            setValue(newValue);
+                          }}
                           variant="scrollable"
                           scrollButtons
                           allowScrollButtonsMobile
@@ -360,40 +312,46 @@ export default function Index({
                       </Box>
                     </Grid>
                   </Grid>
-                  {plotLoading ? (
-                    <Grid container justifyContent="center">
-                      <Grid item>
-                        <CircularProgress />
-                      </Grid>
-                    </Grid>
-                  ) : (
-                    <>
-                      <TabPanel value={value} index={0}>
-                        <IndexTabGraph plotData={plotData.estadual} />
-                      </TabPanel>
-                      <TabPanel value={value} index={1}>
-                        <IndexTabGraph plotData={plotData.ministerios} />
-                      </TabPanel>
-                      <TabPanel value={value} index={2}>
-                        <IndexTabGraph plotData={plotData.trabalho} />
-                      </TabPanel>
-                      <TabPanel value={value} index={3}>
-                        <IndexTabGraph plotData={plotData.militar} />
-                      </TabPanel>
-                      <TabPanel value={value} index={4}>
-                        <IndexTabGraph plotData={plotData.federal} />
-                      </TabPanel>
-                      <TabPanel value={value} index={5}>
-                        <IndexTabGraph plotData={plotData.eleitoral} />
-                      </TabPanel>
-                      <TabPanel value={value} index={6}>
-                        <IndexTabGraph plotData={plotData.superior} />
-                      </TabPanel>
-                      <TabPanel value={value} index={7}>
-                        <IndexTabGraph plotData={plotData.conselhos} />
-                      </TabPanel>
-                    </>
-                  )}
+                  <TabPanel value={value} index={0}>
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-estadual']}
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={1}>
+                    <IndexTabGraph
+                      plotData={transparencyData['ministerios-publicos']}
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={2}>
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-do-trabalho']}
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={3}>
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-militar']}
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={4}>
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-federal']}
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={5}>
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-eleitoral']}
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={6}>
+                    <IndexTabGraph
+                      plotData={transparencyData['justica-superior']}
+                    />
+                  </TabPanel>
+                  <TabPanel value={value} index={7}>
+                    <IndexTabGraph
+                      plotData={transparencyData['conselhos-de-justica']}
+                    />
+                  </TabPanel>
                 </Grid>
               </Grid>
             </Box>
@@ -486,10 +444,14 @@ export default function Index({
     </Page>
   );
 }
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getStaticProps: GetStaticProps = async () => {
   try {
     const { data } = await api.ui.get('/v2/geral/resumo');
     const res = await api.default.get('/orgaos');
+    const { data: transparencyData } = await api.default.get(
+      'indice?agregado=true',
+    );
+
     return {
       props: {
         agencyAmount: data.num_orgaos,
@@ -498,7 +460,9 @@ export const getServerSideProps: GetServerSideProps = async () => {
         recordAmount: `${data.num_meses_coletados}`,
         finalValue: `${data.remuneracao_total}`,
         ais: res.data,
+        transparencyData,
       },
+      revalidate: 60 * 60 * 24,
     };
   } catch (err) {
     // context.res.writeHead(301, {

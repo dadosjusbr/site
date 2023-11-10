@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { GetServerSideProps } from 'next';
-import { useRouter } from 'next/router';
+import React, { useState } from 'react';
+import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import styled from 'styled-components';
 import {
@@ -41,15 +40,28 @@ function orderStringsWithNum(string1: string, string2: string) {
   return num1 - num2;
 }
 
+type chartDataType = {
+  dados_anuais?: AnnualSummaryData[];
+  orgao: Agency;
+};
+
 export default function SummaryPage({
   dataList,
   summary,
+  chartData,
+  agencyTotals,
 }: {
   dataList: v2AgencyBasic[];
   summary: string;
+  chartData: chartDataType[];
+  agencyTotals: v2AgencyTotalsYear;
 }) {
   const pageTitle = `${formatToAgency(summary)}`;
   const [value, setValue] = useState('');
+  chartData?.sort((a, b) =>
+    orderStringsWithNum(a.orgao.id_orgao, b.orgao.id_orgao),
+  );
+
   return (
     <Page>
       <Head>
@@ -109,7 +121,7 @@ export default function SummaryPage({
                 </ListSubheader>
 
                 {dataList
-                  .sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao))
+                  ?.sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao))
                   .map(ag => (
                     <MenuItem
                       key={ag.id_orgao}
@@ -125,13 +137,19 @@ export default function SummaryPage({
         <div>
           {(() => {
             if (typeof dataList !== 'undefined' && dataList.length > 0) {
-              return dataList.map(agency => (
-                <Box mb={12}>
-                  <GraphWithNavigation
-                    key={agency.id_orgao}
-                    title={agency.nome}
-                    id={agency.id_orgao}
-                  />
+              return dataList.map((agency, i) => (
+                <Box mb={12} key={agency.id_orgao}>
+                  <div id={agency.id_orgao}>
+                    <AgencyWithoutNavigation
+                      data={chartData[i]?.dados_anuais}
+                      agencyTotals={agencyTotals[i]}
+                      dataLoading={false}
+                      id={agency?.id_orgao}
+                      title={agency?.nome}
+                      year={getCurrentYear()}
+                      agency={chartData[i]?.orgao}
+                    />
+                  </div>
                 </Box>
               ));
             }
@@ -157,70 +175,32 @@ export default function SummaryPage({
     </Page>
   );
 }
-// this component is used to to build the main section, with charts and pagination.
-// his load some agency so, it needs params to load it.
-// the id is the main identifier.
-// the title is the vocative from the componenet.
 
-const GraphWithNavigation: React.FC<{ id: string; title: string }> = ({
-  id,
-  title,
-}) => {
-  const router = useRouter();
-  // this state is used to store the api fetched data after fetch it
-  const [data, setData] = useState<AnnualSummaryData[]>([]);
-  const [year, setYear] = useState(getCurrentYear());
-  const [agencyData, setAgencyData] = useState<Agency>();
-  const [agencyTotals, setAgencyTotals] = useState<v2AgencyTotalsYear>();
-  const [dataLoading, setDataLoading] = useState(true);
-
-  useEffect(() => {
-    setDataLoading(true);
-    Promise.all([fetchAgencyData(), fetchAgencyTotalData()]).finally(() =>
-      setDataLoading(false),
-    );
-  }, [year]);
-
-  async function fetchAgencyData() {
-    try {
-      const { data: agency } = await api.ui.get(`/v2/orgao/resumo/${id}`);
-      setData(agency?.dados_anuais ? agency?.dados_anuais : null);
-      setAgencyData(agency?.orgao);
-      setYear(agency?.dados_anuais?.at(-1).ano);
-    } catch (err) {
-      router.push('/404');
-    }
+export const getStaticPaths: GetStaticPaths = async () => {
+  try {
+    const paths = [
+      { params: { summary: 'justica-estadual' } },
+      { params: { summary: 'ministerios-publicos' } },
+      { params: { summary: 'justica-do-trabalho' } },
+      { params: { summary: 'justica-militar' } },
+      { params: { summary: 'justica-federal' } },
+      { params: { summary: 'justica-eleitoral' } },
+      { params: { summary: 'justica-superior' } },
+      { params: { summary: 'conselhos-de-justica' } },
+    ];
+    return {
+      paths,
+      fallback: true,
+    };
+  } catch (error) {
+    return {
+      paths: [],
+      fallback: true,
+    };
   }
-
-  const fetchAgencyTotalData = async () => {
-    if (year !== undefined) {
-      try {
-        const { data: agencyTotalsResponse } = await api.ui.get(
-          `/v2/orgao/totais/${id}/${year}`,
-        );
-        setAgencyTotals(agencyTotalsResponse);
-      } catch (err) {
-        router.push('/404');
-      }
-    }
-  };
-
-  return (
-    <div id={id}>
-      <AgencyWithoutNavigation
-        data={data}
-        agencyTotals={agencyTotals}
-        dataLoading={dataLoading}
-        id={id}
-        title={title}
-        year={year}
-        agency={agencyData}
-      />
-    </div>
-  );
 };
 
-export const getServerSideProps: GetServerSideProps = async context => {
+export const getStaticProps: GetStaticProps = async context => {
   const { summary } = context.params;
   try {
     const { data } = await api.ui.get(`/v2/orgao/${summary}`);
@@ -231,11 +211,39 @@ export const getServerSideProps: GetServerSideProps = async context => {
       // context.res.end();
       return { props: {} };
     }
+
+    const chartData = [];
+    try {
+      const request = data?.orgaos.map(async item => {
+        const response = await api.ui.get(`/v2/orgao/resumo/${item.id_orgao}`);
+        chartData.push(response.data);
+      });
+      await Promise.all(request);
+    } catch (error) {
+      throw new Error(error);
+    }
+
+    const agencyTotals = [];
+    try {
+      const request = data?.orgaos.map(async item => {
+        const response = await api.ui.get(
+          `/v2/orgao/totais/${item.id_orgao}/${getCurrentYear()}`,
+        );
+        agencyTotals.push(response.data);
+      });
+      await Promise.all(request);
+    } catch (error) {
+      throw new Error(error);
+    }
+
     return {
       props: {
         dataList: data.orgaos,
         summary: data.grupo,
+        chartData,
+        agencyTotals,
       },
+      revalidate: 60 * 60 * 24,
     };
   } catch (error) {
     // context.res.writeHead(301, {
