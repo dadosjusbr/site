@@ -9,6 +9,7 @@ import {
   ListItem,
   ListItemText,
   ListItemIcon,
+  Link,
 } from '@mui/material';
 
 import Footer from '../components/Essentials/Footer';
@@ -64,6 +65,48 @@ export default function Index({ ais }) {
           <Box pb={4}>
             <Typography variant="h1" textAlign="center" gutterBottom>
               Status das coletas de dados
+            </Typography>
+            <Typography variant="body1" textAlign="justify">
+              A API do DadosJusBr é open source e disponível para todos, ela
+              permite que você acesse os dados de remuneração do sistema de
+              justiça brasileiro de maneira fácil e bem documentada. Isso abre
+              um mundo de possibilidades para análises, visualizações e
+              aplicações. Convidamos todos a explorar e contribuir para a nossa
+              comunidade de código aberto. Para mais informações, visite a{' '}
+              <Link
+                color="inherit"
+                underline="always"
+                href="https://api.dadosjusbr.org"
+                target="_blank"
+                rel="noopener"
+              >
+                documentação da API
+              </Link>{' '}
+              ou o{' '}
+              <Link
+                color="inherit"
+                underline="always"
+                href="https://github.com/dadosjusbr/api"
+                target="_blank"
+                rel="noopener"
+              >
+                repositório da API
+              </Link>{' '}
+              no Github.
+            </Typography>
+            <Typography variant="body1" textAlign="justify" gutterBottom mb={4}>
+              Qualquer problema encontrado na coleta ou integridade dos dados
+              pode ser informado através de uma issue no{' '}
+              <Link
+                color="inherit"
+                underline="always"
+                href="https://github.com/dadosjusbr/site/issues/new"
+                target="_blank"
+                rel="noopener"
+              >
+                repositorio do site
+              </Link>{' '}
+              no Github.
             </Typography>
             <Typography variant="h3" gutterBottom>
               Órgãos monitorados pelo DadosJusBR: {collecting.length}
