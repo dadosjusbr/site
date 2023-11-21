@@ -34,6 +34,7 @@ import light from '../styles/theme-light';
 import { getCurrentYear } from '../functions/currentYear';
 import COLLECT_INFOS from '../@types/COLLECT_INFOS';
 import ShareModal from '../components/Common/ShareModal';
+import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
 
 const RemunerationBarGraph = dynamic(
   () =>
@@ -103,6 +104,7 @@ export default function Index({
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [createdAt, setCreatedAt] = useState<Date>(new Date());
@@ -202,7 +204,7 @@ export default function Index({
           </Typography>
           <Typography component="p" textAlign="justify">
             Você pode fazer o{' '}
-            <Link href={fileLink}>
+            <Link onClick={() => setOpenDialog(true)}>
               <Typography
                 variant="inherit"
                 component="span"
@@ -387,7 +389,7 @@ export default function Index({
             <Box my={4}>
               <Stack
                 spacing={2}
-                direction="row"
+                direction={{ xs: 'column', sm: 'row' }}
                 justifyContent="flex-end"
                 my={4}
               >
@@ -402,20 +404,14 @@ export default function Index({
                 <Button
                   variant="outlined"
                   color="info"
+                  onClick={() => setOpenDialog(true)}
                   endIcon={<CloudDownloadIcon />}
-                  onClick={() => {
-                    ReactGA.event('file_download', {
-                      category: 'download',
-                      action: `From: ${window.location.pathname}`,
-                    });
-                  }}
-                  href={fileLink}
-                  id="download-button"
                 >
                   <Typography variant="button" mr={1}>
                     BAIXAR
                   </Typography>
                   <Typography variant="button" color="#00bfa6">
+                    01/2018 -{' '}
                     {createdAt.toLocaleDateString('pt-BR', {
                       month: '2-digit',
                       year: 'numeric',
@@ -437,6 +433,11 @@ export default function Index({
             isOpen={modalIsOpen}
             url="https://dadosjusbr.org#remuneration-graph"
             onRequestClose={() => setModalIsOpen(false)}
+          />
+          <DownloadDumpDialog
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+            fileLink={fileLink}
           />
         </Container>
       </ThemeProvider>
