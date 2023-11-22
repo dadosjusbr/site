@@ -23,7 +23,7 @@ type ResultProps = {
   downloadAvailable: boolean;
   downloadLimit: number;
   result: SearchResult[];
-  shareButtonProps?: ButtonProps;
+  buttonColorScheme: ButtonProps['color'];
   downloadButton: React.ReactNode;
   setModalIsOpen: (isOpen: boolean) => void;
 };
@@ -57,7 +57,7 @@ const Result = ({
   downloadAvailable,
   downloadLimit,
   result,
-  shareButtonProps,
+  buttonColorScheme,
   downloadButton,
   setModalIsOpen,
 }: ResultProps) => {
@@ -126,7 +126,7 @@ const Result = ({
 
             <Box py={4} textAlign="right">
               <Button
-                {...shareButtonProps}
+                color={buttonColorScheme}
                 sx={{ mr: 2 }}
                 variant="outlined"
                 endIcon={<IosShareIcon />}
@@ -157,7 +157,7 @@ const Result = ({
           <Box mt={4} display="flex" flexDirection="row-reverse">
             <Button
               variant="outlined"
-              color="info"
+              color={buttonColorScheme}
               onClick={() => setOpenDialog(true)}
               endIcon={<CloudDownloadIcon />}
             >
