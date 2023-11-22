@@ -10,6 +10,7 @@ import {
   ListItemText,
   ListItemIcon,
   Link,
+  Button,
 } from '@mui/material';
 
 import Footer from '../components/Essentials/Footer';
@@ -21,7 +22,7 @@ import { useDownloadDump } from '../hooks/useDownloadDump';
 
 export default function Index({ ais }) {
   const [openDialog, setOpenDialog] = useState(false);
-  const [fileLink, dumpDate] = useDownloadDump();
+  const [fileLink] = useDownloadDump();
 
   const collecting = ais
     .filter(ag => ag.coletando === undefined)
@@ -115,19 +116,23 @@ export default function Index({ ais }) {
             </Typography>
             <Typography variant="body1" textAlign="justify" gutterBottom mb={4}>
               Você pode fazer o download de todas as informações de remunerações
-              da nossa base de dados clicando neste{' '}
-              <Link
+              da nossa base de dados por
+              <Button
                 onClick={() => setOpenDialog(true)}
-                sx={{ cursor: 'pointer' }}
+                sx={{
+                  ':hover': {
+                    backgroundColor: 'transparent',
+                  },
+                }}
               >
                 <Typography
                   variant="inherit"
                   component="span"
                   color="success.main"
                 >
-                  link.
+                  este link.
                 </Typography>
-              </Link>
+              </Button>
             </Typography>
             <Typography variant="h3" gutterBottom>
               Órgãos monitorados pelo DadosJusBR: {collecting.length}

@@ -199,10 +199,15 @@ export default function Index({
             em recursos públicos.
           </Typography>
           <Typography component="p" textAlign="justify">
-            Você pode fazer o{' '}
-            <Link
+            Você pode fazer o
+            <Button
               onClick={() => setOpenDialog(true)}
-              sx={{ cursor: 'pointer' }}
+              disableRipple
+              sx={{
+                ':hover': {
+                  backgroundColor: 'transparent',
+                },
+              }}
             >
               <Typography
                 variant="inherit"
@@ -211,7 +216,7 @@ export default function Index({
               >
                 download
               </Typography>
-            </Link>{' '}
+            </Button>
             de todas as informações de remunerações da nossa base de dados!
           </Typography>
           <Grid

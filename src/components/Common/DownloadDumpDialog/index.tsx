@@ -42,9 +42,8 @@ export default function DownloadDumpDialog({
         }}
       >
         <DialogTitle id="alert-dialog-title">
-          {
-            'Fazer o download de todas as informações de remunerações da nossa base de dados?'
-          }
+          Fazer o download de todas as informações de remunerações da nossa base
+          de dados?
         </DialogTitle>
         <DialogContent>
           <DialogContentText
