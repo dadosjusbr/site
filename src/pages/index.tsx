@@ -35,6 +35,7 @@ import { getCurrentYear } from '../functions/currentYear';
 import COLLECT_INFOS from '../@types/COLLECT_INFOS';
 import ShareModal from '../components/Common/ShareModal';
 import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
+import { useDownloadDump } from '../hooks/useDownloadDump';
 
 const RemunerationBarGraph = dynamic(
   () =>
@@ -108,12 +109,7 @@ export default function Index({
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [createdAt, setCreatedAt] = useState<Date>(new Date());
-  const fileLink = `https://dadosjusbr.org/download/dumps/dadosjusbr-${getCurrentYear()}-${createdAt.toLocaleDateString(
-    'pt-BR',
-    {
-      month: 'numeric',
-    },
-  )}.zip`;
+  const [fileLink, dumpDate] = useDownloadDump();
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -204,7 +200,10 @@ export default function Index({
           </Typography>
           <Typography component="p" textAlign="justify">
             Você pode fazer o{' '}
-            <Link onClick={() => setOpenDialog(true)}>
+            <Link
+              onClick={() => setOpenDialog(true)}
+              sx={{ cursor: 'pointer' }}
+            >
               <Typography
                 variant="inherit"
                 component="span"
@@ -411,11 +410,7 @@ export default function Index({
                     BAIXAR
                   </Typography>
                   <Typography variant="button" color="#00bfa6">
-                    01/2018 -{' '}
-                    {createdAt.toLocaleDateString('pt-BR', {
-                      month: '2-digit',
-                      year: 'numeric',
-                    })}
+                    {dumpDate}
                   </Typography>
                 </Button>
               </Stack>
