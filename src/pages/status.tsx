@@ -1,58 +1,18 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
-import {
-  Container,
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Link,
-  Button,
-} from '@mui/material';
+import { Container, Box, Typography, Link, Button } from '@mui/material';
 
 import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
 import api from '../services/api';
-import { formatAgency } from '../functions/format';
 import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
 import { useDownloadDump } from '../hooks/useDownloadDump';
+import StatusCards from '../components/Common/StatusCards';
 
 export default function Index({ ais }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [fileLink] = useDownloadDump();
-
-  const collecting = ais
-    .filter(ag => ag.coletando === undefined)
-    .sort((a, b) => {
-      if (a.uf > b.uf) {
-        return 1;
-      }
-      if (a.uf < b.uf) {
-        return -1;
-      }
-      return 0;
-    });
-  const notCollecting = ais
-    .filter(ag => ag.coletando !== undefined)
-    .sort((a, b) => {
-      if (a.uf > b.uf) {
-        return 1;
-      }
-      if (a.uf < b.uf) {
-        return -1;
-      }
-      return 0;
-    });
-
-  const getReasons = ag => {
-    if (ag.coletando && ag.coletando.length > 0 && ag.coletando[0].descricao) {
-      return ag.coletando[0].descricao.map(desc => `${desc}. `);
-    }
-    return '';
-  };
 
   return (
     <Page>
@@ -126,7 +86,7 @@ export default function Index({ ais }) {
                 }}
               >
                 <Typography
-                  variant="inherit"
+                  variant="subtitle1"
                   component="span"
                   color="success.main"
                 >
@@ -134,7 +94,10 @@ export default function Index({ ais }) {
                 </Typography>
               </Button>
             </Typography>
-            <Typography variant="h3" gutterBottom>
+
+            <StatusCards ais={ais} />
+
+            {/* <Typography variant="h3" gutterBottom>
               Órgãos monitorados pelo DadosJusBR: {collecting.length}
             </Typography>
             <List dense>
@@ -161,7 +124,7 @@ export default function Index({ ais }) {
                   </ListItemText>
                 </ListItem>
               ))}
-            </List>
+            </List> */}
           </Box>
         </Box>
         <DownloadDumpDialog
@@ -195,8 +158,4 @@ export async function getStaticProps() {
 
 const Page = styled.div`
   background: #3e5363;
-`;
-
-const Upper = styled.span`
-  text-transform: uppercase;
 `;
