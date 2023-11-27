@@ -34,6 +34,8 @@ import light from '../styles/theme-light';
 import { getCurrentYear } from '../functions/currentYear';
 import COLLECT_INFOS from '../@types/COLLECT_INFOS';
 import ShareModal from '../components/Common/ShareModal';
+import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
+import { useDownloadDump } from '../hooks/useDownloadDump';
 
 const RemunerationBarGraph = dynamic(
   () =>
@@ -103,15 +105,11 @@ export default function Index({
   const [completeChartData, setCompleteChartData] = useState<any[]>([]);
   const [year, setYear] = useState(getCurrentYear());
   const [loading, setLoading] = useState(true);
+  const [openDialog, setOpenDialog] = useState(false);
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [createdAt, setCreatedAt] = useState<Date>(new Date());
-  const fileLink = `https://dadosjusbr.org/download/dumps/dadosjusbr-${getCurrentYear()}-${createdAt.toLocaleDateString(
-    'pt-BR',
-    {
-      month: 'numeric',
-    },
-  )}.zip`;
+  const [fileLink, dumpDate] = useDownloadDump();
   const nextDateIsNavigable = useMemo<boolean>(
     () => year !== new Date().getFullYear(),
     [year],
@@ -201,8 +199,16 @@ export default function Index({
             em recursos públicos.
           </Typography>
           <Typography component="p" textAlign="justify">
-            Você pode fazer o{' '}
-            <Link href={fileLink}>
+            Você pode fazer o
+            <Button
+              onClick={() => setOpenDialog(true)}
+              disableRipple
+              sx={{
+                ':hover': {
+                  backgroundColor: 'transparent',
+                },
+              }}
+            >
               <Typography
                 variant="inherit"
                 component="span"
@@ -210,7 +216,7 @@ export default function Index({
               >
                 download
               </Typography>
-            </Link>{' '}
+            </Button>
             de todas as informações de remunerações da nossa base de dados!
           </Typography>
           <Grid
@@ -387,7 +393,7 @@ export default function Index({
             <Box my={4}>
               <Stack
                 spacing={2}
-                direction="row"
+                direction={{ xs: 'column', sm: 'row' }}
                 justifyContent="flex-end"
                 my={4}
               >
@@ -402,24 +408,14 @@ export default function Index({
                 <Button
                   variant="outlined"
                   color="info"
+                  onClick={() => setOpenDialog(true)}
                   endIcon={<CloudDownloadIcon />}
-                  onClick={() => {
-                    ReactGA.event('file_download', {
-                      category: 'download',
-                      action: `From: ${window.location.pathname}`,
-                    });
-                  }}
-                  href={fileLink}
-                  id="download-button"
                 >
                   <Typography variant="button" mr={1}>
                     BAIXAR
                   </Typography>
                   <Typography variant="button" color="#00bfa6">
-                    {createdAt.toLocaleDateString('pt-BR', {
-                      month: '2-digit',
-                      year: 'numeric',
-                    })}
+                    {dumpDate}
                   </Typography>
                 </Button>
               </Stack>
@@ -437,6 +433,11 @@ export default function Index({
             isOpen={modalIsOpen}
             url="https://dadosjusbr.org#remuneration-graph"
             onRequestClose={() => setModalIsOpen(false)}
+          />
+          <DownloadDumpDialog
+            open={openDialog}
+            onClose={() => setOpenDialog(false)}
+            fileLink={fileLink}
           />
         </Container>
       </ThemeProvider>

@@ -186,7 +186,7 @@ const SearchAccordion = ({ selectedAgencies }: SearchAccordionProps) => {
             </Grid>
           </Grid>
           <Search.Result
-            shareButtonProps={{ color: 'secondary' }}
+            buttonColorScheme="secondary"
             loading={loading}
             showResults={showResults}
             numRowsIfAvailable={numRowsIfAvailable}

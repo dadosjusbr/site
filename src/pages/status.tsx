@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
 import {
@@ -10,14 +10,20 @@ import {
   ListItemText,
   ListItemIcon,
   Link,
+  Button,
 } from '@mui/material';
 
 import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
 import api from '../services/api';
 import { formatAgency } from '../functions/format';
+import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
+import { useDownloadDump } from '../hooks/useDownloadDump';
 
 export default function Index({ ais }) {
+  const [openDialog, setOpenDialog] = useState(false);
+  const [fileLink] = useDownloadDump();
+
   const collecting = ais
     .filter(ag => ag.coletando === undefined)
     .sort((a, b) => {
@@ -94,7 +100,7 @@ export default function Index({ ais }) {
               </Link>{' '}
               no Github.
             </Typography>
-            <Typography variant="body1" textAlign="justify" gutterBottom mb={4}>
+            <Typography variant="body1" textAlign="justify" gutterBottom>
               Qualquer problema encontrado na coleta ou integridade dos dados
               pode ser informado através de uma issue no{' '}
               <Link
@@ -107,6 +113,26 @@ export default function Index({ ais }) {
                 repositorio do site
               </Link>{' '}
               no Github.
+            </Typography>
+            <Typography variant="body1" textAlign="justify" gutterBottom mb={4}>
+              Você pode fazer o download de todas as informações de remunerações
+              da nossa base de dados por
+              <Button
+                onClick={() => setOpenDialog(true)}
+                sx={{
+                  ':hover': {
+                    backgroundColor: 'transparent',
+                  },
+                }}
+              >
+                <Typography
+                  variant="inherit"
+                  component="span"
+                  color="success.main"
+                >
+                  este link.
+                </Typography>
+              </Button>
             </Typography>
             <Typography variant="h3" gutterBottom>
               Órgãos monitorados pelo DadosJusBR: {collecting.length}
@@ -138,6 +164,11 @@ export default function Index({ ais }) {
             </List>
           </Box>
         </Box>
+        <DownloadDumpDialog
+          open={openDialog}
+          onClose={() => setOpenDialog(false)}
+          fileLink={fileLink}
+        />
       </Container>
       <Footer />
     </Page>
