@@ -173,7 +173,7 @@ const StatusCards = ({ ais }) => {
               },
             }}
           >
-            {collects.map(ag => (
+            {collects.reverse().map(ag => (
               <ListItem key={ag}>
                 <ListItemText
                   primaryTypographyProps={{
