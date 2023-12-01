@@ -194,7 +194,13 @@ export default function Index({
             registros de pagamentos de salários, indenizações, gratificações e
             diárias, totalizando{' '}
             <Typography variant="inherit" component="span" color="success.main">
-              R$ {(finalValue / 1000000000).toFixed(2)} bilhões
+              {(finalValue / 1000000000).toLocaleString('pt-BR', {
+                style: 'currency',
+                currency: 'BRL',
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2,
+              })}{' '}
+              bilhões
             </Typography>{' '}
             em recursos públicos.
           </Typography>
