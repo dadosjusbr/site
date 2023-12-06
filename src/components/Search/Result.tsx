@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   CircularProgress,
@@ -11,10 +10,7 @@ import {
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ThemeProvider } from '@mui/material/styles';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import light from '../../styles/theme-light';
-import { useDownloadDump } from '../../hooks/useDownloadDump';
-import DownloadDumpDialog from '../Common/DownloadDumpDialog';
 
 type ResultProps = {
   loading: boolean;
@@ -60,124 +56,100 @@ const Result = ({
   buttonColorScheme,
   downloadButton,
   setModalIsOpen,
-}: ResultProps) => {
-  const [openDialog, setOpenDialog] = useState(false);
-  const [fileLink, dumpDate] = useDownloadDump();
-  return (
-    <>
-      {loading && (
+}: ResultProps) => (
+  <>
+    {loading && (
+      <Box
+        m={4}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <div>
+          <CircularProgress color="info" />
+        </div>
+        <p>Aguarde...</p>
+      </Box>
+    )}
+    {showResults && (
+      <Box>
         <Box
-          m={4}
+          pt={4}
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            borderTop: '2px solid',
           }}
         >
-          <div>
-            <CircularProgress color="info" />
-          </div>
-          <p>Aguarde...</p>
-        </Box>
-      )}
-      {showResults && (
-        <Box>
-          <Box
-            pt={4}
-            sx={{
-              borderTop: '2px solid',
-            }}
-          >
-            <Typography variant="h3" gutterBottom>
-              Resultados
+          <Typography variant="h3" gutterBottom>
+            Resultados
+          </Typography>
+          {numRowsIfAvailable === 0 && (
+            <Typography variant="body1" gutterBottom>
+              O órgão não prestou contas neste período.
             </Typography>
-            {numRowsIfAvailable === 0 && (
-              <Typography variant="body1" gutterBottom>
-                O órgão não prestou contas neste período.
-              </Typography>
-            )}
-            {numRowsIfAvailable > 0 && (
-              <Box>
-                {!downloadAvailable && (
-                  <ThemeProvider theme={light}>
-                    <Alert severity="warning">
-                      <Typography variant="body1" gutterBottom>
-                        A pesquisa retorna mais linhas que o número máximo
-                        permitido para download ({`${downloadLimit / 1000}`}
-                        {` `}
-                        mil).
-                        <br />
-                        Refaça a sua busca com menos órgãos ou com um período
-                        mais curto.
-                        <br />
-                        Abaixo, uma amostra dos dados:
-                      </Typography>
-                    </Alert>
-                  </ThemeProvider>
-                )}
-                {downloadAvailable && (
-                  <Typography variant="body1" gutterBottom>
-                    A pesquisa retornou <strong>{numRowsIfAvailable}</strong>{' '}
-                    linhas. Abaixo, uma amostra dos dados:
-                  </Typography>
-                )}
-              </Box>
-            )}
-
-            <Box py={4} textAlign="right">
-              <Button
-                color={buttonColorScheme}
-                sx={{ mr: 2 }}
-                variant="outlined"
-                endIcon={<IosShareIcon />}
-                onClick={() => setModalIsOpen(true)}
-              >
-                COMPARTILHAR
-              </Button>
-              {downloadButton}
-            </Box>
-          </Box>
-          {numRowsIfAvailable > 0 && (
-            <ThemeProvider theme={light}>
-              <Paper>
-                <Box sx={{ width: '100%' }}>
-                  <DataGrid
-                    rows={result}
-                    columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[10]}
-                    disableSelectionOnClick
-                    rowHeight={35}
-                    autoHeight
-                  />
-                </Box>
-              </Paper>
-            </ThemeProvider>
           )}
-          <Box mt={4} display="flex" flexDirection="row-reverse">
+          {numRowsIfAvailable > 0 && (
+            <Box>
+              {!downloadAvailable && (
+                <ThemeProvider theme={light}>
+                  <Alert severity="warning">
+                    <Typography variant="body1" gutterBottom>
+                      A pesquisa retorna mais linhas que o número máximo
+                      permitido para download ({`${downloadLimit / 1000}`}
+                      {` `}
+                      mil).
+                      <br />
+                      Refaça a sua busca com menos órgãos ou com um período mais
+                      curto.
+                      <br />
+                      Abaixo, uma amostra dos dados:
+                    </Typography>
+                  </Alert>
+                </ThemeProvider>
+              )}
+              {downloadAvailable && (
+                <Typography variant="body1" gutterBottom>
+                  A pesquisa retornou <strong>{numRowsIfAvailable}</strong>{' '}
+                  linhas. Abaixo, uma amostra dos dados:
+                </Typography>
+              )}
+            </Box>
+          )}
+
+          <Box py={4} textAlign="right">
             <Button
-              variant="outlined"
               color={buttonColorScheme}
-              onClick={() => setOpenDialog(true)}
-              endIcon={<CloudDownloadIcon />}
+              sx={{ mr: 2 }}
+              variant="outlined"
+              endIcon={<IosShareIcon />}
+              onClick={() => setModalIsOpen(true)}
             >
-              <Typography variant="button" mr={1}>
-                BAIXAR
-              </Typography>
-              <Typography variant="button" color="#00bfa6">
-                {dumpDate}
-              </Typography>
+              COMPARTILHAR
             </Button>
-            <DownloadDumpDialog
-              open={openDialog}
-              onClose={() => setOpenDialog(false)}
-              fileLink={fileLink}
-            />
+            {downloadButton}
           </Box>
         </Box>
-      )}
-    </>
-  );
-};
+        {numRowsIfAvailable > 0 && (
+          <ThemeProvider theme={light}>
+            <Paper>
+              <Box sx={{ width: '100%' }}>
+                <DataGrid
+                  rows={result}
+                  columns={columns}
+                  pageSize={10}
+                  rowsPerPageOptions={[10]}
+                  disableSelectionOnClick
+                  rowHeight={35}
+                  autoHeight
+                />
+              </Box>
+            </Paper>
+          </ThemeProvider>
+        )}
+      </Box>
+    )}
+  </>
+);
 
 export default Result;

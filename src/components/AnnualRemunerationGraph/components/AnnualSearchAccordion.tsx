@@ -88,7 +88,11 @@ const SearchAccordion = ({ selectedAgencies }: SearchAccordionProps) => {
       setSelectedYears(getSearchUrlParameter('anos') as number);
 
       const url = new URL(window.location.href);
-      if (url.search !== '') {
+      if (
+        url.search.includes('categorias') ||
+        url.search.includes('meses') ||
+        url.search.includes('anos')
+      ) {
         firstRequest();
         timer = setTimeout(() => {
           window.location.assign('#search-accordion');

@@ -17,12 +17,17 @@ import { getCurrentYear } from '../functions/currentYear';
 import { searchHandleClick } from '../functions/query';
 import { months } from '../@types/MONTHS';
 import { getSearchUrlParameter } from '../functions/url';
+import { useDownloadDump } from '../hooks/useDownloadDump';
+import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
 
 export default function Index({ ais }: { ais: Agency[] }) {
   const years: number[] = [];
   for (let i = getCurrentYear(); i >= 2018; i--) {
     years.push(i);
   }
+
+  const [openDialog, setOpenDialog] = React.useState(false);
+  const [fileLink, dumpDate] = useDownloadDump();
 
   const [selectedYears, setSelectedYears] = React.useState(getCurrentYear());
   const [selectedMonths, setSelectedMonths] = React.useState(months);
@@ -227,6 +232,28 @@ export default function Index({ ais }: { ais: Agency[] }) {
               </Button>
             }
           />
+          {showResults && (
+            <Box mt={4} display="flex" flexDirection="row-reverse">
+              <Button
+                variant="outlined"
+                color="info"
+                onClick={() => setOpenDialog(true)}
+                endIcon={<CloudDownloadIcon />}
+              >
+                <Typography variant="button" mr={1}>
+                  BAIXAR
+                </Typography>
+                <Typography variant="button" color="#00bfa6">
+                  {dumpDate}
+                </Typography>
+              </Button>
+              <DownloadDumpDialog
+                open={openDialog}
+                onClose={() => setOpenDialog(false)}
+                fileLink={fileLink}
+              />
+            </Box>
+          )}
         </Box>
         <ShareModal
           isOpen={modalIsOpen}
