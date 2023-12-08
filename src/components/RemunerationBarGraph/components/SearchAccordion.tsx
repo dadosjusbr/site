@@ -87,7 +87,7 @@ const SearchAccordion = ({
 
     const url = new URL(window.location.href);
     let timer: NodeJS.Timeout;
-    if (url.search !== '') {
+    if (url.search.includes('categorias') || url.search.includes('meses')) {
       firstRequest();
       timer = setTimeout(() => {
         window.location.assign('#search-accordion');
