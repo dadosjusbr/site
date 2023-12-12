@@ -21,24 +21,7 @@ import api from '../../services/api';
 import DropDownGroupSelector from '../../components/Common/DropDownGroupSelector';
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
-import { extractNumbers, formatToAgency } from '../../functions/format';
-
-function orderStringsWithNum(string1: string, string2: string) {
-  const num1 = extractNumbers(string1);
-  const num2 = extractNumbers(string2);
-
-  const texto1 = string1.replace(/\d+$/, '');
-  const texto2 = string2.replace(/\d+$/, '');
-
-  if (texto1 < texto2) {
-    return -1;
-  }
-  if (texto1 > texto2) {
-    return 1;
-  }
-
-  return num1 - num2;
-}
+import { formatToAgency, orderStringsWithNum } from '../../functions/format';
 
 type chartDataType = {
   dados_anuais?: AnnualSummaryData[];
