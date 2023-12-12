@@ -20,6 +20,23 @@ function extractNumbers(str: string): number {
   return matches ? parseInt(matches[0], 10) : -1;
 }
 
+function orderStringsWithNum(string1: string, string2: string) {
+  const num1 = extractNumbers(string1);
+  const num2 = extractNumbers(string2);
+
+  const texto1 = string1.replace(/\d+$/, '');
+  const texto2 = string2.replace(/\d+$/, '');
+
+  if (texto1 < texto2) {
+    return -1;
+  }
+  if (texto1 > texto2) {
+    return 1;
+  }
+
+  return num1 - num2;
+}
+
 function formatToAgency(input: string): string {
   const words = input?.split('-');
 
@@ -58,4 +75,5 @@ export {
   formatToAgency,
   formatCurrencyValue,
   formatBytes,
+  orderStringsWithNum,
 };

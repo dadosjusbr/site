@@ -16,7 +16,7 @@ import {
 import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
 import api from '../services/api';
-import { formatAgency } from '../functions/format';
+import { formatAgency, orderStringsWithNum } from '../functions/format';
 import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
 import { useDownloadDump } from '../hooks/useDownloadDump';
 
@@ -26,26 +26,10 @@ export default function Index({ ais }) {
 
   const collecting = ais
     .filter(ag => ag.coletando === undefined)
-    .sort((a, b) => {
-      if (a.uf > b.uf) {
-        return 1;
-      }
-      if (a.uf < b.uf) {
-        return -1;
-      }
-      return 0;
-    });
+    .sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao));
   const notCollecting = ais
     .filter(ag => ag.coletando !== undefined)
-    .sort((a, b) => {
-      if (a.uf > b.uf) {
-        return 1;
-      }
-      if (a.uf < b.uf) {
-        return -1;
-      }
-      return 0;
-    });
+    .sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao));
 
   const getReasons = ag => {
     if (ag.coletando && ag.coletando.length > 0 && ag.coletando[0].descricao) {
