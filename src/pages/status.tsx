@@ -110,7 +110,7 @@ export default function Index({ ais }) {
                 }}
               >
                 <Typography
-                  variant="inherit"
+                  variant="subtitle1"
                   component="span"
                   color="success.main"
                 >
