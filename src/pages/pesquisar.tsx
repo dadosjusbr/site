@@ -270,7 +270,7 @@ export async function getStaticProps() {
   try {
     const res = await api.default.get('/orgaos');
     const agencies: Agency[] = res.data.filter(
-      ag => ag.collecting == null || ag.collecting[0].collecting == true,
+      ag => ag.coletando == null || ag.coletando[0].coletando == true,
     );
     return {
       props: {
