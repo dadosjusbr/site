@@ -275,7 +275,6 @@ export default function OmaPage({
           })()}
       </Container>
       <Footer />
-      {console.log(ais)}
     </Page>
   );
 }
