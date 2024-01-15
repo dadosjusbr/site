@@ -17,6 +17,7 @@ import CrawlingDateTable from '../../Common/CrawlingDateTable';
 import NotCollecting from '../../Common/NotCollecting';
 import { warningMessage } from '../functions';
 import RemunerationLegend from '../../RemunerationChartLegend';
+import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -41,27 +42,11 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const [hidingNoData, setHidingNoData] = useState(false);
   const [hidingErrors] = useState(false);
   const [graphType, setGraphType] = useState('media-por-membro');
-
-  const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'remuneracao_base_por_membro';
-    }
-    return 'remuneracao_base';
-  }, [graphType]);
-
-  const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'outras_remuneracoes_por_membro';
-    }
-    return 'outras_remuneracoes';
-  }, [graphType]);
-
-  const discountsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'descontos_por_membro';
-    }
-    return 'descontos';
-  }, [graphType]);
+  const [
+    baseRemunerationDataTypes,
+    otherRemunerationsDataTypes,
+    discountsDataTypes,
+  ] = useRemunerationDataTypes(graphType);
 
   return (
     <>

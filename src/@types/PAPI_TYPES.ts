@@ -10,6 +10,11 @@ type SummaryzedMI = {
   error?: MiError;
 };
 
+type ItemSummary = {
+  auxilio_alimentacao: number;
+  outras: number;
+};
+
 type Summaries = {
   membros_ativos: Summary;
 };

@@ -15,6 +15,7 @@ import { warningMessage } from '../functions';
 import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
+import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -31,42 +32,18 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   data,
   dataLoading = true,
 }) => {
+  console.log(data);
   const matches = useMediaQuery('(max-width:500px)');
   const [hidingRemunerations, setHidingRemunerations] = useState(false);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [graphType, setGraphType] = useState('media-por-membro');
-
-  const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'remuneracao_base_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'remuneracao_base_por_mes';
-    }
-    return 'remuneracao_base';
-  }, [graphType]);
-
-  const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'outras_remuneracoes_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'outras_remuneracoes_por_mes';
-    }
-    return 'outras_remuneracoes';
-  }, [graphType]);
-
-  const discountsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'descontos_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'descontos_por_mes';
-    }
-    return 'descontos';
-  }, [graphType]);
+  const [
+    baseRemunerationDataTypes,
+    otherRemunerationsDataTypes,
+    discountsDataTypes,
+  ] = useRemunerationDataTypes(graphType);
 
   return (
     <>
