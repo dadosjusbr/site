@@ -1,4 +1,4 @@
-import { useState, useMemo, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import {
   Box,
@@ -16,6 +16,7 @@ import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
+import Test from '../../Teste';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -130,6 +131,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                           height="500"
                           type="line"
                         />
+                        <Test />
                       </Suspense>
                     </Box>
                   ) : (
