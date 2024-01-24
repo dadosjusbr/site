@@ -16,7 +16,7 @@ import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
-import Test from '../../Teste';
+import MoneyHeadingsChart from '../../MoneyHeadingsChart/index.tsx';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -33,7 +33,6 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   data,
   dataLoading = true,
 }) => {
-  console.log(data);
   const matches = useMediaQuery('(max-width:500px)');
   const [hidingRemunerations, setHidingRemunerations] = useState(false);
   const [hidingWage, setHidingWage] = useState(false);
@@ -131,7 +130,11 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                           height="500"
                           type="line"
                         />
-                        <Test />
+                        <MoneyHeadingsChart
+                          data={data}
+                          width={400}
+                          height={350}
+                        />
                       </Suspense>
                     </Box>
                   ) : (

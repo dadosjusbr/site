@@ -1,29 +1,54 @@
 import { Box, CircularProgress, ThemeProvider } from '@mui/material';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
-import light from '../styles/theme-light';
-import { formatCurrencyValue } from '../functions/format';
+import { Suspense, useMemo } from 'react';
+import light from '../../styles/theme-light';
+import { formatCurrencyValue } from '../../functions/format';
+import MONTHS from '../../@types/MONTHS';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const data = [
-  {
-    ano: 2019,
-    resumo_rubricas: {
-      auxilio_alimentacao: 137904,
-      outras: 15556174.26,
-    },
-  },
-];
+const Test = ({
+  data,
+  width,
+  height,
+}: {
+  data: AnnualSummaryData[] | v2MonthTotals[];
+  width: number;
+  height: number;
+}) => {
+  const result = useMemo(() => {
+    let groupedObject = {};
 
-const Test = () => {
+    data.forEach(item => {
+      Object.keys(item.resumo_rubricas).forEach(key => {
+        if (!groupedObject[key]) {
+          groupedObject[key] = [];
+        }
+        groupedObject[key].push(item.resumo_rubricas[key]);
+      });
+    });
+
+    let result = Object.keys(groupedObject).map(key => {
+      return {
+        name: key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' '),
+        data: groupedObject[key],
+      };
+    });
+
+    let index = result.findIndex(item => item.name === 'Outras');
+    let item = result.splice(index, 1)[0];
+    result.unshift(item);
+
+    return result;
+  }, [data]);
+
   return (
     <ThemeProvider theme={light}>
       <Box px={8}>
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
-              colors: ['#ff1d1d', '#57659d'],
+              colors: ['#70A9DB', '#8F3232', '#1dff7b', '#8176DB', '#FFC107'],
               chart: {
                 id: 'remuneration-graph',
                 stacked: true,
@@ -105,7 +130,7 @@ const Test = () => {
                 title: {
                   text: 'Quantidade',
                   offsetY: 10,
-                  offsetX: -5,
+                  offsetX: -3,
                   style: {
                     fontSize: '14px',
                     fontWeight: 'bold',
@@ -129,24 +154,18 @@ const Test = () => {
                   },
                 },
               },
-              // annotations: {
-              //   xaxis: graphAnnotations({ data, matches }),
-              // },
-              markers: {
-                size: 5,
-                hover: {
-                  size: 7,
-                },
-              },
               tooltip: {
                 enabled: true,
+                shared: true,
+                intersect: false,
+                inverseOrder: true,
                 x: {
                   formatter(val) {
                     return `${val}`;
                   },
                 },
                 y: {
-                  formatter(val, opts) {
+                  formatter(val) {
                     return `${formatCurrencyValue(val, 1)}`;
                   },
                 },
@@ -160,7 +179,7 @@ const Test = () => {
                     fontSize: '12px',
                   },
                 },
-                categories: ['2023'],
+                categories: data.map(d => d.ano || MONTHS[d.mes]),
                 title: {
                   text: 'Anos',
                   offsetX: -25,
@@ -182,18 +201,9 @@ const Test = () => {
                 enabled: false,
               },
             }}
-            series={[
-              {
-                name: 'Outras',
-                data: [data[0].resumo_rubricas.outras],
-              },
-              {
-                name: 'Auxílio alimentação',
-                data: [data[0].resumo_rubricas.auxilio_alimentacao],
-              },
-            ]}
-            width="200"
-            height="300"
+            series={result}
+            width={width}
+            height={height}
             type="bar"
           />
         </Suspense>
