@@ -84,11 +84,18 @@ const Test = ({
 
   return (
     <ThemeProvider theme={light}>
-      <Box px={8}>
+      <Box>
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
-              colors: ['#70A9DB', '#8F3232', '#1dff7b', '#8176DB', '#FFC107'],
+              colors: [
+                '#70A9DB',
+                '#8F3232',
+                '#1dff7b',
+                '#8176DB',
+                '#FFC107',
+                '#2c3236',
+              ],
               chart: {
                 id: 'remuneration-graph',
                 stacked: true,
@@ -124,7 +131,7 @@ const Test = ({
                       forceNiceScale: true,
                       decimalsInFloat: 2,
                       title: {
-                        text: 'Quantidade',
+                        text: 'Gasto anual',
                         offsetY: 10,
                         style: {
                           fontSize: '10px',
@@ -168,7 +175,7 @@ const Test = ({
                 forceNiceScale: true,
                 decimalsInFloat: 2,
                 title: {
-                  text: 'Quantidade',
+                  text: 'Gasto anual',
                   offsetY: 10,
                   offsetX: -3,
                   style: {
