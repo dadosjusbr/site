@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 import { Suspense, useMemo } from 'react';
 import light from '../../styles/theme-light';
 import { formatCurrencyValue } from '../../functions/format';
-import MONTHS from '../../@types/MONTHS';
+import { getCurrentYear } from '../../functions/currentYear';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -12,14 +12,39 @@ const Test = ({
   width,
   height,
 }: {
-  data: AnnualSummaryData[] | v2MonthTotals[];
+  data: AnnualSummaryData[];
   width: number;
   height: number;
 }) => {
+  const yearList = (): number[] => {
+    const list = [];
+    for (let i = 2018; i <= getCurrentYear(); i += 1) {
+      list.push(i);
+    }
+    return list;
+  };
+
+  const transformedData = yearList().map(ano => {
+    if (data.find(item => item.ano === ano)) {
+      let rubricas = data.find(item => item.ano === ano).resumo_rubricas;
+      rubricas['sem_dados'] = 0;
+      return {
+        ano,
+        resumo_rubricas: rubricas,
+      };
+    }
+    return {
+      ano,
+      resumo_rubricas: {
+        sem_dados: data.map(item => item.resumo_rubricas)[0].outras,
+      },
+    };
+  });
+
   const result = useMemo(() => {
     let groupedObject = {};
 
-    data.forEach(item => {
+    transformedData.forEach(item => {
       Object.keys(item.resumo_rubricas).forEach(key => {
         if (!groupedObject[key]) {
           groupedObject[key] = [];
@@ -38,6 +63,21 @@ const Test = ({
     let index = result.findIndex(item => item.name === 'Outras');
     let item = result.splice(index, 1)[0];
     result.unshift(item);
+
+    // Create bars to represent years with no data
+    let noDataIndexes = transformedData
+      .map((item, index) => {
+        if (item.resumo_rubricas['sem_dados'] > 0) {
+          return index;
+        }
+      })
+      .filter(item => item !== undefined);
+
+    noDataIndexes.forEach(index => {
+      result.forEach(item => {
+        item.name !== 'Sem dados' ? item.data.splice(index, 0, 0) : null;
+      });
+    });
 
     return result;
   }, [data]);
@@ -179,7 +219,7 @@ const Test = ({
                     fontSize: '12px',
                   },
                 },
-                categories: data.map(d => d.ano || MONTHS[d.mes]),
+                categories: yearList(),
                 title: {
                   text: 'Anos',
                   offsetX: -25,

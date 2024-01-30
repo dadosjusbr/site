@@ -136,11 +136,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         height="500"
                         type="line"
                       />
-                      <MoneyHeadingsChart
-                        data={data}
-                        width={400}
-                        height={350}
-                      />
                     </Box>
                   ) : (
                     <Typography variant="body1" py={2} textAlign="center">
