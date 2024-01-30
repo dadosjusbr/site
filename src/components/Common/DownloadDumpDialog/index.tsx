@@ -6,6 +6,7 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import theme from '../../../styles/theme-dark';
+import { Box, Typography } from '@mui/material';
 
 type DownloadDumpDialogProps = {
   fileLink: string;
@@ -43,37 +44,50 @@ export default function DownloadDumpDialog({
       >
         <DialogTitle id="alert-dialog-title">
           Fazer o download de todas as informações de remunerações da nossa base
-          de dados?
+          de dados
         </DialogTitle>
         <DialogContent>
           <DialogContentText
             id="alert-dialog-description"
             color={theme.palette.info.main}
           >
-            O download de um conjunto de dados muito grande pode levar a uma
-            demora significativa devido ao tamanho do arquivo. Isso pode afetar
-            a eficiência de suas atividades, pois o download pode levar mais
-            tempo do que o esperado.
+            Ao realizar o download de um conjunto de dados extenso, é importante
+            estar ciente de que o processo pode levar um tempo considerável
+            devido ao tamanho do arquivo.
           </DialogContentText>
           <DialogContentText color={theme.palette.info.main}>
             Gerenciar e analisar grandes conjuntos de dados também requer
-            ferramentas e habilidades especializadas. Portanto, recomendamos que
-            você considere cuidadosamente esses fatores antes de prosseguir com
-            o download.
+            ferramentas especializadas.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="info" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button
-            color="success"
-            onClick={handleDownload}
-            href={fileLink}
-            autoFocus
-          >
-            Baixar
-          </Button>
+          <Box width="100%" display="flex" justifyContent="space-between">
+            <Button color="info" onClick={onClose}>
+              <Typography variant="button" mr={1}>
+                Cancelar
+              </Typography>
+            </Button>
+            <Box display="flex" gap={2}>
+              <Button color="warning" href="/pesquisar" autoFocus>
+                <Typography variant="button" mr={1}>
+                  Baixar um subconjunto dos dados
+                </Typography>
+              </Button>
+              <Button
+                color="success"
+                onClick={handleDownload}
+                href={fileLink}
+                autoFocus
+              >
+                <Typography variant="button" mr={1}>
+                  Baixar dados
+                </Typography>
+                <Typography variant="button" color="#fff">
+                  151.2 MB
+                </Typography>
+              </Button>
+            </Box>
+          </Box>
         </DialogActions>
       </Dialog>
     </>
