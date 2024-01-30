@@ -62,31 +62,24 @@ export default function DownloadDumpDialog({
         </DialogContent>
         <DialogActions>
           <Box width="100%" display="flex" justifyContent="space-between">
-            <Button color="info" onClick={onClose}>
+            <Button color="success" href="/pesquisar" autoFocus>
               <Typography variant="button" mr={1}>
-                Cancelar
+                Baixar um subconjunto dos dados
               </Typography>
             </Button>
-            <Box display="flex" gap={2}>
-              <Button color="warning" href="/pesquisar" autoFocus>
-                <Typography variant="button" mr={1}>
-                  Baixar um subconjunto dos dados
-                </Typography>
-              </Button>
-              <Button
-                color="success"
-                onClick={handleDownload}
-                href={fileLink}
-                autoFocus
-              >
-                <Typography variant="button" mr={1}>
-                  Baixar dados
-                </Typography>
-                <Typography variant="button" color="#fff">
-                  151.2 MB
-                </Typography>
-              </Button>
-            </Box>
+            <Button
+              color="success"
+              onClick={handleDownload}
+              href={fileLink}
+              autoFocus
+            >
+              <Typography variant="button" mr={1}>
+                Baixar todos os dados
+              </Typography>
+              <Typography variant="button" color="#fff">
+                151.2 MB
+              </Typography>
+            </Button>
           </Box>
         </DialogActions>
       </Dialog>
