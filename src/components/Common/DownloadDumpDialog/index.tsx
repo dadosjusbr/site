@@ -5,8 +5,8 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
-import theme from '../../../styles/theme-dark';
 import { Box, Typography } from '@mui/material';
+import theme from '../../../styles/theme-dark';
 
 type DownloadDumpDialogProps = {
   fileLink: string;
