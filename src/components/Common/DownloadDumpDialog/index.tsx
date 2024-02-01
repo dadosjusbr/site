@@ -43,8 +43,7 @@ export default function DownloadDumpDialog({
         }}
       >
         <DialogTitle id="alert-dialog-title">
-          Fazer o download de todas as informações de remunerações da nossa base
-          de dados
+          Deseja fazer o download do banco de dados completo?
         </DialogTitle>
         <DialogContent>
           <DialogContentText
@@ -56,8 +55,11 @@ export default function DownloadDumpDialog({
             devido ao tamanho do arquivo.
           </DialogContentText>
           <DialogContentText color={theme.palette.info.main}>
-            Gerenciar e analisar grandes conjuntos de dados também requer
-            ferramentas especializadas.
+            Ao descompactar, você terá acesso a arquivos que totalizam{' '}
+            <Typography component="span" variant="inherit" color="#00bfa6">
+              1.5GB
+            </Typography>{' '}
+            com todas as informações disponíveis no banco de dados.
           </DialogContentText>
         </DialogContent>
         <DialogActions>

@@ -1,3 +1,4 @@
+import COLLECT_INFOS from '../@types/COLLECT_INFOS';
 import { getCurrentYear } from '../functions/currentYear';
 
 /**
@@ -5,7 +6,12 @@ import { getCurrentYear } from '../functions/currentYear';
  * @returns An array containing the file link and the creation date.
  */
 export const useDownloadDump = (): [string, string] => {
-  const date = new Date(getCurrentYear(), new Date().getMonth() - 1);
+  const date = new Date(
+    getCurrentYear(),
+    new Date().getDate() < COLLECT_INFOS.COLLECT_DATE
+      ? new Date().getMonth() - 2
+      : new Date().getMonth() - 1,
+  );
   const dumpDate = ` 01/2018 - ${date.toLocaleDateString('pt-BR', {
     month: '2-digit',
     year: 'numeric',
