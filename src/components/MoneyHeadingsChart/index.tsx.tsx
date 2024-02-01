@@ -9,10 +9,12 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const Test = ({
   data,
+  yearsWithoutData,
   width,
   height,
 }: {
   data: AnnualSummaryData[];
+  yearsWithoutData: number[];
   width: number;
   height: number;
 }) => {
@@ -208,6 +210,9 @@ const Test = ({
                 inverseOrder: true,
                 x: {
                   formatter(val) {
+                    if (yearsWithoutData.includes(val)) {
+                      return `Sem dados`;
+                    }
                     return `${val}`;
                   },
                 },

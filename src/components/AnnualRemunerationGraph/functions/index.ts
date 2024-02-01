@@ -36,7 +36,7 @@ export const yearList = (): number[] => {
   return list;
 };
 
-const yearsWithoutData = (data: AnnualSummaryData[]): number[] =>
+export const yearsWithoutData = (data: AnnualSummaryData[]): number[] =>
   yearList()?.filter(
     returnedYear => !yearsWithData(data)?.includes(returnedYear),
   );

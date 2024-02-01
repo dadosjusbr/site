@@ -11,7 +11,7 @@ import {
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import { warningMessage } from '../functions';
+import { warningMessage, yearsWithoutData } from '../functions';
 import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
@@ -132,6 +132,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                         />
                         <MoneyHeadingsChart
                           data={data}
+                          yearsWithoutData={yearsWithoutData(data)}
                           width={400}
                           height={350}
                         />
