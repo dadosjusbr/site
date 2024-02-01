@@ -133,8 +133,8 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                         <MoneyHeadingsChart
                           data={data}
                           yearsWithoutData={yearsWithoutData(data)}
-                          width={400}
-                          height={350}
+                          width={1120}
+                          height={500}
                         />
                       </Suspense>
                     </Box>

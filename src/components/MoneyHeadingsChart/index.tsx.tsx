@@ -15,8 +15,8 @@ const Test = ({
 }: {
   data: AnnualSummaryData[];
   yearsWithoutData: number[];
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
 }) => {
   const yearList = (): number[] => {
     const list = [];
@@ -107,7 +107,18 @@ const Test = ({
                     download:
                       '<Image src="/img/cloud_download_black_24dp.svg"></Image>',
                   },
-                  show: false,
+                  show: true,
+                  export: {
+                    svg: {
+                      filename: 'benefícios-membros-svg',
+                    },
+                    png: {
+                      filename: 'benefícios-membros-png',
+                    },
+                    csv: {
+                      filename: 'benefícios-membros-csv',
+                    },
+                  },
                 },
                 zoom: {
                   enabled: false,
@@ -133,7 +144,7 @@ const Test = ({
                       forceNiceScale: true,
                       decimalsInFloat: 2,
                       title: {
-                        text: 'Gasto anual',
+                        text: 'Gasto anual em benefícios',
                         offsetY: 10,
                         style: {
                           fontSize: '10px',
@@ -177,7 +188,7 @@ const Test = ({
                 forceNiceScale: true,
                 decimalsInFloat: 2,
                 title: {
-                  text: 'Gasto anual',
+                  text: 'Gasto anual em benefícios',
                   offsetY: 10,
                   offsetX: -3,
                   style: {
