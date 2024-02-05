@@ -18,6 +18,7 @@ import NotCollecting from '../../Common/NotCollecting';
 import { warningMessage } from '../functions';
 import RemunerationLegend from '../../RemunerationChartLegend';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
+import MoneyHeadingsChart from './MoneyHeadingsChart';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -134,6 +135,14 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                         width="100%"
                         height="500"
                         type="line"
+                      />
+                      <MoneyHeadingsChart
+                        data={data}
+                        year={year}
+                        hidingNoData={hidingNoData}
+                        // yearsWithoutData={yearsWithoutData(data)}
+                        width="100%"
+                        height="500"
                       />
                     </Box>
                   ) : (
