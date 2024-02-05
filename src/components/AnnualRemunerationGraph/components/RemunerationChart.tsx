@@ -16,7 +16,7 @@ import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
-import MoneyHeadingsChart from '../../MoneyHeadingsChart/index.tsx';
+import MoneyHeadingsChart from './AnnualMoneyHeadingsChart';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -133,8 +133,8 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                         <MoneyHeadingsChart
                           data={data}
                           yearsWithoutData={yearsWithoutData(data)}
-                          width={1120}
-                          height={500}
+                          width="100%"
+                          height="500"
                         />
                       </Suspense>
                     </Box>

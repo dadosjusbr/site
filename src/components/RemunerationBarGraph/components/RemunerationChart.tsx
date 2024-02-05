@@ -18,7 +18,6 @@ import NotCollecting from '../../Common/NotCollecting';
 import { warningMessage } from '../functions';
 import RemunerationLegend from '../../RemunerationChartLegend';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
-import MoneyHeadingsChart from '../../MoneyHeadingsChart/index.tsx';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 

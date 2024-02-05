@@ -1,13 +1,13 @@
 import { Box, CircularProgress, ThemeProvider } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense, useMemo } from 'react';
-import light from '../../styles/theme-light';
-import { formatCurrencyValue } from '../../functions/format';
-import { getCurrentYear } from '../../functions/currentYear';
+import light from '../../../styles/theme-light';
+import { formatCurrencyValue } from '../../../functions/format';
+import { getCurrentYear } from '../../../functions/currentYear';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
-const Test = ({
+const AnnualMoneyHeadingsChart = ({
   data,
   yearsWithoutData,
   width,
@@ -15,8 +15,8 @@ const Test = ({
 }: {
   data: AnnualSummaryData[];
   yearsWithoutData: number[];
-  width?: number;
-  height?: number;
+  width?: number | string;
+  height?: number | string;
 }) => {
   const yearList = (): number[] => {
     const list = [];
@@ -275,4 +275,4 @@ const Test = ({
   );
 };
 
-export default Test;
+export default AnnualMoneyHeadingsChart;
