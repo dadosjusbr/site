@@ -1,4 +1,9 @@
-import { Box, CircularProgress, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  ThemeProvider,
+  Typography,
+} from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import light from '../../../styles/theme-light';
@@ -14,14 +19,12 @@ const MoneyHeadingsChart = ({
   data,
   year,
   hidingNoData,
-  // yearsWithoutData,
   width,
   height,
 }: {
   data: v2MonthTotals[];
   year: number;
   hidingNoData: boolean;
-  // yearsWithoutData: number[];
   width?: number | string;
   height?: number | string;
 }) => {
@@ -39,7 +42,10 @@ const MoneyHeadingsChart = ({
 
   return (
     <ThemeProvider theme={light}>
-      <Box>
+      <Box mt={4}>
+        <Typography variant="h5" textAlign="center" mb={2}>
+          Gasto mensal em benefícios
+        </Typography>
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
@@ -49,7 +55,7 @@ const MoneyHeadingsChart = ({
                 '#1dff7b',
                 '#8176DB',
                 '#FFC107',
-                '#2c3236',
+                '#2C3236',
               ],
               chart: {
                 id: 'remuneration-graph',
@@ -97,7 +103,7 @@ const MoneyHeadingsChart = ({
                       forceNiceScale: true,
                       decimalsInFloat: 2,
                       title: {
-                        text: 'Gasto anual em benefícios',
+                        text: 'Gasto mensal',
                         offsetY: 10,
                         style: {
                           fontSize: '10px',
@@ -141,7 +147,7 @@ const MoneyHeadingsChart = ({
                 forceNiceScale: true,
                 decimalsInFloat: 2,
                 title: {
-                  text: 'Gasto anual em benefícios',
+                  text: 'Gasto mensal',
                   offsetY: 10,
                   offsetX: -3,
                   style: {
