@@ -204,33 +204,12 @@ export default function Index({
             </Typography>{' '}
             em recursos públicos.
           </Typography>
-          <Typography component="p" textAlign="justify">
-            Você pode fazer o
-            <Button
-              onClick={() => setOpenDialog(true)}
-              disableRipple
-              sx={{
-                ':hover': {
-                  backgroundColor: 'transparent',
-                },
-              }}
-            >
-              <Typography
-                variant="inherit"
-                component="span"
-                color="success.main"
-              >
-                download
-              </Typography>
-            </Button>
-            de todas as informações de remunerações da nossa base de dados!
-          </Typography>
           <Grid
             container
             display="flex"
             alignItems="flex-start"
             justifyContent="space-between"
-            mt={8}
+            mt={4}
             pr={38}
           >
             <Grid item>
@@ -262,6 +241,27 @@ export default function Index({
               </Link>
             </Grid>
           </Grid>
+          <Typography mt={4} component="p" textAlign="justify">
+            Você pode fazer o
+            <Button
+              onClick={() => setOpenDialog(true)}
+              disableRipple
+              sx={{
+                ':hover': {
+                  backgroundColor: 'transparent',
+                },
+              }}
+            >
+              <Typography
+                variant="inherit"
+                component="span"
+                color="success.main"
+              >
+                download
+              </Typography>
+            </Button>
+            de todas as informações de remunerações da nossa base de dados!
+          </Typography>
         </Headline>
       </Container>
       <ThemeProvider theme={light}>

@@ -9,8 +9,8 @@ export const useDownloadDump = (): [fileLink: string, dumpDate: string] => {
   const date = new Date(
     getCurrentYear(),
     new Date().getDate() < COLLECT_INFOS.COLLECT_DATE
-      ? new Date().getMonth() - 1
-      : new Date().getMonth(),
+      ? new Date().getMonth() - 2
+      : new Date().getMonth() - 1,
   );
   const dumpDate = ` 01/2018 - ${date.toLocaleDateString('pt-BR', {
     month: '2-digit',

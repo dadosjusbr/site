@@ -103,6 +103,7 @@ export default function Index({ ais }) {
               da nossa base de dados por
               <Button
                 onClick={() => setOpenDialog(true)}
+                disableRipple
                 sx={{
                   ':hover': {
                     backgroundColor: 'transparent',
@@ -110,7 +111,7 @@ export default function Index({ ais }) {
                 }}
               >
                 <Typography
-                  variant="subtitle1"
+                  variant="inherit"
                   component="span"
                   color="success.main"
                 >

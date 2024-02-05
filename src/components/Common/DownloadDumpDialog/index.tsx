@@ -5,6 +5,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import { Box, Typography } from '@mui/material';
 import theme from '../../../styles/theme-dark';
 
 type DownloadDumpDialogProps = {
@@ -42,38 +43,46 @@ export default function DownloadDumpDialog({
         }}
       >
         <DialogTitle id="alert-dialog-title">
-          Fazer o download de todas as informações de remunerações da nossa base
-          de dados?
+          Deseja fazer o download do banco de dados completo?
         </DialogTitle>
         <DialogContent>
           <DialogContentText
             id="alert-dialog-description"
             color={theme.palette.info.main}
           >
-            O download de um conjunto de dados muito grande pode levar a uma
-            demora significativa devido ao tamanho do arquivo. Isso pode afetar
-            a eficiência de suas atividades, pois o download pode levar mais
-            tempo do que o esperado.
+            Ao realizar o download de um conjunto de dados extenso, é importante
+            estar ciente de que o processo pode levar um tempo considerável
+            devido ao tamanho do arquivo.
           </DialogContentText>
           <DialogContentText color={theme.palette.info.main}>
-            Gerenciar e analisar grandes conjuntos de dados também requer
-            ferramentas e habilidades especializadas. Portanto, recomendamos que
-            você considere cuidadosamente esses fatores antes de prosseguir com
-            o download.
+            Ao descompactar, você terá acesso a arquivos que totalizam{' '}
+            <Typography component="span" variant="inherit" color="#00bfa6">
+              1.5GB
+            </Typography>{' '}
+            com todas as informações disponíveis no banco de dados.
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button color="info" onClick={onClose}>
-            Cancelar
-          </Button>
-          <Button
-            color="success"
-            onClick={handleDownload}
-            href={fileLink}
-            autoFocus
-          >
-            Baixar
-          </Button>
+          <Box width="100%" display="flex" justifyContent="space-between">
+            <Button color="success" href="/pesquisar" autoFocus>
+              <Typography variant="button" mr={1}>
+                Baixar um subconjunto dos dados
+              </Typography>
+            </Button>
+            <Button
+              color="success"
+              onClick={handleDownload}
+              href={fileLink}
+              autoFocus
+            >
+              <Typography variant="button" mr={1}>
+                Baixar todos os dados
+              </Typography>
+              <Typography variant="button" color="#fff">
+                151.2 MB
+              </Typography>
+            </Button>
+          </Box>
         </DialogActions>
       </Dialog>
     </>
