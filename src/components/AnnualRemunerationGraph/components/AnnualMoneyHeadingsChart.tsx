@@ -1,9 +1,13 @@
-import { Box, CircularProgress, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  CircularProgress,
+  ThemeProvider,
+  Typography,
+} from '@mui/material';
 import dynamic from 'next/dynamic';
-import { Suspense, useMemo } from 'react';
+import { Suspense } from 'react';
 import light from '../../../styles/theme-light';
 import { formatCurrencyValue } from '../../../functions/format';
-import { getCurrentYear } from '../../../functions/currentYear';
 import {
   createDataArray,
   yearList,
@@ -28,67 +32,13 @@ const AnnualMoneyHeadingsChart = ({
   matches: boolean;
 }) => {
   const yearListArr = yearList();
-  // const transformedData = yearList().map(ano => {
-  //   if (data.find(item => item.ano === ano)) {
-  //     let rubricas = data.find(item => item.ano === ano).resumo_rubricas;
-  //     rubricas['sem_dados'] = 0;
-  //     return {
-  //       ano,
-  //       resumo_rubricas: rubricas,
-  //     };
-  //   }
-  //   return {
-  //     ano,
-  //     resumo_rubricas: {
-  //       sem_dados: data.map(item => item.resumo_rubricas)[0].outras,
-  //     },
-  //   };
-  // });
-
-  // const result = useMemo(() => {
-  //   let groupedObject = {};
-
-  //   transformedData.forEach(item => {
-  //     Object.keys(item.resumo_rubricas).forEach(key => {
-  //       if (!groupedObject[key]) {
-  //         groupedObject[key] = [];
-  //       }
-  //       groupedObject[key].push(item.resumo_rubricas[key]);
-  //     });
-  //   });
-
-  //   let result = Object.keys(groupedObject).map(key => {
-  //     return {
-  //       name: key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' '),
-  //       data: groupedObject[key],
-  //     };
-  //   });
-
-  //   let index = result.findIndex(item => item.name === 'Outras');
-  //   let item = result.splice(index, 1)[0];
-  //   result.unshift(item);
-
-  //   // Create bars to represent years with no data
-  //   let noDataIndexes = transformedData
-  //     .map((item, index) => {
-  //       if (item.resumo_rubricas['sem_dados'] > 0) {
-  //         return index;
-  //       }
-  //     })
-  //     .filter(item => item !== undefined);
-
-  //   noDataIndexes.forEach(index => {
-  //     result.forEach(item => {
-  //       item.name !== 'Sem dados' ? item.data.splice(index, 0, 0) : null;
-  //     });
-  //   });
-
-  //   return result;
-  // }, [data]);
 
   return (
     <ThemeProvider theme={light}>
-      <Box>
+      <Box mt={4}>
+        <Typography variant="h5" textAlign="center" mb={2}>
+          Gasto anual em benefícios
+        </Typography>
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
@@ -98,7 +48,7 @@ const AnnualMoneyHeadingsChart = ({
                 '#1DFF7B',
                 '#8176DB',
                 '#FFC107',
-                '#2c3236',
+                '#2C3236',
               ],
               chart: {
                 id: 'remuneration-graph',
@@ -146,7 +96,7 @@ const AnnualMoneyHeadingsChart = ({
                       forceNiceScale: true,
                       decimalsInFloat: 2,
                       title: {
-                        text: 'Gasto anual em benefícios',
+                        text: 'Gasto anual',
                         offsetY: 10,
                         style: {
                           fontSize: '10px',
@@ -190,7 +140,7 @@ const AnnualMoneyHeadingsChart = ({
                 forceNiceScale: true,
                 decimalsInFloat: 2,
                 title: {
-                  text: 'Gasto anual em benefícios',
+                  text: 'Gasto anual',
                   offsetY: 10,
                   offsetX: -3,
                   style: {
@@ -231,7 +181,7 @@ const AnnualMoneyHeadingsChart = ({
                     '#1DFF7B',
                     '#8176DB',
                     '#FFC107',
-                    '#2c3236',
+                    '#2C3236',
                   ],
                 },
                 x: {
