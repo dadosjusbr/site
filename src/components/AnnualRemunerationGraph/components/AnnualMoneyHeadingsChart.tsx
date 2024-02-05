@@ -4,6 +4,13 @@ import { Suspense, useMemo } from 'react';
 import light from '../../../styles/theme-light';
 import { formatCurrencyValue } from '../../../functions/format';
 import { getCurrentYear } from '../../../functions/currentYear';
+import {
+  createDataArray,
+  yearList,
+  noData,
+  getYearWithIncompleteData,
+} from '../functions';
+import { graphAnnotations } from '../functions/graphConfigs';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -12,77 +19,72 @@ const AnnualMoneyHeadingsChart = ({
   yearsWithoutData,
   width,
   height,
+  matches,
 }: {
   data: AnnualSummaryData[];
   yearsWithoutData: number[];
   width?: number | string;
   height?: number | string;
+  matches: boolean;
 }) => {
-  const yearList = (): number[] => {
-    const list = [];
-    for (let i = 2018; i <= getCurrentYear(); i += 1) {
-      list.push(i);
-    }
-    return list;
-  };
+  const yearListArr = yearList();
+  // const transformedData = yearList().map(ano => {
+  //   if (data.find(item => item.ano === ano)) {
+  //     let rubricas = data.find(item => item.ano === ano).resumo_rubricas;
+  //     rubricas['sem_dados'] = 0;
+  //     return {
+  //       ano,
+  //       resumo_rubricas: rubricas,
+  //     };
+  //   }
+  //   return {
+  //     ano,
+  //     resumo_rubricas: {
+  //       sem_dados: data.map(item => item.resumo_rubricas)[0].outras,
+  //     },
+  //   };
+  // });
 
-  const transformedData = yearList().map(ano => {
-    if (data.find(item => item.ano === ano)) {
-      let rubricas = data.find(item => item.ano === ano).resumo_rubricas;
-      rubricas['sem_dados'] = 0;
-      return {
-        ano,
-        resumo_rubricas: rubricas,
-      };
-    }
-    return {
-      ano,
-      resumo_rubricas: {
-        sem_dados: data.map(item => item.resumo_rubricas)[0].outras,
-      },
-    };
-  });
+  // const result = useMemo(() => {
+  //   let groupedObject = {};
 
-  const result = useMemo(() => {
-    let groupedObject = {};
+  //   transformedData.forEach(item => {
+  //     Object.keys(item.resumo_rubricas).forEach(key => {
+  //       if (!groupedObject[key]) {
+  //         groupedObject[key] = [];
+  //       }
+  //       groupedObject[key].push(item.resumo_rubricas[key]);
+  //     });
+  //   });
 
-    transformedData.forEach(item => {
-      Object.keys(item.resumo_rubricas).forEach(key => {
-        if (!groupedObject[key]) {
-          groupedObject[key] = [];
-        }
-        groupedObject[key].push(item.resumo_rubricas[key]);
-      });
-    });
+  //   let result = Object.keys(groupedObject).map(key => {
+  //     return {
+  //       name: key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' '),
+  //       data: groupedObject[key],
+  //     };
+  //   });
 
-    let result = Object.keys(groupedObject).map(key => {
-      return {
-        name: key.charAt(0).toUpperCase() + key.slice(1).replace('_', ' '),
-        data: groupedObject[key],
-      };
-    });
+  //   let index = result.findIndex(item => item.name === 'Outras');
+  //   let item = result.splice(index, 1)[0];
+  //   result.unshift(item);
 
-    let index = result.findIndex(item => item.name === 'Outras');
-    let item = result.splice(index, 1)[0];
-    result.unshift(item);
+  //   // Create bars to represent years with no data
+  //   let noDataIndexes = transformedData
+  //     .map((item, index) => {
+  //       if (item.resumo_rubricas['sem_dados'] > 0) {
+  //         return index;
+  //       }
+  //     })
+  //     .filter(item => item !== undefined);
 
-    // Create bars to represent years with no data
-    let noDataIndexes = transformedData
-      .map((item, index) => {
-        if (item.resumo_rubricas['sem_dados'] > 0) {
-          return index;
-        }
-      })
-      .filter(item => item !== undefined);
+  //   noDataIndexes.forEach(index => {
+  //     result.forEach(item => {
+  //       item.name !== 'Sem dados' ? item.data.splice(index, 0, 0) : null;
+  //     });
+  //   });
 
-    noDataIndexes.forEach(index => {
-      result.forEach(item => {
-        item.name !== 'Sem dados' ? item.data.splice(index, 0, 0) : null;
-      });
-    });
-
-    return result;
-  }, [data]);
+  //   return result;
+  // }, [data]);
 
   return (
     <ThemeProvider theme={light}>
@@ -93,7 +95,7 @@ const AnnualMoneyHeadingsChart = ({
               colors: [
                 '#70A9DB',
                 '#8F3232',
-                '#1dff7b',
+                '#1DFF7B',
                 '#8176DB',
                 '#FFC107',
                 '#2c3236',
@@ -214,11 +216,24 @@ const AnnualMoneyHeadingsChart = ({
                   },
                 },
               },
+              annotations: {
+                xaxis: graphAnnotations({ data, matches }),
+              },
               tooltip: {
                 enabled: true,
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
+                marker: {
+                  fillColors: [
+                    '#70A9DB',
+                    '#8F3232',
+                    '#1DFF7B',
+                    '#8176DB',
+                    '#FFC107',
+                    '#2c3236',
+                  ],
+                },
                 x: {
                   formatter(val) {
                     if (yearsWithoutData.includes(val)) {
@@ -242,7 +257,7 @@ const AnnualMoneyHeadingsChart = ({
                     fontSize: '12px',
                   },
                 },
-                categories: yearList(),
+                categories: yearListArr,
                 title: {
                   text: 'Anos',
                   offsetX: -25,
@@ -264,7 +279,80 @@ const AnnualMoneyHeadingsChart = ({
                 enabled: false,
               },
             }}
-            series={result}
+            series={[
+              {
+                name: 'Outras',
+                data: (() => {
+                  return createDataArray({
+                    tipoRemuneracao: 'outras',
+                    data,
+                    type: 'rubrica',
+                  });
+                })(),
+                // @ts-expect-error this function always returns a string
+                color: options =>
+                  getYearWithIncompleteData(data)
+                    .map(d => d.resumo_rubricas.outras)
+                    .includes(options.value) &&
+                  graphAnnotations({ data, matches })
+                    .map(d => d.x)
+                    .map(elemento => yearListArr.indexOf(+elemento))
+                    .includes(options.dataPointIndex)
+                    ? '#70A9DB7D'
+                    : '#70A9DB',
+              },
+              {
+                name: 'Auxílio alimentação',
+                data: (() => {
+                  return createDataArray({
+                    tipoRemuneracao: 'auxilio_alimentacao',
+                    data,
+                    type: 'rubrica',
+                  });
+                })(),
+                // @ts-expect-error this function always returns a string
+                color: options =>
+                  getYearWithIncompleteData(data)
+                    .map(d => d.resumo_rubricas.auxilio_alimentacao)
+                    .includes(options.value) &&
+                  graphAnnotations({ data, matches })
+                    .map(d => d.x)
+                    .map(elemento => yearListArr.indexOf(+elemento))
+                    .includes(options.dataPointIndex)
+                    ? '#8F32327D'
+                    : '#8F3232',
+              },
+              {
+                name: 'Licença-prêmio',
+                data: (() => {
+                  return createDataArray({
+                    tipoRemuneracao: 'licenca_premio',
+                    data,
+                    type: 'rubrica',
+                  });
+                })(),
+                // @ts-expect-error this function always returns a string
+                color: options =>
+                  getYearWithIncompleteData(data)
+                    .map(d => d.resumo_rubricas.licenca_premio)
+                    .includes(options.value) &&
+                  graphAnnotations({ data, matches })
+                    .map(d => d.x)
+                    .map(elemento => yearListArr.indexOf(+elemento))
+                    .includes(options.dataPointIndex)
+                    ? '#1DFF7B7D'
+                    : '#1DFF7B',
+              },
+              {
+                name: 'Sem Dados',
+                data: (() => {
+                  return noData({
+                    data,
+                    type: 'rubrica',
+                  });
+                })(),
+              },
+            ]}
             width={width}
             height={height}
             type="bar"

@@ -37,8 +37,6 @@ const MoneyHeadingsChart = ({
       }, 0);
   };
 
-  console.log(MaxMonthPlaceholder());
-
   return (
     <ThemeProvider theme={light}>
       <Box>
@@ -253,14 +251,13 @@ const MoneyHeadingsChart = ({
               {
                 name: 'Licença-prêmio',
                 data: (() =>
-                  createArrayFilledWithValue({ size: 12, value: 0 })
-                    .map((v, i) =>
+                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                    (v, i) =>
                       fixYearDataArray(data)[i]
                         ? fixYearDataArray(data)[i].resumo_rubricas
                             .licenca_premio
                         : v,
-                    )
-                    .map(d => d / 1000000000))(),
+                  ))(),
               },
               {
                 type: 'bar',
