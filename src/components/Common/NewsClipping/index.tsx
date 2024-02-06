@@ -36,27 +36,35 @@ function NewsClipping({ news }: { news: NewsProps[] }) {
 
 function NewsClip({ news, id }: { news: NewsProps; id: number }) {
   return (
-    <Grid id={`clip-${id}`} item sx={{ width: 692 }}>
-      <Card id={`clipcard-${id}`}>
-        <CardContent>
-          <Typography color="text.secondary">{news.formatedDate}</Typography>
-          <Typography variant="h5">{news.title}</Typography>
-          <Typography color="text.secondary">{news.site}</Typography>
-          <Box textAlign="right">
-            <Button
-              size="small"
-              variant="outlined"
-              color="info"
-              endIcon={<OpenInNewIcon />}
-              href={news.url}
-              target="_blank"
-            >
-              Leia
-            </Button>
-          </Box>
-        </CardContent>
-      </Card>
-    </Grid>
+    <Card
+      id={`clipcard-${id}`}
+      sx={{
+        cursor: 'pointer',
+        transition: 'all 0.3s',
+        '&:hover': {
+          boxShadow: 4,
+          transform: 'scale(1.02)',
+        },
+      }}
+    >
+      <CardContent>
+        <Typography color="text.secondary">{news.formatedDate}</Typography>
+        <Typography variant="h5">{news.title}</Typography>
+        <Typography color="text.secondary">{news.site}</Typography>
+        <Box textAlign="right">
+          <Button
+            size="small"
+            variant="outlined"
+            color="info"
+            endIcon={<OpenInNewIcon />}
+            href={news.url}
+            target="_blank"
+          >
+            Leia
+          </Button>
+        </Box>
+      </CardContent>
+    </Card>
   );
 }
 export default NewsClipping;
