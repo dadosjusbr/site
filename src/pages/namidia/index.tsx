@@ -1,6 +1,6 @@
 import Head from 'next/head';
 import styled from 'styled-components';
-import { Box, Container, Grid } from '@mui/material';
+import { Box, Container, Grid, Typography } from '@mui/material';
 
 import Footer from '../../components/Essentials/Footer';
 import Nav from '../../components/Essentials/Header';
@@ -30,11 +30,14 @@ export default function Clipping({ news }) {
       </Head>
       <Nav />
       <Container fixed>
-        <Grid container justifyContent="center" my={4} spacing={2}>
+        <Typography variant="h1" mt={6} textAlign="center">
+          Notícias
+        </Typography>
+        <Grid container justifyContent="center" mt={2}>
           {NewsClipping({ news }).map(n => (
-            <Box key={n.props.news.url} my={1}>
-              {n}
-            </Box>
+            <Grid item xs={12} md={7} sm={12} key={n.props.news.url}>
+              <Box my={1}>{n}</Box>
+            </Grid>
           ))}
         </Grid>
       </Container>
