@@ -25,6 +25,8 @@ function NewsClipping({ reports }: { reports: ReportsProps[] }) {
 
     if (dateA > dateB) return -1;
     if (dateA < dateB) return 1;
+
+    return 1;
   });
 
   const list = formated.map((n, i) => <NewsClip id={i} report={n} />);
