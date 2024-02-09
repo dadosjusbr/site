@@ -34,6 +34,11 @@ function Header() {
       anchor: '/indice',
     },
     {
+      key: 'relatorios',
+      title: 'Relatórios',
+      anchor: '/relatorios',
+    },
+    {
       key: 'namidia',
       title: 'Na Mídia',
       anchor: '/namidia',
