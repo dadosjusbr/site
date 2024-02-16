@@ -36,18 +36,15 @@ const AnnualMoneyHeadingsChart = ({
   return (
     <ThemeProvider theme={light}>
       <Box mt={4}>
-        <Typography variant="h5" textAlign="center" mb={2}>
-          Gasto anual em benefícios
-        </Typography>
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
               colors: [
-                '#70A9DB',
-                '#8F3232',
-                '#1DFF7B',
-                '#8176DB',
-                '#FFC107',
+                '#8dd3c7',
+                '#ffffb3',
+                '#bebada',
+                '#fb8072',
+                '#80b1d3',
                 '#2C3236',
               ],
               chart: {
@@ -174,13 +171,14 @@ const AnnualMoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
+                enabledOnSeries: [0, 1, 2, 3, 4],
                 marker: {
                   fillColors: [
-                    '#70A9DB',
-                    '#8F3232',
-                    '#1DFF7B',
-                    '#8176DB',
-                    '#FFC107',
+                    '#8dd3c7',
+                    '#ffffb3',
+                    '#bebada',
+                    '#fb8072',
+                    '#80b1d3',
                     '#2C3236',
                   ],
                 },
@@ -239,17 +237,48 @@ const AnnualMoneyHeadingsChart = ({
                     type: 'rubrica',
                   });
                 })(),
+              },
+              {
+                name: 'Gratificação natalina',
+                data: (() => {
+                  return createDataArray({
+                    tipoRemuneracao: 'gratificacao_natalina',
+                    data,
+                    type: 'rubrica',
+                  });
+                })(),
                 // @ts-expect-error this function always returns a string
                 color: options =>
                   getYearWithIncompleteData(data)
-                    .map(d => d.resumo_rubricas.outras)
+                    .map(d => d.resumo_rubricas.gratificacao_natalina)
                     .includes(options.value) &&
                   graphAnnotations({ data, matches })
                     .map(d => d.x)
                     .map(elemento => yearListArr.indexOf(+elemento))
                     .includes(options.dataPointIndex)
-                    ? '#70A9DB7D'
-                    : '#70A9DB',
+                    ? '#fb80727d'
+                    : '#fb8072',
+              },
+              {
+                name: 'Indenização de férias',
+                data: (() => {
+                  return createDataArray({
+                    tipoRemuneracao: 'indenizacao_de_ferias',
+                    data,
+                    type: 'rubrica',
+                  });
+                })(),
+                // @ts-expect-error this function always returns a string
+                color: options =>
+                  getYearWithIncompleteData(data)
+                    .map(d => d.resumo_rubricas.indenizacao_de_ferias)
+                    .includes(options.value) &&
+                  graphAnnotations({ data, matches })
+                    .map(d => d.x)
+                    .map(elemento => yearListArr.indexOf(+elemento))
+                    .includes(options.dataPointIndex)
+                    ? '#bebada7d'
+                    : '#bebada',
               },
               {
                 name: 'Auxílio alimentação',
@@ -269,8 +298,8 @@ const AnnualMoneyHeadingsChart = ({
                     .map(d => d.x)
                     .map(elemento => yearListArr.indexOf(+elemento))
                     .includes(options.dataPointIndex)
-                    ? '#8F32327D'
-                    : '#8F3232',
+                    ? '#ffffb37d'
+                    : '#ffffb3',
               },
               {
                 name: 'Licença-prêmio',
@@ -290,8 +319,8 @@ const AnnualMoneyHeadingsChart = ({
                     .map(d => d.x)
                     .map(elemento => yearListArr.indexOf(+elemento))
                     .includes(options.dataPointIndex)
-                    ? '#1DFF7B7D'
-                    : '#1DFF7B',
+                    ? '#8dd3c77d'
+                    : '#8dd3c7',
               },
               {
                 name: 'Sem Dados',

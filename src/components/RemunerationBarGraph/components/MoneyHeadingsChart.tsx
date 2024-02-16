@@ -1,9 +1,4 @@
-import {
-  Box,
-  CircularProgress,
-  ThemeProvider,
-  Typography,
-} from '@mui/material';
+import { Box, CircularProgress, ThemeProvider } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import light from '../../../styles/theme-light';
@@ -18,13 +13,11 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 const MoneyHeadingsChart = ({
   data,
   year,
-  hidingNoData,
   width,
   height,
 }: {
   data: v2MonthTotals[];
   year: number;
-  hidingNoData: boolean;
   width?: number | string;
   height?: number | string;
 }) => {
@@ -40,12 +33,19 @@ const MoneyHeadingsChart = ({
       }, 0);
   };
 
+  const OthersMoneyHeadings = createArrayFilledWithValue({
+    size: 12,
+    value: 0,
+  }).map((v, i) => {
+    if (fixYearDataArray(data)[i]) {
+      return fixYearDataArray(data)[i].resumo_rubricas.outras;
+    }
+    return v;
+  });
+
   return (
     <ThemeProvider theme={light}>
       <Box mt={4}>
-        <Typography variant="h5" textAlign="center" mb={2}>
-          Gasto mensal em benefícios
-        </Typography>
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
@@ -178,8 +178,12 @@ const MoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
+                enabledOnSeries: [0, 1, 2, 3, 4],
                 x: {
-                  formatter(val) {
+                  formatter(val, opts) {
+                    if (OthersMoneyHeadings[opts.dataPointIndex] === 0) {
+                      return `Sem dados`;
+                    }
                     return `${val}`;
                   },
                 },
@@ -243,6 +247,18 @@ const MoneyHeadingsChart = ({
                 })(),
               },
               {
+                name: 'Gratificação natalina',
+                data: (() => {
+                  return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                    (v, i) =>
+                      fixYearDataArray(data)[i]
+                        ? fixYearDataArray(data)[i].resumo_rubricas
+                            .gratificacao_natalina
+                        : v,
+                  );
+                })(),
+              },
+              {
                 name: 'Indenização de férias',
                 data: (() => {
                   return createArrayFilledWithValue({ size: 12, value: 0 }).map(
@@ -281,34 +297,32 @@ const MoneyHeadingsChart = ({
                 type: 'bar',
                 name: 'Sem Dados',
                 data: (() => {
-                  if (!hidingNoData) {
-                    return createArrayFilledWithValue({
-                      size: 12,
-                      value: 0,
-                    }).map((v, i) => {
-                      const dateFixedArray = fixYearDataArray(data);
-                      if (dateFixedArray[i]) {
-                        return v;
-                      }
-                      // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
-                      const date = new Date();
-                      if (year === getCurrentYear()) {
-                        if (
-                          new Date(
-                            getCurrentYear(),
-                            i + 1,
-                            COLLECT_INFOS.COLLECT_DATE,
-                          ) < date
-                        ) {
-                          return MaxMonthPlaceholder();
-                        }
-                      } else {
+                  return createArrayFilledWithValue({
+                    size: 12,
+                    value: 0,
+                  }).map((v, i) => {
+                    const dateFixedArray = fixYearDataArray(data);
+                    if (dateFixedArray[i]) {
+                      return v;
+                    }
+                    // this verifcation is used to check the previous months without data based in the last month in array,
+                    // if the month is previous then a existing data and has no data, the no data array is filled
+                    const date = new Date();
+                    if (year === getCurrentYear()) {
+                      if (
+                        new Date(
+                          getCurrentYear(),
+                          i + 1,
+                          COLLECT_INFOS.COLLECT_DATE,
+                        ) < date
+                      ) {
                         return MaxMonthPlaceholder();
                       }
-                      return 0;
-                    });
-                  }
-                  return createArrayFilledWithValue({ size: 12, value: 0 });
+                    } else {
+                      return MaxMonthPlaceholder();
+                    }
+                    return 0;
+                  });
                 })(),
               },
             ]}

@@ -37,6 +37,7 @@ import MoreInfoAccordion from '../Common/MoreInfoAccordion';
 import SearchAccordion from './components/SearchAccordion';
 import api from '../../services/api';
 import { normalizeMonthlyPlotData } from '../../functions/normalize';
+import MoneyHeadingsChart from './components/MoneyHeadingsChart';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -256,6 +257,25 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
               selectedMonth={navigableMonth}
             />
           </Box>
+          {data?.length > 0 && (
+            <Box mt={2}>
+              <Accordion>
+                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                  <Typography variant="h6" color="#000">
+                    Gráfico do gasto mensal em benefícios
+                  </Typography>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <MoneyHeadingsChart
+                    data={data}
+                    year={year}
+                    width="100%"
+                    height="500"
+                  />
+                </AccordionDetails>
+              </Accordion>
+            </Box>
+          )}
           {data?.length > 0 && (
             <Box mt={2}>
               <Accordion

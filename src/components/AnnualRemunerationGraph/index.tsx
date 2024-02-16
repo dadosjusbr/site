@@ -33,6 +33,8 @@ import SearchAccordion from './components/AnnualSearchAccordion';
 import api from '../../services/api';
 import { normalizePlotData } from '../../functions/normalize';
 import * as url from '../../url';
+import AnnualMoneyHeadingsChart from './components/AnnualMoneyHeadingsChart';
+import { yearsWithoutData } from './functions';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./components/RemunerationChart'),
@@ -209,6 +211,29 @@ const AgencyPageWithoutNavigation: React.FC<
             dataLoading={dataLoading}
           />
         </Box>
+        {(!agency?.coletando && !agency?.possui_dados) ||
+        (agency?.coletando && agency?.possui_dados) ? (
+          <Box mt={2}>
+            <Accordion>
+              <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                <Typography variant="h6" color="#000">
+                  Gráfico do gasto anual em benefícios
+                </Typography>
+              </AccordionSummary>
+              <AccordionDetails>
+                <Suspense fallback={<CircularProgress />}>
+                  <AnnualMoneyHeadingsChart
+                    data={data}
+                    matches={matches}
+                    yearsWithoutData={yearsWithoutData(data)}
+                    width="100%"
+                    height="500"
+                  />
+                </Suspense>
+              </AccordionDetails>
+            </Accordion>
+          </Box>
+        ) : null}
         {(!agency?.coletando && !agency?.possui_dados) ||
         (agency?.coletando && agency?.possui_dados) ? (
           <Box mt={2}>

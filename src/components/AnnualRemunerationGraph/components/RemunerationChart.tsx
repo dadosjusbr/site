@@ -11,12 +11,11 @@ import {
 } from '@mui/material';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
-import { warningMessage, yearsWithoutData } from '../functions';
+import { warningMessage } from '../functions';
 import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
-import MoneyHeadingsChart from './AnnualMoneyHeadingsChart';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -129,13 +128,6 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                           width="100%"
                           height="500"
                           type="line"
-                        />
-                        <MoneyHeadingsChart
-                          data={data}
-                          matches={matches}
-                          yearsWithoutData={yearsWithoutData(data)}
-                          width="100%"
-                          height="500"
                         />
                       </Suspense>
                     </Box>
