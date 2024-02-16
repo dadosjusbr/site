@@ -13,6 +13,7 @@ type SummaryzedMI = {
 type ItemSummary = {
   auxilio_alimentacao: number;
   licenca_premio: number;
+  indenizacao_de_ferias: number;
   outras: number;
 };
 

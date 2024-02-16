@@ -50,11 +50,11 @@ const MoneyHeadingsChart = ({
           <Chart
             options={{
               colors: [
-                '#70A9DB',
-                '#8F3232',
-                '#1dff7b',
-                '#8176DB',
-                '#FFC107',
+                '#8dd3c7',
+                '#ffffb3',
+                '#bebada',
+                '#fb8072',
+                '#80b1d3',
                 '#2C3236',
               ],
               chart: {
@@ -239,6 +239,18 @@ const MoneyHeadingsChart = ({
                       }
                       return v;
                     },
+                  );
+                })(),
+              },
+              {
+                name: 'Indenização de férias',
+                data: (() => {
+                  return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                    (v, i) =>
+                      fixYearDataArray(data)[i]
+                        ? fixYearDataArray(data)[i].resumo_rubricas
+                            .indenizacao_de_ferias
+                        : v,
                   );
                 })(),
               },
