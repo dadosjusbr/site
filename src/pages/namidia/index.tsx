@@ -7,6 +7,7 @@ import Nav from '../../components/Essentials/Header';
 import NewsClipping from '../../components/Common/NewsClipping';
 
 import newsJSON from '../../../public/news.json';
+import ScrollToTopButton from '../../components/Common/ScrollToTopButton';
 
 export async function getStaticProps() {
   return {
@@ -40,6 +41,7 @@ export default function Clipping({ news }) {
             </Grid>
           ))}
         </Grid>
+        <ScrollToTopButton />
       </Container>
       <Footer />
     </Page>
