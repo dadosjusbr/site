@@ -1,9 +1,10 @@
 import Head from 'next/head';
 import { Box, Grid, Typography, Container } from '@mui/material';
-import ReportsClipping from '../components/Common/Resports';
+import ReportsClipping from '../components/Common/Reports';
 import reportsJSON from '../../public/reports.json';
 import Nav from '../components/Essentials/Header';
 import Footer from '../components/Essentials/Footer';
+import ScrollToTopButton from '../components/Common/ScrollToTopButton';
 
 export async function getStaticProps() {
   return {
@@ -43,6 +44,7 @@ const ReportsPage = ({ reports }) => (
           ))}
         </Grid>
       </Box>
+      <ScrollToTopButton />
     </Container>
     <Footer />
   </>
