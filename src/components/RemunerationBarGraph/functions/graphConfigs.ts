@@ -213,7 +213,7 @@ export const graphOptions = ({
       inverseOrder: true,
       ...(agency
         ? { enabledOnSeries: [0, 1, 2, 3, 4] }
-        : { enabledOnSeries: [1, 2, 3] }),
+        : { enabledOnSeries: [1, 2, 3, 4] }),
       marker: {
         fillColors: [
           '#e5cbb4',
