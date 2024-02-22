@@ -41,7 +41,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [hidingErrors] = useState(false);
-  const [graphType, setGraphType] = useState('media-por-membro');
+  const [graphType, setGraphType] = useState(
+    agency === null ? 'total' : 'media-por-membro',
+  );
   const [
     baseRemunerationDataTypes,
     otherRemunerationsDataTypes,
