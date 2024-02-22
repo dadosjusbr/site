@@ -167,7 +167,7 @@ export const graphOptions = ({
       title: {
         text: transformGrpahTitle(),
         offsetY: 10,
-        offsetX: -5.5,
+        offsetX: 6.5,
         style: {
           fontSize: '14px',
           fontWeight: 'bold',

@@ -139,7 +139,7 @@ const AnnualMoneyHeadingsChart = ({
                 title: {
                   text: 'Gasto anual',
                   offsetY: 10,
-                  offsetX: -3,
+                  offsetX: 6,
                   style: {
                     fontSize: '14px',
                     fontWeight: 'bold',
