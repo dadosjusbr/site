@@ -38,11 +38,8 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [graphType, setGraphType] = useState('media-por-membro');
-  const [
-    baseRemunerationDataTypes,
-    otherRemunerationsDataTypes,
-    discountsDataTypes,
-  ] = useRemunerationDataTypes(graphType);
+  const { baseRemunerationDataTypes, otherRemunerationsDataTypes } =
+    useRemunerationDataTypes(graphType);
 
   return (
     <>
@@ -56,9 +53,6 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               data={data}
               graphType={graphType}
               setGraphType={setGraphType}
-              baseRemunerationDataTypes={baseRemunerationDataTypes}
-              otherRemunerationsDataTypes={otherRemunerationsDataTypes}
-              discountsDataTypes={discountsDataTypes}
               hidingRemunerations={hidingRemunerations}
               setHidingRemunerations={setHidingRemunerations}
               hidingWage={hidingWage}
@@ -111,14 +105,11 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                             agency,
                             data,
                             matches,
-                            baseRemunerationDataTypes,
-                            otherRemunerationsDataTypes,
+                            graphType,
                           })}
                           series={graphSeries({
                             data,
-                            baseRemunerationDataTypes,
-                            otherRemunerationsDataTypes,
-                            discountsDataTypes,
+                            graphType,
                             hidingRemunerations,
                             hidingBenefits,
                             hidingWage,

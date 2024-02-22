@@ -17,11 +17,16 @@ const generateDataTypeSuffix = (graphType: string, dataType: string) => {
  */
 export const useRemunerationDataTypes = (
   graphType: string,
-): [
-  baseRemunerationDataTypes: string,
-  otherRemunerationsDataTypes: string,
-  discountsDataTypes: string,
-] => {
+): {
+  netRemunerationDataTypes: string;
+  baseRemunerationDataTypes: string;
+  otherRemunerationsDataTypes: string;
+  discountsDataTypes: string;
+} => {
+  const netRemunerationDataTypes = generateDataTypeSuffix(
+    graphType,
+    'remuneracoes',
+  );
   const baseRemunerationDataTypes = generateDataTypeSuffix(
     graphType,
     'remuneracao_base',
@@ -32,9 +37,10 @@ export const useRemunerationDataTypes = (
   );
   const discountsDataTypes = generateDataTypeSuffix(graphType, 'descontos');
 
-  return [
+  return {
+    netRemunerationDataTypes,
     baseRemunerationDataTypes,
     otherRemunerationsDataTypes,
     discountsDataTypes,
-  ];
+  };
 };

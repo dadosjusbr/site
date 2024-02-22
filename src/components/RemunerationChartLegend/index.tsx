@@ -20,15 +20,13 @@ import Remove from '@mui/icons-material/Remove';
 import Equal from '@mui/icons-material/DragHandle';
 import AlertModal from '../Common/AlertModal';
 import { formatCurrencyValue } from '../../functions/format';
+import { useRemunerationDataTypes } from '../../hooks/useRemunerationTypes';
 
 const index = ({
   agency,
   data,
   graphType,
   setGraphType,
-  baseRemunerationDataTypes,
-  otherRemunerationsDataTypes,
-  discountsDataTypes,
   hidingWage,
   hidingRemunerations,
   setHidingRemunerations,
@@ -44,9 +42,6 @@ const index = ({
   data: v2MonthTotals[] | AnnualSummaryData[];
   graphType: string;
   setGraphType: React.Dispatch<React.SetStateAction<string>>;
-  baseRemunerationDataTypes: string;
-  otherRemunerationsDataTypes: string;
-  discountsDataTypes: string;
   hidingRemunerations: boolean;
   setHidingRemunerations: React.Dispatch<React.SetStateAction<boolean>>;
   hidingWage: boolean;
@@ -61,6 +56,12 @@ const index = ({
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+  const {
+    netRemunerationDataTypes,
+    baseRemunerationDataTypes,
+    otherRemunerationsDataTypes,
+    discountsDataTypes,
+  } = useRemunerationDataTypes(graphType);
 
   const calculateTotal = (totalsMap: number[]) => {
     let total = 0;
@@ -305,9 +306,7 @@ const index = ({
               {(() => {
                 const yearlyTotals = data.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
-                    d[baseRemunerationDataTypes] +
-                    d[otherRemunerationsDataTypes] -
-                    d[discountsDataTypes],
+                    d[netRemunerationDataTypes],
                 );
 
                 return calculateTotal(yearlyTotals);
