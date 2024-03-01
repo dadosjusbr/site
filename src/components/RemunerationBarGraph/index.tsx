@@ -259,7 +259,14 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
           </Box>
           {data?.length > 0 && (
             <Box mt={2}>
-              <Accordion>
+              <Accordion
+                onChange={() =>
+                  ReactGA.event('click', {
+                    category: 'open_component',
+                    action: `From: Gráfico de rubricas`,
+                  })
+                }
+              >
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6" color="#000">
                     Gráfico do gasto mensal em benefícios

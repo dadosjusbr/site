@@ -214,7 +214,14 @@ const AgencyPageWithoutNavigation: React.FC<
         {(!agency?.coletando && !agency?.possui_dados) ||
         (agency?.coletando && agency?.possui_dados) ? (
           <Box mt={2}>
-            <Accordion>
+            <Accordion
+              onChange={() =>
+                ReactGA.event('click', {
+                  category: 'open_component',
+                  action: `From: Gráfico de rubricas`,
+                })
+              }
+            >
               <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                 <Typography variant="h6" color="#000">
                   Gráfico do gasto anual em benefícios
