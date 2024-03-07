@@ -17,7 +17,6 @@ import CrawlingDateTable from '../../Common/CrawlingDateTable';
 import NotCollecting from '../../Common/NotCollecting';
 import { warningMessage } from '../functions';
 import RemunerationLegend from '../../RemunerationChartLegend';
-import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -44,11 +43,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const [graphType, setGraphType] = useState(
     agency === null ? 'total' : 'media-por-membro',
   );
-  const [
-    baseRemunerationDataTypes,
-    otherRemunerationsDataTypes,
-    discountsDataTypes,
-  ] = useRemunerationDataTypes(graphType);
 
   return (
     <>
@@ -63,9 +57,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 data={data}
                 graphType={graphType}
                 setGraphType={setGraphType}
-                baseRemunerationDataTypes={baseRemunerationDataTypes}
-                otherRemunerationsDataTypes={otherRemunerationsDataTypes}
-                discountsDataTypes={discountsDataTypes}
                 hidingRemunerations={hidingRemunerations}
                 setHidingRemunerations={setHidingRemunerations}
                 hidingWage={hidingWage}
@@ -117,8 +108,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           agency,
                           data,
                           year,
-                          baseRemunerationDataTypes,
-                          otherRemunerationsDataTypes,
+                          graphType,
                         })}
                         series={graphSeries({
                           data,
@@ -129,9 +119,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           hidingWage,
                           hidingErrors,
                           hidingNoData,
-                          baseRemunerationDataTypes,
-                          otherRemunerationsDataTypes,
-                          discountsDataTypes,
+                          graphType,
                         })}
                         width="100%"
                         height="500"
