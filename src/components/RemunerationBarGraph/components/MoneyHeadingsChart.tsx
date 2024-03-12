@@ -43,8 +43,6 @@ const MoneyHeadingsChart = ({
     return v;
   });
 
-  console.log(data);
-
   return (
     <ThemeProvider theme={light}>
       <Box mt={4}>

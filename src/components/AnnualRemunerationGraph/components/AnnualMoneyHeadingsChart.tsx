@@ -45,6 +45,11 @@ const AnnualMoneyHeadingsChart = ({
                 '#bebada',
                 '#fb8072',
                 '#80b1d3',
+                '#fdb462',
+                '#b3de69',
+                '#fccde5',
+                '#d9d9d9',
+                '#bc80bd',
                 '#2C3236',
               ],
               chart: {
@@ -171,7 +176,7 @@ const AnnualMoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4],
+                enabledOnSeries: [0, 1, 2, 3, 4, 5],
                 marker: {
                   fillColors: [
                     '#8dd3c7',
@@ -179,6 +184,11 @@ const AnnualMoneyHeadingsChart = ({
                     '#bebada',
                     '#fb8072',
                     '#80b1d3',
+                    '#fdb462',
+                    '#b3de69',
+                    '#fccde5',
+                    '#d9d9d9',
+                    '#bc80bd',
                     '#2C3236',
                   ],
                 },
@@ -239,6 +249,16 @@ const AnnualMoneyHeadingsChart = ({
                 })(),
               },
               {
+                name: 'Licença compensatória',
+                data: (() => {
+                  return createDataArray({
+                    tipoRemuneracao: 'licenca_compensatoria',
+                    data,
+                    type: 'rubrica',
+                  });
+                })(),
+              },
+              {
                 name: 'Gratificação natalina',
                 data: (() => {
                   return createDataArray({
@@ -247,17 +267,6 @@ const AnnualMoneyHeadingsChart = ({
                     type: 'rubrica',
                   });
                 })(),
-                // @ts-expect-error this function always returns a string
-                color: options =>
-                  getYearWithIncompleteData(data)
-                    .map(d => d.resumo_rubricas.gratificacao_natalina)
-                    .includes(options.value) &&
-                  graphAnnotations({ data, matches })
-                    .map(d => d.x)
-                    .map(elemento => yearListArr.indexOf(+elemento))
-                    .includes(options.dataPointIndex)
-                    ? '#fb80727d'
-                    : '#fb8072',
               },
               {
                 name: 'Indenização de férias',
@@ -268,17 +277,6 @@ const AnnualMoneyHeadingsChart = ({
                     type: 'rubrica',
                   });
                 })(),
-                // @ts-expect-error this function always returns a string
-                color: options =>
-                  getYearWithIncompleteData(data)
-                    .map(d => d.resumo_rubricas.indenizacao_de_ferias)
-                    .includes(options.value) &&
-                  graphAnnotations({ data, matches })
-                    .map(d => d.x)
-                    .map(elemento => yearListArr.indexOf(+elemento))
-                    .includes(options.dataPointIndex)
-                    ? '#bebada7d'
-                    : '#bebada',
               },
               {
                 name: 'Auxílio alimentação',
@@ -289,17 +287,6 @@ const AnnualMoneyHeadingsChart = ({
                     type: 'rubrica',
                   });
                 })(),
-                // @ts-expect-error this function always returns a string
-                color: options =>
-                  getYearWithIncompleteData(data)
-                    .map(d => d.resumo_rubricas.auxilio_alimentacao)
-                    .includes(options.value) &&
-                  graphAnnotations({ data, matches })
-                    .map(d => d.x)
-                    .map(elemento => yearListArr.indexOf(+elemento))
-                    .includes(options.dataPointIndex)
-                    ? '#ffffb37d'
-                    : '#ffffb3',
               },
               {
                 name: 'Licença-prêmio',
@@ -310,17 +297,6 @@ const AnnualMoneyHeadingsChart = ({
                     type: 'rubrica',
                   });
                 })(),
-                // @ts-expect-error this function always returns a string
-                color: options =>
-                  getYearWithIncompleteData(data)
-                    .map(d => d.resumo_rubricas.licenca_premio)
-                    .includes(options.value) &&
-                  graphAnnotations({ data, matches })
-                    .map(d => d.x)
-                    .map(elemento => yearListArr.indexOf(+elemento))
-                    .includes(options.dataPointIndex)
-                    ? '#8dd3c77d'
-                    : '#8dd3c7',
               },
               {
                 name: 'Sem Dados',
