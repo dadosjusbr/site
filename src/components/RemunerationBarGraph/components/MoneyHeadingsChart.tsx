@@ -43,6 +43,8 @@ const MoneyHeadingsChart = ({
     return v;
   });
 
+  console.log(data);
+
   return (
     <ThemeProvider theme={light}>
       <Box mt={4}>
@@ -55,6 +57,11 @@ const MoneyHeadingsChart = ({
                 '#bebada',
                 '#fb8072',
                 '#80b1d3',
+                '#fdb462',
+                '#b3de69',
+                '#fccde5',
+                '#d9d9d9',
+                '#bc80bd',
                 '#2C3236',
               ],
               chart: {
@@ -178,7 +185,7 @@ const MoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4],
+                enabledOnSeries: [0, 1, 2, 3, 4, 5],
                 x: {
                   formatter(val, opts) {
                     if (OthersMoneyHeadings[opts.dataPointIndex] === 0) {
@@ -243,6 +250,18 @@ const MoneyHeadingsChart = ({
                       }
                       return v;
                     },
+                  );
+                })(),
+              },
+              {
+                name: 'Licença compensatória',
+                data: (() => {
+                  return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                    (v, i) =>
+                      fixYearDataArray(data)[i]
+                        ? fixYearDataArray(data)[i].resumo_rubricas
+                            .licenca_compensatoria
+                        : v,
                   );
                 })(),
               },
