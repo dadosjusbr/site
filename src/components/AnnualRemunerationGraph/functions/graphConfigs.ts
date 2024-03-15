@@ -128,13 +128,14 @@ export const graphOptions = ({
             },
           },
           yaxis: {
-            max: Math.max(
-              ...totalWaste({
-                data,
-                baseRemunerationDataTypes,
-                otherRemunerationsDataTypes,
-              }),
-            ),
+            max:
+              Math.max(
+                ...totalWaste({
+                  data,
+                  baseRemunerationDataTypes,
+                  otherRemunerationsDataTypes,
+                }),
+              ) * 1.1,
             forceNiceScale: true,
             decimalsInFloat: 2,
             title: {
@@ -179,13 +180,14 @@ export const graphOptions = ({
       },
     },
     yaxis: {
-      max: Math.max(
-        ...totalWaste({
-          data,
-          baseRemunerationDataTypes,
-          otherRemunerationsDataTypes,
-        }),
-      ),
+      max:
+        Math.max(
+          ...totalWaste({
+            data,
+            baseRemunerationDataTypes,
+            otherRemunerationsDataTypes,
+          }),
+        ) * 1.1,
       forceNiceScale: true,
       decimalsInFloat: 2,
       title: {
