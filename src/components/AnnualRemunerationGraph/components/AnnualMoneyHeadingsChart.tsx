@@ -1,19 +1,9 @@
-import {
-  Box,
-  CircularProgress,
-  ThemeProvider,
-  Typography,
-} from '@mui/material';
+import { Box, CircularProgress, ThemeProvider } from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import light from '../../../styles/theme-light';
 import { formatCurrencyValue } from '../../../functions/format';
-import {
-  createDataArray,
-  yearList,
-  noData,
-  getYearWithIncompleteData,
-} from '../functions';
+import { createDataArray, yearList, noData } from '../functions';
 import { graphAnnotations } from '../functions/graphConfigs';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
@@ -53,7 +43,7 @@ const AnnualMoneyHeadingsChart = ({
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
-              colors: colors,
+              colors,
               chart: {
                 id: 'remuneration-graph',
                 stacked: true,
@@ -230,72 +220,65 @@ const AnnualMoneyHeadingsChart = ({
             series={[
               {
                 name: 'Outras',
-                data: (() => {
-                  return createDataArray({
+                data: (() =>
+                  createDataArray({
                     tipoRemuneracao: 'outras',
                     data,
                     type: 'rubrica',
-                  });
-                })(),
+                  }))(),
               },
               {
                 name: 'Licença compensatória',
-                data: (() => {
-                  return createDataArray({
+                data: (() =>
+                  createDataArray({
                     tipoRemuneracao: 'licenca_compensatoria',
                     data,
                     type: 'rubrica',
-                  });
-                })(),
+                  }))(),
               },
               {
                 name: 'Gratificação natalina',
-                data: (() => {
-                  return createDataArray({
+                data: (() =>
+                  createDataArray({
                     tipoRemuneracao: 'gratificacao_natalina',
                     data,
                     type: 'rubrica',
-                  });
-                })(),
+                  }))(),
               },
               {
                 name: 'Indenização de férias',
-                data: (() => {
-                  return createDataArray({
+                data: (() =>
+                  createDataArray({
                     tipoRemuneracao: 'indenizacao_de_ferias',
                     data,
                     type: 'rubrica',
-                  });
-                })(),
+                  }))(),
               },
               {
                 name: 'Auxílio alimentação',
-                data: (() => {
-                  return createDataArray({
+                data: (() =>
+                  createDataArray({
                     tipoRemuneracao: 'auxilio_alimentacao',
                     data,
                     type: 'rubrica',
-                  });
-                })(),
+                  }))(),
               },
               {
                 name: 'Licença-prêmio',
-                data: (() => {
-                  return createDataArray({
+                data: (() =>
+                  createDataArray({
                     tipoRemuneracao: 'licenca_premio',
                     data,
                     type: 'rubrica',
-                  });
-                })(),
+                  }))(),
               },
               {
                 name: 'Sem Dados',
-                data: (() => {
-                  return noData({
+                data: (() =>
+                  noData({
                     data,
                     type: 'rubrica',
-                  });
-                })(),
+                  }))(),
               },
             ]}
             width={width}

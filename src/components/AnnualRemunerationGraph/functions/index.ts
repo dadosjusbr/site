@@ -105,9 +105,8 @@ export const noData = ({
             .reduce((a, b) => {
               if (a > b) {
                 return a;
-              } else {
-                return b;
               }
+              return b;
             }, 0),
         );
       }
@@ -177,7 +176,7 @@ export const createDataArray = ({
 }): number[] => {
   let incomingData = [];
 
-  if (type == 'rubrica') {
+  if (type === 'rubrica') {
     incomingData = data
       ?.sort((a, b) => a.ano - b.ano)
       .map(d =>

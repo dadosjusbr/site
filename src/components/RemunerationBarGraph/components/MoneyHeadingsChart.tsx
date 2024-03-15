@@ -21,17 +21,15 @@ const MoneyHeadingsChart = ({
   width?: number | string;
   height?: number | string;
 }) => {
-  const MaxMonthPlaceholder = () => {
-    return data
+  const MaxMonthPlaceholder = () =>
+    data
       .map(d => d.resumo_rubricas.outras)
       .reduce((a, b) => {
         if (a > b) {
           return a;
-        } else {
-          return b;
         }
+        return b;
       }, 0);
-  };
 
   const OthersMoneyHeadings = createArrayFilledWithValue({
     size: 12,
@@ -240,64 +238,59 @@ const MoneyHeadingsChart = ({
             series={[
               {
                 name: 'Outras',
-                data: (() => {
-                  return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                data: (() =>
+                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
                     (v, i) => {
                       if (fixYearDataArray(data)[i]) {
                         return fixYearDataArray(data)[i].resumo_rubricas.outras;
                       }
                       return v;
                     },
-                  );
-                })(),
+                  ))(),
               },
               {
                 name: 'Licença compensatória',
-                data: (() => {
-                  return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                data: (() =>
+                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
                     (v, i) =>
                       fixYearDataArray(data)[i]
                         ? fixYearDataArray(data)[i].resumo_rubricas
                             .licenca_compensatoria
                         : v,
-                  );
-                })(),
+                  ))(),
               },
               {
                 name: 'Gratificação natalina',
-                data: (() => {
-                  return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                data: (() =>
+                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
                     (v, i) =>
                       fixYearDataArray(data)[i]
                         ? fixYearDataArray(data)[i].resumo_rubricas
                             .gratificacao_natalina
                         : v,
-                  );
-                })(),
+                  ))(),
               },
               {
                 name: 'Indenização de férias',
-                data: (() => {
-                  return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                data: (() =>
+                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
                     (v, i) =>
                       fixYearDataArray(data)[i]
                         ? fixYearDataArray(data)[i].resumo_rubricas
                             .indenizacao_de_ferias
                         : v,
-                  );
-                })(),
+                  ))(),
               },
               {
                 name: 'Auxílio alimentação',
-                data: (() => {
-                  return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                data: (() =>
+                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
                     (v, i) =>
                       fixYearDataArray(data)[i]
                         ? fixYearDataArray(data)[i].resumo_rubricas
                             .auxilio_alimentacao
                         : v,
-                  );
-                })(),
+                  ))(),
               },
               {
                 name: 'Licença-prêmio',
@@ -313,8 +306,8 @@ const MoneyHeadingsChart = ({
               {
                 type: 'bar',
                 name: 'Sem Dados',
-                data: (() => {
-                  return createArrayFilledWithValue({
+                data: (() =>
+                  createArrayFilledWithValue({
                     size: 12,
                     value: 0,
                   }).map((v, i) => {
@@ -339,8 +332,7 @@ const MoneyHeadingsChart = ({
                       return MaxMonthPlaceholder();
                     }
                     return 0;
-                  });
-                })(),
+                  }))(),
               },
             ]}
             width={width}
