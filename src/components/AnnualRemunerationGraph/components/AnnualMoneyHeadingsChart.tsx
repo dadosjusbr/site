@@ -33,25 +33,27 @@ const AnnualMoneyHeadingsChart = ({
 }) => {
   const yearListArr = yearList();
 
+  const colors = [
+    '#8dd3c7',
+    '#ffffb3',
+    '#bebada',
+    '#fb8072',
+    '#80b1d3',
+    '#fdb462',
+    // '#b3de69',
+    // '#6d2f4f',
+    // '#d9d9d9',
+    // '#bc80bd',
+    '#2C3236',
+  ];
+
   return (
     <ThemeProvider theme={light}>
       <Box mt={4}>
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
-              colors: [
-                '#8dd3c7',
-                '#ffffb3',
-                '#bebada',
-                '#fb8072',
-                '#80b1d3',
-                '#fdb462',
-                '#b3de69',
-                '#fccde5',
-                '#d9d9d9',
-                '#bc80bd',
-                '#2C3236',
-              ],
+              colors: colors,
               chart: {
                 id: 'remuneration-graph',
                 stacked: true,
@@ -178,19 +180,7 @@ const AnnualMoneyHeadingsChart = ({
                 inverseOrder: true,
                 enabledOnSeries: [0, 1, 2, 3, 4, 5],
                 marker: {
-                  fillColors: [
-                    '#8dd3c7',
-                    '#ffffb3',
-                    '#bebada',
-                    '#fb8072',
-                    '#80b1d3',
-                    '#fdb462',
-                    '#b3de69',
-                    '#fccde5',
-                    '#d9d9d9',
-                    '#bc80bd',
-                    '#2C3236',
-                  ],
+                  fillColors: colors,
                 },
                 x: {
                   formatter(val) {
