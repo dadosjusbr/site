@@ -15,6 +15,7 @@ type ItemSummary = {
   licenca_premio: number;
   indenizacao_de_ferias: number;
   gratificacao_natalina: number;
+  licenca_compensatoria: number;
   outras: number;
 };
 

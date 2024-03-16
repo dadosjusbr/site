@@ -38,7 +38,10 @@ export function createArrayFilledWithValue<T>({
   return array;
 }
 export function fixYearDataArray(array: v2MonthTotals[]) {
-  const a = createArrayFilledWithValue({ size: 12, value: undefined });
+  const a = createArrayFilledWithValue<v2MonthTotals>({
+    size: 12,
+    value: undefined,
+  });
   array.forEach(v => {
     a[v.mes - 1] = v;
   });
