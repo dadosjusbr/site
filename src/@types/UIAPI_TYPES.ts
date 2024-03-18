@@ -66,6 +66,7 @@ type v2AgencySummary = {
   total_remuneracao: number;
   tem_proximo: boolean;
   tem_anterior: boolean;
+  resumo_rubricas: ItemSummary;
 };
 
 type v2AgencyTotalsYear = {
@@ -93,6 +94,7 @@ type v2MonthTotals = {
   descontos: number;
   descontos_por_membro: number;
   timestamp: Timestamp;
+  resumo_rubricas: ItemSummary;
 };
 
 type Timestamp = {
@@ -181,6 +183,7 @@ type AnnualSummaryData = {
   remuneracoes_por_membro: number;
   meses_com_dados: number;
   package: Backup;
+  resumo_rubricas: ItemSummary;
 };
 
 type MensalRemuneration = {
@@ -190,6 +193,7 @@ type MensalRemuneration = {
   outras_remuneracoes: number;
   descontos: number;
   remuneracoes: number;
+  resumo_rubricas: ItemSummary;
 };
 
 type Month = {

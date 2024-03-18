@@ -1,6 +1,5 @@
 import {
   createDataArray,
-  createRemunerationArray,
   getYearWithIncompleteData,
   noData,
   totalWaste,
@@ -9,6 +8,7 @@ import {
 import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
 import { getCurrentYear } from '../../../functions/currentYear';
 import { formatCurrencyValue } from '../../../functions/format';
+import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
 
 const yearListArr = yearList();
 const currentYear = getCurrentYear();
@@ -51,15 +51,16 @@ export const graphOptions = ({
   agency,
   data,
   matches,
-  baseRemunerationDataTypes,
-  otherRemunerationsDataTypes,
+  graphType,
 }: {
   agency: Agency;
   data: AnnualSummaryData[];
   matches: boolean;
-  baseRemunerationDataTypes: string;
-  otherRemunerationsDataTypes: string;
+  graphType: string;
 }): ApexCharts.ApexOptions => {
+  const { baseRemunerationDataTypes, otherRemunerationsDataTypes } =
+    useRemunerationDataTypes(graphType);
+
   function transformGrpahTitle() {
     if (baseRemunerationDataTypes === 'remuneracao_base_por_membro') {
       return 'Média de remuneração por membro';
@@ -127,16 +128,14 @@ export const graphOptions = ({
             },
           },
           yaxis: {
-            max: (() => {
-              const max = Math.max(
+            max:
+              Math.max(
                 ...totalWaste({
                   data,
                   baseRemunerationDataTypes,
                   otherRemunerationsDataTypes,
-                }).map(month => month),
-              );
-              return max + max * 0.1;
-            })(),
+                }),
+              ) * 1.1,
             forceNiceScale: true,
             decimalsInFloat: 2,
             title: {
@@ -181,16 +180,14 @@ export const graphOptions = ({
       },
     },
     yaxis: {
-      max: (() => {
-        const max = Math.max(
+      max:
+        Math.max(
           ...totalWaste({
             data,
             baseRemunerationDataTypes,
             otherRemunerationsDataTypes,
-          }).map(month => month),
-        );
-        return max + max * 0.1;
-      })(),
+          }),
+        ) * 1.1,
       forceNiceScale: true,
       decimalsInFloat: 2,
       title: {
@@ -339,9 +336,7 @@ export const graphOptions = ({
 
 export const graphSeries = ({
   data,
-  baseRemunerationDataTypes,
-  otherRemunerationsDataTypes,
-  discountsDataTypes,
+  graphType,
   hidingRemunerations,
   hidingBenefits,
   hidingWage,
@@ -349,104 +344,109 @@ export const graphSeries = ({
   matches,
 }: {
   data: AnnualSummaryData[];
-  baseRemunerationDataTypes: string;
-  otherRemunerationsDataTypes: string;
-  discountsDataTypes: string;
+  graphType: string;
   hidingRemunerations: boolean;
   hidingBenefits: boolean;
   hidingWage: boolean;
   hidingNoData: boolean;
   matches: boolean;
-}): ApexAxisChartSeries | ApexNonAxisChartSeries => [
-  {
-    type: 'bar',
-    name: 'Média mensal de membros',
-    data: (() => createDataArray({ tipoRemuneracao: 'num_membros', data }))(),
-  },
-  {
-    type: 'bar',
-    name: 'Descontos',
-    data: createDataArray({
-      tipoRemuneracao: discountsDataTypes,
-      data,
-    }).map(d => d / 1000000000),
-  },
-  {
-    type: 'bar',
-    name: 'Benefício bruto',
-    data: (() => {
-      if (!hidingBenefits) {
-        return createDataArray({
-          tipoRemuneracao: otherRemunerationsDataTypes,
-          data,
-        });
-      }
-      return [];
-    })(),
-    // @ts-expect-error this function always returns a string
-    color: options =>
-      getYearWithIncompleteData(data)
-        .map(d => d[otherRemunerationsDataTypes])
-        .includes(options.value) &&
-      graphAnnotations({ data, matches })
-        .map(d => d.x)
-        .map(elemento => yearListArr.indexOf(+elemento))
-        .includes(options.dataPointIndex)
-        ? '#98bb2f7d'
-        : '#97BB2F',
-  },
-  {
-    type: 'bar',
-    name: 'Salário bruto',
-    data: (() => {
-      if (!hidingWage) {
-        return createDataArray({
-          tipoRemuneracao: baseRemunerationDataTypes,
-          data,
-        });
-      }
-      return [];
-    })(),
-    // @ts-expect-error this function always returns a string
-    color: options =>
-      getYearWithIncompleteData(data)
-        .map(d => d[baseRemunerationDataTypes])
-        .includes(options.value) &&
-      graphAnnotations({ data, matches })
-        .map(d => d.x)
-        .map(elemento => yearListArr.indexOf(+elemento))
-        .includes(options.dataPointIndex)
-        ? '#2fbb967d'
-        : '#2FBB96',
-  },
-  {
-    type: 'line',
-    name: 'Remuneração líquida',
-    data: (() => {
-      if (!hidingRemunerations) {
-        return createRemunerationArray({
-          data,
-          baseRemunerationDataTypes,
-          otherRemunerationsDataTypes,
-          discountsDataTypes,
-        });
-      }
-      return [];
-    })(),
-    color: '#57659d',
-  },
-  {
-    type: 'bar',
-    name: 'Sem Dados',
-    data: (() => {
-      if (!hidingNoData) {
-        return noData({
-          data,
-          baseRemunerationDataTypes,
-          otherRemunerationsDataTypes,
-        });
-      }
-      return [];
-    })(),
-  },
-];
+}): ApexAxisChartSeries | ApexNonAxisChartSeries => {
+  const {
+    netRemunerationDataTypes,
+    baseRemunerationDataTypes,
+    otherRemunerationsDataTypes,
+    discountsDataTypes,
+  } = useRemunerationDataTypes(graphType);
+
+  return [
+    {
+      type: 'bar',
+      name: 'Média mensal de membros',
+      data: (() => createDataArray({ tipoRemuneracao: 'num_membros', data }))(),
+    },
+    {
+      type: 'bar',
+      name: 'Descontos',
+      data: createDataArray({
+        tipoRemuneracao: discountsDataTypes,
+        data,
+      }).map(d => d / 1000000000),
+    },
+    {
+      type: 'bar',
+      name: 'Benefício bruto',
+      data: (() => {
+        if (!hidingBenefits) {
+          return createDataArray({
+            tipoRemuneracao: otherRemunerationsDataTypes,
+            data,
+          });
+        }
+        return [];
+      })(),
+      // @ts-expect-error this function always returns a string
+      color: options =>
+        getYearWithIncompleteData(data)
+          .map(d => d[otherRemunerationsDataTypes])
+          .includes(options.value) &&
+        graphAnnotations({ data, matches })
+          .map(d => d.x)
+          .map(elemento => yearListArr.indexOf(+elemento))
+          .includes(options.dataPointIndex)
+          ? '#98bb2f7d'
+          : '#97BB2F',
+    },
+    {
+      type: 'bar',
+      name: 'Salário bruto',
+      data: (() => {
+        if (!hidingWage) {
+          return createDataArray({
+            tipoRemuneracao: baseRemunerationDataTypes,
+            data,
+          });
+        }
+        return [];
+      })(),
+      // @ts-expect-error this function always returns a string
+      color: options =>
+        getYearWithIncompleteData(data)
+          .map(d => d[baseRemunerationDataTypes])
+          .includes(options.value) &&
+        graphAnnotations({ data, matches })
+          .map(d => d.x)
+          .map(elemento => yearListArr.indexOf(+elemento))
+          .includes(options.dataPointIndex)
+          ? '#2fbb967d'
+          : '#2FBB96',
+    },
+    {
+      type: 'line',
+      name: 'Remuneração líquida',
+      data: (() => {
+        if (!hidingRemunerations) {
+          return createDataArray({
+            tipoRemuneracao: netRemunerationDataTypes,
+            data,
+          });
+        }
+        return [];
+      })(),
+      color: '#57659d',
+    },
+    {
+      type: 'bar',
+      name: 'Sem Dados',
+      data: (() => {
+        if (!hidingNoData) {
+          return noData({
+            data,
+            baseRemunerationDataTypes,
+            otherRemunerationsDataTypes,
+          });
+        }
+        return [];
+      })(),
+    },
+  ];
+};

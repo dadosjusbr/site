@@ -8,20 +8,22 @@ import {
   fixYearDataArray,
 } from '.';
 import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
+import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
 
 export const graphOptions = ({
   agency,
   data,
   year,
-  baseRemunerationDataTypes,
-  otherRemunerationsDataTypes,
+  graphType,
 }: {
   agency: Agency;
   data: v2MonthTotals[];
   year: number;
-  baseRemunerationDataTypes: string;
-  otherRemunerationsDataTypes: string;
+  graphType: string;
 }): ApexCharts.ApexOptions => {
+  const { baseRemunerationDataTypes, otherRemunerationsDataTypes } =
+    useRemunerationDataTypes(graphType);
+
   const MonthlyInfoArr = MonthlyInfo({
     data,
     baseRemunerationDataTypes,
@@ -213,7 +215,7 @@ export const graphOptions = ({
       inverseOrder: true,
       ...(agency
         ? { enabledOnSeries: [0, 1, 2, 3, 4] }
-        : { enabledOnSeries: [1, 2, 3] }),
+        : { enabledOnSeries: [1, 2, 3, 4] }),
       marker: {
         fillColors: [
           '#e5cbb4',
@@ -303,9 +305,7 @@ export const graphSeries = ({
   hidingWage,
   hidingErrors,
   hidingNoData,
-  baseRemunerationDataTypes,
-  otherRemunerationsDataTypes,
-  discountsDataTypes,
+  graphType,
 }: {
   data: v2MonthTotals[];
   year: number;
@@ -315,101 +315,144 @@ export const graphSeries = ({
   hidingWage: boolean;
   hidingErrors: boolean;
   hidingNoData: boolean;
-  baseRemunerationDataTypes: string;
-  otherRemunerationsDataTypes: string;
-  discountsDataTypes: string;
-}): ApexAxisChartSeries | ApexNonAxisChartSeries => [
-  {
-    type: 'bar',
-    name: 'Membros',
-    data: (() => {
-      if (agency) {
-        return createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
-          fixYearDataArray(data)[i]
-            ? fixYearDataArray(data)[i].total_membros
-            : v,
-        );
-      }
-      return createArrayFilledWithValue({ size: 12, value: 0 });
-    })(),
-  },
-  {
-    type: 'bar',
-    name: 'Descontos',
-    data: (() =>
-      createArrayFilledWithValue({ size: 12, value: 0 })
-        .map((v, i) =>
-          fixYearDataArray(data)[i]
-            ? fixYearDataArray(data)[i][discountsDataTypes]
-            : v,
-        )
-        .map(d => d / 1000000000))(),
-  },
-  {
-    type: 'bar',
-    name: 'Benefício bruto',
-    data: (() => {
-      if (!hidingBenefits) {
-        return createArrayFilledWithValue({ size: 12, value: 0 }).map(
-          (v, i) => {
-            if (fixYearDataArray(data)[i]) {
-              return fixYearDataArray(data)[i][otherRemunerationsDataTypes];
-            }
-            return v;
-          },
-        );
-      }
-      return createArrayFilledWithValue({ size: 12, value: 0 });
-    })(),
-  },
-  {
-    type: 'bar',
-    name: 'Salário bruto',
-    data: (() => {
-      if (!hidingWage) {
-        return createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
-          fixYearDataArray(data)[i]
-            ? fixYearDataArray(data)[i][baseRemunerationDataTypes]
-            : v,
-        );
-      }
-      return createArrayFilledWithValue({ size: 12, value: 0 });
-    })(),
-  },
-  {
-    type: 'line',
-    name: 'Remuneração líquida',
-    data: (() => {
-      if (!hidingRemunerations) {
-        return createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) =>
-          fixYearDataArray(data)[i]
-            ? fixYearDataArray(data)[i][baseRemunerationDataTypes] +
-              fixYearDataArray(data)[i][otherRemunerationsDataTypes] -
-              fixYearDataArray(data)[i][discountsDataTypes]
-            : v,
-        );
-      }
-      return createArrayFilledWithValue({ size: 12, value: 0 });
-    })(),
-    color: '#57659d',
-  },
-  {
-    type: 'bar',
-    name: 'Sem Dados',
-    data: (() => {
-      if (!hidingNoData) {
-        return createArrayFilledWithValue({ size: 12, value: 0 }).map(
-          (v, i) => {
-            const dateFixedArray = fixYearDataArray(data);
-            if (dateFixedArray[i]) {
+  graphType: string;
+}): ApexAxisChartSeries | ApexNonAxisChartSeries => {
+  const {
+    baseRemunerationDataTypes,
+    otherRemunerationsDataTypes,
+    discountsDataTypes,
+  } = useRemunerationDataTypes(graphType);
+
+  return [
+    {
+      type: 'bar',
+      name: 'Membros',
+      data: (() => {
+        if (agency) {
+          return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+            (v, i) =>
+              fixYearDataArray(data)[i]
+                ? fixYearDataArray(data)[i].total_membros
+                : v,
+          );
+        }
+        return createArrayFilledWithValue({ size: 12, value: 0 });
+      })(),
+    },
+    {
+      type: 'bar',
+      name: 'Descontos',
+      data: (() =>
+        createArrayFilledWithValue({ size: 12, value: 0 })
+          .map((v, i) =>
+            fixYearDataArray(data)[i]
+              ? fixYearDataArray(data)[i][discountsDataTypes]
+              : v,
+          )
+          .map(d => d / 1000000000))(),
+    },
+    {
+      type: 'bar',
+      name: 'Benefício bruto',
+      data: (() => {
+        if (!hidingBenefits) {
+          return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+            (v, i) => {
+              if (fixYearDataArray(data)[i]) {
+                return fixYearDataArray(data)[i][otherRemunerationsDataTypes];
+              }
               return v;
-            }
-            // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
-            const date = new Date();
-            if (year === getCurrentYear()) {
+            },
+          );
+        }
+        return createArrayFilledWithValue({ size: 12, value: 0 });
+      })(),
+    },
+    {
+      type: 'bar',
+      name: 'Salário bruto',
+      data: (() => {
+        if (!hidingWage) {
+          return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+            (v, i) =>
+              fixYearDataArray(data)[i]
+                ? fixYearDataArray(data)[i][baseRemunerationDataTypes]
+                : v,
+          );
+        }
+        return createArrayFilledWithValue({ size: 12, value: 0 });
+      })(),
+    },
+    {
+      type: 'line',
+      name: 'Remuneração líquida',
+      data: (() => {
+        if (!hidingRemunerations) {
+          return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+            (v, i) =>
+              fixYearDataArray(data)[i]
+                ? fixYearDataArray(data)[i][baseRemunerationDataTypes] +
+                  fixYearDataArray(data)[i][otherRemunerationsDataTypes] -
+                  fixYearDataArray(data)[i][discountsDataTypes]
+                : v,
+          );
+        }
+        return createArrayFilledWithValue({ size: 12, value: 0 });
+      })(),
+      color: '#57659d',
+    },
+    {
+      type: 'bar',
+      name: 'Sem Dados',
+      data: (() => {
+        if (!hidingNoData) {
+          return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+            (v, i) => {
+              const dateFixedArray = fixYearDataArray(data);
+              if (dateFixedArray[i]) {
+                return v;
+              }
+              // this verifcation is used to check the previous months without data based in the last month in array, if the month is previous then a existing data and has no data, the no data array is filled
+              const date = new Date();
+              if (year === getCurrentYear()) {
+                if (
+                  new Date(
+                    getCurrentYear(),
+                    i + 1,
+                    COLLECT_INFOS.COLLECT_DATE,
+                  ) < date
+                ) {
+                  return MaxMonthPlaceholder({
+                    data,
+                    baseRemunerationDataTypes,
+                    otherRemunerationsDataTypes,
+                  });
+                }
+              } else {
+                return MaxMonthPlaceholder({
+                  data,
+                  baseRemunerationDataTypes,
+                  otherRemunerationsDataTypes,
+                });
+              }
+              return 0;
+            },
+          );
+        }
+        return createArrayFilledWithValue({ size: 12, value: 0 });
+      })(),
+    },
+    {
+      type: 'bar',
+      name: 'Problema na coleta',
+      data: (() => {
+        if (!hidingErrors) {
+          return createArrayFilledWithValue({ size: 12, value: 0 }).map(
+            (v, i) => {
+              // fills the chart data if theres an error in given month
               if (
-                new Date(getCurrentYear(), i + 1, COLLECT_INFOS.COLLECT_DATE) <
-                date
+                fixYearDataArray(data)[i] &&
+                fixYearDataArray(data)[i].error
               ) {
                 return MaxMonthPlaceholder({
                   data,
@@ -417,40 +460,12 @@ export const graphSeries = ({
                   otherRemunerationsDataTypes,
                 });
               }
-            } else {
-              return MaxMonthPlaceholder({
-                data,
-                baseRemunerationDataTypes,
-                otherRemunerationsDataTypes,
-              });
-            }
-            return 0;
-          },
-        );
-      }
-      return createArrayFilledWithValue({ size: 12, value: 0 });
-    })(),
-  },
-  {
-    type: 'bar',
-    name: 'Problema na coleta',
-    data: (() => {
-      if (!hidingErrors) {
-        return createArrayFilledWithValue({ size: 12, value: 0 }).map(
-          (v, i) => {
-            // fills the chart data if theres an error in given month
-            if (fixYearDataArray(data)[i] && fixYearDataArray(data)[i].error) {
-              return MaxMonthPlaceholder({
-                data,
-                baseRemunerationDataTypes,
-                otherRemunerationsDataTypes,
-              });
-            }
-            return 0;
-          },
-        );
-      }
-      return createArrayFilledWithValue({ size: 12, value: 0 });
-    })(),
-  },
-];
+              return 0;
+            },
+          );
+        }
+        return createArrayFilledWithValue({ size: 12, value: 0 });
+      })(),
+    },
+  ];
+};

@@ -1,4 +1,4 @@
-import { useState, useMemo, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import dynamic from 'next/dynamic';
 import {
   Box,
@@ -15,6 +15,7 @@ import { warningMessage } from '../functions';
 import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
+import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -37,36 +38,8 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [graphType, setGraphType] = useState('media-por-membro');
-
-  const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'remuneracao_base_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'remuneracao_base_por_mes';
-    }
-    return 'remuneracao_base';
-  }, [graphType]);
-
-  const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'outras_remuneracoes_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'outras_remuneracoes_por_mes';
-    }
-    return 'outras_remuneracoes';
-  }, [graphType]);
-
-  const discountsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro') {
-      return 'descontos_por_membro';
-    }
-    if (graphType === 'media-mensal') {
-      return 'descontos_por_mes';
-    }
-    return 'descontos';
-  }, [graphType]);
+  const { baseRemunerationDataTypes, otherRemunerationsDataTypes } =
+    useRemunerationDataTypes(graphType);
 
   return (
     <>
@@ -80,9 +53,6 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               data={data}
               graphType={graphType}
               setGraphType={setGraphType}
-              baseRemunerationDataTypes={baseRemunerationDataTypes}
-              otherRemunerationsDataTypes={otherRemunerationsDataTypes}
-              discountsDataTypes={discountsDataTypes}
               hidingRemunerations={hidingRemunerations}
               setHidingRemunerations={setHidingRemunerations}
               hidingWage={hidingWage}
@@ -135,14 +105,11 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                             agency,
                             data,
                             matches,
-                            baseRemunerationDataTypes,
-                            otherRemunerationsDataTypes,
+                            graphType,
                           })}
                           series={graphSeries({
                             data,
-                            baseRemunerationDataTypes,
-                            otherRemunerationsDataTypes,
-                            discountsDataTypes,
+                            graphType,
                             hidingRemunerations,
                             hidingBenefits,
                             hidingWage,

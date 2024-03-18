@@ -36,7 +36,7 @@ export const yearList = (): number[] => {
   return list;
 };
 
-const yearsWithoutData = (data: AnnualSummaryData[]): number[] =>
+export const yearsWithoutData = (data: AnnualSummaryData[]): number[] =>
   yearList()?.filter(
     returnedYear => !yearsWithData(data)?.includes(returnedYear),
   );
@@ -85,25 +85,48 @@ export const noData = ({
   data,
   baseRemunerationDataTypes,
   otherRemunerationsDataTypes,
+  type,
 }: {
   data: AnnualSummaryData[];
-  baseRemunerationDataTypes: string;
-  otherRemunerationsDataTypes: string;
+  baseRemunerationDataTypes?: string;
+  otherRemunerationsDataTypes?: string;
+  type?: 'rubrica';
 }): number[] => {
   const noDataArr: number[] = [];
-  for (let i = 2018; i <= getCurrentYear(); i += 1) {
-    if (yearsWithData(data)?.includes(i)) {
-      noDataArr.push(0);
-    } else if (!yearsWithData(data)?.includes(i)) {
-      noDataArr.push(
-        MaxMonthPlaceholder({
-          data,
-          baseRemunerationDataTypes,
-          otherRemunerationsDataTypes,
-        }),
-      );
+
+  if (type === 'rubrica') {
+    for (let i = 2018; i <= getCurrentYear(); i += 1) {
+      if (yearsWithData(data)?.includes(i)) {
+        noDataArr.push(0);
+      } else if (!yearsWithData(data)?.includes(i)) {
+        noDataArr.push(
+          data
+            .map(d => d.resumo_rubricas.outras)
+            .reduce((a, b) => {
+              if (a > b) {
+                return a;
+              }
+              return b;
+            }, 0),
+        );
+      }
+    }
+  } else {
+    for (let i = 2018; i <= getCurrentYear(); i += 1) {
+      if (yearsWithData(data)?.includes(i)) {
+        noDataArr.push(0);
+      } else if (!yearsWithData(data)?.includes(i)) {
+        noDataArr.push(
+          MaxMonthPlaceholder({
+            data,
+            baseRemunerationDataTypes,
+            otherRemunerationsDataTypes,
+          }),
+        );
+      }
     }
   }
+
   return noDataArr;
 };
 
@@ -131,7 +154,9 @@ export const totalWaste = ({
   const dataArray: number[] = [];
   for (let i = 2018; i <= getCurrentYear(); i += 1) {
     if (yearsWithData(data)?.includes(i)) {
-      dataArray.push(totalRemunerationArr[yearsWithData(data)?.indexOf(i)]);
+      dataArray.push(
+        +totalRemunerationArr[yearsWithData(data)?.indexOf(i)].toFixed(2),
+      );
     } else if (!yearsWithData(data)?.includes(i)) {
       dataArray.push(0);
     }
@@ -143,49 +168,27 @@ export const totalWaste = ({
 export const createDataArray = ({
   tipoRemuneracao,
   data,
+  type,
 }: {
   tipoRemuneracao: string;
   data: AnnualSummaryData[];
+  type?: 'rubrica';
 }): number[] => {
-  const incomingData = data
-    ?.sort((a, b) => a.ano - b.ano)
-    .map(d => (d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao]));
+  let incomingData = [];
 
-  const dataArray: number[] = [];
-  for (let i = 2018; i <= getCurrentYear(); i += 1) {
-    if (yearsWithData(data)?.includes(i)) {
-      dataArray.push(incomingData[yearsWithData(data)?.indexOf(i)]);
-    } else if (!yearsWithData(data)?.includes(i)) {
-      dataArray.push(0);
-    }
+  if (type === 'rubrica') {
+    incomingData = data
+      ?.sort((a, b) => a.ano - b.ano)
+      .map(d =>
+        d.resumo_rubricas[tipoRemuneracao] === undefined
+          ? 0
+          : d.resumo_rubricas[tipoRemuneracao],
+      );
+  } else {
+    incomingData = data
+      ?.sort((a, b) => a.ano - b.ano)
+      .map(d => (d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao]));
   }
-
-  return dataArray;
-};
-
-export const createRemunerationArray = ({
-  data,
-  baseRemunerationDataTypes,
-  otherRemunerationsDataTypes,
-  discountsDataTypes,
-}: {
-  data: AnnualSummaryData[];
-  baseRemunerationDataTypes: string;
-  otherRemunerationsDataTypes: string;
-  discountsDataTypes: string;
-}): number[] => {
-  const incomingData = data
-    ?.sort((a, b) => a.ano - b.ano)
-    .map(
-      d =>
-        (d[baseRemunerationDataTypes] === undefined
-          ? 0
-          : d[baseRemunerationDataTypes]) +
-        (d[otherRemunerationsDataTypes] === undefined
-          ? 0
-          : d[otherRemunerationsDataTypes]) -
-        (d[discountsDataTypes] === undefined ? 0 : d[discountsDataTypes]),
-    );
 
   const dataArray: number[] = [];
   for (let i = 2018; i <= getCurrentYear(); i += 1) {

@@ -5,7 +5,7 @@ import { getCurrentYear } from '../functions/currentYear';
  * Hook that returns a file link and the creation date for downloading a dump.
  * @returns An array containing the file link and the creation date.
  */
-export const useDownloadDump = (): [string, string] => {
+export const useDownloadDump = (): [fileLink: string, dumpDate: string] => {
   const date = new Date(
     getCurrentYear(),
     new Date().getDate() < COLLECT_INFOS.COLLECT_DATE

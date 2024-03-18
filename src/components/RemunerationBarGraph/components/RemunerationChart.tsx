@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-syntax */
-import React, { useMemo, useState } from 'react';
+import React, { useState } from 'react';
 import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import {
@@ -40,28 +40,9 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [hidingErrors] = useState(false);
-  const [graphType, setGraphType] = useState('media-por-membro');
-
-  const baseRemunerationDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'remuneracao_base_por_membro';
-    }
-    return 'remuneracao_base';
-  }, [graphType]);
-
-  const otherRemunerationsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'outras_remuneracoes_por_membro';
-    }
-    return 'outras_remuneracoes';
-  }, [graphType]);
-
-  const discountsDataTypes = useMemo(() => {
-    if (graphType === 'media-por-membro' && agency) {
-      return 'descontos_por_membro';
-    }
-    return 'descontos';
-  }, [graphType]);
+  const [graphType, setGraphType] = useState(
+    agency === null ? 'total' : 'media-por-membro',
+  );
 
   return (
     <>
@@ -76,9 +57,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 data={data}
                 graphType={graphType}
                 setGraphType={setGraphType}
-                baseRemunerationDataTypes={baseRemunerationDataTypes}
-                otherRemunerationsDataTypes={otherRemunerationsDataTypes}
-                discountsDataTypes={discountsDataTypes}
                 hidingRemunerations={hidingRemunerations}
                 setHidingRemunerations={setHidingRemunerations}
                 hidingWage={hidingWage}
@@ -130,8 +108,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           agency,
                           data,
                           year,
-                          baseRemunerationDataTypes,
-                          otherRemunerationsDataTypes,
+                          graphType,
                         })}
                         series={graphSeries({
                           data,
@@ -142,9 +119,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                           hidingWage,
                           hidingErrors,
                           hidingNoData,
-                          baseRemunerationDataTypes,
-                          otherRemunerationsDataTypes,
-                          discountsDataTypes,
+                          graphType,
                         })}
                         width="100%"
                         height="500"

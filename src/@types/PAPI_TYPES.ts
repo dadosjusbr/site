@@ -10,6 +10,15 @@ type SummaryzedMI = {
   error?: MiError;
 };
 
+type ItemSummary = {
+  auxilio_alimentacao: number;
+  licenca_premio: number;
+  indenizacao_de_ferias: number;
+  gratificacao_natalina: number;
+  licenca_compensatoria: number;
+  outras: number;
+};
+
 type Summaries = {
   membros_ativos: Summary;
 };
