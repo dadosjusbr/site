@@ -54,7 +54,7 @@ const MoneyHeadingsChart = ({
                 '#fb8072',
                 '#80b1d3',
                 '#fdb462',
-                // '#b3de69',
+                '#b3de69',
                 // '#6d2f4f',
                 // '#d9d9d9',
                 // '#bc80bd',
@@ -181,7 +181,7 @@ const MoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4, 5],
+                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6],
                 x: {
                   formatter(val, opts) {
                     if (OthersMoneyHeadings[opts.dataPointIndex] === 0) {
@@ -293,13 +293,24 @@ const MoneyHeadingsChart = ({
                   ))(),
               },
               {
-                name: 'Licença-prêmio',
+                name: 'Licença prêmio',
                 data: (() =>
                   createArrayFilledWithValue({ size: 12, value: 0 }).map(
                     (v, i) =>
                       fixYearDataArray(data)[i]
                         ? fixYearDataArray(data)[i].resumo_rubricas
                             .licenca_premio
+                        : v,
+                  ))(),
+              },
+              {
+                name: 'Auxílio saúde',
+                data: (() =>
+                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
+                    (v, i) =>
+                      fixYearDataArray(data)[i]
+                        ? fixYearDataArray(data)[i].resumo_rubricas
+                            .auxilio_saude
                         : v,
                   ))(),
               },

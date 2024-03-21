@@ -289,6 +289,10 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                           <hr />
                           <b>Licença compensatória: </b>
                           Horas extras não compensadas no mesmo mês.
+                          <hr />
+                          <b>Auxílio saúde: </b>
+                          Reembolso de despesas com planos de saúde, inclusive
+                          excedentes do teto.
                         </Typography>
                       }
                     >
