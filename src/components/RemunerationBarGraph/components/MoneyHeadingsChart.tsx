@@ -41,6 +41,14 @@ const MoneyHeadingsChart = ({
     return v;
   });
 
+  const fillDataArray = (money_heading: keyof ItemSummary) =>
+    createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) => {
+      if (fixYearDataArray(data)[i]) {
+        return fixYearDataArray(data)[i].resumo_rubricas[money_heading];
+      }
+      return v;
+    });
+
   return (
     <ThemeProvider theme={light}>
       <Box mt={4}>
@@ -54,7 +62,7 @@ const MoneyHeadingsChart = ({
                 '#fb8072',
                 '#80b1d3',
                 '#fdb462',
-                // '#b3de69',
+                '#b3de69',
                 // '#6d2f4f',
                 // '#d9d9d9',
                 // '#bc80bd',
@@ -181,7 +189,7 @@ const MoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4, 5],
+                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6],
                 x: {
                   formatter(val, opts) {
                     if (OthersMoneyHeadings[opts.dataPointIndex] === 0) {
@@ -238,70 +246,31 @@ const MoneyHeadingsChart = ({
             series={[
               {
                 name: 'Outras',
-                data: (() =>
-                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
-                    (v, i) => {
-                      if (fixYearDataArray(data)[i]) {
-                        return fixYearDataArray(data)[i].resumo_rubricas.outras;
-                      }
-                      return v;
-                    },
-                  ))(),
+                data: (() => fillDataArray('outras'))(),
               },
               {
-                name: 'Licença compensatória',
-                data: (() =>
-                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
-                    (v, i) =>
-                      fixYearDataArray(data)[i]
-                        ? fixYearDataArray(data)[i].resumo_rubricas
-                            .licenca_compensatoria
-                        : v,
-                  ))(),
+                name: 'Licença-compensatória',
+                data: (() => fillDataArray('licenca_compensatoria'))(),
               },
               {
                 name: 'Gratificação natalina',
-                data: (() =>
-                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
-                    (v, i) =>
-                      fixYearDataArray(data)[i]
-                        ? fixYearDataArray(data)[i].resumo_rubricas
-                            .gratificacao_natalina
-                        : v,
-                  ))(),
+                data: (() => fillDataArray('gratificacao_natalina'))(),
               },
               {
                 name: 'Indenização de férias',
-                data: (() =>
-                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
-                    (v, i) =>
-                      fixYearDataArray(data)[i]
-                        ? fixYearDataArray(data)[i].resumo_rubricas
-                            .indenizacao_de_ferias
-                        : v,
-                  ))(),
+                data: (() => fillDataArray('indenizacao_de_ferias'))(),
               },
               {
-                name: 'Auxílio alimentação',
-                data: (() =>
-                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
-                    (v, i) =>
-                      fixYearDataArray(data)[i]
-                        ? fixYearDataArray(data)[i].resumo_rubricas
-                            .auxilio_alimentacao
-                        : v,
-                  ))(),
+                name: 'Auxílio-alimentação',
+                data: (() => fillDataArray('auxilio_alimentacao'))(),
               },
               {
                 name: 'Licença-prêmio',
-                data: (() =>
-                  createArrayFilledWithValue({ size: 12, value: 0 }).map(
-                    (v, i) =>
-                      fixYearDataArray(data)[i]
-                        ? fixYearDataArray(data)[i].resumo_rubricas
-                            .licenca_premio
-                        : v,
-                  ))(),
+                data: (() => fillDataArray('licenca_premio'))(),
+              },
+              {
+                name: 'Auxílio-saúde',
+                data: (() => fillDataArray('auxilio_saude'))(),
               },
               {
                 type: 'bar',
