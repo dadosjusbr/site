@@ -229,10 +229,10 @@ const AgencyPageWithoutNavigation: React.FC<
                     placement="bottom"
                     title={
                       <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                        <b>Auxílio alimentação: </b> Custeio de alimentação não
+                        <b>Auxílio-alimentação: </b> Custeio de alimentação não
                         incorporável ao salário.
                         <hr />
-                        <b>Licença prêmio: </b>
+                        <b>Licença-prêmio: </b>
                         A cada 5 anos de serviço, o servidor tem direito a 3
                         meses de licença.
                         <hr />
@@ -242,10 +242,10 @@ const AgencyPageWithoutNavigation: React.FC<
                         <b>Gratificação Natalina: </b>
                         Corresponde ao 13° salário.
                         <hr />
-                        <b>Licença compensatória: </b>
+                        <b>Licença-compensatória: </b>
                         Horas extras não compensadas no mesmo mês.
                         <hr />
-                        <b>Auxílio saúde: </b>
+                        <b>Auxílio-saúde: </b>
                         Reembolso de despesas com planos de saúde, inclusive
                         excedentes do teto.
                       </Typography>

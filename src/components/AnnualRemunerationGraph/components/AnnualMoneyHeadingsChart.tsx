@@ -228,7 +228,7 @@ const AnnualMoneyHeadingsChart = ({
                   }))(),
               },
               {
-                name: 'Licença compensatória',
+                name: 'Licença-compensatória',
                 data: (() =>
                   createDataArray({
                     tipoRemuneracao: 'licenca_compensatoria',
@@ -255,7 +255,7 @@ const AnnualMoneyHeadingsChart = ({
                   }))(),
               },
               {
-                name: 'Auxílio alimentação',
+                name: 'Auxílio-alimentação',
                 data: (() =>
                   createDataArray({
                     tipoRemuneracao: 'auxilio_alimentacao',
@@ -264,7 +264,7 @@ const AnnualMoneyHeadingsChart = ({
                   }))(),
               },
               {
-                name: 'Licença prêmio',
+                name: 'Licença-prêmio',
                 data: (() =>
                   createDataArray({
                     tipoRemuneracao: 'licenca_premio',
@@ -273,7 +273,7 @@ const AnnualMoneyHeadingsChart = ({
                   }))(),
               },
               {
-                name: 'Auxílio saúde',
+                name: 'Auxílio-saúde',
                 data: (() =>
                   createDataArray({
                     tipoRemuneracao: 'auxilio_saude',
