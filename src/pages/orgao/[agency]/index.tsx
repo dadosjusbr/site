@@ -3,11 +3,12 @@ import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, CircularProgress, Container } from '@mui/material';
 import Header from '../../../components/Essentials/Header';
 import Footer from '../../../components/Essentials/Footer';
 import api from '../../../services/api';
 import { getCurrentYear } from '../../../functions/currentYear';
+import AlertWithTitle from '../../../components/Common/AlertWithTitle';
 
 const AgencyWithoutNavigation = dynamic(
   () => import('../../../components/AnnualRemunerationGraph'),
@@ -66,6 +67,11 @@ export default function AnualAgencyPage({
         />
       </Head>
       <Header />
+      {/** Alerta sobre a mudança do  separador decimal */}
+      <Container>
+        <AlertWithTitle />
+      </Container>
+
       <Box display="flex" my={10} justifyContent="center">
         <AgencyWithoutNavigation
           data={data}

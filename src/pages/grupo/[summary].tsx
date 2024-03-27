@@ -22,6 +22,7 @@ import DropDownGroupSelector from '../../components/Common/DropDownGroupSelector
 import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
 import { formatToAgency, orderStringsWithNum } from '../../functions/format';
+import AlertWithTitle from '../../components/Common/AlertWithTitle';
 
 type chartDataType = {
   dados_anuais?: AnnualSummaryData[];
@@ -61,6 +62,9 @@ export default function SummaryPage({
       </Head>
       <Header />
       <Container>
+        {/** Alerta sobre a mudança do  separador decimal */}
+        <AlertWithTitle />
+
         <Grid
           container
           display="flex"

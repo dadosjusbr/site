@@ -19,6 +19,7 @@ import { months } from '../@types/MONTHS';
 import { getSearchUrlParameter } from '../functions/url';
 import { useDownloadDump } from '../hooks/useDownloadDump';
 import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
+import AlertWithTitle from '../components/Common/AlertWithTitle';
 
 export default function Index({ ais }: { ais: Agency[] }) {
   const years: number[] = [];
@@ -119,6 +120,9 @@ export default function Index({ ais }: { ais: Agency[] }) {
       </Head>
       <Nav />
       <Container fixed>
+        {/** Alerta sobre a mudança do  separador decimal */}
+        <AlertWithTitle />
+
         <Box py={4}>
           <Box pb={4}>
             <Typography variant="h1" textAlign="center" gutterBottom>

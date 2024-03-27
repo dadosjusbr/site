@@ -8,6 +8,8 @@ import Footer from '../../../../components/Essentials/Footer';
 import api from '../../../../services/api';
 import AgencyWithNavigation from '../../../../components/RemunerationBarGraph';
 import { formatAgency } from '../../../../functions/format';
+import { Container as MUIConteiner } from '@mui/material';
+import AlertWithTitle from '../../../../components/Common/AlertWithTitle';
 
 export default function AgencyPage({
   id,
@@ -61,6 +63,11 @@ export default function AgencyPage({
         />
       </Head>
       <Header />
+      {/** Alerta sobre a mudança do  separador decimal */}
+      <MUIConteiner>
+        <AlertWithTitle />
+      </MUIConteiner>
+
       <Container>
         <AgencyWithNavigation
           data={data}
