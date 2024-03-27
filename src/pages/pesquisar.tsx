@@ -280,7 +280,7 @@ export async function getStaticProps() {
       props: {
         ais: agencies,
       },
-      revalidate: 60 * 60 * 24,
+      revalidate: 3600,
     };
   } catch (err) {
     return {

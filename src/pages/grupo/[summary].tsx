@@ -230,7 +230,7 @@ export const getStaticProps: GetStaticProps = async context => {
         chartData,
         agencyTotals,
       },
-      revalidate: 60 * 60 * 24,
+      revalidate: 3600,
     };
   } catch (error) {
     // context.res.writeHead(301, {
