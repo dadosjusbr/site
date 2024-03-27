@@ -24,7 +24,6 @@ import OMASummary from '../../../../components/OmaChart';
 import ErrorTable from '../../../../components/Common/ErrorTable';
 import MonthPopover from '../../../../components/Common/MonthPopover';
 import MoreInfoAccordion from '../../../../components/Common/MoreInfoAccordion';
-import AlertWithTitle from '../../../../components/Common/AlertWithTitle';
 
 function UnixToHumanDate(unix) {
   const d = new Date(unix * 1000);
@@ -140,9 +139,6 @@ export default function OmaPage({
       </Head>
       <Header />
       <Container fixed>
-        {/** Alerta sobre a mudança do  separador decimal */}
-        <AlertWithTitle />
-
         <Box py={4}>
           <MoreInfoAccordion
             ombudsman={agencyInfo?.ouvidoria}

@@ -20,6 +20,7 @@ import MembersGraph from './components/MembersGraph';
 import CollectInfos from './components/CollectInfos';
 import SearchAccordion from './components/OMASearchAccordion';
 import { months } from '../../@types/MONTHS';
+import AlertWithTitle from '../Common/AlertWithTitle';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -61,10 +62,17 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
+
   return (
     <>
       {!matches ? (
         <StackButtons
+          open={open}
+          handleOpen={handleOpen}
+          handleClose={handleClose}
           router={router}
           setModalIsOpen={setModalIsOpen}
           fileLink={fileLink}
@@ -81,25 +89,31 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             >
               COMPARTILHAR
             </Button>
-            <Button
-              variant="outlined"
-              color="info"
-              endIcon={<CloudDownloadIcon />}
-              onClick={() => {
-                ReactGA.event('file_download', {
-                  category: 'download',
-                  action: `From: ${window.location.pathname}`,
-                });
-              }}
-              href={url.downloadURL(fileLink)}
+            <AlertWithTitle
+              open={open}
+              handleClose={handleClose}
+              downloadLink={url.downloadURL(fileLink)}
             >
-              <Typography variant="button" mr={1}>
-                BAIXAR
-              </Typography>
-              <Typography variant="button" color="#00bfa6">
-                {formatBytes(mi.pacote_de_dados.size)}
-              </Typography>
-            </Button>
+              <Button
+                variant="outlined"
+                color="info"
+                endIcon={<CloudDownloadIcon />}
+                onClick={() => {
+                  ReactGA.event('file_download', {
+                    category: 'download',
+                    action: `From: ${window.location.pathname}`,
+                  });
+                  handleOpen();
+                }}
+              >
+                <Typography variant="button" mr={1}>
+                  BAIXAR
+                </Typography>
+                <Typography variant="button" color="#00bfa6">
+                  {formatBytes(mi.pacote_de_dados.size)}
+                </Typography>
+              </Button>
+            </AlertWithTitle>
           </Stack>
         </Drawer>
       )}
@@ -132,6 +146,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             setModalIsOpen={setModalIsOpen}
             fileLink={fileLink}
             mi={mi}
+            open={open}
+            handleOpen={handleOpen}
+            handleClose={handleClose}
           />
         ) : (
           <Stack spacing={2} direction="column" my={2} mx={6}>
@@ -143,25 +160,31 @@ const OMASummary: React.FC<OMASummaryProps> = ({
             >
               COMPARTILHAR
             </Button>
-            <Button
-              variant="outlined"
-              color="info"
-              endIcon={<CloudDownloadIcon />}
-              onClick={() => {
-                ReactGA.event('file_download', {
-                  category: 'download',
-                  action: `From: ${window.location.pathname}`,
-                });
-              }}
-              href={url.downloadURL(fileLink)}
+            <AlertWithTitle
+              open={open}
+              handleClose={handleClose}
+              downloadLink={url.downloadURL(fileLink)}
             >
-              <Typography variant="button" mr={1}>
-                BAIXAR
-              </Typography>
-              <Typography variant="button" color="#00bfa6">
-                {formatBytes(mi.pacote_de_dados.size)}
-              </Typography>
-            </Button>
+              <Button
+                variant="outlined"
+                color="info"
+                endIcon={<CloudDownloadIcon />}
+                onClick={() => {
+                  ReactGA.event('file_download', {
+                    category: 'download',
+                    action: `From: ${window.location.pathname}`,
+                  });
+                  handleOpen();
+                }}
+              >
+                <Typography variant="button" mr={1}>
+                  BAIXAR
+                </Typography>
+                <Typography variant="button" color="#00bfa6">
+                  {formatBytes(mi.pacote_de_dados.size)}
+                </Typography>
+              </Button>
+            </AlertWithTitle>
             <Button
               variant="outlined"
               color="info"

@@ -36,7 +36,6 @@ import COLLECT_INFOS from '../@types/COLLECT_INFOS';
 import ShareModal from '../components/Common/ShareModal';
 import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
 import { useDownloadDump } from '../hooks/useDownloadDump';
-import AlertWithTitle from '../components/Common/AlertWithTitle';
 
 const RemunerationBarGraph = dynamic(
   () =>
@@ -427,9 +426,6 @@ export default function Index({
                 </Button>
               </Stack>
               <Box id="remuneration-graph">
-                {/** Alerta sobre a mudança do  separador decimal */}
-                <AlertWithTitle />
-
                 <RemunerationBarGraph
                   year={year}
                   agency={null}
