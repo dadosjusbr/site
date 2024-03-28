@@ -469,7 +469,7 @@ export const getStaticProps: GetStaticProps = async () => {
         ais: res.data,
         transparencyData,
       },
-      revalidate: 60 * 60 * 24,
+      revalidate: 3600,
     };
   } catch (err) {
     // context.res.writeHead(301, {

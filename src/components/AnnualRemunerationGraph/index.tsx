@@ -35,6 +35,7 @@ import { normalizePlotData } from '../../functions/normalize';
 import * as url from '../../url';
 import AnnualMoneyHeadingsChart from './components/AnnualMoneyHeadingsChart';
 import { yearsWithoutData } from './functions';
+import AlertWithTitle from '../Common/AlertWithTitle';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./components/RemunerationChart'),
@@ -70,6 +71,10 @@ const AgencyPageWithoutNavigation: React.FC<
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
+
+  const [open, setOpen] = useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   async function fetchPlotData() {
     if (!plotData.length) {
@@ -134,26 +139,32 @@ const AgencyPageWithoutNavigation: React.FC<
                     COMPARTILHAR
                   </Button>
                   {agencyTotals?.package && (
-                    <Button
-                      variant="outlined"
-                      color="info"
-                      endIcon={<CloudDownloadIcon />}
-                      onClick={() => {
-                        ReactGA.event('file_download', {
-                          category: 'download',
-                          action: `From: ${window.location.pathname}`,
-                        });
-                      }}
-                      href={url.downloadURL(fileLink)}
-                      id="download-button"
+                    <AlertWithTitle
+                      open={open}
+                      handleClose={handleClose}
+                      downloadLink={url.downloadURL(fileLink)}
                     >
-                      <Typography variant="button" mr={1}>
-                        BAIXAR
-                      </Typography>
-                      <Typography variant="button" color="#00bfa6">
-                        {formatBytes(agencyTotals?.package.size)}
-                      </Typography>
-                    </Button>
+                      <Button
+                        variant="outlined"
+                        color="info"
+                        endIcon={<CloudDownloadIcon />}
+                        onClick={() => {
+                          ReactGA.event('file_download', {
+                            category: 'download',
+                            action: `From: ${window.location.pathname}`,
+                          });
+                          handleOpen();
+                        }}
+                        id="download-button"
+                      >
+                        <Typography variant="button" mr={1}>
+                          BAIXAR
+                        </Typography>
+                        <Typography variant="button" color="#00bfa6">
+                          {formatBytes(agencyTotals?.package.size)}
+                        </Typography>
+                      </Button>
+                    </AlertWithTitle>
                   )}
                 </Stack>
               </Box>
@@ -175,26 +186,31 @@ const AgencyPageWithoutNavigation: React.FC<
                     COMPARTILHAR
                   </Button>
                   {agencyTotals?.package && (
-                    <Button
-                      variant="outlined"
-                      color="info"
-                      endIcon={<CloudDownloadIcon />}
-                      onClick={() => {
-                        ReactGA.event('file_download', {
-                          category: 'download',
-                          action: `From: ${window.location.pathname}`,
-                        });
-                      }}
-                      href={url.downloadURL(fileLink)}
-                      id="download-button"
+                    <AlertWithTitle
+                      open={open}
+                      handleClose={handleClose}
+                      downloadLink={url.downloadURL(fileLink)}
                     >
-                      <Typography variant="button" mr={1}>
-                        BAIXAR
-                      </Typography>
-                      <Typography variant="button" color="#00bfa6">
-                        {formatBytes(agencyTotals?.package.size)}
-                      </Typography>
-                    </Button>
+                      <Button
+                        variant="outlined"
+                        color="info"
+                        endIcon={<CloudDownloadIcon />}
+                        onClick={() => {
+                          ReactGA.event('file_download', {
+                            category: 'download',
+                            action: `From: ${window.location.pathname}`,
+                          });
+                        }}
+                        id="download-button"
+                      >
+                        <Typography variant="button" mr={1}>
+                          BAIXAR
+                        </Typography>
+                        <Typography variant="button" color="#00bfa6">
+                          {formatBytes(agencyTotals?.package.size)}
+                        </Typography>
+                      </Button>
+                    </AlertWithTitle>
                   )}
                 </Stack>
               </Drawer>

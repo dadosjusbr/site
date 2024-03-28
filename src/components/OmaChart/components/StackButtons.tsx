@@ -1,4 +1,4 @@
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useState } from 'react';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
@@ -7,17 +7,24 @@ import ReactGA from 'react-ga4';
 import { NextRouter } from 'next/router';
 import { formatBytes } from '../../../functions/format';
 import * as url from '../../../url';
+import AlertWithTitle from '../../Common/AlertWithTitle';
 
 export default function index({
   router,
   setModalIsOpen,
   fileLink,
   mi,
+  open,
+  handleClose,
+  handleOpen,
 }: {
   router: NextRouter;
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   fileLink: string;
   mi: SummaryzedMI;
+  open: boolean;
+  handleClose: () => void;
+  handleOpen: () => void;
 }) {
   return (
     <Box display="flex" justifyContent="space-between">
@@ -54,25 +61,31 @@ export default function index({
         >
           COMPARTILHAR
         </Button>
-        <Button
-          variant="outlined"
-          color="info"
-          endIcon={<CloudDownloadIcon />}
-          onClick={() => {
-            ReactGA.event('file_download', {
-              category: 'download',
-              action: `From: ${window.location.pathname}`,
-            });
-          }}
-          href={url.downloadURL(fileLink)}
+        <AlertWithTitle
+          open={open}
+          handleClose={handleClose}
+          downloadLink={url.downloadURL(fileLink)}
         >
-          <Typography variant="button" mr={1}>
-            BAIXAR
-          </Typography>
-          <Typography variant="button" color="#00bfa6">
-            {formatBytes(mi?.pacote_de_dados?.size)}
-          </Typography>
-        </Button>
+          <Button
+            variant="outlined"
+            color="info"
+            endIcon={<CloudDownloadIcon />}
+            onClick={() => {
+              ReactGA.event('file_download', {
+                category: 'download',
+                action: `From: ${window.location.pathname}`,
+              });
+              handleOpen();
+            }}
+          >
+            <Typography variant="button" mr={1}>
+              BAIXAR
+            </Typography>
+            <Typography variant="button" color="#00bfa6">
+              {formatBytes(mi?.pacote_de_dados?.size)}
+            </Typography>
+          </Button>
+        </AlertWithTitle>
       </Stack>
     </Box>
   );

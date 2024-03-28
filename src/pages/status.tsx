@@ -167,7 +167,7 @@ export async function getStaticProps() {
       props: {
         ais: res.data,
       },
-      revalidate: 60 * 60 * 24,
+      revalidate: 3600,
     };
   } catch (err) {
     return {
