@@ -80,6 +80,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}-${year}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
+  const hasData = data.length > 0;
 
   async function fetchPlotData() {
     if (!plotData.length) {
@@ -268,118 +269,123 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
               selectedMonth={navigableMonth}
             />
           </Box>
-          {data?.length > 0 && (
-            <Box mt={2}>
-              <Accordion
-                onChange={() =>
-                  ReactGA.event('click', {
-                    category: 'open_component',
-                    action: `From: Gráfico de rubricas`,
-                  })
-                }
-              >
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="h6" color="#000">
-                    Gráfico do gasto mensal em benefícios
-                    <Tooltip
-                      placement="bottom"
-                      title={
-                        <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                          <b>Auxílio-alimentação: </b> Custeio de alimentação
-                          não incorporável ao salário.
-                          <hr />
-                          <b>Licença-prêmio: </b>
-                          A cada 5 anos de serviço, o servidor tem direito a 3
-                          meses de licença.
-                          <hr />
-                          <b>Indenização de Férias: </b>
-                          Venda de períodos de férias não usufruídos.
-                          <hr />
-                          <b>Gratificação Natalina: </b>
-                          Corresponde ao 13° salário.
-                          <hr />
-                          <b>Licença-compensatória: </b>
-                          Horas extras não compensadas no mesmo mês.
-                          <hr />
-                          <b>Auxílio-saúde: </b>
-                          Reembolso de despesas com planos de saúde, inclusive
-                          excedentes do teto.
-                        </Typography>
-                      }
-                    >
-                      <IconButton aria-label="Botão de informações">
-                        <InfoIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <MoneyHeadingsChart
-                    data={data}
-                    year={year}
-                    width="100%"
-                    height="500"
-                  />
-                </AccordionDetails>
-              </Accordion>
-            </Box>
+          {hasData && (
+            <>
+              <Box mt={2}>
+                <Accordion
+                  onChange={() =>
+                    ReactGA.event('click', {
+                      category: 'open_component',
+                      action: `From: Gráfico de rubricas`,
+                    })
+                  }
+                >
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="h6" color="#000">
+                      Gráfico do gasto mensal em benefícios
+                      <Tooltip
+                        placement="bottom"
+                        title={
+                          <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                            <b>Auxílio-alimentação: </b> Custeio de alimentação
+                            não incorporável ao salário.
+                            <hr />
+                            <b>Licença-prêmio: </b>
+                            A cada 5 anos de serviço, o servidor tem direito a 3
+                            meses de licença.
+                            <hr />
+                            <b>Indenização de Férias: </b>
+                            Venda de períodos de férias não usufruídos.
+                            <hr />
+                            <b>Gratificação Natalina: </b>
+                            Corresponde ao 13° salário.
+                            <hr />
+                            <b>Licença-compensatória: </b>
+                            Horas extras não compensadas no mesmo mês.
+                            <hr />
+                            <b>Auxílio-saúde: </b>
+                            Reembolso de despesas com planos de saúde, inclusive
+                            excedentes do teto.
+                          </Typography>
+                        }
+                      >
+                        <IconButton aria-label="Botão de informações">
+                          <InfoIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <MoneyHeadingsChart
+                      data={data}
+                      year={year}
+                      width="100%"
+                      height="500"
+                    />
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+
+              <Box mt={2}>
+                <Accordion
+                  onChange={() => {
+                    fetchPlotData();
+                    setExpanded(!expanded);
+                  }}
+                  expanded={expanded}
+                >
+                  <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                    <Typography variant="h6" color="#000">
+                      Índice de transparência
+                      <Tooltip
+                        placement="bottom"
+                        title={
+                          <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                            O Índice de Transparência é composto por duas
+                            dimensões: facilidade e completude. Cada uma das
+                            dimensões, por sua vez, é composta por até seis
+                            critérios em cada prestação de contas, que são
+                            avaliados mês a mês. O índice corresponde à média
+                            harmônica das duas dimensões.{' '}
+                            <Link href="/indice" color="inherit">
+                              Saiba mais
+                            </Link>
+                            .
+                          </Typography>
+                        }
+                      >
+                        <IconButton aria-label="Botão de informações">
+                          <InfoIcon />
+                        </IconButton>
+                      </Tooltip>
+                    </Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Suspense fallback={<CircularProgress />}>
+                      {plotData.length > 0 ? (
+                        <IndexTabGraph
+                          plotData={plotData}
+                          height={350}
+                          mobileHeight={555}
+                          monthly
+                          isAgency
+                        />
+                      ) : (
+                        <CircularProgress />
+                      )}
+                    </Suspense>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+
+              <Box mt={2}>
+                <SearchAccordion
+                  selectedAgencies={[agency]}
+                  selectedYears={year}
+                />
+              </Box>
+            </>
           )}
-          {data?.length > 0 && (
-            <Box mt={2}>
-              <Accordion
-                onChange={() => {
-                  fetchPlotData();
-                  setExpanded(!expanded);
-                }}
-                expanded={expanded}
-              >
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                  <Typography variant="h6" color="#000">
-                    Índice de transparência
-                    <Tooltip
-                      placement="bottom"
-                      title={
-                        <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                          O Índice de Transparência é composto por duas
-                          dimensões: facilidade e completude. Cada uma das
-                          dimensões, por sua vez, é composta por até seis
-                          critérios em cada prestação de contas, que são
-                          avaliados mês a mês. O índice corresponde à média
-                          harmônica das duas dimensões.{' '}
-                          <Link href="/indice" color="inherit">
-                            Saiba mais
-                          </Link>
-                          .
-                        </Typography>
-                      }
-                    >
-                      <IconButton aria-label="Botão de informações">
-                        <InfoIcon />
-                      </IconButton>
-                    </Tooltip>
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Suspense fallback={<CircularProgress />}>
-                    {plotData.length > 0 ? (
-                      <IndexTabGraph
-                        plotData={plotData}
-                        height={350}
-                        mobileHeight={555}
-                        monthly
-                        isAgency
-                      />
-                    ) : (
-                      <CircularProgress />
-                    )}
-                  </Suspense>
-                </AccordionDetails>
-              </Accordion>
-            </Box>
-          )}
-          <Box mt={2}>
-            <SearchAccordion selectedAgencies={[agency]} selectedYears={year} />
-          </Box>
         </ThemeProvider>
       </Box>
       <ShareModal
