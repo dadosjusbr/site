@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   Box,
   CircularProgress,
@@ -12,7 +13,6 @@ import { ThemeProvider } from '@mui/material/styles';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import light from '../../styles/theme-light';
 import AlertWithTitle from '../Common/AlertWithTitle';
-import { useState } from 'react';
 
 type ResultProps = {
   loading: boolean;
@@ -136,7 +136,7 @@ const Result = ({
               >
                 COMPARTILHAR
               </Button>
-              {/**  Alerta de mudança de separador decimal*/}
+              {/**  Alerta de mudança de separador decimal */}
 
               <AlertWithTitle
                 open={open}
