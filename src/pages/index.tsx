@@ -139,6 +139,7 @@ export default function Index({
           remuneracao_base: d.remuneracao_base,
           outras_remuneracoes: d.outras_remuneracoes,
           descontos: d.descontos,
+          remuneracoes: d.remuneracoes,
           // eslint-disable-next-line no-underscore-dangle
           mes: d.mes,
         })),
