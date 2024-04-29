@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 type SummaryzedMI = {
   id_orgao: string;
   mes: number;

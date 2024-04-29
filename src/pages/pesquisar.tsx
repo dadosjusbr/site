@@ -19,6 +19,7 @@ import { months } from '../@types/MONTHS';
 import { getSearchUrlParameter } from '../functions/url';
 import { useDownloadDump } from '../hooks/useDownloadDump';
 import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
+import Video from '../components/Video';
 
 export default function Index({ ais }: { ais: Agency[] }) {
   const years: number[] = [];
@@ -120,16 +121,39 @@ export default function Index({ ais }: { ais: Agency[] }) {
       <Nav />
       <Container fixed>
         <Box py={4}>
-          <Box pb={4}>
-            <Typography variant="h1" textAlign="center" gutterBottom>
-              Pesquisa de dados
-            </Typography>
-            <Typography variant="body1" gutterBottom>
-              Use os campos abaixo para selecionar dados de remuneração de
-              membros de TJs e MPs. É possível baixar planilhas com até{' '}
-              {`${downloadLimit / 1000}`} mil linhas.
-            </Typography>
-          </Box>
+          <Typography variant="h1" textAlign="center" gutterBottom>
+            Pesquisa de dados
+          </Typography>
+          <Grid
+            container
+            pb={4}
+            justifyContent="space-evenly"
+            alignItems={{ xs: 'normal', md: 'center' }}
+            flexDirection={{ xs: 'column-reverse', md: 'row' }}
+          >
+            <Grid item xs={12} md={3.5} mb={{ xs: 4, md: 0 }}>
+              <Video.Player
+                src="https://www.youtube-nocookie.com/embed/w4S9PdZOB9U"
+                allowFullScreen
+                loading="lazy"
+                aria-label="Vídeo sobre a página de pesquisa de dados"
+              />
+            </Grid>
+            <Grid item xs={12} md={7}>
+              <Typography variant="body1" gutterBottom>
+                Você pode selecionar o ano, os meses e o tipo de órgão que
+                deseja acessar. É possível fazer o download dos contracheques de
+                múltiplos órgãos, baixar remunerações de vários tribunais
+                estaduais simultaneamente, ou do tribunal e do ministério
+                público de um mesmo estado.
+              </Typography>
+              <Typography variant="body1" gutterBottom>
+                Use os campos abaixo para selecionar dados de remuneração de
+                membros de TJs e MPs. É possível baixar planilhas com até{' '}
+                {`${downloadLimit / 1000}`} mil linhas.
+              </Typography>
+            </Grid>
+          </Grid>
           <Grid container spacing={3}>
             <Grid item xs={12}>
               <Search.YearsAutocomplete

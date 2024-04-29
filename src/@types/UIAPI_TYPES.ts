@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 type DataForChartAtAgencyScreen = {
   Members: number[];
   Servers: number[];

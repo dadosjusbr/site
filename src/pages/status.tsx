@@ -10,7 +10,7 @@ import {
   ListItemText,
   ListItemIcon,
   Link,
-  Button,
+  Grid,
 } from '@mui/material';
 
 import Footer from '../components/Essentials/Footer';
@@ -19,6 +19,7 @@ import api from '../services/api';
 import { formatAgency, orderStringsWithNum } from '../functions/format';
 import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
 import { useDownloadDump } from '../hooks/useDownloadDump';
+import Video from '../components/Video';
 
 export default function Index({ ais }) {
   const [openDialog, setOpenDialog] = useState(false);
@@ -56,68 +57,77 @@ export default function Index({ ais }) {
             <Typography variant="h1" textAlign="center" gutterBottom>
               Status das coletas de dados
             </Typography>
-            <Typography variant="body1" textAlign="justify">
-              A API do DadosJusBr é open source e disponível para todos, ela
-              permite que você acesse os dados de remuneração do sistema de
-              justiça brasileiro de maneira fácil e bem documentada. Isso abre
-              um mundo de possibilidades para análises, visualizações e
-              aplicações. Convidamos todos a explorar e contribuir para a nossa
-              comunidade de código aberto. Para mais informações, visite a{' '}
-              <Link
-                color="inherit"
-                underline="always"
-                href="https://api.dadosjusbr.org"
-                target="_blank"
-                rel="noopener"
-              >
-                documentação da API
-              </Link>{' '}
-              ou o{' '}
-              <Link
-                color="inherit"
-                underline="always"
-                href="https://github.com/dadosjusbr/api"
-                target="_blank"
-                rel="noopener"
-              >
-                repositório da API
-              </Link>{' '}
-              no Github.
-            </Typography>
-            <Typography variant="body1" textAlign="justify" gutterBottom>
-              Qualquer problema encontrado na coleta ou integridade dos dados
-              pode ser informado através de uma issue no{' '}
-              <Link
-                color="inherit"
-                underline="always"
-                href="https://github.com/dadosjusbr/site/issues/new"
-                target="_blank"
-                rel="noopener"
-              >
-                repositorio do site
-              </Link>{' '}
-              no Github.
-            </Typography>
-            <Typography variant="body1" textAlign="justify" gutterBottom mb={4}>
-              Você pode fazer o download de todas as informações de remunerações
-              da nossa base de dados por
-              <Button
-                onClick={() => setOpenDialog(true)}
-                disableRipple
-                sx={{
-                  ':hover': {
-                    backgroundColor: 'transparent',
-                  },
-                }}
-              >
-                <Typography
-                  variant="inherit"
-                  component="span"
-                  color="success.main"
-                >
-                  este link.
+            <Grid
+              container
+              justifyContent="space-evenly"
+              alignItems={{ xs: 'normal', md: 'center' }}
+              flexDirection={{ xs: 'column-reverse', md: 'row' }}
+            >
+              <Grid item xs={12} md={3.5} my={{ xs: 4, md: 0 }}>
+                <Video.Player
+                  src="https://www.youtube-nocookie.com/embed/dXC9nYYNBtY"
+                  allowFullScreen
+                  loading="lazy"
+                  aria-label="Vídeo sobre a página de pesquisa de dados"
+                />
+              </Grid>
+              <Grid item xs={12} md={7}>
+                <Typography variant="body1">
+                  A API do DadosJusBr é open source e disponível para todos, ela
+                  permite que você acesse os dados de remuneração do sistema de
+                  justiça brasileiro de maneira fácil e bem documentada. Isso
+                  abre um mundo de possibilidades para análises, visualizações e
+                  aplicações. Convidamos todos a explorar e contribuir para a
+                  nossa comunidade de código aberto. Para mais informações,
+                  visite a{' '}
+                  <Link
+                    underline="always"
+                    href="https://api.dadosjusbr.org"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    documentação da API
+                  </Link>{' '}
+                  ou o{' '}
+                  <Link
+                    underline="always"
+                    href="https://github.com/dadosjusbr/api"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    repositório da API
+                  </Link>{' '}
+                  no Github.
+                  <br />
+                  <br />
+                  Qualquer problema encontrado na coleta ou integridade dos
+                  dados pode ser informado através de uma issue no{' '}
+                  <Link
+                    underline="always"
+                    href="https://github.com/dadosjusbr/site/issues/new"
+                    target="_blank"
+                    rel="noopener"
+                  >
+                    repositorio do site
+                  </Link>{' '}
+                  no Github.
+                  <br />
                 </Typography>
-              </Button>
+              </Grid>
+            </Grid>
+            <Typography variant="body1" gutterBottom my={4}>
+              Você pode fazer o download de todas as informações de remunerações
+              da nossa base de dados por{' '}
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <Link
+                underline="always"
+                onClick={() => setOpenDialog(true)}
+                target="_blank"
+                rel="noopener"
+                sx={{ cursor: 'pointer' }}
+              >
+                este link.
+              </Link>
             </Typography>
             <Typography variant="h3" gutterBottom>
               Órgãos monitorados pelo DadosJusBR: {collecting.length}
