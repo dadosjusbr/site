@@ -56,6 +56,7 @@ const MoneyHeadingsChart = ({
           <Chart
             options={{
               colors: [
+                '#d1d1d17d',
                 '#8dd3c7',
                 '#ffffb3',
                 '#bebada',
