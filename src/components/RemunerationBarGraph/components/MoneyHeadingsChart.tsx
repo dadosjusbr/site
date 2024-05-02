@@ -63,7 +63,7 @@ const MoneyHeadingsChart = ({
                 '#fb8072',
                 '#80b1d3',
                 '#fdb462',
-                '#b3de69',
+                // '#b3de69',
                 // '#6d2f4f',
                 // '#d9d9d9',
                 // '#bc80bd',
