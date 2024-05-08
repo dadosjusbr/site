@@ -16,25 +16,11 @@ export default function Team() {
     {
       id: 2,
       name: 'Daniel Fireman',
-      role: 'Professor',
+      role: 'Líder técnico',
       profileURL: 'https://github.com/danielfireman',
       photoURL:
         'https://avatars2.githubusercontent.com/u/8951363?s=400&u=acdedbbd00a15d2f913e3e1bde6b14f2c7451f90&v=4',
     },
-    // {
-    //   id: 3,
-    //   name: 'Eduardo Queiroz',
-    //   role: 'Desenvolvedor',
-    //   profileURL: 'https://github.com/duardoqueiroz',
-    //   photoURL: 'https://avatars.githubusercontent.com/u/83377894?v=4',
-    // },
-    // {
-    //   id: 4,
-    //   name: 'Jefferson Neves',
-    //   role: 'Desenvolvedor',
-    //   profileURL: 'https://github.com/jeffersonrpn',
-    //   photoURL: 'https://github.com/jeffersonrpn.png',
-    // },
     {
       id: 3,
       name: 'Jessé Oliveira',
@@ -42,12 +28,6 @@ export default function Team() {
       profileURL: 'https://github.com/jezzdiego',
       photoURL: 'https://github.com/jezzdiego.png',
     },
-    // {
-    //   name: 'João Menezes',
-    //   role: 'Desenvolvedor',
-    //   photoURL: 'https://avatars.githubusercontent.com/u/20714862?v=4',
-    //   profileURL: 'https://github.com/joaolgm',
-    // },
     {
       id: 4,
       name: 'Joellen Silva',
@@ -62,18 +42,13 @@ export default function Team() {
       profileURL: 'https://www.linkedin.com/in/julianasakai/',
       photoURL: '/img/team/ju_sakai.jpg',
     },
-    // {
-    //   name: 'Marcos Vinicius',
-    //   role: 'Developer',
-    //   photoURL: '/img/team/marcos_vinicius.jpg',
-    //   profileURL: 'https://github.com/marcos-inja',
-    // },
     {
       id: 6,
-      name: 'Mariana Souto',
-      role: 'Designer',
-      profileURL: 'https://github.com/soutoam',
-      photoURL: 'https://github.com/soutoam.png',
+      name: 'Cristiano Pavini',
+      role: 'Coordenador de projetos',
+      profileURL: 'https://www.linkedin.com/in/cristiano-pavini-4286303b/',
+      photoURL:
+        'https://media.licdn.com/dms/image/D4D03AQFo7VxMzUZwIw/profile-displayphoto-shrink_200_200/0/1686706602511?e=1720656000&v=beta&t=VkBqd7Jw6i9QEqYkBuPDRU0lA1Y1QovORd5KgWTjF9k',
     },
     {
       id: 7,
@@ -82,12 +57,6 @@ export default function Team() {
       profileURL: 'https://github.com/nazareno',
       photoURL: 'https://github.com/nazareno.png',
     },
-    // {
-    //   name: 'Samara Sonale',
-    //   role: 'Developer',
-    //   profileURL: 'https://www.linkedin.com/in/samara-sonale-4b805b194/',
-    //   photoURL: '/img/team/samara_sonale.jpg',
-    // },
     {
       id: 8,
       name: 'Raul Durlo',
@@ -96,24 +65,7 @@ export default function Team() {
       photoURL: 'https://github.com/rdurl0.png',
     },
   ]);
-  // const [partners] = useState([
-  //   {
-  //     name: 'APBMP',
-  //     img: '/img/partners/APBMP.svg',
-  //   },
-  //   {
-  //     name: 'analytics',
-  //     img: '/img/partners/analytics.svg',
-  //   },
-  //   {
-  //     name: 'MPPB',
-  //     img: '/img/partners/MPPB.svg',
-  //   },
-  //   {
-  //     name: 'shuttleworth',
-  //     img: '/img/partners/shuttleworth.svg',
-  //   },
-  // ]);
+
   const [contribuitors] = useState([
     {
       id: 1,
