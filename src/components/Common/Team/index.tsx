@@ -16,7 +16,7 @@ export default function Team() {
     {
       id: 2,
       name: 'Daniel Fireman',
-      role: 'Lider técnico',
+      role: 'Líder técnico',
       profileURL: 'https://github.com/danielfireman',
       photoURL:
         'https://avatars2.githubusercontent.com/u/8951363?s=400&u=acdedbbd00a15d2f913e3e1bde6b14f2c7451f90&v=4',
