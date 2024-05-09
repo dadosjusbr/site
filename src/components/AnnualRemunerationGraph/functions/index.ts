@@ -217,7 +217,7 @@ export const warningMessage = (
     }).find(d => d !== 0) &&
     agency.id_orgao === 'trf6'
   ) {
-    return `Este órgão foi criado em 2022 não publicou dados de ${
+    return `Este órgão foi criado em 2022 e não publicou dados de ${
       yearsWithoutData(data).length - 4
     }
         ${yearsWithoutData(data).length > 1 ? 'anos' : 'ano'}${
