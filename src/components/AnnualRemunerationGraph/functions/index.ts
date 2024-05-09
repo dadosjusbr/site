@@ -204,9 +204,36 @@ export const createDataArray = ({
 
 export const warningMessage = (
   data: AnnualSummaryData[],
+  agency: Agency,
   baseRemunerationDataTypes: string,
   otherRemunerationsDataTypes: string,
 ): string => {
+  // condição específica para o TRF6, que foi criado em 2022.
+  if (
+    noData({
+      data,
+      baseRemunerationDataTypes,
+      otherRemunerationsDataTypes,
+    }).find(d => d !== 0) &&
+    agency.id_orgao === 'trf6'
+  ) {
+    return `Este órgão foi criado em 2022 não publicou dados de ${
+      yearsWithoutData(data).length - 4
+    }
+        ${yearsWithoutData(data).length > 1 ? 'anos' : 'ano'}${
+      monthsWithoutData({ data }) > 0
+        ? ` e ${monthsWithoutData({ data })}`
+        : '.'
+    }
+        ${
+          monthsWithoutData({ data }) > 1
+            ? 'meses.'
+            : monthsWithoutData({ data }) === 1
+            ? 'mês.'
+            : ''
+        }`;
+  }
+
   if (
     noData({
       data,
@@ -228,6 +255,7 @@ export const warningMessage = (
             : ''
         }`;
   }
+
   if (
     monthsWithoutData({ data }) > 0 &&
     !noData({
