@@ -7,12 +7,14 @@ import {
   Button,
   Paper,
   ButtonProps,
+  Grid,
 } from '@mui/material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ThemeProvider } from '@mui/material/styles';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import light from '../../styles/theme-light';
 import AlertWithTitle from '../Common/AlertWithTitle';
+import Video from '../Video';
 
 type ResultProps = {
   loading: boolean;
@@ -127,24 +129,47 @@ const Result = ({
             )}
 
             <Box py={4} textAlign="right">
-              <Button
-                color={buttonColorScheme}
-                sx={{ mr: 2 }}
-                variant="outlined"
-                endIcon={<IosShareIcon />}
-                onClick={() => setModalIsOpen(true)}
-              >
-                COMPARTILHAR
-              </Button>
-              {/**  Alerta de mudança de separador decimal */}
+              <Grid container justifyContent="space-evenly">
+                <Grid item xs={12} md={3.5} mb={2}>
+                  <Video.Player
+                    src="https://www.youtube-nocookie.com/embed/JElQeMFHDcM"
+                    allowFullScreen
+                    loading="lazy"
+                    aria-label="Vídeo sobre a análise dos dados baixados no DadosJusBr"
+                  />
+                </Grid>
 
-              <AlertWithTitle
-                open={open}
-                handleClose={handleClose}
-                downloadLink={query}
-              >
-                <Button onClick={handleOpen}>{downloadButton}</Button>
-              </AlertWithTitle>
+                <Grid item xs={12} md={5} display="flex" alignItems="center">
+                  <Typography textAlign="justify">
+                    Na maioria das vezes é necessário um software específico de
+                    planilhas para analisar os dados baixados no DadosJusBr.
+                    Aqui você pode ver como fazer a importação dos dados
+                    baixados e algumas configurações pertinentes para fazer
+                    consultas mais acertivas aos dados.
+                  </Typography>
+                </Grid>
+
+                <Grid item xs={12} md={3}>
+                  <Button
+                    color={buttonColorScheme}
+                    sx={{ mr: 0.7 }}
+                    variant="outlined"
+                    endIcon={<IosShareIcon />}
+                    onClick={() => setModalIsOpen(true)}
+                  >
+                    COMPARTILHAR
+                  </Button>
+
+                  {/**  Alerta de mudança de separador decimal */}
+                  <AlertWithTitle
+                    open={open}
+                    handleClose={handleClose}
+                    downloadLink={query}
+                  >
+                    <Button onClick={handleOpen}>{downloadButton}</Button>
+                  </AlertWithTitle>
+                </Grid>
+              </Grid>
             </Box>
           </Box>
           {numRowsIfAvailable > 0 && (

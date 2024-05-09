@@ -81,7 +81,7 @@ export default class MyDocument extends Document<documentProps> {
             content="DadosJusBr é uma plataforma que realiza a libertação continua de dados de remuneração de sistema de justiça brasileiro."
           />
         </Head>
-        <body>
+        <body style={{ padding: 0 }}>
           <Main />
           <NextScript />
           <Script
