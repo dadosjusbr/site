@@ -25,7 +25,7 @@ export default function HeadlineSection({
   return (
     <>
       <Typography variant="h1" p={0} lineHeight={1} textAlign="center">
-        Acesse as remunerações do Sistema de Justiça
+        Acesse as remunerações do sistema de Justiça
       </Typography>
       <br />
       <Grid container justifyContent="space-between">
@@ -60,12 +60,17 @@ export default function HeadlineSection({
             </Typography>{' '}
             em recursos públicos.
           </Typography>
-          <Grid container display="flex" alignItems="flex-start" my={4}>
+          <Grid
+            container
+            display="flex"
+            alignItems="flex-start"
+            justifyContent="space-evenly"
+            my={4}
+          >
             <Grid item>
-              <DropDownGroupSelector minWidth={195} />
+              <DropDownGroupSelector minWidth={125} />
             </Grid>
-
-            <Grid item borderBottom="2px solid #2fbb96" mt={0.7} ml={4}>
+            <Grid item borderBottom="2px solid #2fbb96" mt={0.7}>
               <Link
                 href="/pesquisar"
                 color="inherit"
