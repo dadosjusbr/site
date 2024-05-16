@@ -102,8 +102,8 @@ export const getServerSideProps: GetServerSideProps = async context => {
       props: {
         id,
         data: agency.dados_anuais ? agency.dados_anuais : null,
-        agency: agency.orgao,
-        fullName: agency.orgao.nome,
+        agency: agency?.orgao,
+        fullName: agency?.orgao.nome,
         plotData,
       },
     };

@@ -238,7 +238,6 @@ export default function Index({ ais }: { ais: Agency[] }) {
             downloadLimit={downloadLimit}
             result={result}
             setModalIsOpen={setModalIsOpen}
-            query={`${process.env.API_BASE_URL}/v2/download${query}`}
             downloadButton={
               <Button
                 variant="outlined"
@@ -250,6 +249,7 @@ export default function Index({ ais }: { ais: Agency[] }) {
                     action: `From: ${window.location.pathname}`,
                   });
                 }}
+                href={`${process.env.API_BASE_URL}/v2/download${query}`}
                 id="download-button"
               >
                 BAIXAR DADOS
