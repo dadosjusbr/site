@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import {
   Box,
   CircularProgress,
@@ -13,7 +12,6 @@ import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ThemeProvider } from '@mui/material/styles';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import light from '../../styles/theme-light';
-import AlertWithTitle from '../Common/AlertWithTitle';
 import Video from '../Video';
 
 type ResultProps = {
@@ -25,7 +23,6 @@ type ResultProps = {
   result: SearchResult[];
   buttonColorScheme: ButtonProps['color'];
   downloadButton: React.ReactNode;
-  query: string;
   setModalIsOpen: (isOpen: boolean) => void;
 };
 
@@ -60,142 +57,132 @@ const Result = ({
   result,
   buttonColorScheme,
   downloadButton,
-  query,
   setModalIsOpen,
-}: ResultProps) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
-  return (
-    <>
-      {loading && (
+}: ResultProps) => (
+  <>
+    {loading && (
+      <Box
+        pt={4}
+        sx={{
+          display: 'flex',
+        }}
+      >
+        <div>
+          <CircularProgress color="info" />
+        </div>
+        <p>Aguarde...</p>
+      </Box>
+    )}
+    {showResults && (
+      <Box>
         <Box
-          m={4}
+          pt={4}
           sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
+            borderTop: '2px solid',
           }}
         >
-          <div>
-            <CircularProgress color="info" />
-          </div>
-          <p>Aguarde...</p>
-        </Box>
-      )}
-      {showResults && (
-        <Box>
-          <Box
-            pt={4}
-            sx={{
-              borderTop: '2px solid',
-            }}
-          >
-            <Typography variant="h3" gutterBottom>
-              Resultados
+          <Typography variant="h3" gutterBottom>
+            Resultados
+          </Typography>
+          {numRowsIfAvailable === 0 && (
+            <Typography variant="body1" gutterBottom>
+              O órgão não prestou contas neste período.
             </Typography>
-            {numRowsIfAvailable === 0 && (
-              <Typography variant="body1" gutterBottom>
-                O órgão não prestou contas neste período.
-              </Typography>
-            )}
-            {numRowsIfAvailable > 0 && (
-              <Box>
-                {!downloadAvailable && (
-                  <ThemeProvider theme={light}>
-                    <Alert severity="warning">
-                      <Typography variant="body1" gutterBottom>
-                        A pesquisa retorna mais linhas que o número máximo
-                        permitido para download ({`${downloadLimit / 1000}`}
-                        {` `}
-                        mil).
-                        <br />
-                        Refaça a sua busca com menos órgãos ou com um período
-                        mais curto.
-                        <br />
-                        Abaixo, uma amostra dos dados:
-                      </Typography>
-                    </Alert>
-                  </ThemeProvider>
-                )}
-                {downloadAvailable && (
-                  <Typography variant="body1" gutterBottom>
-                    A pesquisa retornou <strong>{numRowsIfAvailable}</strong>{' '}
-                    linhas. Abaixo, uma amostra dos dados:
-                  </Typography>
-                )}
-              </Box>
-            )}
-
+          )}
+          {numRowsIfAvailable > 0 && (
             <Box>
-              <Grid container justifyContent="space-evenly">
-                <Grid item xs={12} md={3.5} mb={2}>
-                  <Video.Player
-                    src="https://www.youtube-nocookie.com/embed/JElQeMFHDcM"
-                    allowFullScreen
-                    loading="lazy"
-                    aria-label="Vídeo sobre a análise dos dados baixados no DadosJusBr"
-                  />
-                </Grid>
+              {!downloadAvailable && (
+                <ThemeProvider theme={light}>
+                  <Alert severity="warning">
+                    <Typography variant="body1" gutterBottom>
+                      A pesquisa retorna mais linhas que o número máximo
+                      permitido para download ({`${downloadLimit / 1000}`}
+                      {` `}
+                      mil).
+                      <br />
+                      Refaça a sua busca com menos órgãos ou com um período mais
+                      curto.
+                      <br />
+                      Abaixo, uma amostra dos dados:
+                    </Typography>
+                  </Alert>
+                </ThemeProvider>
+              )}
+              {downloadAvailable && (
+                <Typography variant="body1" gutterBottom>
+                  A pesquisa retornou <strong>{numRowsIfAvailable}</strong>{' '}
+                  linhas. Abaixo, uma amostra dos dados:
+                </Typography>
+              )}
+            </Box>
+          )}
 
-                <Grid item xs={12} md={7} display="flex" alignItems="center">
-                  <Typography>
-                    Na maioria das vezes, para analisar os dados baixados no
-                    DadosJusBr, é necessário um software específico de
-                    planilhas, como o Microsoft Excel ou o Google Sheets. Esses
-                    softwares possuem uma variedade de ferramentas que permitem
-                    manipular, analisar e visualizar os dados de maneira eficaz.
-                    Aqui, você pode ver como fazer a importação dos dados
-                    baixados para esses softwares e algumas configurações
-                    importantes que você pode ajustar para realizar consultas
-                    mais precisas e acertivas aos dados.
-                  </Typography>
-                </Grid>
+          <Box>
+            <Grid container justifyContent="space-evenly">
+              <Grid item xs={12} md={3.5} mb={2}>
+                <Video.Player
+                  src="https://www.youtube-nocookie.com/embed/JElQeMFHDcM"
+                  allowFullScreen
+                  loading="lazy"
+                  aria-label="Vídeo sobre a análise dos dados baixados no DadosJusBr"
+                />
               </Grid>
-              <Box display="flex" justifyContent="flex-end" alignItems="center">
-                <Button
-                  color={buttonColorScheme}
-                  sx={{ mr: 0.7 }}
-                  variant="outlined"
-                  endIcon={<IosShareIcon />}
-                  onClick={() => setModalIsOpen(true)}
-                >
-                  COMPARTILHAR
-                </Button>
 
-                {/**  Alerta de mudança de separador decimal */}
-                <AlertWithTitle
-                  open={open}
-                  handleClose={handleClose}
-                  downloadLink={query}
-                >
-                  <Button onClick={handleOpen}>{downloadButton}</Button>
-                </AlertWithTitle>
-              </Box>
+              <Grid item xs={12} md={7} display="flex" alignItems="center">
+                <Typography>
+                  Na maioria das vezes, para analisar os dados baixados no
+                  DadosJusBr, é necessário um software específico de planilhas,
+                  como o Microsoft Excel ou o Google Sheets. Esses softwares
+                  possuem uma variedade de ferramentas que permitem manipular,
+                  analisar e visualizar os dados de maneira eficaz. Aqui, você
+                  pode ver como fazer a importação dos dados baixados para esses
+                  softwares e algumas configurações importantes que você pode
+                  ajustar para realizar consultas mais precisas e acertivas aos
+                  dados.
+                </Typography>
+              </Grid>
+            </Grid>
+            <Box
+              display="flex"
+              justifyContent="flex-end"
+              alignItems="center"
+              mt={4}
+              mb={2}
+            >
+              <Button
+                color={buttonColorScheme}
+                sx={{ mr: 0.7 }}
+                variant="outlined"
+                endIcon={<IosShareIcon />}
+                onClick={() => setModalIsOpen(true)}
+              >
+                COMPARTILHAR
+              </Button>
+
+              {downloadButton}
             </Box>
           </Box>
-          {numRowsIfAvailable > 0 && (
-            <ThemeProvider theme={light}>
-              <Paper>
-                <Box sx={{ width: '100%' }}>
-                  <DataGrid
-                    rows={result}
-                    columns={columns}
-                    pageSize={10}
-                    rowsPerPageOptions={[10]}
-                    disableSelectionOnClick
-                    rowHeight={35}
-                    autoHeight
-                  />
-                </Box>
-              </Paper>
-            </ThemeProvider>
-          )}
         </Box>
-      )}
-    </>
-  );
-};
+        {numRowsIfAvailable > 0 && (
+          <ThemeProvider theme={light}>
+            <Paper>
+              <Box sx={{ width: '100%' }}>
+                <DataGrid
+                  rows={result}
+                  columns={columns}
+                  pageSize={10}
+                  rowsPerPageOptions={[10]}
+                  disableSelectionOnClick
+                  rowHeight={35}
+                  autoHeight
+                />
+              </Box>
+            </Paper>
+          </ThemeProvider>
+        )}
+      </Box>
+    )}
+  </>
+);
 
 export default Result;

@@ -174,7 +174,6 @@ const SearchAccordion = ({
             downloadLimit={downloadLimit}
             result={result}
             setModalIsOpen={setModalIsOpen}
-            query={`${process.env.API_BASE_URL}/v2/download${query}`}
             downloadButton={
               <Button
                 variant="outlined"
@@ -187,6 +186,7 @@ const SearchAccordion = ({
                     action: `From: ${window.location.pathname}`,
                   });
                 }}
+                href={`${process.env.API_BASE_URL}/v2/download${query}`}
                 id="download-button"
               >
                 BAIXAR DADOS FILTRADOS

@@ -38,7 +38,6 @@ import SearchAccordion from './components/SearchAccordion';
 import api from '../../services/api';
 import { normalizeMonthlyPlotData } from '../../functions/normalize';
 import MoneyHeadingsChart from './components/MoneyHeadingsChart';
-import AlertWithTitle from '../Common/AlertWithTitle';
 
 export interface AgencyPageWithNavigationProps {
   id: string;
@@ -65,10 +64,6 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   navigableMonth,
   summaryPackage,
 }) => {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
   const [expanded, setExpanded] = useState(false);
@@ -184,32 +179,26 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                     COMPARTILHAR
                   </Button>
                   {summaryPackage && (
-                    <AlertWithTitle
-                      open={open}
-                      handleClose={handleClose}
-                      downloadLink={url.downloadURL(fileLink)}
+                    <Button
+                      variant="outlined"
+                      color="info"
+                      endIcon={<CloudDownloadIcon />}
+                      onClick={() => {
+                        ReactGA.event('file_download', {
+                          category: 'download',
+                          action: `From: ${window.location.pathname}`,
+                        });
+                      }}
+                      href={url.downloadURL(fileLink)}
+                      id="download-button"
                     >
-                      <Button
-                        variant="outlined"
-                        color="info"
-                        endIcon={<CloudDownloadIcon />}
-                        onClick={() => {
-                          ReactGA.event('file_download', {
-                            category: 'download',
-                            action: `From: ${window.location.pathname}`,
-                          });
-                          handleOpen();
-                        }}
-                        id="download-button"
-                      >
-                        <Typography variant="button" mr={1}>
-                          BAIXAR
-                        </Typography>
-                        <Typography variant="button" color="#00bfa6">
-                          {formatBytes(summaryPackage.size)}
-                        </Typography>
-                      </Button>
-                    </AlertWithTitle>
+                      <Typography variant="button" mr={1}>
+                        BAIXAR
+                      </Typography>
+                      <Typography variant="button" color="#00bfa6">
+                        {formatBytes(summaryPackage.size)}
+                      </Typography>
+                    </Button>
                   )}
                 </Stack>
               </Box>
