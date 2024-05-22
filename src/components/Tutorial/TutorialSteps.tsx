@@ -6,12 +6,12 @@ import {
   Divider,
 } from '@mui/material';
 import Video from '../Video';
-import { Suspense } from 'react';
+import React, { Suspense } from 'react';
 
 type TutorialStepsProps = {
   url: string;
   title: string;
-  subtitle: string;
+  subtitle: React.ReactNode;
 };
 
 export default function TutorialSteps({
@@ -22,7 +22,7 @@ export default function TutorialSteps({
   return (
     <Box mt={2}>
       <Suspense fallback={<CircularProgress />}>
-        <Typography variant="h2" ml={2}>
+        <Typography variant="h2" ml={4}>
           {title}
         </Typography>
         <Divider sx={{ mb: 2 }} />
@@ -36,9 +36,7 @@ export default function TutorialSteps({
             />
           </Grid>
         </Grid>
-        <Typography variant="subtitle1" ml={2}>
-          {subtitle}
-        </Typography>
+        <Box pb={2}>{subtitle}</Box>
       </Suspense>
     </Box>
   );

@@ -26,16 +26,11 @@ const Tutoriais = () => {
         <Box
           display="flex"
           my={4}
-          border="1px solid #ffffff90"
+          border="1px solid rgba(255, 255, 255, 0.12)"
           borderRadius="12px"
         >
           {matches ? (
-            <Box
-              height="100vh"
-              borderRadius="12px 0 0 12px"
-              maxWidth={20}
-              mt={1}
-            >
+            <Box borderRadius="12px 0 0 12px" maxWidth={20} mt={1}>
               <Drawer>
                 <Tutorial.Selection
                   activeStep={activeStep}
@@ -47,7 +42,6 @@ const Tutoriais = () => {
             <Box
               p={2}
               bgcolor="rgb(217,217,217, 0.2)"
-              height="100vh"
               maxWidth={320}
               borderRadius="12px 0 0 12px"
             >
