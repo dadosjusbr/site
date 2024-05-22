@@ -34,6 +34,11 @@ function Header() {
       anchor: '/indice',
     },
     {
+      key: 'status',
+      title: 'Status',
+      anchor: '/status',
+    },
+    {
       key: 'relatorios',
       title: 'Relatórios',
       anchor: '/relatorios',
@@ -47,11 +52,6 @@ function Header() {
       key: 'namidia',
       title: 'Na Mídia',
       anchor: '/namidia',
-    },
-    {
-      key: 'status',
-      title: 'Status',
-      anchor: '/status',
     },
     {
       key: 'quemsomos',

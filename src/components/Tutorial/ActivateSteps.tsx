@@ -110,7 +110,7 @@ const activeStepsObj = [
         <Subtitle>
           Há um limite de 100 mil linhas para as planilhas geradas em cada
           busca. Caso você precise de mais dados, é possível fazer buscas mais
-          de uma vez e juntar os arquivos gerados.
+          de uma vez.
         </Subtitle>
       </>
     ),
