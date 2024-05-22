@@ -1,4 +1,10 @@
-import { Box, Typography, Grid, CircularProgress } from '@mui/material';
+import {
+  Box,
+  Typography,
+  Grid,
+  CircularProgress,
+  Divider,
+} from '@mui/material';
 import Video from '../Video';
 import { Suspense } from 'react';
 
@@ -16,11 +22,12 @@ export default function TutorialSteps({
   return (
     <Box mt={2}>
       <Suspense fallback={<CircularProgress />}>
-        <Typography variant="h2" textAlign="center">
+        <Typography variant="h2" ml={2}>
           {title}
         </Typography>
+        <Divider sx={{ mb: 2 }} />
         <Grid container justifyContent="center">
-          <Grid item xs={11} md={10}>
+          <Grid item xs={11} md={10} my={2}>
             <Video.Player
               src={`https://www.youtube-nocookie.com/embed/${url}`}
               loading="lazy"
@@ -29,7 +36,7 @@ export default function TutorialSteps({
             />
           </Grid>
         </Grid>
-        <Typography variant="subtitle1" textAlign="center">
+        <Typography variant="subtitle1" ml={2}>
           {subtitle}
         </Typography>
       </Suspense>
