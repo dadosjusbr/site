@@ -63,6 +63,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               setHidingNoData={setHidingNoData}
               warningMessage={warningMessage(
                 data,
+                agency,
                 baseRemunerationDataTypes,
                 otherRemunerationsDataTypes,
               )}
