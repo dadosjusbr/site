@@ -226,32 +226,19 @@ export const warningMessage = (
     }).find(d => d !== 0) &&
     agency.id_orgao === 'trf6'
   ) {
+    // 4 anos de atraso para a criação do órgão
     const anos = yearsWithoutData(data).length - 4;
+    // 8 meses para a publicação do primeiro contracheque
+    const meses = monthsWithoutData({ data }) - 8;
 
     if (anos > 0) {
       return `Este órgão foi criado em 2022 e não publicou dados de ${anos}
-        ${anos > 1 ? 'anos' : 'ano'}${
-        monthsWithoutData({ data }) > 0
-          ? ` e ${monthsWithoutData({ data })}`
-          : '.'
-      }
-        ${
-          monthsWithoutData({ data }) > 1
-            ? 'meses.'
-            : monthsWithoutData({ data }) === 1
-            ? 'mês.'
-            : ''
-        }`;
+        ${anos > 1 ? 'anos' : 'ano'}${meses > 0 ? ` e ${meses}` : '.'}
+        ${meses > 1 ? 'meses.' : meses === 1 ? 'mês.' : ''}`;
     }
 
-    return `Este órgão não publicou dados de ${monthsWithoutData({ data })}
-          ${
-            monthsWithoutData({ data }) > 1
-              ? 'meses.'
-              : monthsWithoutData({ data }) === 1
-              ? 'mês.'
-              : ''
-          }`;
+    return `Este órgão foi criado em 2022 e não publicou dados de ${meses}
+          ${meses > 1 ? 'meses.' : meses === 1 ? 'mês.' : ''}`;
   }
 
   if (
