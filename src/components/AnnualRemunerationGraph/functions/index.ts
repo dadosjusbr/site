@@ -38,7 +38,9 @@ export const yearList = (): number[] => {
 
 export const yearsWithoutData = (data: AnnualSummaryData[]): number[] =>
   yearList()?.filter(
-    returnedYear => !yearsWithData(data)?.includes(returnedYear),
+    returnedYear =>
+      !yearsWithData(data)?.includes(returnedYear) &&
+      returnedYear < getCurrentYear(),
   );
 
 export const getYearWithIncompleteData = (
@@ -57,26 +59,32 @@ export const getYearWithIncompleteData = (
 
 const monthsWithoutData = ({ data }: { data: AnnualSummaryData[] }): number => {
   let monthsCount = 0;
+  const date = new Date();
+  const currentYear = getCurrentYear();
+  const currentMonth = new Date().getMonth();
+  const monthlyCollectDone =
+    date < new Date(currentYear, currentMonth, COLLECT_INFOS.COLLECT_DATE);
+
   data
     ?.map(d => {
-      if (d.ano === getCurrentYear()) {
-        if (
-          new Date() <
-          new Date(
-            getCurrentYear(),
-            new Date().getMonth(),
-            COLLECT_INFOS.COLLECT_DATE,
-          )
-        ) {
-          return new Date().getMonth() - (d.meses_com_dados + 1);
+      if (d.ano === currentYear) {
+        if (monthlyCollectDone) {
+          return currentMonth - (d.meses_com_dados + 1);
         }
-        return new Date().getMonth() - d.meses_com_dados;
+        return currentMonth - d.meses_com_dados;
       }
       return 12 - d.meses_com_dados;
     })
     .forEach(d => {
       monthsCount += d;
     });
+
+  if (!yearsWithData(data).includes(currentYear)) {
+    if (monthlyCollectDone) {
+      return monthsCount + (12 - (12 - currentMonth - 1));
+    }
+    return monthsCount + (12 - (12 - currentMonth));
+  }
 
   return monthsCount;
 };
@@ -93,9 +101,10 @@ export const noData = ({
   type?: 'rubrica';
 }): number[] => {
   const noDataArr: number[] = [];
+  const currentYear = getCurrentYear();
 
   if (type === 'rubrica') {
-    for (let i = 2018; i <= getCurrentYear(); i += 1) {
+    for (let i = 2018; i <= currentYear; i += 1) {
       if (yearsWithData(data)?.includes(i)) {
         noDataArr.push(0);
       } else if (!yearsWithData(data)?.includes(i)) {
@@ -112,7 +121,7 @@ export const noData = ({
       }
     }
   } else {
-    for (let i = 2018; i <= getCurrentYear(); i += 1) {
+    for (let i = 2018; i <= currentYear; i += 1) {
       if (yearsWithData(data)?.includes(i)) {
         noDataArr.push(0);
       } else if (!yearsWithData(data)?.includes(i)) {
@@ -217,14 +226,15 @@ export const warningMessage = (
     }).find(d => d !== 0) &&
     agency.id_orgao === 'trf6'
   ) {
-    return `Este órgão foi criado em 2022 e não publicou dados de ${
-      yearsWithoutData(data).length - 4
-    }
-        ${yearsWithoutData(data).length > 1 ? 'anos' : 'ano'}${
-      monthsWithoutData({ data }) > 0
-        ? ` e ${monthsWithoutData({ data })}`
-        : '.'
-    }
+    const anos = yearsWithoutData(data).length - 4;
+
+    if (anos > 0) {
+      return `Este órgão foi criado em 2022 e não publicou dados de ${anos}
+        ${anos > 1 ? 'anos' : 'ano'}${
+        monthsWithoutData({ data }) > 0
+          ? ` e ${monthsWithoutData({ data })}`
+          : '.'
+      }
         ${
           monthsWithoutData({ data }) > 1
             ? 'meses.'
@@ -232,6 +242,16 @@ export const warningMessage = (
             ? 'mês.'
             : ''
         }`;
+    }
+
+    return `Este órgão não publicou dados de ${monthsWithoutData({ data })}
+          ${
+            monthsWithoutData({ data }) > 1
+              ? 'meses.'
+              : monthsWithoutData({ data }) === 1
+              ? 'mês.'
+              : ''
+          }`;
   }
 
   if (
