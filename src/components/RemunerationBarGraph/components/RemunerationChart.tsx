@@ -65,7 +65,7 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
                 setHidingBenefits={setHidingBenefits}
                 hidingNoData={hidingNoData}
                 setHidingNoData={setHidingNoData}
-                warningMessage={warningMessage({ data, year })}
+                warningMessage={warningMessage({ data, year, agency })}
               />
             ) : (
               <Box display="flex" alignItems="center" justifyContent="center">

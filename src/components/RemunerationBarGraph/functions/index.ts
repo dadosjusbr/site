@@ -101,14 +101,21 @@ export const monthsWithoutData = ({
 export const warningMessage = ({
   data,
   year,
+  agency,
 }: {
   data: v2MonthTotals[];
   year: number;
+  agency: Agency;
 }): string => {
-  if (monthsWithoutData({ data, year }).length > 0) {
-    return `Este órgão não publicou os dados de ${
-      monthsWithoutData({ data, year }).length
-    } ${monthsWithoutData({ data, year }).length > 1 ? 'meses.' : 'mês.'}`;
+  const months =
+    agency?.id_orgao === 'trf6' && year === 2022
+      ? monthsWithoutData({ data, year }).length - 8
+      : monthsWithoutData({ data, year }).length;
+
+  if (months > 0) {
+    return `Este órgão não publicou os dados de ${months} ${
+      months > 1 ? 'meses.' : 'mês.'
+    }`;
   }
   return '';
 };
