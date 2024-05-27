@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import {
   Box,
   Typography,
@@ -6,7 +7,6 @@ import {
   Divider,
 } from '@mui/material';
 import Video from '../Video';
-import React, { Suspense } from 'react';
 
 type TutorialStepsProps = {
   url: string;
@@ -32,7 +32,7 @@ export default function TutorialSteps({
               src={`https://www.youtube-nocookie.com/embed/${url}`}
               loading="lazy"
               allowFullScreen
-              aria-label="Vídeo sobre o Portal de Remunerações"
+              aria-label="Vídeo tutorial sobre a plataforma do DadosJusBr"
             />
           </Grid>
         </Grid>

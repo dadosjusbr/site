@@ -15,30 +15,28 @@ function SelectionStepper({
   activeStep,
   setActiveStep,
 }: SelectionStepperProps) {
-  const QontoConnector = styled(StepConnector)(() => {
-    return {
-      [`&.${stepConnectorClasses.alternativeLabel}`]: {
-        top: 10,
-        left: 'calc(-50% + 16px)',
-        right: 'calc(50% + 16px)',
-      },
-      [`&.${stepConnectorClasses.active}`]: {
-        [`& .${stepConnectorClasses.line}`]: {
-          borderColor: '#fff',
-        },
-      },
-      [`&.${stepConnectorClasses.completed}`]: {
-        [`& .${stepConnectorClasses.line}`]: {
-          borderColor: '#fff',
-        },
-      },
+  const QontoConnector = styled(StepConnector)(() => ({
+    [`&.${stepConnectorClasses.alternativeLabel}`]: {
+      top: 10,
+      left: 'calc(-50% + 16px)',
+      right: 'calc(50% + 16px)',
+    },
+    [`&.${stepConnectorClasses.active}`]: {
       [`& .${stepConnectorClasses.line}`]: {
-        borderColor: '#ffffff90',
-        borderTopWidth: 3,
-        borderRadius: 1,
+        borderColor: '#fff',
       },
-    };
-  });
+    },
+    [`&.${stepConnectorClasses.completed}`]: {
+      [`& .${stepConnectorClasses.line}`]: {
+        borderColor: '#fff',
+      },
+    },
+    [`& .${stepConnectorClasses.line}`]: {
+      borderColor: '#ffffff90',
+      borderTopWidth: 3,
+      borderRadius: 1,
+    },
+  }));
 
   return (
     <Stepper
