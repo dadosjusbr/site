@@ -49,8 +49,7 @@ export default function Drawer(props: Props) {
       >
         <StyledBox
           sx={{
-            px: 2,
-            pb: 2,
+            p: 2,
             height: '100%',
             overflow: 'auto',
           }}

@@ -34,19 +34,24 @@ function Header() {
       anchor: '/indice',
     },
     {
+      key: 'status',
+      title: 'Status',
+      anchor: '/status',
+    },
+    {
       key: 'relatorios',
       title: 'Relatórios',
       anchor: '/relatorios',
     },
     {
+      key: 'tutoriais',
+      title: 'Tutoriais',
+      anchor: '/tutoriais',
+    },
+    {
       key: 'namidia',
       title: 'Na Mídia',
       anchor: '/namidia',
-    },
-    {
-      key: 'status',
-      title: 'Status',
-      anchor: '/status',
     },
     {
       key: 'quemsomos',
@@ -63,13 +68,7 @@ function Header() {
           borderBottom: '2px solid',
         }}
       >
-        <Grid
-          container
-          columnSpacing={4}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Grid container columnSpacing={4}>
           <Grid item xs={4} md={2}>
             <Link href="/">
               <img
