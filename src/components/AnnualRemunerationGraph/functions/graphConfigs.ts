@@ -362,13 +362,17 @@ export const graphSeries = ({
     {
       type: 'bar',
       name: 'Média mensal de membros',
-      data: (() => createDataArray({ tipoRemuneracao: 'num_membros', data }))(),
+      data: (() =>
+        createDataArray({
+          tipoRemuneracao: 'num_membros' as keyof ItemSummary,
+          data,
+        }))(),
     },
     {
       type: 'bar',
       name: 'Descontos',
       data: createDataArray({
-        tipoRemuneracao: discountsDataTypes,
+        tipoRemuneracao: discountsDataTypes as keyof ItemSummary,
         data,
       }).map(d => d / 1000000000),
     },
@@ -378,7 +382,7 @@ export const graphSeries = ({
       data: (() => {
         if (!hidingBenefits) {
           return createDataArray({
-            tipoRemuneracao: otherRemunerationsDataTypes,
+            tipoRemuneracao: otherRemunerationsDataTypes as keyof ItemSummary,
             data,
           });
         }
@@ -402,7 +406,7 @@ export const graphSeries = ({
       data: (() => {
         if (!hidingWage) {
           return createDataArray({
-            tipoRemuneracao: baseRemunerationDataTypes,
+            tipoRemuneracao: baseRemunerationDataTypes as keyof ItemSummary,
             data,
           });
         }
@@ -426,7 +430,7 @@ export const graphSeries = ({
       data: (() => {
         if (!hidingRemunerations) {
           return createDataArray({
-            tipoRemuneracao: netRemunerationDataTypes,
+            tipoRemuneracao: netRemunerationDataTypes as keyof ItemSummary,
             data,
           });
         }

@@ -31,7 +31,7 @@ const AnnualMoneyHeadingsChart = ({
     '#fb8072',
     '#80b1d3',
     '#fdb462',
-    // '#b3de69',
+    '#b3de69',
     // '#6d2f4f',
     // '#d9d9d9',
     // '#bc80bd',
@@ -169,7 +169,7 @@ const AnnualMoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6],
+                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6, 7],
                 marker: {
                   fillColors: colors,
                 },
@@ -251,6 +251,15 @@ const AnnualMoneyHeadingsChart = ({
                 data: (() =>
                   createDataArray({
                     tipoRemuneracao: 'indenizacao_de_ferias',
+                    data,
+                    type: 'rubrica',
+                  }))(),
+              },
+              {
+                name: 'Férias',
+                data: (() =>
+                  createDataArray({
+                    tipoRemuneracao: 'ferias',
                     data,
                     type: 'rubrica',
                   }))(),

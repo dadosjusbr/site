@@ -16,6 +16,7 @@ type ItemSummary = {
   auxilio_alimentacao: number;
   licenca_premio: number;
   indenizacao_de_ferias: number;
+  ferias: number;
   gratificacao_natalina: number;
   licenca_compensatoria: number;
   auxilio_saude: number;
