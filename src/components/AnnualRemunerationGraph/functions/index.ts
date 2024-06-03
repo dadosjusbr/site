@@ -179,7 +179,7 @@ export const createDataArray = ({
   data,
   type,
 }: {
-  tipoRemuneracao: string;
+  tipoRemuneracao: keyof ItemSummary;
   data: AnnualSummaryData[];
   type?: 'rubrica';
 }): number[] => {

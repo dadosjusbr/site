@@ -63,7 +63,7 @@ const MoneyHeadingsChart = ({
                 '#fb8072',
                 '#80b1d3',
                 '#fdb462',
-                // '#b3de69',
+                '#b3de69',
                 // '#6d2f4f',
                 // '#d9d9d9',
                 // '#bc80bd',
@@ -190,7 +190,7 @@ const MoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6],
+                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6, 7],
                 x: {
                   formatter(val, opts) {
                     if (OthersMoneyHeadings[opts.dataPointIndex] === 0) {
@@ -260,6 +260,10 @@ const MoneyHeadingsChart = ({
               {
                 name: 'Indenização de férias',
                 data: (() => fillDataArray('indenizacao_de_ferias'))(),
+              },
+              {
+                name: 'Férias',
+                data: (() => fillDataArray('ferias'))(),
               },
               {
                 name: 'Auxílio-alimentação',

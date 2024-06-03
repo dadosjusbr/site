@@ -35,6 +35,7 @@ import { normalizePlotData } from '../../functions/normalize';
 import * as url from '../../url';
 import AnnualMoneyHeadingsChart from './components/AnnualMoneyHeadingsChart';
 import { yearsWithoutData } from './functions';
+import MoneyHeadingInfo from '../Common/MoneyHeadingInfo';
 
 const AnnualRemunerationGraph = dynamic(
   () => import('./components/RemunerationChart'),
@@ -229,32 +230,7 @@ const AgencyPageWithoutNavigation: React.FC<
                 <AccordionSummary expandIcon={<ExpandMoreIcon />}>
                   <Typography variant="h6" color="#000">
                     Gráfico do gasto anual em benefícios
-                    <Tooltip
-                      placement="bottom"
-                      title={
-                        <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                          <b>Auxílio-alimentação: </b> Custeio de alimentação
-                          não incorporável ao salário.
-                          <hr />
-                          <b>Licença-prêmio: </b>
-                          A cada 5 anos de serviço, o servidor tem direito a 3
-                          meses de licença.
-                          <hr />
-                          <b>Indenização de Férias: </b>
-                          Venda de períodos de férias não usufruídos.
-                          <hr />
-                          <b>Gratificação Natalina: </b>
-                          Corresponde ao 13° salário.
-                          <hr />
-                          <b>Licença-compensatória: </b>
-                          Horas extras não compensadas no mesmo mês.
-                          <hr />
-                          <b>Auxílio-saúde: </b>
-                          Reembolso de despesas com planos de saúde, inclusive
-                          excedentes do teto.
-                        </Typography>
-                      }
-                    >
+                    <Tooltip placement="bottom" title={<MoneyHeadingInfo />}>
                       <IconButton aria-label="Botão de informações">
                         <InfoIcon />
                       </IconButton>
