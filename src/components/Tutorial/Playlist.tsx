@@ -2,12 +2,11 @@ import { Link, Typography } from '@mui/material';
 import styled from 'styled-components';
 
 const Subtitle = styled(Typography)`
-  margin: 0 32px;
+  padding: 0 32px;
   line-height: 1.6;
-  text-indent: 2rem;
 
   @media (max-width: 600px) {
-    margin: 0 16px;
+    padding: 0 16px;
   }
 `;
 

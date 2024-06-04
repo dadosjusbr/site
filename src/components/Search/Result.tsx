@@ -137,7 +137,7 @@ const Result = ({
                   analisar e visualizar os dados de maneira eficaz. Aqui, você
                   pode ver como fazer a importação dos dados baixados para esses
                   softwares e algumas configurações importantes que você pode
-                  ajustar para realizar consultas mais precisas e acertivas aos
+                  ajustar para realizar consultas mais precisas e assertivas aos
                   dados.
                 </Typography>
               </Grid>
