@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import ReactGA from 'react-ga4';
 import styled from 'styled-components';
 import { Typography, Grid, Link } from '@mui/material';
@@ -22,6 +23,8 @@ export default function HeadlineSection({
   formatedEndDate,
   setOpenDialog,
 }: HeadlineSectionProps) {
+  const [videoURL, setVideoURL] = useState('4PB39l4IykI');
+
   return (
     <>
       <Typography variant="h1" p={0} lineHeight={1} textAlign="center">
@@ -94,23 +97,23 @@ export default function HeadlineSection({
             </Grid>
           </Grid>
         </Grid>
-        <Grid
-          item
-          xs={12}
-          md={4}
-          display="flex"
-          alignItems="center"
-          justifyContent="center"
-        >
+        <Grid item xs={12} md={4} position="relative">
           <Video.Player
-            src="https://www.youtube-nocookie.com/embed/4PB39l4IykI"
+            src={`https://www.youtube-nocookie.com/embed/${videoURL}`}
             loading="lazy"
             allowFullScreen
             aria-label="Vídeo sobre o Portal de Remunerações"
           />
+          <Video.Related
+            buttonProps={{
+              sx: { position: 'absolute', left: 0, top: '95%' },
+            }}
+            setVideoURL={setVideoURL}
+            relatedVideos={['TaQN-gLEV0Y', 'zDCiDV-IUR0']}
+          />
         </Grid>
       </Grid>
-      <Typography component="p">
+      <Typography component="p" mt={3}>
         Você pode fazer o{' '}
         {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
         <Link
