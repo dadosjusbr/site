@@ -12,6 +12,18 @@ module.exports = {
       },
     ];
   },
+
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+        port: '',
+        pathname: '/vi/**',
+      },
+    ],
+  },
+
   //the env variables are set here to access in browser
   env: {
     API_BASE_URL: process.env.API_BASE_URL,
