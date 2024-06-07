@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React from 'react';
 import {
   Button,
   ClickAwayListener,
@@ -6,10 +6,10 @@ import {
   tooltipClasses,
   TooltipProps,
   styled as muiStyled,
-  Box,
   ButtonProps,
   Grid,
 } from '@mui/material';
+import Image from 'next/image';
 
 type RelatedProps = {
   setVideoURL: (url: string) => void;
@@ -22,7 +22,7 @@ export default function Related({
   relatedVideos,
   buttonProps,
 }: RelatedProps) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = React.useState(false);
 
   const handleTooltipClose = () => {
     setOpen(false);
@@ -46,8 +46,12 @@ export default function Related({
           <Grid container gap={2}>
             {relatedVideos.map(videoId => (
               <Grid item key={videoId}>
-                <img
+                <Image
                   src={`https://i.ytimg.com/vi/${videoId}/maxresdefault.jpg`}
+                  blurDataURL={`https://i.ytimg.com/vi/${videoId}/default.jpg`}
+                  alt="related video thumbnail"
+                  placeholder="blur"
+                  loading="lazy"
                   width={170}
                   height={(9 / 16) * 170}
                   onClick={() => setVideoURL(videoId)}
@@ -66,9 +70,11 @@ export default function Related({
   );
 }
 
-const HtmlTooltip = muiStyled(({ className, ...props }: TooltipProps) => (
-  <Tooltip {...props} classes={{ popper: className }} />
-))(({ theme }) => ({
+const HtmlTooltip = muiStyled(
+  React.forwardRef((props: TooltipProps, ref: React.Ref<HTMLDivElement>) => (
+    <Tooltip {...props} ref={ref} classes={{ popper: props.className }} />
+  )),
+)(({ theme }) => ({
   [`& .${tooltipClasses.tooltip}`]: {
     backgroundColor: '#f5f5f5',
     color: 'rgba(0, 0, 0, 0.87)',
@@ -76,6 +82,6 @@ const HtmlTooltip = muiStyled(({ className, ...props }: TooltipProps) => (
     maxWidth: 'fit-content',
     fontSize: theme.typography.pxToRem(12),
     border: '1px solid #dadde9',
-    padding: theme.spacing(1),
+    padding: theme.spacing(1, 1, 0.5, 1),
   },
 }));
