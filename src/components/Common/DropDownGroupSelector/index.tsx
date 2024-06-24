@@ -10,6 +10,7 @@ import {
 } from '@mui/material';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
+import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
 
 import { formatToAgency } from '../../../functions/format';
 
@@ -31,6 +32,16 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
 }) => {
   const router = useRouter();
   const [agencyName, setAgencyName] = React.useState(value || '');
+  const [open, setOpen] = React.useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
   const handleChange = (event: SelectChangeEvent) => {
     const v = event.target.value as string;
     setAgencyName(v);
@@ -50,11 +61,29 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         defaultValue=""
         value={agencyName}
         label="Estados"
+        open={open}
+        onClose={handleClose}
+        onOpen={handleOpen}
         onChange={handleChange}
         displayEmpty
         inputProps={{ 'aria-label': 'Dados por órgão' }}
         input={inputType === 'outlined' ? <OutlinedInput /> : <InputBase />}
-        IconComponent={() => <ArrowDropDownIcon />}
+        IconComponent={() => {
+          if (open) {
+            return (
+              <ArrowDropUpIcon
+                onClick={() => setOpen(prev => !prev)}
+                sx={{ cursor: 'pointer' }}
+              />
+            );
+          }
+          return (
+            <ArrowDropDownIcon
+              onClick={() => setOpen(prev => !prev)}
+              sx={{ cursor: 'pointer' }}
+            />
+          );
+        }}
         renderValue={selected => {
           if (selected.length === 0) {
             return (
