@@ -208,7 +208,7 @@ const index = ({
               <AccountBalanceWalletIcon />
             </IconButton>
             <Typography pt={1} pb={0} fontSize={{ xs: 14, md: 16 }}>
-              Salário bruto
+              Salário base
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {

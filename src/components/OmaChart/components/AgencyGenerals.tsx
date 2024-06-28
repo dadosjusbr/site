@@ -119,19 +119,19 @@ const index = ({
                 </ListItemAvatar>
                 <Box>
                   <ListItemText primaryTypographyProps={{ lineHeight: 1 }}>
-                    Salário bruto médio:{' '}
+                    Salário base médio:{' '}
                     {formatCurrencyValue(totalWage / totalMembers, 2)}
                   </ListItemText>
                   <ListItemText
                     secondaryTypographyProps={{ lineHeight: 1 }}
-                    secondary={`Maior salário bruto: ${formatCurrencyValue(
+                    secondary={`Maior salário base: ${formatCurrencyValue(
                       maxWage,
                       1,
                     )}`}
                   />
                   <ListItemText
                     secondaryTypographyProps={{ lineHeight: 1 }}
-                    secondary={`Total de salários brutos:
+                    secondary={`Total de salários base:
                     ${formatCurrencyValue(totalWage, 2)}`}
                   />
                 </Box>
