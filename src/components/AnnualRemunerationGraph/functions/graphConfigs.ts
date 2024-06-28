@@ -402,7 +402,7 @@ export const graphSeries = ({
     },
     {
       type: 'bar',
-      name: 'Salário bruto',
+      name: 'Salário base',
       data: (() => {
         if (!hidingWage) {
           return createDataArray({
