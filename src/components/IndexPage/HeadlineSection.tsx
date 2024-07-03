@@ -23,7 +23,7 @@ export default function HeadlineSection({
   formatedEndDate,
   setOpenDialog,
 }: HeadlineSectionProps) {
-  const [videoURL, setVideoURL] = useState('4PB39l4IykI');
+  const [videoURL, setVideoURL] = useState('fFyDINfubbc');
 
   return (
     <>
