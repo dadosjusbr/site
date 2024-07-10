@@ -172,8 +172,8 @@ export const getStaticPaths: GetStaticPaths = async () => {
       { params: { summary: 'conselhos-de-justica' } },
     ];
     return {
-      paths,
-      fallback: true,
+      paths: [],
+      fallback: 'blocking',
     };
   } catch (error) {
     return {
