@@ -170,8 +170,8 @@ export const Playlist = [
           que permitem a obtenção automática desses dados. É possível examinar a
           diferença entre o total pago pelo órgão em salários e benefícios ou
           comparar os pagamentos de diferentes órgãos. Com os dados de
-          diferentes anos ou meses é possível explorar como o pagamento cresceu
-          ou não em um órgão ao longo do tempo ou identificar períodos em que
+          diferentes anos ou meses, é possível explorar como o pagamento cresceu
+          ou não em um órgão ao longo do tempo, ou identificar períodos em que
           houve um grande pagamento de benefícios.
         </Subtitle>
         <Subtitle>
