@@ -191,7 +191,7 @@ export const Playlist = [
       <>
         <Subtitle>
           Os dados disponíveis no DadosJusBr permitem muitos tipos de análise.
-          Nesse vídeo compartilhamos algumas análises feitas pela Transparência
+          Nesse vídeo, compartilhamos algumas análises feitas pela Transparência
           Brasil. Essas análises podem ser encontradas na aba de{' '}
           <Link href="/relatorios">relatórios</Link> do site.
         </Subtitle>
