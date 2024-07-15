@@ -240,8 +240,8 @@ export const Playlist = [
         <Subtitle>
           A primeira distinção que precisamos fazer é entre o salário base e os
           benefícios. O salário base é o vencimento mensal de um membro do
-          sistema de justiça. Já os benefícios são o total das verbas adicionais
-          recebidas por ele, em um dado mês.
+          sistema de Justiça. Já os benefícios são o total das verbas adicionais
+          recebidas por ele em um dado mês.
         </Subtitle>
         <Subtitle>
           A remuneração líquida é a soma dessas duas categorias, menos os
