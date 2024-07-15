@@ -200,7 +200,7 @@ export const Playlist = [
           identificou que a licença-prêmio convertida em pagamento foi a
           principal verba indenizatória paga no MPU entre 2019 e 2022,
           totalizando ao menos R$ 438 milhões nesses 4 anos. Os procuradores do MPU
-          receberam em média R$ 184 mil cada um apenas com esse benefício. Para
+          receberam, em média, R$ 184 mil cada um apenas com esse benefício. Para
           chegar nesses valores, a Transparência Brasil analisou todas as
           nomenclaturas dadas pelos órgãos do MPU para esse mesmo benefício.
           Você pode acessar esse relatório{' '}
