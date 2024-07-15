@@ -221,9 +221,9 @@ export const Playlist = [
             salários pagos acima do teto constitucional nos Tribunais Regionais
             Federais no primeiro semestre de 2023.
           </Link>{' '}
-          Com os dados publicados pelo DadosJusBr foi possível verificar que
-          nesse período mais de 1500 magistrados receberam acima do teto
-          constitucional, com um contracheque chegando a mais de R$400 mil. O
+          Com os dados publicados pelo DadosJusBr, foi possível verificar que,
+          nesse período, mais de 1500 magistrados receberam acima do teto
+          constitucional, com um contracheque chegando a mais de R$ 400 mil. O
           maior benefício pago por esses tribunais foi a gratificação por
           exercício cumulativo. Os detalhes dessas duas análises e outras estão
           publicados no formato de relatórios no site do DadosJusBr e podem
