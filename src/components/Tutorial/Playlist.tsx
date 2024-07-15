@@ -196,7 +196,7 @@ export const Playlist = [
           <Link href="/relatorios">relatórios</Link> do site.
         </Subtitle>
         <Subtitle>
-          Utilizando os dados publicados no DadosJusBr , a Transparência Brasil
+          Utilizando os dados publicados no DadosJusBr, a Transparência Brasil
           identificou que a licença-prêmio convertida em pagamento foi a
           principal verba indenizatória paga no MPU entre 2019 e 2022,
           totalizando ao menos R$438 milhões nesses 4 anos. Os procurados do MPU
