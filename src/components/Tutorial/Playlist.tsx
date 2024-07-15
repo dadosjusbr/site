@@ -307,7 +307,7 @@ export const Playlist = [
           O DadosJusBr quer melhorar a transparência dos contracheques, para que
           qualquer pessoa consiga entender o que é cada benefício, quais estão
           ou não limitados pelo teto constitucional, e o impacto de cada um na
-          remuneração final dos membros do sistema de justiça brasileiro. Para
+          remuneração final dos membros do sistema de Justiça brasileiro. Para
           isso, trabalhamos continuamente na distinção e unificação das
           rubricas. Apenas no Judiciário, são 2,6 mil nomenclaturas distintas de
           benefícios.
