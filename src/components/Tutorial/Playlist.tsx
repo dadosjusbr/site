@@ -199,9 +199,9 @@ export const Playlist = [
           Utilizando os dados publicados no DadosJusBr, a Transparência Brasil
           identificou que a licença-prêmio convertida em pagamento foi a
           principal verba indenizatória paga no MPU entre 2019 e 2022,
-          totalizando ao menos R$ 438 milhões nesses 4 anos. Os procuradores do MPU
-          receberam, em média, R$ 184 mil cada um apenas com esse benefício. Para
-          chegar nesses valores, a Transparência Brasil analisou todas as
+          totalizando ao menos R$ 438 milhões nesses 4 anos. Os procuradores do
+          MPU receberam, em média, R$ 184 mil cada um apenas com esse benefício.
+          Para chegar nesses valores, a Transparência Brasil analisou todas as
           nomenclaturas dadas pelos órgãos do MPU para esse mesmo benefício.
           Você pode acessar esse relatório{' '}
           <Link
@@ -330,7 +330,7 @@ export const Playlist = [
           Como vimos no vídeo sobre as rubricas presentes nos contracheques,
           alguns deles possuem natureza indenizatória. Isso quer dizer que são
           pagos, a princípio, como uma compensação a prejuízos ou despesas que
-          ficaram ou ficarão à encargo do funcionário. No âmbito do regime CLT,
+          ficaram ou ficarão a encargo do funcionário. No âmbito do regime CLT,
           por exemplo, o aviso prévio e o FGTS são considerados verbas de
           natureza indenizatória.
         </Subtitle>
