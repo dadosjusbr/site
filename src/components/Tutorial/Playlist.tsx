@@ -373,7 +373,7 @@ export const Playlist = [
           Uma ferramenta que pode ser de grande ajuda ao examinar as
           remunerações publicadas pelo DadosJusBr são as tabelas dinâmicas de
           programas de planilha. Esse vídeo mostra como você pode usá-las no
-          Google Sheets No nosso exemplo, estamos examinando as remunerações do{' '}
+          Google Sheets. No nosso exemplo, estamos examinando as remunerações do{' '}
           <Link href="/orgao/tjba">TJ-BA</Link>. Repare que há uma alta no valor
           dos benefícios em 2023 em comparação com 2022. Veja também que essa
           alta acontece principalmente em dezembro de 2023. Para examinar essa
