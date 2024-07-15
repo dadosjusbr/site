@@ -166,7 +166,7 @@ export const Playlist = [
     subtitle: (
       <>
         <Subtitle>
-          O DadosJusBr publica dados de todos os órgãos do sistema de justiça
+          O DadosJusBr publica dados de todos os órgãos do sistema de Justiça
           que permitem a obtenção automática desses dados. É possível examinar a
           diferença entre o total pago pelo órgão em salários e benefícios ou
           comparar os pagamentos de diferentes órgãos. Com os dados de
