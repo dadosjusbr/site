@@ -385,7 +385,7 @@ export const Playlist = [
         </Subtitle>
         <Subtitle>
           Quando você for importar os dados, é útil conferir primeiro se sua
-          planilha está configurada para usar o padrão brasileiros de números e
+          planilha está configurada para usar o padrão brasileiro de números e
           moeda. Outra dica é transformar os valores para a formatação de moeda,
           o que facilita sua leitura.
         </Subtitle>
