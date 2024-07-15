@@ -175,7 +175,7 @@ export const Playlist = [
           houve um grande pagamento de benefícios.
         </Subtitle>
         <Subtitle>
-          Examinando os dados detalhados podemos identificar verbas que foram
+          Examinando os dados detalhados, podemos identificar verbas que foram
           responsáveis por grandes pagamentos e entender ou questionar esses
           pagamentos. Como temos os mesmos dados para vários órgãos, é possível
           comparar o comportamento de diferentes órgãos, como o tribunal e
