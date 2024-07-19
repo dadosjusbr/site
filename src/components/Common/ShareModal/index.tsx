@@ -28,28 +28,31 @@ import { setUtmParameters, removeUtmParameters } from '../../../functions/url';
 interface ShareModalProps {
   isOpen: boolean;
   onRequestClose: () => void;
+  agencyName: string;
   url?: string;
 }
 
 const ShareModal: React.FC<ShareModalProps> = ({
   isOpen,
   onRequestClose,
+  agencyName,
   url,
 }) => {
   const [open, setOpen] = React.useState(false);
   const [quote, setQuote] = React.useState(false);
-  const year = new Date().getFullYear();
-  const date = `${new Date().toLocaleDateString('pt-BR', {
+  const fullDate = new Date();
+  const date = `${fullDate.toLocaleDateString('pt-BR', {
     calendar: 'gregory',
     day: '2-digit',
-    month: 'short',
+    // show full month name only in May
+    month: fullDate.getMonth() === 4 ? 'long' : 'short',
     year: 'numeric',
     timeZone: 'UTC',
   })}`;
 
-  const text = `DADOSJUSBR, ${year}. Disponível em: <${removeUtmParameters(
+  const text = `DADOSJUSBR. ${agencyName}. Disponível em: ${removeUtmParameters(
     url,
-  )}>. ${' '}Acesso em: ${date}.`;
+  )}. ${' '}Acesso em: ${date}.`;
 
   const handleClick = () => {
     setOpen(true);

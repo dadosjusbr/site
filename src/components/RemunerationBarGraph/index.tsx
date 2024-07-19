@@ -355,6 +355,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
       </Box>
       <ShareModal
         isOpen={modalIsOpen}
+        agencyName={title}
         url={`https://dadosjusbr.org/orgao/${id}/${year}`}
         onRequestClose={() => setModalIsOpen(false)}
       />

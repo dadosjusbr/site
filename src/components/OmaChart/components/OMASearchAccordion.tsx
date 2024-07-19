@@ -195,6 +195,7 @@ const SearchAccordion = ({
           />
           <ShareModal
             isOpen={modalIsOpen}
+            agencyName={selectedAgencies?.at(0).nome}
             url={`${window.location.href.replace(window.location.hash, '')}`}
             onRequestClose={() => setModalIsOpen(false)}
           />

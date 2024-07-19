@@ -297,7 +297,10 @@ const AgencyPageWithoutNavigation: React.FC<
             </Box>
 
             <Box mt={2}>
-              <SearchAccordion selectedAgencies={[agency]} />
+              <SearchAccordion
+                selectedAgencies={[agency]}
+                agencyName={agency?.nome}
+              />
             </Box>
           </>
         ) : null}
@@ -305,6 +308,7 @@ const AgencyPageWithoutNavigation: React.FC<
 
       <ShareModal
         isOpen={modalIsOpen}
+        agencyName={agency?.nome}
         url={`https://dadosjusbr.org/orgao/${id}`}
         onRequestClose={() => setModalIsOpen(false)}
       />
