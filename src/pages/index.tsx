@@ -147,6 +147,7 @@ export default function Index({
 
           <ShareModal
             isOpen={modalIsOpen}
+            agencyName="Total das remunerações do sistema de Justiça"
             url="https://dadosjusbr.org#remuneration-graph"
             onRequestClose={() => setModalIsOpen(false)}
           />

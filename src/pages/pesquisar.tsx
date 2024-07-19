@@ -281,6 +281,7 @@ export default function Index({ ais }: { ais: Agency[] }) {
         </Box>
         <ShareModal
           isOpen={modalIsOpen}
+          agencyName="Pesquisa de dados"
           url={`https://dadosjusbr.org/pesquisar${query}`}
           onRequestClose={() => setModalIsOpen(false)}
         />

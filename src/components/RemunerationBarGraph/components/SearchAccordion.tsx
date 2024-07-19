@@ -204,6 +204,7 @@ const SearchAccordion = ({
           />
           <ShareModal
             isOpen={modalIsOpen}
+            agencyName={selectedAgencies?.at(0).nome}
             url={`https://dadosjusbr.org/orgao/${selectedAgencies
               .map(a => a.id_orgao)
               .join(',')}/${selectedYears.toString()}?orgaos=${selectedAgencies

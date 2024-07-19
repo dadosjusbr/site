@@ -23,9 +23,13 @@ import { months } from '../../../@types/MONTHS';
 
 type SearchAccordionProps = {
   selectedAgencies: Agency[];
+  agencyName: string;
 };
 
-const SearchAccordion = ({ selectedAgencies }: SearchAccordionProps) => {
+const SearchAccordion = ({
+  selectedAgencies,
+  agencyName,
+}: SearchAccordionProps) => {
   const years: number[] = [];
   for (let i = getCurrentYear(); i >= 2018; i -= 1) {
     years.push(i);
@@ -219,6 +223,7 @@ const SearchAccordion = ({ selectedAgencies }: SearchAccordionProps) => {
           />
           <ShareModal
             isOpen={modalIsOpen}
+            agencyName={agencyName}
             url={`https://dadosjusbr.org/orgao/${selectedAgencies
               .map(a => a.id_orgao)
               .join(',')}?orgaos=${selectedAgencies
