@@ -1,14 +1,36 @@
 import { Box, Container, useMediaQuery } from '@mui/material';
-import React, { useState } from 'react';
+import React from 'react';
 import Head from 'next/head';
 import Header from '../components/Essentials/Header';
 import Footer from '../components/Essentials/Footer';
 import { Tutorial } from '../components/Tutorial';
 import { TutorialStepContext } from '../contexts/tutorial-step-context';
+import { setParameter, getParameter } from '../functions/url';
 
 const Tutoriais = () => {
-  const [activeStep, setActiveStep] = useState(0);
+  const [activeStep, setActiveStep] = React.useState(0);
+  const isFirstRender = React.useRef(true);
   const smallDevice = useMediaQuery('(max-width:900px)');
+
+  React.useEffect(() => {
+    const tutorial = getParameter('tutorial');
+    if (tutorial) {
+      setActiveStep(parseInt(tutorial, 10));
+    }
+  }, []);
+
+  React.useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+
+    window.history.pushState(
+      null,
+      '',
+      setParameter('tutorial', activeStep.toString()),
+    );
+  }, [activeStep]);
 
   return (
     <>

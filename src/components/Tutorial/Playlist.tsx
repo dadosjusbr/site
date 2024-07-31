@@ -1,7 +1,7 @@
-import { Link, Typography } from '@mui/material';
+import { Link } from '@mui/material';
 import styled from 'styled-components';
 
-const Subtitle = styled(Typography)`
+const Subtitle = styled.div`
   padding: 8px 32px;
   line-height: 1.6;
 
