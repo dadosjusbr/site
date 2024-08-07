@@ -1,5 +1,6 @@
 import { Link } from '@mui/material';
 import styled from 'styled-components';
+import FAQ from '../Common/FAQ';
 
 const Subtitle = styled.div`
   padding: 8px 32px;
@@ -11,6 +12,14 @@ const Subtitle = styled.div`
 `;
 
 export const Playlist = [
+  {
+    title: 'Perguntas frequentes',
+    subtitle: (
+      <Subtitle>
+        <FAQ />
+      </Subtitle>
+    ),
+  },
   {
     url: 'fFyDINfubbc',
     title: 'Como consultar os dados',
@@ -162,7 +171,7 @@ export const Playlist = [
   },
   {
     url: '6RMOPw1Zsso',
-    title: 'O que pode ser feito com os dados que publicamos?',
+    title: 'O que pode ser feito com os dados que publicamos',
     subtitle: (
       <>
         <Subtitle>

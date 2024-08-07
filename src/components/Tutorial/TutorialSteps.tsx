@@ -28,7 +28,7 @@ export default function TutorialSteps({
   return (
     <Box mt={2}>
       <Suspense fallback={<CircularProgress />}>
-        <Box display="flex">
+        <Box display="flex" alignItems="center">
           {smallDevice && (
             <Drawer>
               <Tutorial.Selection
@@ -37,21 +37,27 @@ export default function TutorialSteps({
               />
             </Drawer>
           )}
-          <Typography variant="h2" ml={1}>
+          <Typography
+            variant="h2"
+            ml={{ xs: 0, md: 2 }}
+            paddingBottom={{ xs: 0, md: 2 }}
+          >
             {title}
           </Typography>
         </Box>
         <Divider sx={{ mb: 2 }} />
-        <Grid container justifyContent="center">
-          <Grid item xs={11} md={10} my={2}>
-            <Video.Player
-              src={`https://www.youtube-nocookie.com/embed/${url}`}
-              loading="lazy"
-              allowFullScreen
-              aria-label="Vídeo tutorial sobre a plataforma do DadosJusBr"
-            />
+        {url && (
+          <Grid container justifyContent="center">
+            <Grid item xs={11} md={10} my={2}>
+              <Video.Player
+                src={`https://www.youtube-nocookie.com/embed/${url}`}
+                loading="lazy"
+                allowFullScreen
+                aria-label="Vídeo tutorial sobre a plataforma do DadosJusBr"
+              />
+            </Grid>
           </Grid>
-        </Grid>
+        )}
         <Box pb={2}>{subtitle}</Box>
       </Suspense>
     </Box>
