@@ -16,7 +16,7 @@ export const QA = [
     answer: (
       <span>
         Não. O DadosJusBr monitora apenas a remuneração dos membros do sistema
-        de justiça, isto é, magistrados no Judiciário e promotores e
+        de Justiça, isto é, magistrados no Judiciário e promotores e
         procuradores do Ministério Público.
       </span>
     ),
@@ -167,7 +167,7 @@ export const QA = [
         utilizada podem ser acessados no nosso{' '}
         <Link href="https://github.com/dadosjusbr">repositório no GitHub</Link>.
         Além disso, disponibilizamos a seção &ldquo;Mais informações sobre a
-        coleta&rdquo; no DadosJus, que fornece detalhes sobre a obtenção e
+        coleta&rdquo; no DadosJusBr, que fornece detalhes sobre a obtenção e
         tratamento de dados da folha de pagamento mensal de cada órgão.
         <br />
         Quando o órgão não divulga os dados, os robôs realizam mensalmente novas
@@ -176,7 +176,7 @@ export const QA = [
         ciente de que podem ocorrer divergências caso os órgãos modifiquem os
         dados inicialmente informados.
         <br />O projeto também realiza rotineiras análises de integridade das
-        informações para verificar possíveis erros das fontes oficiais. usuário.
+        informações para verificar possíveis erros das fontes oficiais.
       </span>
     ),
   },
