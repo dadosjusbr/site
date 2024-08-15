@@ -47,8 +47,7 @@ export default function Team() {
       name: 'Cristiano Pavini',
       role: 'Coordenador de projetos',
       profileURL: 'https://www.linkedin.com/in/cristiano-pavini-4286303b/',
-      photoURL:
-        'https://media.licdn.com/dms/image/D4D03AQFo7VxMzUZwIw/profile-displayphoto-shrink_200_200/0/1686706602511?e=1720656000&v=beta&t=VkBqd7Jw6i9QEqYkBuPDRU0lA1Y1QovORd5KgWTjF9k',
+      photoURL: '/img/team/C.Pavini.jpeg',
     },
     {
       id: 7,
