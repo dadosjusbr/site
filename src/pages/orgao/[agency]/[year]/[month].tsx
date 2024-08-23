@@ -105,7 +105,7 @@ export default function OmaPage({
       );
       setAgencyInfo(agencyObj);
     } catch (error) {
-      router.push('/404');
+      throw new Error(`Erro ao buscar dados mensais do orgão - ${error}`);
     }
   }
   function handleNavigateToNextSummaryOption() {

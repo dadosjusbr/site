@@ -86,7 +86,9 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
         );
         setPlotData(normalizeMonthlyPlotData(transparencyPlot));
       } catch (err) {
-        router.push('/404');
+        throw new Error(
+          `Erro ao buscar dados do índice de transparência - ${err}`,
+        );
       }
     }
   }

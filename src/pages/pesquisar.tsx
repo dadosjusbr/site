@@ -304,11 +304,7 @@ export async function getStaticProps() {
       revalidate: 3600,
     };
   } catch (err) {
-    return {
-      props: {
-        ais: [],
-      },
-    };
+    throw new Error(`Erro ao buscar a lista de órgãos - ${err}`);
   }
 }
 

@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 import dynamic from 'next/dynamic';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
@@ -25,9 +24,8 @@ export default function AnualAgencyPage({
   data: AnnualSummaryData[];
   fullName: string;
 }) {
-  const router = useRouter();
   const [year, setYear] = useState(getCurrentYear());
-  const [agencyTotals, setAgencyTotals] = useState<v2AgencyTotalsYear>();
+
   useEffect(() => {
     const yearData: number =
       data &&
@@ -36,21 +34,9 @@ export default function AnualAgencyPage({
         .sort((a, b) => b - a)
         .find(d => d <= getCurrentYear());
 
-    fetchAgencyTotalData();
     setYear(yearData);
   }, [data]);
 
-  const fetchAgencyTotalData = async () => {
-    try {
-      const { data: agencyTotalsResponse } = await api.ui.get(
-        `/v2/orgao/totais/${id}/${year}`,
-      );
-
-      setAgencyTotals(agencyTotalsResponse);
-    } catch (err) {
-      router.push('/404');
-    }
-  };
   return (
     <Box>
       <Head>
@@ -69,7 +55,6 @@ export default function AnualAgencyPage({
       <Box display="flex" my={10} justifyContent="center">
         <AgencyWithoutNavigation
           data={data}
-          agencyTotals={agencyTotals}
           id={id}
           year={year}
           agency={agency}
@@ -108,12 +93,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
       },
     };
   } catch (err) {
-    context.res.writeHead(301, {
-      Location: `/404`,
-    });
-    context.res.end();
-    return {
-      props: {},
-    };
+    throw new Error('Erro ao buscar dados do orgão');
   }
 };

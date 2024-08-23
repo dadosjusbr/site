@@ -184,11 +184,9 @@ export const getStaticProps: GetStaticProps = async () => {
       revalidate: 3600,
     };
   } catch (err) {
-    // context.res.writeHead(301, {
-    //   Location: `/404`,
-    // });
-    // context.res.end();
-    return { props: {} };
+    throw new Error(
+      `Os dados da página inicial não estando sendo retornados pela API - ${err}`,
+    );
   }
 };
 const Page = styled.div`

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { Suspense, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
 import styled from 'styled-components';
@@ -32,12 +32,10 @@ export default function SummaryPage({
   dataList,
   summary,
   chartData,
-  agencyTotals,
 }: {
   dataList: v2AgencyBasic[];
   summary: string;
   chartData: chartDataType[];
-  agencyTotals: v2AgencyTotalsYear;
 }) {
   const pageTitle = `${formatToAgency(summary)}`;
   const [value, setValue] = useState('');
@@ -121,19 +119,20 @@ export default function SummaryPage({
           {(() => {
             if (typeof dataList !== 'undefined' && dataList.length > 0) {
               return dataList.map((agency, i) => (
-                <Box mb={12} key={agency.id_orgao}>
-                  <div id={agency.id_orgao}>
-                    <AgencyWithoutNavigation
-                      data={chartData[i]?.dados_anuais}
-                      agencyTotals={agencyTotals[i]}
-                      dataLoading={false}
-                      id={agency?.id_orgao}
-                      title={agency?.nome}
-                      year={getCurrentYear()}
-                      agency={chartData[i]?.orgao}
-                    />
-                  </div>
-                </Box>
+                <Suspense fallback={<CircularProgress />}>
+                  <Box mb={12} key={agency.id_orgao}>
+                    <div id={agency.id_orgao}>
+                      <AgencyWithoutNavigation
+                        data={chartData[i]?.dados_anuais}
+                        dataLoading={false}
+                        id={agency?.id_orgao}
+                        title={agency?.nome}
+                        year={getCurrentYear()}
+                        agency={chartData[i]?.orgao}
+                      />
+                    </div>
+                  </Box>
+                </Suspense>
               ));
             }
             return (
@@ -206,34 +205,18 @@ export const getStaticProps: GetStaticProps = async context => {
       throw new Error(error);
     }
 
-    const agencyTotals = [];
-    try {
-      const request = data?.orgaos.map(async item => {
-        const response = await api.ui.get(
-          `/v2/orgao/totais/${item.id_orgao}/${getCurrentYear()}`,
-        );
-        agencyTotals.push(response.data);
-      });
-      await Promise.all(request);
-    } catch (error) {
-      throw new Error(error);
-    }
-
     return {
       props: {
         dataList: data.orgaos,
         summary: data.grupo,
         chartData,
-        agencyTotals,
       },
       revalidate: 3600,
     };
   } catch (error) {
-    // context.res.writeHead(301, {
-    //   Location: `/404`,
-    // });
-    // context.res.end();
-    return { props: {} };
+    throw new Error(
+      `Erro ao buscar dados do grupo do grupo de órgãos - ${error}`,
+    );
   }
 };
 const Page = styled.div`
