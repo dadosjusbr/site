@@ -1,4 +1,4 @@
-import React, { Suspense, useState } from 'react';
+import React, { Suspense, useCallback, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga4';
@@ -55,7 +55,6 @@ const IndexTabGraph = dynamic(
 
 export interface AgencyPageWithoutNavigationProps {
   id: string;
-  agencyTotals: v2AgencyTotalsYear;
   year: number;
   agency: Agency;
   title: string;
@@ -65,9 +64,10 @@ export interface AgencyPageWithoutNavigationProps {
 
 const AgencyPageWithoutNavigation: React.FC<
   AgencyPageWithoutNavigationProps
-> = ({ id, agencyTotals, title, year, agency, data, dataLoading }) => {
+> = ({ id, title, year, agency, data, dataLoading }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
+  const [agencyInfo, setAgencyInfo] = useState<v2AgencyTotalsYear>();
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
@@ -84,10 +84,30 @@ const AgencyPageWithoutNavigation: React.FC<
         );
         setPlotData(normalizePlotData(transparencyPlot));
       } catch (err) {
-        router.push('/404');
+        throw new Error(
+          `Erro ao buscar os dados do índice de transparência - ${err}`,
+        );
       }
     }
   }
+
+  const fetchAgencyInfo = useCallback(async () => {
+    try {
+      const { data: response } = await api.ui.get(
+        `/v2/orgao/totais/${agency.id_orgao}/${year}`,
+      );
+
+      setAgencyInfo(response);
+    } catch (err) {
+      throw new Error(
+        `Erro ao buscar a data da última coleta do ${title} - ${err}`,
+      );
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchAgencyInfo();
+  }, [fetchAgencyInfo]);
 
   return (
     <Container fixed>
@@ -95,7 +115,7 @@ const AgencyPageWithoutNavigation: React.FC<
         <MoreInfoAccordion
           ombudsman={agency?.ouvidoria}
           twitterHandle={agency?.twitter_handle}
-          timestamp={agencyTotals?.meses?.at(-1).timestamp.seconds}
+          timestamp={agencyInfo?.meses?.at(-1).timestamp.seconds}
           repository=""
         >
           <Typography variant="h2" textAlign="center" width="100%">
@@ -138,7 +158,7 @@ const AgencyPageWithoutNavigation: React.FC<
                   >
                     COMPARTILHAR
                   </Button>
-                  {agencyTotals?.package && (
+                  {agencyInfo?.package && (
                     <Button
                       variant="outlined"
                       color="info"
@@ -156,7 +176,7 @@ const AgencyPageWithoutNavigation: React.FC<
                         BAIXAR
                       </Typography>
                       <Typography variant="button" color="#00bfa6">
-                        {formatBytes(agencyTotals?.package.size)}
+                        {formatBytes(agencyInfo?.package.size)}
                       </Typography>
                     </Button>
                   )}
@@ -179,7 +199,7 @@ const AgencyPageWithoutNavigation: React.FC<
                   >
                     COMPARTILHAR
                   </Button>
-                  {agencyTotals?.package && (
+                  {agencyInfo?.package && (
                     <Button
                       variant="outlined"
                       color="info"
@@ -197,7 +217,7 @@ const AgencyPageWithoutNavigation: React.FC<
                         BAIXAR
                       </Typography>
                       <Typography variant="button" color="#00bfa6">
-                        {formatBytes(agencyTotals?.package.size)}
+                        {formatBytes(agencyInfo?.package.size)}
                       </Typography>
                     </Button>
                   )}
