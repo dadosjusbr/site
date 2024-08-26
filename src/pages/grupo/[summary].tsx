@@ -215,7 +215,7 @@ export const getStaticProps: GetStaticProps = async context => {
     };
   } catch (error) {
     throw new Error(
-      `Erro ao buscar dados do grupo do grupo de órgãos - ${error}`,
+      `Erro ao buscar dados do grupo de órgãos - ${error}`,
     );
   }
 };
