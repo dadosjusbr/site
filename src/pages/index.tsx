@@ -185,7 +185,7 @@ export const getStaticProps: GetStaticProps = async () => {
     };
   } catch (err) {
     throw new Error(
-      `Os dados da página inicial não estando sendo retornados pela API - ${err}`,
+      `Os dados da página inicial não estão sendo retornados pela API - ${err}`,
     );
   }
 };
