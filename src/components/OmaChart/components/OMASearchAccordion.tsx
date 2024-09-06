@@ -6,7 +6,7 @@ import {
   Grid,
   Button,
 } from '@mui/material';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
@@ -18,7 +18,6 @@ import { searchHandleClick } from '../../../functions/query';
 import { getCurrentYear } from '../../../functions/currentYear';
 import ShareModal from '../../Common/ShareModal';
 import { getSearchUrlParameter } from '../../../functions/url';
-import api from '../../../services/api';
 
 type SearchAccordionProps = {
   selectedYears: number;
@@ -45,7 +44,7 @@ const SearchAccordion = ({
   const [numRowsIfAvailable, setNumRowsIfAvailable] = useState(0);
   const [query, setQuery] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const isFirstRender = useRef(true);
+  const [URLToChange] = useState(new URL(window.location.href));
 
   const [expanded, setExpanded] = useState(false);
 
@@ -53,40 +52,42 @@ const SearchAccordion = ({
     setCategory('Tudo');
   };
 
-  const firstRequest = async () => {
-    setLoading(true);
-    setShowResults(false);
-    try {
-      const url = new URL(window.location.href);
-      setQuery(url.search);
-      const res = await api.ui.get(`/v2/pesquisar${url.search}`);
-      const data = res.data.result.map((d, i) => {
-        const item = d;
-        item.id = i + 1;
-        return item;
-      });
-      setResult(data);
-      setDownloadAvailable(res.data.download_available);
-      setDownloadLimit(res.data.download_limit);
-      setNumRowsIfAvailable(res.data.num_rows_if_available);
-      setShowResults(true);
-    } catch (error) {
-      setResult([]);
-      setDownloadAvailable(false);
-      setShowResults(false);
-    } finally {
-      setLoading(false);
-      setExpanded(true);
-    }
+  const SearchHandleClick = () => {
+    searchHandleClick({
+      selectedYears,
+      years,
+      selectedMonths,
+      selectedAgencies,
+      category,
+      setLoading,
+      setResult,
+      setDownloadAvailable,
+      setNumRowsIfAvailable,
+      setShowResults,
+      setQuery,
+      setDownloadLimit,
+    });
+    URLToChange.searchParams.set('anos', selectedYears.toString());
+    URLToChange.searchParams.set(
+      'meses',
+      selectedMonths.map(m => String(m.value)).join(','),
+    );
+    URLToChange.searchParams.set(
+      'categorias',
+      category
+        .split(' ')
+        .at(category === 'Remuneração base' ? -1 : 0)
+        .toLowerCase(),
+    );
   };
 
   useEffect(() => {
     setCategory(getSearchUrlParameter('categorias') as string);
 
-    const url = new URL(window.location.href);
     let timer: NodeJS.Timeout;
-    if (url.search.includes('categorias')) {
-      firstRequest();
+    if (URLToChange.search.includes('categorias')) {
+      setExpanded(true);
+
       timer = setTimeout(() => {
         window.location.assign('#search-accordion');
       }, 1500);
@@ -94,19 +95,6 @@ const SearchAccordion = ({
 
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    Search.setSearchURLFunc(
-      selectedYears,
-      selectedMonths,
-      selectedAgencies,
-      category,
-    );
-  }, [category]);
 
   return (
     <Grid item xs={12} md={20}>
@@ -134,22 +122,7 @@ const SearchAccordion = ({
               <Search.Button
                 color="secondary"
                 loading={loading}
-                onClick={() =>
-                  searchHandleClick({
-                    selectedYears,
-                    years,
-                    selectedMonths,
-                    selectedAgencies,
-                    category,
-                    setLoading,
-                    setResult,
-                    setDownloadAvailable,
-                    setNumRowsIfAvailable,
-                    setShowResults,
-                    setQuery,
-                    setDownloadLimit,
-                  })
-                }
+                onClick={SearchHandleClick}
                 startIcon={<SearchOutlinedIcon />}
               >
                 Pesquisar
@@ -196,7 +169,7 @@ const SearchAccordion = ({
           <ShareModal
             isOpen={modalIsOpen}
             agencyName={selectedAgencies?.at(0).nome}
-            url={`${window.location.href.replace(window.location.hash, '')}`}
+            url={URLToChange.toString()}
             onRequestClose={() => setModalIsOpen(false)}
           />
         </AccordionDetails>

@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   Accordion,
   AccordionSummary,
@@ -6,7 +8,6 @@ import {
   Grid,
   Button,
 } from '@mui/material';
-import { useState, useEffect, useRef } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
@@ -18,7 +19,6 @@ import { searchHandleClick } from '../../../functions/query';
 import { getCurrentYear } from '../../../functions/currentYear';
 import ShareModal from '../../Common/ShareModal';
 import { getSearchUrlParameter } from '../../../functions/url';
-import api from '../../../services/api';
 import { months } from '../../../@types/MONTHS';
 
 type SearchAccordionProps = {
@@ -35,6 +35,7 @@ const SearchAccordion = ({
     years.push(i);
   }
 
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [selectedMonths, setSelectedMonths] = useState(months);
   const [category, setCategory] = useState('Tudo');
@@ -45,7 +46,9 @@ const SearchAccordion = ({
   const [numRowsIfAvailable, setNumRowsIfAvailable] = useState(0);
   const [query, setQuery] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const isFirstRender = useRef(true);
+  const [URLToChange, setURLToChange] = useState(
+    new URL(`https://dadosjusbr.org${router.asPath}`),
+  );
 
   const [expanded, setExpanded] = useState(false);
 
@@ -54,41 +57,47 @@ const SearchAccordion = ({
     setSelectedMonths(months);
   };
 
-  const firstRequest = async () => {
-    setLoading(true);
-    setShowResults(false);
-    try {
-      const url = new URL(window.location.href);
-      setQuery(url.search);
-      const res = await api.ui.get(`/v2/pesquisar${url.search}`);
-      const data = res.data.result.map((d, i) => {
-        const item = d;
-        item.id = i + 1;
-        return item;
-      });
-      setResult(data);
-      setDownloadAvailable(res.data.download_available);
-      setDownloadLimit(res.data.download_limit);
-      setNumRowsIfAvailable(res.data.num_rows_if_available);
-      setShowResults(true);
-    } catch (error) {
-      setResult([]);
-      setDownloadAvailable(false);
-      setShowResults(false);
-    } finally {
-      setLoading(false);
-      setExpanded(true);
-    }
+  const SearchHandleClick = () => {
+    searchHandleClick({
+      selectedYears,
+      years,
+      selectedMonths,
+      selectedAgencies,
+      category,
+      setLoading,
+      setResult,
+      setDownloadAvailable,
+      setNumRowsIfAvailable,
+      setShowResults,
+      setQuery,
+      setDownloadLimit,
+    });
+    URLToChange.searchParams.set('anos', selectedYears.toString());
+    URLToChange.searchParams.set(
+      'meses',
+      selectedMonths.map(m => String(m.value)).join(','),
+    );
+    URLToChange.searchParams.set(
+      'categorias',
+      category
+        .split(' ')
+        .at(category === 'Remuneração base' ? -1 : 0)
+        .toLowerCase(),
+    );
   };
 
   useEffect(() => {
+    setURLToChange(new URL(window.location.href));
     setCategory(getSearchUrlParameter('categorias') as string);
     setSelectedMonths(getSearchUrlParameter('meses') as Month[]);
 
-    const url = new URL(window.location.href);
     let timer: NodeJS.Timeout;
-    if (url.search.includes('categorias') || url.search.includes('meses')) {
-      firstRequest();
+    if (
+      URLToChange.search.includes('categorias') ||
+      URLToChange.search.includes('meses')
+    ) {
+      setExpanded(true);
+
       timer = setTimeout(() => {
         window.location.assign('#search-accordion');
       }, 1500);
@@ -96,19 +105,6 @@ const SearchAccordion = ({
 
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    }
-    Search.setSearchURLFunc(
-      selectedYears,
-      selectedMonths,
-      selectedAgencies,
-      category,
-    );
-  }, [category, selectedMonths]);
 
   return (
     <Grid item xs={12} md={20}>
@@ -143,22 +139,7 @@ const SearchAccordion = ({
               <Search.Button
                 color="secondary"
                 loading={loading}
-                onClick={() =>
-                  searchHandleClick({
-                    selectedYears,
-                    years,
-                    selectedMonths,
-                    selectedAgencies,
-                    category,
-                    setLoading,
-                    setResult,
-                    setDownloadAvailable,
-                    setNumRowsIfAvailable,
-                    setShowResults,
-                    setQuery,
-                    setDownloadLimit,
-                  })
-                }
+                onClick={SearchHandleClick}
                 startIcon={<SearchOutlinedIcon />}
               >
                 Pesquisar
@@ -205,18 +186,7 @@ const SearchAccordion = ({
           <ShareModal
             isOpen={modalIsOpen}
             agencyName={selectedAgencies?.at(0).nome}
-            url={`https://dadosjusbr.org/orgao/${selectedAgencies
-              .map(a => a.id_orgao)
-              .join(',')}/${selectedYears.toString()}?orgaos=${selectedAgencies
-              .map(a => a.id_orgao)
-              .join(
-                ',',
-              )}&anos=${selectedYears.toString()}&meses=${selectedMonths
-              .map(m => String(m.value))
-              .join(',')}&categorias=${category
-              .split(' ')
-              .at(category === 'Remuneração base' ? -1 : 0)
-              .toLowerCase()}`}
+            url={URLToChange.toString()}
             onRequestClose={() => setModalIsOpen(false)}
           />
         </AccordionDetails>
