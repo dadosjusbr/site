@@ -72,7 +72,7 @@ export function HandleAccess({ text }: { text: string }) {
           <ListItemIcon>
             <Close color="error" />
           </ListItemIcon>
-          <Typography variant="subtitle2">--</Typography>
+          <Typography variant="subtitle2">Coleta manual</Typography>
         </Box>
       );
   }
