@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   Accordion,
   AccordionSummary,
@@ -34,6 +35,7 @@ const SearchAccordion = ({
     years.push(i);
   }
 
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [selectedYears, setSelectedYears] = useState(getCurrentYear());
   const [selectedMonths, setSelectedMonths] = useState(months);
@@ -45,7 +47,9 @@ const SearchAccordion = ({
   const [numRowsIfAvailable, setNumRowsIfAvailable] = useState(0);
   const [query, setQuery] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [URLToChange] = useState(new URL(window.location.href));
+  const [URLToChange, setURLToChange] = useState(
+    new URL(`https://dadosjusbr.org${router.asPath}`),
+  );
 
   const [expanded, setExpanded] = useState(false);
 
@@ -85,6 +89,7 @@ const SearchAccordion = ({
   };
 
   useEffect(() => {
+    setURLToChange(new URL(window.location.href));
     let timer: NodeJS.Timeout;
 
     if (window.location.pathname.split('/').includes('orgao')) {
@@ -195,7 +200,10 @@ const SearchAccordion = ({
           <ShareModal
             isOpen={modalIsOpen}
             agencyName={agencyName}
-            url={URLToChange.toString()}
+            url={`
+              ${URLToChange.origin}/orgao/${selectedAgencies.map(
+              d => d.id_orgao,
+            )}${URLToChange.search}`}
             onRequestClose={() => setModalIsOpen(false)}
           />
         </AccordionDetails>

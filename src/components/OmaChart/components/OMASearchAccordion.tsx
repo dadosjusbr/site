@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/router';
 import {
   Accordion,
   AccordionSummary,
@@ -6,7 +8,6 @@ import {
   Grid,
   Button,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import SearchOutlinedIcon from '@mui/icons-material/SearchOutlined';
 import SearchOffOutlinedIcon from '@mui/icons-material/SearchOffOutlined';
@@ -35,6 +36,7 @@ const SearchAccordion = ({
     years.push(i);
   }
 
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [category, setCategory] = useState('Tudo');
   const [showResults, setShowResults] = useState(false);
@@ -44,7 +46,9 @@ const SearchAccordion = ({
   const [numRowsIfAvailable, setNumRowsIfAvailable] = useState(0);
   const [query, setQuery] = useState('');
   const [modalIsOpen, setModalIsOpen] = useState(false);
-  const [URLToChange] = useState(new URL(window.location.href));
+  const [URLToChange, setURLToChange] = useState(
+    new URL(`https://dadosjusbr.org${router.asPath}`),
+  );
 
   const [expanded, setExpanded] = useState(false);
 
@@ -82,6 +86,7 @@ const SearchAccordion = ({
   };
 
   useEffect(() => {
+    setURLToChange(new URL(window.location.href));
     setCategory(getSearchUrlParameter('categorias') as string);
 
     let timer: NodeJS.Timeout;

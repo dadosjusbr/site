@@ -119,9 +119,9 @@ export default function SummaryPage({
           {(() => {
             if (typeof dataList !== 'undefined' && dataList.length > 0) {
               return dataList.map((agency, i) => (
-                <Suspense fallback={<CircularProgress />}>
-                  <Box mb={12} key={agency.id_orgao}>
-                    <div id={agency.id_orgao}>
+                <Box mb={12} key={agency.id_orgao}>
+                  <div id={agency.id_orgao}>
+                    <Suspense fallback={<CircularProgress />}>
                       <AgencyWithoutNavigation
                         data={chartData[i]?.dados_anuais}
                         dataLoading={false}
@@ -130,9 +130,9 @@ export default function SummaryPage({
                         year={getCurrentYear()}
                         agency={chartData[i]?.orgao}
                       />
-                    </div>
-                  </Box>
-                </Suspense>
+                    </Suspense>
+                  </div>
+                </Box>
               ));
             }
             return (
@@ -214,9 +214,7 @@ export const getStaticProps: GetStaticProps = async context => {
       revalidate: 3600,
     };
   } catch (error) {
-    throw new Error(
-      `Erro ao buscar dados do grupo de órgãos - ${error}`,
-    );
+    throw new Error(`Erro ao buscar dados do grupo de órgãos - ${error}`);
   }
 };
 const Page = styled.div`
