@@ -133,8 +133,8 @@ const index = ({
                 {graphType === 'media-por-membro' && (
                   <span>
                     <b>Média por membro:</b> Valor médio de remuneração por
-                    membro do órgão, considerando dados de membros com pelo
-                    menos 2 meses de participação no órgão.
+                    membro, considerando dados de membros com pelo menos 2 meses
+                    de participação no órgão.
                     <hr />
                   </span>
                 )}
