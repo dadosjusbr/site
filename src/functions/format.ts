@@ -50,7 +50,7 @@ function formatToAgency(input: string): string {
 }
 
 const formatCurrencyValue = (value: number, decimal_places = 0): string =>
-  value.toLocaleString('pt-BR', {
+  value?.toLocaleString('pt-BR', {
     style: 'currency',
     currency: 'BRL',
     maximumFractionDigits: decimal_places,
