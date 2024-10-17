@@ -233,6 +233,7 @@ const AgencyPageWithoutNavigation: React.FC<
             data={data}
             year={year}
             agency={agency}
+            perCapitaData={agencyInfo?.media_por_membro}
             dataLoading={dataLoading}
           />
         </Box>

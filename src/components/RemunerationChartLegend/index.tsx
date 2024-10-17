@@ -24,6 +24,7 @@ import { useRemunerationDataTypes } from '../../hooks/useRemunerationTypes';
 
 const index = ({
   agency,
+  perCapitaData,
   data,
   graphType,
   setGraphType,
@@ -39,6 +40,7 @@ const index = ({
   annual = false,
 }: {
   agency: Agency;
+  perCapitaData: perCapitaData;
   data: v2MonthTotals[] | AnnualSummaryData[];
   graphType: string;
   setGraphType: React.Dispatch<React.SetStateAction<string>>;
@@ -63,15 +65,18 @@ const index = ({
     discountsDataTypes,
   } = useRemunerationDataTypes(graphType);
 
-  const calculateTotal = (totalsMap: number[]) => {
+  const calculateTotal = (
+    totalsMap: number[],
+    tipo_remuneracao: keyof perCapitaData,
+  ) => {
     let total = 0;
     totalsMap.forEach(w => {
       total += w;
     });
 
-    if (graphType === 'total' || !agency) {
-      return formatCurrencyValue(total, 1);
-    }
+    if (graphType === 'total' || !agency) return formatCurrencyValue(total, 1);
+    if (graphType === 'media-por-membro')
+      return formatCurrencyValue(perCapitaData?.[tipo_remuneracao], 1);
 
     return formatCurrencyValue(total / data.length, 1);
   };
@@ -125,6 +130,14 @@ const index = ({
             placement="bottom"
             title={
               <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
+                {graphType === 'media-por-membro' && (
+                  <span>
+                    <b>Média por membro:</b> Valor médio de remuneração por
+                    membro, considerando dados de membros com pelo menos 2 meses
+                    de participação no órgão.
+                    <hr />
+                  </span>
+                )}
                 <b>Remuneração:</b> Valor final da soma entre salário e
                 benefícios, retirando os descontos.
                 <hr />
@@ -217,7 +230,7 @@ const index = ({
                     d[baseRemunerationDataTypes],
                 );
 
-                return calculateTotal(yearlyTotals);
+                return calculateTotal(yearlyTotals, 'remuneracao_base');
               })()}
             </Typography>
           </Grid>
@@ -249,7 +262,7 @@ const index = ({
                     d[otherRemunerationsDataTypes],
                 );
 
-                return calculateTotal(yearlyTotals);
+                return calculateTotal(yearlyTotals, 'outras_remuneracoes');
               })()}
             </Typography>
           </Grid>
@@ -277,7 +290,7 @@ const index = ({
                     d[discountsDataTypes],
                 );
 
-                return calculateTotal(yearlyTotals);
+                return calculateTotal(yearlyTotals, 'descontos');
               })()}
             </Typography>
           </Grid>
@@ -309,7 +322,7 @@ const index = ({
                     d[netRemunerationDataTypes],
                 );
 
-                return calculateTotal(yearlyTotals);
+                return calculateTotal(yearlyTotals, 'remuneracoes');
               })()}
             </Typography>
           </Grid>
