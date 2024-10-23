@@ -100,9 +100,11 @@ const rows = [
 export default function DataDictionary() {
   return (
     <ThemeProvider theme={theme}>
-      <Paper>
+      <Paper elevation={4}>
         <TableContainer
           sx={{
+            border: '1px solid #9b9b9b',
+            borderRadius: '4px',
             maxHeight: 300,
             '&::-webkit-scrollbar': {
               width: '5px',
