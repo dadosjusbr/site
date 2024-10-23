@@ -71,9 +71,17 @@ type v2AgencySummary = {
   resumo_rubricas: ItemSummary;
 };
 
+type perCapitaData = {
+  remuneracao_base: number;
+  outras_remuneracoes: number;
+  descontos: number;
+  remuneracoes: number;
+};
+
 type v2AgencyTotalsYear = {
   ano: number;
   orgao: Agency;
+  media_por_membro: perCapitaData;
   meses: v2MonthTotals[];
   package: Backup;
 };

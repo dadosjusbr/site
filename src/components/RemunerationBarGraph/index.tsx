@@ -45,6 +45,7 @@ export interface AgencyPageWithNavigationProps {
   year: number;
   agencyInfo: AllAgencyInformation;
   agency: Agency;
+  media_por_membro: perCapitaData;
   title: string;
   setYear: (y: number) => void;
   data: v2MonthTotals[];
@@ -59,6 +60,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
   title,
   year,
   agency,
+  media_por_membro,
   setYear,
   data,
   dataLoading,
@@ -257,6 +259,7 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
               data={data}
               year={year}
               agency={agency}
+              media_por_membro={media_por_membro}
               dataLoading={dataLoading}
               selectedMonth={navigableMonth}
             />

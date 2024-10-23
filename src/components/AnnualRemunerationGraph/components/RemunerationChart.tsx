@@ -22,6 +22,7 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 type AnnualRemunerationGraphProps = {
   year: number;
   agency: Agency;
+  perCapitaData: perCapitaData;
   data: AnnualSummaryData[];
   dataLoading: boolean;
 };
@@ -29,6 +30,7 @@ type AnnualRemunerationGraphProps = {
 const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   year,
   agency,
+  perCapitaData,
   data,
   dataLoading = true,
 }) => {
@@ -43,13 +45,14 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
 
   return (
     <>
-      {agency && agency?.coletando && !data ? (
+      {agency && agency?.coletando && !agency?.possui_dados ? (
         <NotCollecting agency={agency} />
       ) : (
         <Box>
           <Paper elevation={0}>
             <RemunerationChartLegend
               agency={agency}
+              perCapitaData={perCapitaData}
               data={data}
               graphType={graphType}
               setGraphType={setGraphType}
