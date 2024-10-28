@@ -1,11 +1,11 @@
 Campo,Tipo,Descrição,Exemplo
 orgao,string,Sigla do órgão,TJMSP
-mes,int,Mês de referência do contracheque,1
-ano,int,Ano de referência do contracheque,2024
+mes,int,Mês de referência da remuneração,1
+ano,int,Ano de referência da remuneração,2024
 matricula,string,Identificador do membro em cada órgão,21432
 nome,string,Nome do membro,José da Silva
 cargo,string,Cargo desempenhado pelo membro,Juiz do Tribunal de Justiça Militar
 lotacao,string,Local de lotação do membro,Auditoria da Justiça Militar Estadual
-categoria_cotnracheque,string,Categoria do contracheque,Descontos
-detalhamento_contracheque,string,Rubrica associada ao contracheque,Imposto de renda
+categoria_remuneracao,string,Categoria da remuneração,Descontos
+detalhamento_remuneracao,string,Rubrica associada ao remuneração,Imposto de renda
 valor,float,Valor da remuneração,"-10516,4"

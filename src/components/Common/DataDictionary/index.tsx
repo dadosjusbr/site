@@ -61,8 +61,8 @@ function createData(
 
 const rows = [
   createData('orgao', 'string', 'Sigla do órgão', 'TJMSP'),
-  createData('mes', 'int', 'Mês de referência do contracheque', '1'),
-  createData('ano', 'int', 'Ano de referência do contracheque', '2024'),
+  createData('mes', 'int', 'Mês de referência da remuneração', '1'),
+  createData('ano', 'int', 'Ano de referência da remuneração', '2024'),
   createData(
     'matricula',
     'string',
@@ -83,15 +83,15 @@ const rows = [
     'Auditoria da Justiça Militar Estadual',
   ),
   createData(
-    'categoria_contracheque',
+    'categoria_remuneracao',
     'string',
-    'Categoria do contracheque',
+    'Categoria da remuneração',
     'Descontos',
   ),
   createData(
-    'detalhamento_contracheque',
+    'detalhamento_remuneracao',
     'string',
-    'Rubrica associada ao contracheque',
+    'Rubrica associada a remuneração',
     'Imposto de renda',
   ),
   createData('valor', 'float', 'Valor da remuneração', '-10516,40'),
