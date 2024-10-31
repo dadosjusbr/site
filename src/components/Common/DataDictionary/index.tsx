@@ -66,7 +66,7 @@ const rows = [
   createData(
     'matricula',
     'string',
-    'Indentificador do membro em cada órgão',
+    'Identificador do membro em cada órgão',
     '0021432',
   ),
   createData('nome', 'string', 'Nome do membro', 'José da Silva'),
