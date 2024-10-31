@@ -1,43 +1,19 @@
 import { useState } from 'react';
 import Head from 'next/head';
 import styled from 'styled-components';
-import {
-  Container,
-  Box,
-  Typography,
-  List,
-  ListItem,
-  ListItemText,
-  ListItemIcon,
-  Link,
-  Grid,
-} from '@mui/material';
+import { Container, Box, Typography, Link, Grid } from '@mui/material';
 
 import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
 import api from '../services/api';
-import { formatAgency, orderStringsWithNum } from '../functions/format';
 import DownloadDumpDialog from '../components/Common/DownloadDumpDialog';
 import { useDownloadDump } from '../hooks/useDownloadDump';
 import Video from '../components/Video';
+import StatusCards from '../components/Common/StatusCards';
 
 export default function Index({ ais }) {
   const [openDialog, setOpenDialog] = useState(false);
   const [fileLink] = useDownloadDump();
-
-  const collecting = ais
-    .filter(ag => ag.coletando === undefined)
-    .sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao));
-  const notCollecting = ais
-    .filter(ag => ag.coletando !== undefined)
-    .sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao));
-
-  const getReasons = ag => {
-    if (ag.coletando && ag.coletando.length > 0 && ag.coletando[0].descricao) {
-      return ag.coletando[0].descricao.map(desc => `${desc}. `);
-    }
-    return '';
-  };
 
   return (
     <Page>
@@ -99,7 +75,6 @@ export default function Index({ ais }) {
                   </Link>{' '}
                   no Github.
                   <br />
-                  <br />
                   Qualquer problema encontrado na coleta ou integridade dos
                   dados pode ser informado através de uma issue no{' '}
                   <Link
@@ -112,51 +87,26 @@ export default function Index({ ais }) {
                   </Link>{' '}
                   no Github.
                   <br />
+                  <br />
+                  Você pode fazer o download de todas as informações de
+                  remunerações da nossa base de dados por{' '}
+                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  <Link
+                    underline="always"
+                    onClick={() => setOpenDialog(true)}
+                    target="_blank"
+                    rel="noopener"
+                    sx={{ cursor: 'pointer' }}
+                  >
+                    este link.
+                  </Link>
+                  <br />
+                  <br />
                 </Typography>
               </Grid>
             </Grid>
-            <Typography variant="body1" gutterBottom my={4}>
-              Você pode fazer o download de todas as informações de remunerações
-              da nossa base de dados por{' '}
-              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-              <Link
-                underline="always"
-                onClick={() => setOpenDialog(true)}
-                target="_blank"
-                rel="noopener"
-                sx={{ cursor: 'pointer' }}
-              >
-                este link.
-              </Link>
-            </Typography>
-            <Typography variant="h3" gutterBottom>
-              Órgãos monitorados pelo DadosJusBR: {collecting.length}
-            </Typography>
-            <List dense>
-              {collecting.map(ag => (
-                <ListItem key={ag.id_orgao}>
-                  <ListItemIcon>
-                    <Upper>{formatAgency(ag.id_orgao)}</Upper>
-                  </ListItemIcon>
-                  <ListItemText>{ag.nome}</ListItemText>
-                </ListItem>
-              ))}
-            </List>
-            <Typography variant="h3" gutterBottom pt={4}>
-              Órgãos NÃO monitorados pelo DadosJusBR: {notCollecting.length}
-            </Typography>
-            <List dense>
-              {notCollecting.map(ag => (
-                <ListItem key={ag.id_orgao}>
-                  <ListItemIcon>
-                    <Upper>{formatAgency(ag.id_orgao)}</Upper>
-                  </ListItemIcon>
-                  <ListItemText secondary={getReasons(ag)}>
-                    {ag.nome}
-                  </ListItemText>
-                </ListItem>
-              ))}
-            </List>
+
+            <StatusCards ais={ais} />
           </Box>
         </Box>
         <DownloadDumpDialog
@@ -186,8 +136,4 @@ export async function getStaticProps() {
 
 const Page = styled.div`
   background: #3e5363;
-`;
-
-const Upper = styled.span`
-  text-transform: uppercase;
 `;
