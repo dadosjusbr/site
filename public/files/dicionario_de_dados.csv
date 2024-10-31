@@ -7,5 +7,5 @@ nome,string,Nome do membro,José da Silva
 cargo,string,Cargo desempenhado pelo membro,Juiz do Tribunal de Justiça Militar
 lotacao,string,Local de lotação do membro,Auditoria da Justiça Militar Estadual
 categoria_remuneracao,string,Categoria da remuneração,Descontos
-detalhamento_remuneracao,string,Rubrica associada ao remuneração,Imposto de renda
+detalhamento_remuneracao,string,Rubrica associada a remuneração,Imposto de renda
 valor,float,Valor da remuneração,"-10516,4"
