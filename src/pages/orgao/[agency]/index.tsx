@@ -58,7 +58,6 @@ export default function AnualAgencyPage({
           id={id}
           year={year}
           agency={agency}
-          dataLoading={false}
           title={fullName}
         />
       </Box>

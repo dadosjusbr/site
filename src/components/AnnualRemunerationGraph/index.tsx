@@ -59,15 +59,15 @@ export interface AgencyPageWithoutNavigationProps {
   agency: Agency;
   title: string;
   data: AnnualSummaryData[];
-  dataLoading: boolean;
 }
 
 const AgencyPageWithoutNavigation: React.FC<
   AgencyPageWithoutNavigationProps
-> = ({ id, title, year, agency, data, dataLoading }) => {
+> = ({ id, title, year, agency, data }) => {
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [plotData, setPlotData] = useState<AggregateIndexes[]>([]);
   const [agencyInfo, setAgencyInfo] = useState<v2AgencyTotalsYear>();
+  const [loading, setLoading] = useState(true);
   const fileLink = `${process.env.S3_REPO_URL}/${id}/datapackage/${id}.zip`;
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
@@ -102,12 +102,22 @@ const AgencyPageWithoutNavigation: React.FC<
       throw new Error(
         `Erro ao buscar a data da última coleta do ${title} - ${err}`,
       );
+    } finally {
+      setLoading(false);
     }
   }, []);
 
   useEffect(() => {
     fetchAgencyInfo();
   }, [fetchAgencyInfo]);
+
+  if (loading) {
+    return (
+      <Box display="flex" justifyContent="center" alignItems="center">
+        <CircularProgress />
+      </Box>
+    );
+  }
 
   return (
     <Container fixed>
@@ -229,13 +239,15 @@ const AgencyPageWithoutNavigation: React.FC<
       </Box>
       <ThemeProvider theme={light}>
         <Box>
-          <AnnualRemunerationGraph
-            data={data}
-            year={year}
-            agency={agency}
-            perCapitaData={agencyInfo?.media_por_membro}
-            dataLoading={dataLoading}
-          />
+          <Suspense fallback={<CircularProgress />}>
+            <AnnualRemunerationGraph
+              data={data}
+              year={year}
+              agency={agency}
+              perCapitaData={agencyInfo?.media_por_membro}
+              dataLoading={loading}
+            />
+          </Suspense>
         </Box>
         {hasData ? (
           <>

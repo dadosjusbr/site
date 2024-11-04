@@ -124,7 +124,6 @@ export default function SummaryPage({
                     <Suspense fallback={<CircularProgress />}>
                       <AgencyWithoutNavigation
                         data={chartData[i]?.dados_anuais}
-                        dataLoading={false}
                         id={agency?.id_orgao}
                         title={agency?.nome}
                         year={getCurrentYear()}
