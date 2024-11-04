@@ -9,6 +9,7 @@ type SummaryzedMI = {
   metadados: Metadata;
   indice_transparencia: Score;
   dados_coleta: Collect;
+  coleta_manual: boolean;
   error?: MiError;
 };
 

@@ -38,6 +38,7 @@ const AlertModal = ({
           alignItems: 'center',
           width: 'fit-content',
           cursor: 'pointer',
+          textAlign: 'start',
         }}
         onClick={() => handleOpen()}
       >

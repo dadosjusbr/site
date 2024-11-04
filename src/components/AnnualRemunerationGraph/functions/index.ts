@@ -211,9 +211,21 @@ export const createDataArray = ({
   return dataArray;
 };
 
+const latestData = (allAgencyInfo: AllAgencyInformation) =>
+  allAgencyInfo?.coletas.reduce((latest, current) => {
+    if (
+      current.ano > latest.ano ||
+      (current.ano === latest.ano && current.mes > latest.mes)
+    ) {
+      return current;
+    }
+    return latest;
+  }, allAgencyInfo.coletas[0]);
+
 export const warningMessage = (
   data: AnnualSummaryData[],
   agency: Agency,
+  manualCollection: AllAgencyInformation,
   baseRemunerationDataTypes: string,
   otherRemunerationsDataTypes: string,
 ): string => {
@@ -239,6 +251,13 @@ export const warningMessage = (
 
     return `Este órgão foi criado em 2022 e não publicou dados de ${meses}
           ${meses > 1 ? 'meses.' : meses === 1 ? 'mês.' : ''}`;
+  }
+
+  if (latestData(manualCollection)?.coleta_manual) {
+    return `Este órgão depende de um processo manual de coleta por motivos de más práticas de transparência: ${manualCollection.coletando[0].descricao
+      .map(d => d)
+      .join(',')
+      .toLowerCase()}.`;
   }
 
   if (
