@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { forwardRef, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import {
   Box,
@@ -9,6 +9,8 @@ import {
   ListItemIcon,
   ListItemText,
   CircularProgress,
+  styled as muiStyled,
+  ListProps,
 } from '@mui/material';
 import { formatAgency } from '../../../functions/format';
 import api from '../../../services/api';
@@ -94,7 +96,8 @@ const StatusCards = ({ ais }) => {
       display="flex"
       justifyContent="space-between"
       gap={2}
-      flexDirection="row"
+      flexDirection={{ xs: 'column', md: 'row' }}
+      mt={{ xs: 4, sm: 14, md: 0 }}
     >
       {loading ? (
         <CircularProgress />
@@ -116,26 +119,7 @@ const StatusCards = ({ ais }) => {
                 A obtenção dos contracheques ocorre mensalmente por meio de
                 robôs.
               </Typography>
-              <List
-                dense
-                disablePadding
-                sx={{
-                  maxHeight: '35vh',
-                  overflow: 'auto',
-                  '&::-webkit-scrollbar': {
-                    width: '0.4em',
-                  },
-                  '&::-webkit-scrollbar-track': {
-                    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                  },
-                  '&::-webkit-scrollbar-thumb': {
-                    backgroundColor: 'rgba(0,0,0,.1)',
-                    outline: '1px solid slategrey',
-                    borderRadius: '16px',
-                  },
-                }}
-              >
+              <ScrollbarList dense disablePadding>
                 {collecting.map(ag => (
                   <ListItem key={ag.id_orgao}>
                     <ListItemIcon>
@@ -144,7 +128,7 @@ const StatusCards = ({ ais }) => {
                     <ListItemText>{ag.nome}</ListItemText>
                   </ListItem>
                 ))}
-              </List>
+              </ScrollbarList>
             </Box>
           </Paper>
 
@@ -164,26 +148,7 @@ const StatusCards = ({ ais }) => {
                 Portais não possibilitam o monitoramento automático, dados são
                 obtidos manualmente a cada seis meses.
               </Typography>
-              <List
-                dense
-                disablePadding
-                sx={{
-                  maxHeight: '35vh',
-                  overflow: 'auto',
-                  '&::-webkit-scrollbar': {
-                    width: '0.4em',
-                  },
-                  '&::-webkit-scrollbar-track': {
-                    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                  },
-                  '&::-webkit-scrollbar-thumb': {
-                    backgroundColor: 'rgba(0,0,0,.1)',
-                    outline: '1px solid slategrey',
-                    borderRadius: '16px',
-                  },
-                }}
-              >
+              <ScrollbarList dense disablePadding>
                 {manualCollection.map(ag => (
                   <ListItem key={ag.id_orgao}>
                     <ListItemIcon>
@@ -194,7 +159,7 @@ const StatusCards = ({ ais }) => {
                     </ListItemText>
                   </ListItem>
                 ))}
-              </List>
+              </ScrollbarList>
             </Box>
           </Paper>
 
@@ -214,26 +179,7 @@ const StatusCards = ({ ais }) => {
                 Estrutura dos dados não permite a individualização de
                 contracheques &#40;como ocultação de nomes e matrículas&#41;.
               </Typography>
-              <List
-                dense
-                disablePadding
-                sx={{
-                  maxHeight: '35vh',
-                  overflow: 'auto',
-                  '&::-webkit-scrollbar': {
-                    width: '0.4em',
-                  },
-                  '&::-webkit-scrollbar-track': {
-                    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
-                  },
-                  '&::-webkit-scrollbar-thumb': {
-                    backgroundColor: 'rgba(0,0,0,.1)',
-                    outline: '1px solid slategrey',
-                    borderRadius: '16px',
-                  },
-                }}
-              >
+              <ScrollbarList dense disablePadding>
                 {notCollecting.map(ag => (
                   <ListItem key={ag.id_orgao}>
                     <ListItemIcon>
@@ -244,7 +190,7 @@ const StatusCards = ({ ais }) => {
                     </ListItemText>
                   </ListItem>
                 ))}
-              </List>
+              </ScrollbarList>
             </Box>
           </Paper>
         </>
@@ -254,6 +200,27 @@ const StatusCards = ({ ais }) => {
 };
 
 export default StatusCards;
+
+const ScrollbarList = muiStyled(
+  forwardRef((props: ListProps, ref: React.Ref<HTMLOListElement>) => (
+    <List {...props} ref={ref} />
+  )),
+)(() => ({
+  maxHeight: '30.5vh',
+  overflow: 'auto',
+  '&::-webkit-scrollbar': {
+    width: '0.4em',
+  },
+  '&::-webkit-scrollbar-track': {
+    boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
+    webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.5)',
+  },
+  '&::-webkit-scrollbar-thumb': {
+    backgroundColor: 'rgba(0,0,0,.1)',
+    outline: '1px solid slategrey',
+    borderRadius: '16px',
+  },
+}));
 
 const Upper = styled.span`
   text-transform: uppercase;
