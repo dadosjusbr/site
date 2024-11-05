@@ -1,4 +1,4 @@
-import { useState, Suspense } from 'react';
+import { useState, Suspense, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import {
   Box,
@@ -16,6 +16,7 @@ import { graphOptions, graphSeries } from '../functions/graphConfigs';
 import NotCollecting from '../../Common/NotCollecting';
 import RemunerationChartLegend from '../../RemunerationChartLegend';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
+import api from '../../../services/api';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
@@ -40,8 +41,21 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   const [hidingBenefits, setHidingBenefits] = useState(false);
   const [hidingNoData, setHidingNoData] = useState(false);
   const [graphType, setGraphType] = useState('media-por-membro');
+  const [agencyInfo, setAgencyInfo] = useState<AllAgencyInformation>();
   const { baseRemunerationDataTypes, otherRemunerationsDataTypes } =
     useRemunerationDataTypes(graphType);
+
+  useEffect(() => {
+    (async () => {
+      const {
+        data: response,
+      }: {
+        data: AllAgencyInformation;
+      } = await api.default.get(`/dados/${agency.id_orgao}`);
+
+      setAgencyInfo(response);
+    })();
+  }, []);
 
   return (
     <>
@@ -67,6 +81,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
               warningMessage={warningMessage(
                 data,
                 agency,
+                agencyInfo,
                 baseRemunerationDataTypes,
                 otherRemunerationsDataTypes,
               )}

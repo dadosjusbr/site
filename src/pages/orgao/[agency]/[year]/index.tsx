@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Head from 'next/head';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { Box, CircularProgress } from '@mui/material';
 import Header from '../../../../components/Essentials/Header';
 import Footer from '../../../../components/Essentials/Footer';
 import api from '../../../../services/api';
@@ -29,15 +30,13 @@ export default function AgencyPage({
   summaryPackage: Backup;
 }) {
   const [agencyInfo, setAgencyInfo] = useState<AllAgencyInformation>();
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
   function navigateToGivenYear(y: number) {
     router.push(`/orgao/${id}/${y}`);
   }
   const pageTitle = `${formatAgency(id).toUpperCase()} / ${year}`;
 
-  useEffect(() => {
-    fetchMIData();
-  }, []);
   const fetchMIData = async () => {
     try {
       const { data: agencyInfoResponse } = await api.default.get(
@@ -46,8 +45,15 @@ export default function AgencyPage({
       setAgencyInfo(agencyInfoResponse);
     } catch (error) {
       setAgencyInfo(null);
+    } finally {
+      setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchMIData();
+  }, []);
+
   return (
     <Page>
       <Head>
@@ -64,19 +70,30 @@ export default function AgencyPage({
       </Head>
       <Header />
       <Container>
-        <AgencyWithNavigation
-          data={data}
-          id={id}
-          media_por_membro={media_por_membro}
-          agencyInfo={agencyInfo}
-          year={year}
-          agency={agency}
-          dataLoading={false}
-          title={fullName}
-          navigableMonth={navigableMonth}
-          setYear={navigateToGivenYear}
-          summaryPackage={summaryPackage && summaryPackage}
-        />
+        {loading ? (
+          <Box
+            display="flex"
+            justifyContent="center"
+            alignItems="center"
+            mb={4}
+          >
+            <CircularProgress />
+          </Box>
+        ) : (
+          <AgencyWithNavigation
+            data={data}
+            id={id}
+            media_por_membro={media_por_membro}
+            agencyInfo={agencyInfo}
+            year={year}
+            agency={agency}
+            dataLoading={false}
+            title={fullName}
+            navigableMonth={navigableMonth}
+            setYear={navigateToGivenYear}
+            summaryPackage={summaryPackage && summaryPackage}
+          />
+        )}
       </Container>
       <Footer />
     </Page>
