@@ -5,8 +5,10 @@ import {
   totalWaste,
   yearList,
 } from '.';
-import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
-import { getCurrentYear } from '../../../functions/currentYear';
+import COLLECT_INFOS, {
+  YEARS_WITHOUT_MANUAL_COLLECTION,
+} from '../../../@types/COLLECT_INFOS';
+import { findLatestData, getCurrentYear } from '../../../functions/currentYear';
 import { formatCurrencyValue } from '../../../functions/format';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
 
@@ -16,11 +18,14 @@ const currentYear = getCurrentYear();
 export const graphAnnotations = ({
   data,
   matches,
+  agencyInfo,
 }: {
   data: AnnualSummaryData[];
   matches: boolean;
+  agencyInfo: AllAgencyInformation;
 }): XAxisAnnotations[] => {
-  const yearsArr = getYearWithIncompleteData(data).map(d =>
+  const manualCollection = findLatestData(agencyInfo)?.coleta_manual;
+  const incompleteYears = getYearWithIncompleteData(data).map(d =>
     d.ano === undefined ? 0 : d.ano,
   );
 
@@ -40,11 +45,33 @@ export const graphAnnotations = ({
     },
   };
 
-  return yearsArr.map(d => ({
+  const i = incompleteYears.map(d => ({
     x: d,
     label: annotationsLabel,
     borderWidth: 0,
   }));
+
+  if (manualCollection) {
+    /* No casdo do MPAL, ele tem dados em anos em que a coleta manual ainda não foi realizada
+      porque fazia parte da coleta automatizada, então é necessário filtrar esses anos */
+    const filteredYears = YEARS_WITHOUT_MANUAL_COLLECTION.filter(year =>
+      yearListArr.filter(y => !data.map(d => d.ano).includes(y)).includes(year),
+    );
+
+    const m = filteredYears.map(d => ({
+      x: d,
+      label: {
+        ...annotationsLabel,
+        text: 'Coleta manual não realizada',
+        offsetX: matches ? 0 : 30,
+      },
+      borderWidth: 0,
+    }));
+
+    return i.concat(m);
+  }
+
+  return i;
 };
 
 export const graphOptions = ({
@@ -52,9 +79,11 @@ export const graphOptions = ({
   data,
   matches,
   graphType,
+  agencyInfo,
 }: {
   agency: Agency;
   data: AnnualSummaryData[];
+  agencyInfo: AllAgencyInformation;
   matches: boolean;
   graphType: string;
 }): ApexCharts.ApexOptions => {
@@ -218,7 +247,7 @@ export const graphOptions = ({
       },
     },
     annotations: {
-      xaxis: graphAnnotations({ data, matches }),
+      xaxis: graphAnnotations({ data, matches, agencyInfo }),
     },
     markers: {
       size: 5,
@@ -342,9 +371,11 @@ export const graphSeries = ({
   hidingWage,
   hidingNoData,
   matches,
+  agencyInfo,
 }: {
   data: AnnualSummaryData[];
   graphType: string;
+  agencyInfo: AllAgencyInformation;
   hidingRemunerations: boolean;
   hidingBenefits: boolean;
   hidingWage: boolean;
@@ -393,7 +424,7 @@ export const graphSeries = ({
         getYearWithIncompleteData(data)
           .map(d => d[otherRemunerationsDataTypes])
           .includes(options.value) &&
-        graphAnnotations({ data, matches })
+        graphAnnotations({ data, matches, agencyInfo })
           .map(d => d.x)
           .map(elemento => yearListArr.indexOf(+elemento))
           .includes(options.dataPointIndex)
@@ -417,7 +448,7 @@ export const graphSeries = ({
         getYearWithIncompleteData(data)
           .map(d => d[baseRemunerationDataTypes])
           .includes(options.value) &&
-        graphAnnotations({ data, matches })
+        graphAnnotations({ data, matches, agencyInfo })
           .map(d => d.x)
           .map(elemento => yearListArr.indexOf(+elemento))
           .includes(options.dataPointIndex)

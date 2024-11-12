@@ -162,7 +162,7 @@ const AnnualMoneyHeadingsChart = ({
                 },
               },
               annotations: {
-                xaxis: graphAnnotations({ data, matches }),
+                xaxis: graphAnnotations({ data, matches, agencyInfo: null }),
               },
               tooltip: {
                 enabled: true,

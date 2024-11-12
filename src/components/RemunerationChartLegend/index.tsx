@@ -70,7 +70,7 @@ const index = ({
     tipo_remuneracao: keyof perCapitaData,
   ) => {
     let total = 0;
-    totalsMap.forEach(w => {
+    totalsMap?.forEach(w => {
       total += w;
     });
 
@@ -104,23 +104,25 @@ const index = ({
               </AlertModal>
             </Box>
           )}
-          {agency && (
-            <Tabs
-              value={graphType}
-              onChange={(event: React.SyntheticEvent, newValue: string) =>
-                setGraphType(newValue)
-              }
-              variant="scrollable"
-              scrollButtons
-              allowScrollButtonsMobile
-              aria-label="Opções de gráfico"
-              sx={{ mt: 2 }}
-            >
-              <Tab value="media-por-membro" label="Média por membro" />
-              {annual && <Tab value="media-mensal" label="Média mensal" />}
-              <Tab value="total" label="Total de remunerações" />
-            </Tabs>
-          )}
+          <Box display="flex" justifyContent="center" alignItems="center">
+            {agency && (
+              <Tabs
+                value={graphType}
+                onChange={(event: React.SyntheticEvent, newValue: string) =>
+                  setGraphType(newValue)
+                }
+                variant="scrollable"
+                scrollButtons
+                allowScrollButtonsMobile
+                aria-label="Opções de gráfico"
+                sx={{ mt: 2 }}
+              >
+                <Tab value="media-por-membro" label="Média por membro" />
+                {annual && <Tab value="media-mensal" label="Média mensal" />}
+                <Tab value="total" label="Total de remunerações" />
+              </Tabs>
+            )}
+          </Box>
         </Box>
       </Box>
       <Box overflow="auto" maxWidth={700} margin={{ xs: '0 10px', md: 'auto' }}>
@@ -225,7 +227,7 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                const yearlyTotals = data.map(
+                const yearlyTotals = data?.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
                     d[baseRemunerationDataTypes],
                 );
@@ -257,7 +259,7 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                const yearlyTotals = data.map(
+                const yearlyTotals = data?.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
                     d[otherRemunerationsDataTypes],
                 );
@@ -285,7 +287,7 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                const yearlyTotals = data.map(
+                const yearlyTotals = data?.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
                     d[discountsDataTypes],
                 );
@@ -317,7 +319,7 @@ const index = ({
             </Typography>
             <Typography pb={0} fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                const yearlyTotals = data.map(
+                const yearlyTotals = data?.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
                     d[netRemunerationDataTypes],
                 );

@@ -10,4 +10,15 @@ function getCurrentYear(): number {
   return new Date().getFullYear();
 }
 
+export const findLatestData = (allAgencyInfo: AllAgencyInformation) =>
+  allAgencyInfo?.coletas.reduce((latest, current) => {
+    if (
+      current.ano > latest.ano ||
+      (current.ano === latest.ano && current.mes > latest.mes)
+    ) {
+      return current;
+    }
+    return latest;
+  }, allAgencyInfo.coletas[0]);
+
 export { getCurrentYear };

@@ -45,16 +45,18 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   const { baseRemunerationDataTypes, otherRemunerationsDataTypes } =
     useRemunerationDataTypes(graphType);
 
-  useEffect(() => {
-    (async () => {
-      const {
-        data: response,
-      }: {
-        data: AllAgencyInformation;
-      } = await api.default.get(`/dados/${agency.id_orgao}`);
+  const getAgencyInfo = async () => {
+    const {
+      data: response,
+    }: {
+      data: AllAgencyInformation;
+    } = await api.default.get(`/dados/${agency.id_orgao}`);
 
-      setAgencyInfo(response);
-    })();
+    setAgencyInfo(response);
+  };
+
+  useEffect(() => {
+    getAgencyInfo();
   }, []);
 
   return (
@@ -64,29 +66,31 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
       ) : (
         <Box>
           <Paper elevation={0}>
-            <RemunerationChartLegend
-              agency={agency}
-              perCapitaData={perCapitaData}
-              data={data}
-              graphType={graphType}
-              setGraphType={setGraphType}
-              hidingRemunerations={hidingRemunerations}
-              setHidingRemunerations={setHidingRemunerations}
-              hidingWage={hidingWage}
-              setHidingWage={setHidingWage}
-              hidingBenefits={hidingBenefits}
-              setHidingBenefits={setHidingBenefits}
-              hidingNoData={hidingNoData}
-              setHidingNoData={setHidingNoData}
-              warningMessage={warningMessage(
-                data,
-                agency,
-                agencyInfo,
-                baseRemunerationDataTypes,
-                otherRemunerationsDataTypes,
-              )}
-              annual
-            />
+            <Suspense fallback={<CircularProgress />}>
+              <RemunerationChartLegend
+                agency={agency}
+                perCapitaData={perCapitaData}
+                data={data}
+                graphType={graphType}
+                setGraphType={setGraphType}
+                hidingRemunerations={hidingRemunerations}
+                setHidingRemunerations={setHidingRemunerations}
+                hidingWage={hidingWage}
+                setHidingWage={setHidingWage}
+                hidingBenefits={hidingBenefits}
+                setHidingBenefits={setHidingBenefits}
+                hidingNoData={hidingNoData}
+                setHidingNoData={setHidingNoData}
+                warningMessage={warningMessage(
+                  data,
+                  agency,
+                  agencyInfo,
+                  baseRemunerationDataTypes,
+                  otherRemunerationsDataTypes,
+                )}
+                annual
+              />
+            </Suspense>
             <Box px={2}>
               {agency && data && !dataLoading ? (
                 <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
@@ -116,7 +120,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                 </Box>
               ) : (
                 <>
-                  {data.length > 0 ? (
+                  {data?.length > 0 ? (
                     <Box>
                       <Suspense fallback={<CircularProgress />}>
                         <Chart
@@ -125,6 +129,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                             data,
                             matches,
                             graphType,
+                            agencyInfo,
                           })}
                           series={graphSeries({
                             data,
@@ -134,6 +139,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                             hidingWage,
                             hidingNoData,
                             matches,
+                            agencyInfo,
                           })}
                           width="100%"
                           height="500"
