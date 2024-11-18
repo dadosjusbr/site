@@ -10,6 +10,12 @@ function getCurrentYear(): number {
   return new Date().getFullYear();
 }
 
+/**
+ * Finds the latest monthly data entry from the provided agency information.
+ *
+ * @param {AllAgencyInformation} allAgencyInfo - The complete information of all agencies, including their data collections.
+ * @returns {SummaryzedMI} The latest data entry based on the year and month.
+ */
 export const findLatestData = (allAgencyInfo: AllAgencyInformation) =>
   allAgencyInfo?.coletas.reduce((latest, current) => {
     if (

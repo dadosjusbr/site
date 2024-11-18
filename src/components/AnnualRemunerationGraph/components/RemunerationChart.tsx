@@ -46,13 +46,19 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
     useRemunerationDataTypes(graphType);
 
   const getAgencyInfo = async () => {
-    const {
-      data: response,
-    }: {
-      data: AllAgencyInformation;
-    } = await api.default.get(`/dados/${agency.id_orgao}`);
+    try {
+      const {
+        data: response,
+      }: {
+        data: AllAgencyInformation;
+      } = await api.default.get(`/dados/${agency.id_orgao}`);
 
-    setAgencyInfo(response);
+      setAgencyInfo(response);
+    } catch (err) {
+      throw new Error(err, {
+        cause: 'Error while fetching agency information',
+      });
+    }
   };
 
   useEffect(() => {

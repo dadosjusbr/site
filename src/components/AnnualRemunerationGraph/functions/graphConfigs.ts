@@ -54,8 +54,8 @@ export const graphAnnotations = ({
   if (manualCollection) {
     /* No casdo do MPAL e MPPE, ele tem dados em anos em que a coleta manual ainda não foi realizada
       porque fazia parte da coleta automatizada, então é necessário filtrar esses anos */
-    const filteredYears = YEARS_WITHOUT_MANUAL_COLLECTION.filter(year =>
-      yearListArr.filter(y => !data.map(d => d.ano).includes(y)).includes(year),
+    const filteredYears = YEARS_WITHOUT_MANUAL_COLLECTION.filter(
+      year => !data.some(d => d.ano === year),
     );
 
     const m = filteredYears.map(d => ({
