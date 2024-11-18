@@ -1,4 +1,4 @@
-import React, { Suspense, useCallback, useEffect, useState } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import dynamic from 'next/dynamic';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga4';
@@ -72,9 +72,7 @@ const AgencyPageWithoutNavigation: React.FC<
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
-  const hasData =
-    (!agency?.coletando && !agency?.possui_dados) ||
-    (agency?.coletando && agency?.possui_dados);
+  const hasData = !(agency?.coletando && !agency?.possui_dados && !data);
 
   async function fetchPlotData() {
     if (!plotData.length) {
@@ -91,7 +89,7 @@ const AgencyPageWithoutNavigation: React.FC<
     }
   }
 
-  const fetchAgencyInfo = useCallback(async () => {
+  const fetchAgencyInfo = async () => {
     try {
       const { data: response } = await api.ui.get(
         `/v2/orgao/totais/${agency.id_orgao}/${year}`,
@@ -105,11 +103,11 @@ const AgencyPageWithoutNavigation: React.FC<
     } finally {
       setLoading(false);
     }
-  }, []);
+  };
 
   useEffect(() => {
     fetchAgencyInfo();
-  }, [fetchAgencyInfo]);
+  }, []);
 
   if (loading) {
     return (
@@ -244,7 +242,6 @@ const AgencyPageWithoutNavigation: React.FC<
               data={data}
               year={year}
               agency={agency}
-              perCapitaData={agencyInfo?.media_por_membro}
               dataLoading={loading}
             />
           </Suspense>

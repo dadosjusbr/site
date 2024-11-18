@@ -23,7 +23,6 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 type AnnualRemunerationGraphProps = {
   year: number;
   agency: Agency;
-  perCapitaData: perCapitaData;
   data: AnnualSummaryData[];
   dataLoading: boolean;
 };
@@ -31,7 +30,6 @@ type AnnualRemunerationGraphProps = {
 const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   year,
   agency,
-  perCapitaData,
   data,
   dataLoading = true,
 }) => {
@@ -67,105 +65,107 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
 
   return (
     <>
-      {agency && agency?.coletando && !agency?.possui_dados ? (
-        <NotCollecting agency={agency} />
-      ) : (
-        <Box>
-          <Paper elevation={0}>
-            <Suspense
-              fallback={<CircularProgress aria-label="Carregando dados" />}
-            >
-              <RemunerationChartLegend
-                agency={agency}
-                perCapitaData={perCapitaData}
-                data={data}
-                graphType={graphType}
-                setGraphType={setGraphType}
-                hidingRemunerations={hidingRemunerations}
-                setHidingRemunerations={setHidingRemunerations}
-                hidingWage={hidingWage}
-                setHidingWage={setHidingWage}
-                hidingBenefits={hidingBenefits}
-                setHidingBenefits={setHidingBenefits}
-                hidingNoData={hidingNoData}
-                setHidingNoData={setHidingNoData}
-                warningMessage={warningMessage(
-                  data,
-                  agency,
-                  agencyInfo,
-                  baseRemunerationDataTypes,
-                  otherRemunerationsDataTypes,
-                )}
-                annual
-              />
-            </Suspense>
-            <Box px={2}>
-              {agency && data && !dataLoading ? (
-                <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
-                  <Button
-                    variant="outlined"
-                    color="secondary"
-                    endIcon={<ArrowForwardIosIcon />}
-                    href={`/orgao/${agency.id_orgao}/${year}`}
-                  >
-                    EXPLORAR
-                  </Button>
-                </Grid>
-              ) : null}
-              {dataLoading ? (
-                <Box
-                  m={4}
-                  sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    alignItems: 'center',
-                  }}
-                >
-                  <div>
-                    <CircularProgress color="info" />
-                  </div>
-                  <p>Aguarde...</p>
-                </Box>
-              ) : (
-                <>
-                  {data?.length > 0 ? (
-                    <Box>
-                      <Suspense fallback={<CircularProgress />}>
-                        <Chart
-                          options={graphOptions({
-                            agency,
-                            data,
-                            matches,
-                            graphType,
-                            agencyInfo,
-                          })}
-                          series={graphSeries({
-                            data,
-                            graphType,
-                            hidingRemunerations,
-                            hidingBenefits,
-                            hidingWage,
-                            hidingNoData,
-                            matches,
-                            agencyInfo,
-                          })}
-                          width="100%"
-                          height="500"
-                          type="line"
-                        />
-                      </Suspense>
-                    </Box>
-                  ) : (
-                    <Typography variant="body1" py={2} textAlign="center">
-                      Não há dados para esse ano.
-                    </Typography>
+      {
+        // agency && agency?.coletando && !agency?.possui_dados && !data
+        false ? (
+          <NotCollecting agency={agency} />
+        ) : (
+          <Box>
+            <Paper elevation={0}>
+              <Suspense
+                fallback={<CircularProgress aria-label="Carregando dados" />}
+              >
+                <RemunerationChartLegend
+                  agency={agency}
+                  data={data}
+                  graphType={graphType}
+                  setGraphType={setGraphType}
+                  hidingRemunerations={hidingRemunerations}
+                  setHidingRemunerations={setHidingRemunerations}
+                  hidingWage={hidingWage}
+                  setHidingWage={setHidingWage}
+                  hidingBenefits={hidingBenefits}
+                  setHidingBenefits={setHidingBenefits}
+                  hidingNoData={hidingNoData}
+                  setHidingNoData={setHidingNoData}
+                  warningMessage={warningMessage(
+                    data,
+                    agency,
+                    agencyInfo,
+                    baseRemunerationDataTypes,
+                    otherRemunerationsDataTypes,
                   )}
-                </>
-              )}
-            </Box>
-          </Paper>
-        </Box>
-      )}
+                  annual
+                />
+              </Suspense>
+              <Box px={2}>
+                {agency && data && !dataLoading ? (
+                  <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
+                    <Button
+                      variant="outlined"
+                      color="secondary"
+                      endIcon={<ArrowForwardIosIcon />}
+                      href={`/orgao/${agency.id_orgao}/${year}`}
+                    >
+                      EXPLORAR
+                    </Button>
+                  </Grid>
+                ) : null}
+                {dataLoading ? (
+                  <Box
+                    m={4}
+                    sx={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      alignItems: 'center',
+                    }}
+                  >
+                    <div>
+                      <CircularProgress color="info" />
+                    </div>
+                    <p>Aguarde...</p>
+                  </Box>
+                ) : (
+                  <>
+                    {data?.length > 0 ? (
+                      <Box>
+                        <Suspense fallback={<CircularProgress />}>
+                          <Chart
+                            options={graphOptions({
+                              agency,
+                              data,
+                              matches,
+                              graphType,
+                              agencyInfo,
+                            })}
+                            series={graphSeries({
+                              data,
+                              graphType,
+                              hidingRemunerations,
+                              hidingBenefits,
+                              hidingWage,
+                              hidingNoData,
+                              matches,
+                              agencyInfo,
+                            })}
+                            width="100%"
+                            height="500"
+                            type="line"
+                          />
+                        </Suspense>
+                      </Box>
+                    ) : (
+                      <Typography variant="body1" py={2} textAlign="center">
+                        Não há dados para esse ano.
+                      </Typography>
+                    )}
+                  </>
+                )}
+              </Box>
+            </Paper>
+          </Box>
+        )
+      }
     </>
   );
 };

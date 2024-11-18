@@ -23,7 +23,6 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 export interface RemunerationBarGraphProps {
   year: number;
   agency: Agency;
-  media_por_membro: perCapitaData;
   data: v2MonthTotals[];
   dataLoading: boolean;
   selectedMonth?: number;
@@ -32,7 +31,6 @@ export interface RemunerationBarGraphProps {
 const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
   year,
   agency,
-  media_por_membro,
   data,
   dataLoading = true,
   selectedMonth,
@@ -57,7 +55,6 @@ const RemunerationBarGraph: React.FC<RemunerationBarGraphProps> = ({
               <RemunerationLegend
                 agency={agency}
                 data={data}
-                perCapitaData={media_por_membro}
                 graphType={graphType}
                 setGraphType={setGraphType}
                 hidingRemunerations={hidingRemunerations}
