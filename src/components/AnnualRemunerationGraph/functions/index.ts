@@ -79,7 +79,7 @@ const monthsWithoutData = ({ data }: { data: AnnualSummaryData[] }): number => {
       monthsCount += d;
     });
 
-  if (!yearsWithData(data).includes(currentYear)) {
+  if (!yearsWithData(data)?.includes(currentYear)) {
     if (monthlyCollectDone) {
       return monthsCount + (12 - (12 - currentMonth - 1));
     }
@@ -212,7 +212,7 @@ export const createDataArray = ({
 };
 
 const latestData = (allAgencyInfo: AllAgencyInformation) =>
-  allAgencyInfo?.coletas.reduce((latest, current) => {
+  allAgencyInfo?.coletas?.reduce((latest, current) => {
     if (
       current.ano > latest.ano ||
       (current.ano === latest.ano && current.mes > latest.mes)
@@ -256,7 +256,7 @@ export const warningMessage = (
   if (latestData(manualCollection)?.coleta_manual) {
     return `Este órgão depende de um processo manual de coleta por motivos de más práticas de transparência: ${manualCollection.coletando[0].descricao
       .map(d => d)
-      .join(',')
+      .join(', ')
       .toLowerCase()}.`;
   }
 
@@ -267,19 +267,17 @@ export const warningMessage = (
       otherRemunerationsDataTypes,
     }).find(d => d !== 0)
   ) {
-    return `Este órgão não publicou dados de ${yearsWithoutData(data).length}
-        ${yearsWithoutData(data).length > 1 ? 'anos' : 'ano'}${
-      monthsWithoutData({ data }) > 0
-        ? ` e ${monthsWithoutData({ data })}`
-        : '.'
+    const years = yearsWithoutData(data).length;
+    const months = monthsWithoutData({ data });
+
+    if (years > 0) {
+      return `Este órgão não publicou dados de ${years}
+        ${years > 1 ? 'anos' : 'ano'}${months > 0 ? ` e ${months}` : '.'}
+        ${months > 1 ? 'meses.' : months === 1 ? 'mês.' : ''}`;
     }
-        ${
-          monthsWithoutData({ data }) > 1
-            ? 'meses.'
-            : monthsWithoutData({ data }) === 1
-            ? 'mês.'
-            : ''
-        }`;
+
+    return `Este órgão não publicou dados de ${months}
+          ${months > 1 ? 'meses.' : months === 1 ? 'mês.' : ''}`;
   }
 
   if (
@@ -290,14 +288,9 @@ export const warningMessage = (
       otherRemunerationsDataTypes,
     }).find(d => d !== 0)
   ) {
-    return `Este órgão não publicou dados de ${monthsWithoutData({ data })}
-          ${
-            monthsWithoutData({ data }) > 1
-              ? 'meses.'
-              : monthsWithoutData({ data }) === 1
-              ? 'mês.'
-              : ''
-          }`;
+    const months = monthsWithoutData({ data });
+    return `Este órgão não publicou dados de ${months}
+          ${months > 1 ? 'meses.' : months === 1 ? 'mês.' : ''}`;
   }
   return '';
 };

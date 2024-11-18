@@ -101,7 +101,6 @@ export default function GeneralRemunerationSection({
           <RemunerationBarGraph
             year={year}
             agency={null}
-            media_por_membro={null}
             data={completeChartData}
             dataLoading={loading}
           />

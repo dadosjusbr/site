@@ -24,7 +24,6 @@ import { useRemunerationDataTypes } from '../../hooks/useRemunerationTypes';
 
 const index = ({
   agency,
-  perCapitaData,
   data,
   graphType,
   setGraphType,
@@ -40,7 +39,6 @@ const index = ({
   annual = false,
 }: {
   agency: Agency;
-  perCapitaData: perCapitaData;
   data: v2MonthTotals[] | AnnualSummaryData[];
   graphType: string;
   setGraphType: React.Dispatch<React.SetStateAction<string>>;
@@ -65,20 +63,17 @@ const index = ({
     discountsDataTypes,
   } = useRemunerationDataTypes(graphType);
 
-  const calculateTotal = (
-    totalsMap: number[],
-    tipo_remuneracao: keyof perCapitaData,
-  ) => {
+  const calculateTotal = (totalsMap: number[]) => {
     let total = 0;
-    totalsMap.forEach(w => {
+    totalsMap?.forEach(w => {
       total += w;
     });
 
-    if (graphType === 'total' || !agency) return formatCurrencyValue(total, 1);
-    if (graphType === 'media-por-membro')
-      return formatCurrencyValue(perCapitaData?.[tipo_remuneracao], 1);
+    if (graphType === 'total' || !agency) {
+      return formatCurrencyValue(total, 1);
+    }
 
-    return formatCurrencyValue(total / data.length, 1);
+    return formatCurrencyValue(total / data?.length, 1);
   };
 
   return (
@@ -104,23 +99,25 @@ const index = ({
               </AlertModal>
             </Box>
           )}
-          {agency && (
-            <Tabs
-              value={graphType}
-              onChange={(event: React.SyntheticEvent, newValue: string) =>
-                setGraphType(newValue)
-              }
-              variant="scrollable"
-              scrollButtons
-              allowScrollButtonsMobile
-              aria-label="Opções de gráfico"
-              sx={{ mt: 2 }}
-            >
-              <Tab value="media-por-membro" label="Média por membro" />
-              {annual && <Tab value="media-mensal" label="Média mensal" />}
-              <Tab value="total" label="Total de remunerações" />
-            </Tabs>
-          )}
+          <Box display="flex" justifyContent="center" alignItems="center">
+            {agency && (
+              <Tabs
+                value={graphType}
+                onChange={(event: React.SyntheticEvent, newValue: string) =>
+                  setGraphType(newValue)
+                }
+                variant="scrollable"
+                scrollButtons
+                allowScrollButtonsMobile
+                aria-label="Opções de gráfico"
+                sx={{ mt: 2 }}
+              >
+                <Tab value="media-por-membro" label="Média por membro" />
+                {annual && <Tab value="media-mensal" label="Média mensal" />}
+                <Tab value="total" label="Total de remunerações" />
+              </Tabs>
+            )}
+          </Box>
         </Box>
       </Box>
       <Box overflow="auto" maxWidth={700} margin={{ xs: '0 10px', md: 'auto' }}>
@@ -130,14 +127,6 @@ const index = ({
             placement="bottom"
             title={
               <Typography fontSize={{ xs: '0.8rem', md: '0.9rem' }}>
-                {graphType === 'media-por-membro' && (
-                  <span>
-                    <b>Média por membro:</b> Valor médio de remuneração por
-                    membro, considerando dados de membros com pelo menos 2 meses
-                    de participação no órgão.
-                    <hr />
-                  </span>
-                )}
                 <b>Remuneração:</b> Valor final da soma entre salário e
                 benefícios, retirando os descontos.
                 <hr />
@@ -225,12 +214,12 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                const yearlyTotals = data.map(
+                const yearlyTotals = data?.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
                     d[baseRemunerationDataTypes],
                 );
 
-                return calculateTotal(yearlyTotals, 'remuneracao_base');
+                return calculateTotal(yearlyTotals);
               })()}
             </Typography>
           </Grid>
@@ -257,12 +246,12 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                const yearlyTotals = data.map(
+                const yearlyTotals = data?.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
                     d[otherRemunerationsDataTypes],
                 );
 
-                return calculateTotal(yearlyTotals, 'outras_remuneracoes');
+                return calculateTotal(yearlyTotals);
               })()}
             </Typography>
           </Grid>
@@ -285,12 +274,12 @@ const index = ({
             </Typography>
             <Typography fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                const yearlyTotals = data.map(
+                const yearlyTotals = data?.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
                     d[discountsDataTypes],
                 );
 
-                return calculateTotal(yearlyTotals, 'descontos');
+                return calculateTotal(yearlyTotals);
               })()}
             </Typography>
           </Grid>
@@ -317,12 +306,12 @@ const index = ({
             </Typography>
             <Typography pb={0} fontSize={{ xs: 14, md: 16 }}>
               {(() => {
-                const yearlyTotals = data.map(
+                const yearlyTotals = data?.map(
                   (d: v2MonthTotals | AnnualSummaryData) =>
                     d[netRemunerationDataTypes],
                 );
 
-                return calculateTotal(yearlyTotals, 'remuneracoes');
+                return calculateTotal(yearlyTotals);
               })()}
             </Typography>
           </Grid>

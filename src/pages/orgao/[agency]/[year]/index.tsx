@@ -14,7 +14,6 @@ export default function AgencyPage({
   id,
   year,
   agency,
-  media_por_membro,
   data,
   navigableMonth,
   fullName,
@@ -23,7 +22,6 @@ export default function AgencyPage({
   id: string;
   year: number;
   agency: Agency;
-  media_por_membro: perCapitaData;
   data: v2MonthTotals[];
   navigableMonth: number;
   fullName: string;
@@ -83,7 +81,6 @@ export default function AgencyPage({
           <AgencyWithNavigation
             data={data}
             id={id}
-            media_por_membro={media_por_membro}
             agencyInfo={agencyInfo}
             year={year}
             agency={agency}
@@ -113,7 +110,6 @@ export const getServerSideProps: GetServerSideProps = async context => {
         data: agency?.meses || [],
         year: parseInt(year as string, 10),
         agency: agency?.orgao,
-        media_por_membro: agency?.media_por_membro,
         nextDateIsNavigable:
           parseInt(year as string, 10) !== new Date().getFullYear(),
         previousDateIsNavigable: parseInt(year as string, 10) !== 2018,

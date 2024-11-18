@@ -41,7 +41,7 @@ const AnnualMoneyHeadingsChart = ({
   return (
     <ThemeProvider theme={light}>
       <Box mt={4}>
-        <Suspense fallback={<CircularProgress />}>
+        <Suspense fallback={<CircularProgress aria-label="Carregando dados" />}>
           <Chart
             options={{
               colors,
@@ -162,7 +162,7 @@ const AnnualMoneyHeadingsChart = ({
                 },
               },
               annotations: {
-                xaxis: graphAnnotations({ data, matches }),
+                xaxis: graphAnnotations({ data, matches, agencyInfo: null }),
               },
               tooltip: {
                 enabled: true,

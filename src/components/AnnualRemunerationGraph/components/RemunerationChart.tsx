@@ -23,7 +23,6 @@ const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 type AnnualRemunerationGraphProps = {
   year: number;
   agency: Agency;
-  perCapitaData: perCapitaData;
   data: AnnualSummaryData[];
   dataLoading: boolean;
 };
@@ -31,7 +30,6 @@ type AnnualRemunerationGraphProps = {
 const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   year,
   agency,
-  perCapitaData,
   data,
   dataLoading = true,
 }) => {
@@ -45,8 +43,8 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   const { baseRemunerationDataTypes, otherRemunerationsDataTypes } =
     useRemunerationDataTypes(graphType);
 
-  useEffect(() => {
-    (async () => {
+  const getAgencyInfo = async () => {
+    try {
       const {
         data: response,
       }: {
@@ -54,39 +52,50 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
       } = await api.default.get(`/dados/${agency.id_orgao}`);
 
       setAgencyInfo(response);
-    })();
+    } catch (err) {
+      throw new Error(err, {
+        cause: 'Error while fetching agency information',
+      });
+    }
+  };
+
+  useEffect(() => {
+    getAgencyInfo();
   }, []);
 
   return (
     <>
-      {agency && agency?.coletando && !agency?.possui_dados ? (
+      {agency && agency?.coletando && !agency?.possui_dados && !data ? (
         <NotCollecting agency={agency} />
       ) : (
         <Box>
           <Paper elevation={0}>
-            <RemunerationChartLegend
-              agency={agency}
-              perCapitaData={perCapitaData}
-              data={data}
-              graphType={graphType}
-              setGraphType={setGraphType}
-              hidingRemunerations={hidingRemunerations}
-              setHidingRemunerations={setHidingRemunerations}
-              hidingWage={hidingWage}
-              setHidingWage={setHidingWage}
-              hidingBenefits={hidingBenefits}
-              setHidingBenefits={setHidingBenefits}
-              hidingNoData={hidingNoData}
-              setHidingNoData={setHidingNoData}
-              warningMessage={warningMessage(
-                data,
-                agency,
-                agencyInfo,
-                baseRemunerationDataTypes,
-                otherRemunerationsDataTypes,
-              )}
-              annual
-            />
+            <Suspense
+              fallback={<CircularProgress aria-label="Carregando dados" />}
+            >
+              <RemunerationChartLegend
+                agency={agency}
+                data={data}
+                graphType={graphType}
+                setGraphType={setGraphType}
+                hidingRemunerations={hidingRemunerations}
+                setHidingRemunerations={setHidingRemunerations}
+                hidingWage={hidingWage}
+                setHidingWage={setHidingWage}
+                hidingBenefits={hidingBenefits}
+                setHidingBenefits={setHidingBenefits}
+                hidingNoData={hidingNoData}
+                setHidingNoData={setHidingNoData}
+                warningMessage={warningMessage(
+                  data,
+                  agency,
+                  agencyInfo,
+                  baseRemunerationDataTypes,
+                  otherRemunerationsDataTypes,
+                )}
+                annual
+              />
+            </Suspense>
             <Box px={2}>
               {agency && data && !dataLoading ? (
                 <Grid display="flex" justifyContent="flex-end" mr={1} mt={1}>
@@ -116,7 +125,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                 </Box>
               ) : (
                 <>
-                  {data.length > 0 ? (
+                  {data?.length > 0 ? (
                     <Box>
                       <Suspense fallback={<CircularProgress />}>
                         <Chart
@@ -125,6 +134,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                             data,
                             matches,
                             graphType,
+                            agencyInfo,
                           })}
                           series={graphSeries({
                             data,
@@ -134,6 +144,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
                             hidingWage,
                             hidingNoData,
                             matches,
+                            agencyInfo,
                           })}
                           width="100%"
                           height="500"
