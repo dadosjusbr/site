@@ -65,7 +65,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
 
   return (
     <>
-      {agency && agency?.coletando && !agency?.possui_dados && !data ? (
+      {agency && agency?.coletando && !agency?.possui_dados ? (
         <NotCollecting agency={agency} />
       ) : (
         <Box>
