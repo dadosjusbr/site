@@ -5,9 +5,7 @@ import {
   totalWaste,
   yearList,
 } from '.';
-import COLLECT_INFOS, {
-  YEARS_WITHOUT_MANUAL_COLLECTION,
-} from '../../../@types/COLLECT_INFOS';
+import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
 import { findLatestData, getCurrentYear } from '../../../functions/currentYear';
 import { formatCurrencyValue } from '../../../functions/format';
 import { useRemunerationDataTypes } from '../../../hooks/useRemunerationTypes';
@@ -54,9 +52,7 @@ export const graphAnnotations = ({
   if (manualCollection) {
     /* No casdo do MPAL e MPPE, ele tem dados em anos em que a coleta manual ainda não foi realizada
       porque fazia parte da coleta automatizada, então é necessário filtrar esses anos */
-    const filteredYears = YEARS_WITHOUT_MANUAL_COLLECTION.filter(
-      year => !data.some(d => d.ano === year),
-    );
+    const filteredYears = yearListArr.filter(d => !data.some(e => e.ano === d));
 
     const m = filteredYears.map(d => ({
       x: d,
