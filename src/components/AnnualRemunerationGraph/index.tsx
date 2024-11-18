@@ -72,7 +72,7 @@ const AgencyPageWithoutNavigation: React.FC<
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
-  const hasData = !(agency?.coletando && !agency?.possui_dados && !data);
+  const hasData = !(agency?.coletando && !agency?.possui_dados);
 
   async function fetchPlotData() {
     if (!plotData.length) {
