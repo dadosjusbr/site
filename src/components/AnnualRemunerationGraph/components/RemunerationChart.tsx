@@ -72,7 +72,9 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
       ) : (
         <Box>
           <Paper elevation={0}>
-            <Suspense fallback={<CircularProgress />}>
+            <Suspense
+              fallback={<CircularProgress aria-label="Carregando dados" />}
+            >
               <RemunerationChartLegend
                 agency={agency}
                 perCapitaData={perCapitaData}
