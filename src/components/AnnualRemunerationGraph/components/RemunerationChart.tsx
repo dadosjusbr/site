@@ -34,6 +34,7 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
   dataLoading = true,
 }) => {
   const matches = useMediaQuery('(max-width:500px)');
+  const [loading, setLoading] = useState(true);
   const [hidingRemunerations, setHidingRemunerations] = useState(false);
   const [hidingWage, setHidingWage] = useState(false);
   const [hidingBenefits, setHidingBenefits] = useState(false);
@@ -56,12 +57,32 @@ const AnnualRemunerationGraph: React.FC<AnnualRemunerationGraphProps> = ({
       throw new Error(err, {
         cause: 'Error while fetching agency information',
       });
+    } finally {
+      setLoading(false);
     }
   };
 
   useEffect(() => {
     getAgencyInfo();
   }, []);
+
+  if (loading) {
+    return (
+      <Box
+        m={4}
+        sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <div>
+          <CircularProgress color="info" />
+        </div>
+        <p>Aguarde...</p>
+      </Box>
+    );
+  }
 
   return (
     <>
