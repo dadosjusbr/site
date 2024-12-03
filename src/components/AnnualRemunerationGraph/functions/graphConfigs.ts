@@ -58,7 +58,7 @@ export const graphAnnotations = ({
       x: d,
       label: {
         ...annotationsLabel,
-        text: 'Coleta manual não realizada',
+        text: 'Coleta não realizada',
         offsetX: matches ? 0 : 30,
       },
       borderWidth: 0,
