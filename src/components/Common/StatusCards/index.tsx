@@ -205,18 +205,20 @@ const ScrollbarList = muiStyled(
   forwardRef((props: ListProps, ref: React.Ref<HTMLOListElement>) => (
     <List {...props} ref={ref} />
   )),
-)(() => ({
+)(({ theme }) => ({
   maxHeight: '30.5vh',
   overflow: 'auto',
   '&::-webkit-scrollbar': {
     width: '0.4em',
   },
   '&::-webkit-scrollbar-track': {
+    backgroundColor: theme.palette.secondary.main,
+    borderRadius: '16px',
     boxShadow: 'inset 0 0 6px rgba(0,0,0,0.00)',
     webkitBoxShadow: 'inset 0 0 6px rgba(0,0,0,0.5)',
   },
   '&::-webkit-scrollbar-thumb': {
-    backgroundColor: 'rgba(0,0,0,.1)',
+    backgroundColor: theme.palette.grey[200],
     outline: '1px solid slategrey',
     borderRadius: '16px',
   },
