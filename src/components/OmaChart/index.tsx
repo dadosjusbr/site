@@ -2,7 +2,14 @@ import { useState } from 'react';
 import { useRouter } from 'next/router';
 import ReactGA from 'react-ga4';
 
-import { Button, Grid, Stack, ThemeProvider, Typography } from '@mui/material';
+import {
+  Box,
+  Button,
+  Grid,
+  Stack,
+  ThemeProvider,
+  Typography,
+} from '@mui/material';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import SearchIcon from '@mui/icons-material/Search';
@@ -19,7 +26,8 @@ import TransparencyMetrics from './components/TransparencyMetrics';
 import MembersGraph from './components/MembersGraph';
 import CollectInfos from './components/CollectInfos';
 import SearchAccordion from './components/OMASearchAccordion';
-import { months } from '../../@types/MONTHS';
+import MONTHS, { months } from '../../@types/MONTHS';
+import AlertModal from '../Common/AlertModal';
 
 export interface OMASummaryProps {
   totalMembers: number;
@@ -61,6 +69,11 @@ const OMASummary: React.FC<OMASummaryProps> = ({
   const matches = useMediaQuery('(max-width:900px)');
   const router = useRouter();
 
+  const handleOpen = () =>
+    router.push(
+      `mailto:contato@dadosjusbr.org?subject=Inconsistências nos contracheques de ${MONTHS[month]}/${year}`,
+    );
+  console.log(mi);
   return (
     <>
       {!matches ? (
@@ -104,6 +117,27 @@ const OMASummary: React.FC<OMASummaryProps> = ({
         </Drawer>
       )}
       <ThemeProvider theme={light}>
+        {mi?.inconsistente && (
+          <Box mb={2} display="flex" justifyContent="center">
+            <AlertModal
+              agencyData={{
+                nome: selectedAgencies?.at(0).nome,
+                ouvidoria: selectedAgencies?.at(0).ouvidoria,
+              }}
+              handleClose={null}
+              handleOpen={handleOpen}
+              openParam={null}
+              openOmbudsman={false}
+            >
+              O DadosJusBr encontrou inconsistências nos contracheques de{' '}
+              {MONTHS[month]}/{year} no arquivo originalmente disponibilizado
+              por este órgão, como erros no preenchimento dos campos de
+              informação. Entre em contato para saber mais:
+              contato@dadosjusbr.org.
+            </AlertModal>
+          </Box>
+        )}
+
         <Grid container spacing={2}>
           <AgencyGenerals
             maxPerk={maxPerk}
