@@ -73,7 +73,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
     router.push(
       `mailto:contato@dadosjusbr.org?subject=Inconsistências nos contracheques de ${MONTHS[month]}/${year}`,
     );
-  console.log(mi);
+
   return (
     <>
       {!matches ? (
