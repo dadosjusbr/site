@@ -10,6 +10,7 @@ type SummaryzedMI = {
   indice_transparencia: Score;
   dados_coleta: Collect;
   coleta_manual: boolean;
+  inconsistente: boolean;
   error?: MiError;
 };
 

@@ -15,6 +15,7 @@ const AlertModal = ({
   handleOpen,
   handleClose,
   children,
+  openOmbudsman = true,
 }) => {
   const style = {
     position: 'absolute',
@@ -42,7 +43,7 @@ const AlertModal = ({
         }}
         onClick={() => handleOpen()}
       >
-        {children} <u>Ajude-nos a abrir os dados.</u>
+        {children} {openOmbudsman && <u>Ajude-nos a abrir os dados.</u>}
       </Alert>
       <Modal
         aria-labelledby="transition-modal-title"
