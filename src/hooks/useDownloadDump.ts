@@ -6,17 +6,21 @@ import { getCurrentYear } from '../functions/currentYear';
  * @returns An array containing the file link and the creation date.
  */
 export const useDownloadDump = (): [fileLink: string, dumpDate: string] => {
+  const current_year = getCurrentYear();
+  const aux_date = new Date();
+  const aux_month = aux_date.getMonth();
+
   const date = new Date(
-    getCurrentYear(),
-    new Date().getDate() < COLLECT_INFOS.COLLECT_DATE
-      ? new Date().getMonth() - 2
-      : new Date().getMonth() - 1,
+    current_year,
+    aux_date.getDate() <= COLLECT_INFOS.COLLECT_DATE
+      ? aux_month - 1
+      : aux_month,
   );
   const dumpDate = ` 01/2018 - ${date.toLocaleDateString('pt-BR', {
     month: '2-digit',
     year: 'numeric',
   })}`;
-  const fileLink = `https://dadosjusbr.org/download/dumps/dadosjusbr-${getCurrentYear()}-${date.toLocaleDateString(
+  const fileLink = `https://dadosjusbr.org/download/dumps/dadosjusbr-${current_year}-${date.toLocaleDateString(
     'pt-BR',
     {
       month: 'numeric',
