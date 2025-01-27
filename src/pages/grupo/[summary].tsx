@@ -43,7 +43,7 @@ export default function SummaryPage({
   chartData: chartDataType[];
 }) {
   const router = useRouter();
-  const { page } = router.query === undefined ? { page: 1 } : router.query;
+  const { page } = router.query.page === undefined ? { page: 1 } : router.query;
 
   const pageTitle = `${formatToAgency(summary)}`;
   const [value, setValue] = useState('');

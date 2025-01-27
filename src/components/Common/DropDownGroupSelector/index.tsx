@@ -45,7 +45,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   const handleChange = (event: SelectChangeEvent) => {
     const v = event.target.value as string;
     setAgencyName(v);
-    router.push(`/grupo/${v}?page=1`);
+    router.push(`/grupo/${v}`);
   };
 
   return (
