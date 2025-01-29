@@ -92,7 +92,7 @@ const AgencyPageWithoutNavigation: React.FC<
   const fetchAgencyInfo = async () => {
     try {
       const { data: response } = await api.ui.get(
-        `/v2/orgao/totais/${agency?.id_orgao}/${year}`,
+        `/v2/orgao/totais/${agency.id_orgao}/${year}`,
       );
 
       setAgencyInfo(response);
