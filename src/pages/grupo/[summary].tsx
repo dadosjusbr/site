@@ -1,7 +1,6 @@
 import React, { Suspense, useState } from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Head from 'next/head';
-import { useRouter } from 'next/router';
 import styled from 'styled-components';
 import {
   Box,
@@ -12,9 +11,7 @@ import {
   ListSubheader,
   MenuItem,
   OutlinedInput,
-  Pagination,
   Select,
-  SelectChangeEvent,
   Typography,
 } from '@mui/material';
 
@@ -32,29 +29,19 @@ type chartDataType = {
 };
 
 export default function SummaryPage({
-  pages,
-  agencies,
+  dataList,
   summary,
   chartData,
 }: {
-  pages: v2AgencyBasic[][];
-  agencies: v2AgencyBasic[];
+  dataList: v2AgencyBasic[];
   summary: string;
   chartData: chartDataType[];
 }) {
-  const router = useRouter();
-  const { page } = router.query.page === undefined ? { page: 1 } : router.query;
-
   const pageTitle = `${formatToAgency(summary)}`;
   const [value, setValue] = useState('');
-  const dataList = pages[+page - 1];
-
-  const handleDropDownChange = (event: SelectChangeEvent<string>) => {
-    const { value: eventValue } = event.target;
-
-    setValue(eventValue);
-    router.push(`/orgao/${eventValue.toLowerCase()}`);
-  };
+  chartData?.sort((a, b) =>
+    orderStringsWithNum(a.orgao.id_orgao, b.orgao.id_orgao),
+  );
 
   return (
     <Page>
@@ -87,16 +74,16 @@ export default function SummaryPage({
           <Grid item pb={4}>
             <Typography>Selecione o órgão</Typography>
 
-            <FormControl fullWidth sx={{ m: 0, minWidth: 240, maxWidth: 250 }}>
+            <FormControl fullWidth sx={{ m: 1, minWidth: 240, maxWidth: 250 }}>
               <Select
                 id="orgaos-select"
-                label="Estados"
                 labelId="orgaos-select-label"
                 defaultValue="Selecione um órgão"
-                inputProps={{ 'aria-label': 'Dados por órgão' }}
-                displayEmpty
                 value={value}
-                onChange={handleDropDownChange}
+                onChange={e => setValue(e.target.value)}
+                label="Estados"
+                displayEmpty
+                inputProps={{ 'aria-label': 'Dados por órgão' }}
                 input={<OutlinedInput />}
                 renderValue={selected => {
                   if (selected.length === 0) {
@@ -114,11 +101,16 @@ export default function SummaryPage({
                   <em>Órgãos disponíveis</em>
                 </ListSubheader>
 
-                {agencies.map(ag => (
-                  <MenuItem key={ag.id_orgao} value={ag.id_orgao.toUpperCase()}>
-                    {ag.nome}
-                  </MenuItem>
-                ))}
+                {dataList
+                  ?.sort((a, b) => orderStringsWithNum(a.id_orgao, b.id_orgao))
+                  .map(ag => (
+                    <MenuItem
+                      key={ag.id_orgao}
+                      value={ag.id_orgao.toUpperCase()}
+                    >
+                      <LinkTo href={`#${ag.id_orgao}`}>{ag.nome}</LinkTo>
+                    </MenuItem>
+                  ))}
               </Select>
             </FormControl>
           </Grid>
@@ -127,10 +119,7 @@ export default function SummaryPage({
           {(() => {
             if (typeof dataList !== 'undefined' && dataList.length > 0) {
               return dataList.map((agency, i) => (
-                <Box
-                  mb={i === dataList.length - 1 ? 0 : 12}
-                  key={agency.id_orgao}
-                >
+                <Box mb={12} key={agency.id_orgao}>
                   <div id={agency.id_orgao}>
                     <Suspense fallback={<CircularProgress />}>
                       <AgencyWithoutNavigation
@@ -162,18 +151,6 @@ export default function SummaryPage({
             );
           })()}
         </div>
-        {typeof dataList !== 'undefined' && dataList.length > 0 && (
-          <Box display="flex" justifyContent="center" mt={4} mb={12}>
-            <Pagination
-              count={pages?.length}
-              size="large"
-              page={+page}
-              onChange={(_, changeValue) => {
-                router.replace(`/grupo/${summary}?page=${changeValue}`);
-              }}
-            />
-          </Box>
-        )}
       </Container>
       <Footer />
     </Page>
@@ -182,6 +159,16 @@ export default function SummaryPage({
 
 export const getStaticPaths: GetStaticPaths = async () => {
   try {
+    const paths = [
+      { params: { summary: 'justica-estadual' } },
+      { params: { summary: 'ministerios-publicos' } },
+      { params: { summary: 'justica-do-trabalho' } },
+      { params: { summary: 'justica-militar' } },
+      { params: { summary: 'justica-federal' } },
+      { params: { summary: 'justica-eleitoral' } },
+      { params: { summary: 'justica-superior' } },
+      { params: { summary: 'conselhos-de-justica' } },
+    ];
     return {
       paths: [],
       fallback: 'blocking',
@@ -206,23 +193,9 @@ export const getStaticProps: GetStaticProps = async context => {
       return { props: {} };
     }
 
-    const chunkArray = (array: [], size: number) => {
-      const result = [];
-      for (let i = 0; i < array.length; i += size) {
-        result.push(array.slice(i, i + size));
-      }
-      return result;
-    };
-
-    const agencies = data.orgaos.sort((a, b) =>
-      orderStringsWithNum(a.id_orgao, b.id_orgao),
-    );
-
-    const orgaosChunks = chunkArray(agencies, 5);
-
     const chartData = [];
     try {
-      const request = orgaosChunks?.at(0).map(async item => {
+      const request = data?.orgaos.map(async item => {
         const response = await api.ui.get(`/v2/orgao/resumo/${item.id_orgao}`);
         chartData.push(response.data);
       });
@@ -233,8 +206,7 @@ export const getStaticProps: GetStaticProps = async context => {
 
     return {
       props: {
-        pages: orgaosChunks,
-        agencies,
+        dataList: data.orgaos,
         summary: data.grupo,
         chartData,
       },
@@ -246,4 +218,9 @@ export const getStaticProps: GetStaticProps = async context => {
 };
 const Page = styled.div`
   background: #3e5363;
+`;
+const LinkTo = styled.a`
+  width: 100%;
+  text-decoration: none;
+  color: #fff;
 `;

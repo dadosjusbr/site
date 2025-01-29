@@ -110,7 +110,7 @@ export const noData = ({
       } else if (!yearsWithData(data)?.includes(i)) {
         noDataArr.push(
           data
-            ?.map(d => d.resumo_rubricas.outras)
+            .map(d => d.resumo_rubricas.outras)
             .reduce((a, b) => {
               if (a > b) {
                 return a;
