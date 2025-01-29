@@ -23,7 +23,7 @@ export const graphAnnotations = ({
   agencyInfo: AllAgencyInformation;
 }): XAxisAnnotations[] => {
   const manualCollection = findLatestData(agencyInfo)?.coleta_manual;
-  const incompleteYears = getYearWithIncompleteData(data).map(d =>
+  const incompleteYears = getYearWithIncompleteData(data)?.map(d =>
     d.ano === undefined ? 0 : d.ano,
   );
 
@@ -43,7 +43,7 @@ export const graphAnnotations = ({
     },
   };
 
-  const i = incompleteYears.map(d => ({
+  const i = incompleteYears?.map(d => ({
     x: d,
     label: annotationsLabel,
     borderWidth: 0,
