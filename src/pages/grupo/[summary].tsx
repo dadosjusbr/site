@@ -26,21 +26,14 @@ import { getCurrentYear } from '../../functions/currentYear';
 import AgencyWithoutNavigation from '../../components/AnnualRemunerationGraph';
 import { formatToAgency, orderStringsWithNum } from '../../functions/format';
 
-type chartDataType = {
-  dados_anuais?: AnnualSummaryData[];
-  orgao: Agency;
-};
-
 export default function SummaryPage({
   pages,
   agencies,
   summary,
-  chartData,
 }: {
   pages: v2AgencyBasic[][];
   agencies: v2AgencyBasic[];
   summary: string;
-  chartData: chartDataType[];
 }) {
   const router = useRouter();
   const { page } = router.query.page === undefined ? { page: 1 } : router.query;
@@ -134,11 +127,9 @@ export default function SummaryPage({
                   <div id={agency.id_orgao}>
                     <Suspense fallback={<CircularProgress />}>
                       <AgencyWithoutNavigation
-                        data={chartData[i]?.dados_anuais}
                         id={agency?.id_orgao}
                         title={agency?.nome}
                         year={getCurrentYear()}
-                        agency={chartData[i]?.orgao}
                       />
                     </Suspense>
                   </div>
@@ -217,26 +208,13 @@ export const getStaticProps: GetStaticProps = async context => {
     const agencies = data.orgaos.sort((a, b) =>
       orderStringsWithNum(a.id_orgao, b.id_orgao),
     );
-
     const orgaosChunks = chunkArray(agencies, 5);
-
-    const chartData = [];
-    try {
-      const request = orgaosChunks?.at(0).map(async item => {
-        const response = await api.ui.get(`/v2/orgao/resumo/${item.id_orgao}`);
-        chartData.push(response.data);
-      });
-      await Promise.all(request);
-    } catch (error) {
-      throw new Error(error);
-    }
 
     return {
       props: {
         pages: orgaosChunks,
         agencies,
         summary: data.grupo,
-        chartData,
       },
       revalidate: 3600,
     };
