@@ -127,7 +127,6 @@ const AgencyPageWithoutNavigation: React.FC<
 
   return (
     <Container fixed>
-      {console.log(agency.id_orgao, data)}
       <Box>
         <MoreInfoAccordion
           ombudsman={agency?.ouvidoria}
