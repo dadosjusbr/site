@@ -202,7 +202,7 @@ const SearchAccordion = ({
             agencyName={agencyName}
             url={`
               ${URLToChange.origin}/orgao/${selectedAgencies.map(
-              d => d?.id_orgao,
+              d => d.id_orgao,
             )}${URLToChange.search}`}
             onRequestClose={() => setModalIsOpen(false)}
           />
