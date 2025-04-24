@@ -205,7 +205,7 @@ const AnnualMoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6, 7],
+                enabledOnSeries: [...Array(rubs.length)].map((_, i) => i),
                 marker: {
                   fillColors: colors,
                 },
