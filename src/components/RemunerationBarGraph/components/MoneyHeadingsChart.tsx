@@ -1,4 +1,9 @@
-import { Box, CircularProgress, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  capitalize,
+  CircularProgress,
+  ThemeProvider,
+} from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import light from '../../../styles/theme-light';
@@ -34,7 +39,7 @@ const rub = (data: v2MonthTotals[]) => {
         if (!seriesMap.has(key)) {
           // Initialize new series when we find a new heading
           seriesMap.set(key, {
-            name: key,
+            name: capitalize(key).replace(/_/g, ' '),
             data: [...MONTHLY_ARRAY_FILLED_WITH_ZERO],
             ...(key === 'outras' && { color: '#D1D1D17D' }),
           });
@@ -50,7 +55,7 @@ const rub = (data: v2MonthTotals[]) => {
   let outrasEntry: GraphSeries | null = null;
 
   Array.from(seriesMap.values()).forEach(entry => {
-    if (entry.name === 'outras') {
+    if (entry.name.toLowerCase() === 'outras') {
       outrasEntry = entry;
     } else {
       series.push(entry);

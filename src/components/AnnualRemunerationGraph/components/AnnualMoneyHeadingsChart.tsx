@@ -1,4 +1,9 @@
-import { Box, CircularProgress, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  capitalize,
+  CircularProgress,
+  ThemeProvider,
+} from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import light from '../../../styles/theme-light';
@@ -27,7 +32,7 @@ const rub = (data: AnnualSummaryData[]) => {
     for (const [name, value] of Object.entries(yearData.resumo_rubricas)) {
       if (!seriesMap.has(name)) {
         seriesMap.set(name, {
-          name,
+          name: capitalize(name).replace(/_/g, ' '),
           data: new Array(data.length).fill(0),
           ...(name === 'outras' && { color: '#D1D1D17D' }),
         });
@@ -43,7 +48,7 @@ const rub = (data: AnnualSummaryData[]) => {
 
   Array.from(seriesMap.values()).forEach(entry => {
     entry.data = fillNoDataIndexes(sortedData, entry.data);
-    if (entry.name === 'outras') {
+    if (entry.name.toLocaleLowerCase() === 'outras') {
       outrasEntry = entry;
     } else {
       series.push(entry);
