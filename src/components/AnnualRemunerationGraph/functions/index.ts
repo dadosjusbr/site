@@ -174,6 +174,22 @@ export const totalWaste = ({
   return dataArray;
 };
 
+export const fillNoDataIndexes = (
+  data: AnnualSummaryData[],
+  incomingData: number[],
+) => {
+  const dataArray: number[] = [];
+  for (let i = 2018; i <= getCurrentYear(); i += 1) {
+    if (yearsWithData(data)?.includes(i)) {
+      dataArray.push(incomingData[yearsWithData(data)?.indexOf(i)]);
+    } else if (!yearsWithData(data)?.includes(i)) {
+      dataArray.push(0);
+    }
+  }
+
+  return dataArray;
+};
+
 export const createDataArray = ({
   tipoRemuneracao,
   data,
@@ -199,14 +215,7 @@ export const createDataArray = ({
       .map(d => (d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao]));
   }
 
-  const dataArray: number[] = [];
-  for (let i = 2018; i <= getCurrentYear(); i += 1) {
-    if (yearsWithData(data)?.includes(i)) {
-      dataArray.push(incomingData[yearsWithData(data)?.indexOf(i)]);
-    } else if (!yearsWithData(data)?.includes(i)) {
-      dataArray.push(0);
-    }
-  }
+  const dataArray = fillNoDataIndexes(data, incomingData);
 
   return dataArray;
 };

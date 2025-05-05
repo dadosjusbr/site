@@ -1,12 +1,67 @@
-import { Box, CircularProgress, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  capitalize,
+  CircularProgress,
+  ThemeProvider,
+} from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import light from '../../../styles/theme-light';
 import { formatCurrencyValue } from '../../../functions/format';
-import { createDataArray, yearList, noData } from '../functions';
+import { yearList, noData, fillNoDataIndexes } from '../functions';
 import { graphAnnotations } from '../functions/graphConfigs';
+import { useUniqueColors } from '../../../hooks/useUniqueColors';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+const yearListArr = yearList();
+
+const rub = (data: AnnualSummaryData[]) => {
+  type GraphSeries = {
+    name: string;
+    data: number[];
+    color?: string;
+  };
+
+  // Sort years without mutating original array
+  const sortedData = [...data].sort((a, b) => a.ano - b.ano);
+  const seriesMap = new Map<string, GraphSeries>();
+
+  // Single pass through the data
+  sortedData.forEach((yearData, yearIndex) => {
+    for (const [name, value] of Object.entries(yearData.resumo_rubricas)) {
+      if (!seriesMap.has(name)) {
+        seriesMap.set(name, {
+          name: capitalize(name).replace(/_/g, ' '),
+          data: new Array(data.length).fill(0),
+          ...(name === 'outras' && { color: '#D1D1D17D' }),
+        });
+      }
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      seriesMap.get(name)!.data[yearIndex] = value;
+    }
+  });
+
+  // Optimize array conversion and sorting in single pass
+  const series: GraphSeries[] = [];
+  let outrasEntry: GraphSeries | null = null;
+
+  Array.from(seriesMap.values()).forEach(entry => {
+    entry.data = fillNoDataIndexes(sortedData, entry.data);
+    if (entry.name.toLocaleLowerCase() === 'outras') {
+      outrasEntry = entry;
+    } else {
+      series.push(entry);
+    }
+  });
+
+  // Add 'outras' to beginning if it exists
+  if (outrasEntry) {
+    series.unshift(outrasEntry);
+  }
+
+  return series;
+};
 
 const AnnualMoneyHeadingsChart = ({
   data,
@@ -21,22 +76,8 @@ const AnnualMoneyHeadingsChart = ({
   height?: number | string;
   matches: boolean;
 }) => {
-  const yearListArr = yearList();
-
-  const colors = [
-    '#d1d1d17d',
-    '#8dd3c7',
-    '#ffffb3',
-    '#bebada',
-    '#fb8072',
-    '#80b1d3',
-    '#fdb462',
-    '#b3de69',
-    // '#6d2f4f',
-    // '#d9d9d9',
-    // '#bc80bd',
-    '#2C3236',
-  ];
+  const rubs = rub(data);
+  const colors = useUniqueColors(rubs.length);
 
   return (
     <ThemeProvider theme={light}>
@@ -169,7 +210,7 @@ const AnnualMoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6, 7],
+                enabledOnSeries: [...Array(rubs.length)].map((_, i) => i),
                 marker: {
                   fillColors: colors,
                 },
@@ -219,78 +260,7 @@ const AnnualMoneyHeadingsChart = ({
               },
             }}
             series={[
-              {
-                name: 'Outras',
-                data: (() =>
-                  createDataArray({
-                    tipoRemuneracao: 'outras',
-                    data,
-                    type: 'rubrica',
-                  }))(),
-              },
-              {
-                name: 'Licença-compensatória',
-                data: (() =>
-                  createDataArray({
-                    tipoRemuneracao: 'licenca_compensatoria',
-                    data,
-                    type: 'rubrica',
-                  }))(),
-              },
-              {
-                name: 'Gratificação natalina',
-                data: (() =>
-                  createDataArray({
-                    tipoRemuneracao: 'gratificacao_natalina',
-                    data,
-                    type: 'rubrica',
-                  }))(),
-              },
-              {
-                name: 'Indenização de férias',
-                data: (() =>
-                  createDataArray({
-                    tipoRemuneracao: 'indenizacao_de_ferias',
-                    data,
-                    type: 'rubrica',
-                  }))(),
-              },
-              {
-                name: 'Férias',
-                data: (() =>
-                  createDataArray({
-                    tipoRemuneracao: 'ferias',
-                    data,
-                    type: 'rubrica',
-                  }))(),
-              },
-              {
-                name: 'Auxílio-alimentação',
-                data: (() =>
-                  createDataArray({
-                    tipoRemuneracao: 'auxilio_alimentacao',
-                    data,
-                    type: 'rubrica',
-                  }))(),
-              },
-              {
-                name: 'Licença-prêmio',
-                data: (() =>
-                  createDataArray({
-                    tipoRemuneracao: 'licenca_premio',
-                    data,
-                    type: 'rubrica',
-                  }))(),
-              },
-              {
-                name: 'Auxílio-saúde',
-                data: (() =>
-                  createDataArray({
-                    tipoRemuneracao: 'auxilio_saude',
-                    data,
-                    type: 'rubrica',
-                  }))(),
-              },
+              ...rubs,
               {
                 name: 'Sem Dados',
                 data: (() =>
@@ -298,6 +268,7 @@ const AnnualMoneyHeadingsChart = ({
                     data,
                     type: 'rubrica',
                   }))(),
+                color: '#2C3236',
               },
             ]}
             width={width}

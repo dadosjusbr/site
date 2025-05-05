@@ -1,4 +1,9 @@
-import { Box, CircularProgress, ThemeProvider } from '@mui/material';
+import {
+  Box,
+  capitalize,
+  CircularProgress,
+  ThemeProvider,
+} from '@mui/material';
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
 import light from '../../../styles/theme-light';
@@ -7,8 +12,63 @@ import { getCurrentYear } from '../../../functions/currentYear';
 import MONTHS from '../../../@types/MONTHS';
 import { createArrayFilledWithValue, fixYearDataArray } from '../functions';
 import COLLECT_INFOS from '../../../@types/COLLECT_INFOS';
+import { useUniqueColors } from '../../../hooks/useUniqueColors';
 
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
+
+const currentYear = getCurrentYear();
+const fixData = (data: v2MonthTotals[]) => fixYearDataArray(data);
+const MONTHLY_ARRAY_FILLED_WITH_ZERO = createArrayFilledWithValue({
+  size: 12,
+  value: 0,
+});
+
+const rub = (data: v2MonthTotals[]) => {
+  type GraphSeries = {
+    name: string;
+    data: number[];
+    color?: string;
+  };
+
+  const seriesMap = new Map<string, GraphSeries>();
+
+  // Single pass through the data to discover and fill items
+  data.forEach((monthData, monthIndex) => {
+    if (monthData) {
+      Object.entries(monthData.resumo_rubricas).forEach(([key, value]) => {
+        if (!seriesMap.has(key)) {
+          // Initialize new series when we find a new heading
+          seriesMap.set(key, {
+            name: capitalize(key).replace(/_/g, ' '),
+            data: [...MONTHLY_ARRAY_FILLED_WITH_ZERO],
+            ...(key === 'outras' && { color: '#D1D1D17D' }),
+          });
+        }
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        seriesMap.get(key)!.data[monthIndex] = value;
+      });
+    }
+  });
+
+  // Convert to array and ensure 'outras' comes first
+  const series: GraphSeries[] = [];
+  let outrasEntry: GraphSeries | null = null;
+
+  Array.from(seriesMap.values()).forEach(entry => {
+    if (entry.name.toLowerCase() === 'outras') {
+      outrasEntry = entry;
+    } else {
+      series.push(entry);
+    }
+  });
+
+  // Add 'outras' to beginning if it exists
+  if (outrasEntry) {
+    series.unshift(outrasEntry);
+  }
+
+  return series;
+};
 
 const MoneyHeadingsChart = ({
   data,
@@ -21,33 +81,39 @@ const MoneyHeadingsChart = ({
   width?: number | string;
   height?: number | string;
 }) => {
-  const MaxMonthPlaceholder = () =>
-    data
-      .map(d => d.resumo_rubricas.outras)
-      .reduce((a, b) => {
-        if (a > b) {
-          return a;
-        }
-        return b;
-      }, 0);
+  // data has to be fixed to ensure all months are present before passing to rub()
+  // This is important to ensure that the chart is always filled with 12 months
+  const fixedData = fixData(data);
+  const rubs = rub(fixedData);
+  const colors = useUniqueColors(rubs.length);
 
-  const OthersMoneyHeadings = createArrayFilledWithValue({
-    size: 12,
-    value: 0,
-  }).map((v, i) => {
-    if (fixYearDataArray(data)[i]) {
-      return fixYearDataArray(data)[i].resumo_rubricas.outras;
-    }
-    return v;
-  });
+  const MaxMonthPlaceholder = Math.max(
+    ...rubs.map(r => r.data).reduce((a, b) => a.concat(b), []),
+  );
 
-  const fillDataArray = (money_heading: keyof ItemSummary) =>
-    createArrayFilledWithValue({ size: 12, value: 0 }).map((v, i) => {
-      if (fixYearDataArray(data)[i]) {
-        return fixYearDataArray(data)[i].resumo_rubricas[money_heading];
+  const monthsWithoutData = MONTHLY_ARRAY_FILLED_WITH_ZERO.map(
+    (_, monthIndex) => {
+      // If we have data for this month, return 0
+      if (fixedData[monthIndex]) {
+        return 0;
       }
-      return v;
-    });
+
+      // For past years, all missing months should show as empty
+      if (year < currentYear) {
+        return MaxMonthPlaceholder;
+      }
+
+      // For current year, only show empty months up to current date
+      const collectDate = new Date(
+        currentYear,
+        monthIndex + 1,
+        COLLECT_INFOS.COLLECT_DATE,
+      );
+      const now = new Date();
+
+      return collectDate < now ? MaxMonthPlaceholder : 0;
+    },
+  );
 
   return (
     <ThemeProvider theme={light}>
@@ -55,20 +121,7 @@ const MoneyHeadingsChart = ({
         <Suspense fallback={<CircularProgress />}>
           <Chart
             options={{
-              colors: [
-                '#d1d1d17d',
-                '#8dd3c7',
-                '#ffffb3',
-                '#bebada',
-                '#fb8072',
-                '#80b1d3',
-                '#fdb462',
-                '#b3de69',
-                // '#6d2f4f',
-                // '#d9d9d9',
-                // '#bc80bd',
-                '#2C3236',
-              ],
+              colors,
               chart: {
                 id: 'remuneration-graph',
                 stacked: true,
@@ -190,10 +243,12 @@ const MoneyHeadingsChart = ({
                 shared: true,
                 intersect: false,
                 inverseOrder: true,
-                enabledOnSeries: [0, 1, 2, 3, 4, 5, 6, 7],
+                enabledOnSeries: [
+                  ...Array.from({ length: rubs.length }, (_, i) => i),
+                ],
                 x: {
                   formatter(val, opts) {
-                    if (OthersMoneyHeadings[opts.dataPointIndex] === 0) {
+                    if (monthsWithoutData[opts.dataPointIndex] !== 0) {
                       return `Sem dados`;
                     }
                     return `${val}`;
@@ -224,7 +279,7 @@ const MoneyHeadingsChart = ({
                   return list;
                 })(),
                 title: {
-                  text: 'Anos',
+                  text: 'Meses',
                   offsetX: -25,
                   style: {
                     fontSize: '15px',
@@ -245,68 +300,12 @@ const MoneyHeadingsChart = ({
               },
             }}
             series={[
-              {
-                name: 'Outras',
-                data: (() => fillDataArray('outras'))(),
-              },
-              {
-                name: 'Licença-compensatória',
-                data: (() => fillDataArray('licenca_compensatoria'))(),
-              },
-              {
-                name: 'Gratificação natalina',
-                data: (() => fillDataArray('gratificacao_natalina'))(),
-              },
-              {
-                name: 'Indenização de férias',
-                data: (() => fillDataArray('indenizacao_de_ferias'))(),
-              },
-              {
-                name: 'Férias',
-                data: (() => fillDataArray('ferias'))(),
-              },
-              {
-                name: 'Auxílio-alimentação',
-                data: (() => fillDataArray('auxilio_alimentacao'))(),
-              },
-              {
-                name: 'Licença-prêmio',
-                data: (() => fillDataArray('licenca_premio'))(),
-              },
-              {
-                name: 'Auxílio-saúde',
-                data: (() => fillDataArray('auxilio_saude'))(),
-              },
+              ...rubs,
               {
                 type: 'bar',
                 name: 'Sem Dados',
-                data: (() =>
-                  createArrayFilledWithValue({
-                    size: 12,
-                    value: 0,
-                  }).map((v, i) => {
-                    const dateFixedArray = fixYearDataArray(data);
-                    if (dateFixedArray[i]) {
-                      return v;
-                    }
-                    // this verifcation is used to check the previous months without data based in the last month in array,
-                    // if the month is previous then a existing data and has no data, the no data array is filled
-                    const date = new Date();
-                    if (year === getCurrentYear()) {
-                      if (
-                        new Date(
-                          getCurrentYear(),
-                          i + 1,
-                          COLLECT_INFOS.COLLECT_DATE,
-                        ) < date
-                      ) {
-                        return MaxMonthPlaceholder();
-                      }
-                    } else {
-                      return MaxMonthPlaceholder();
-                    }
-                    return 0;
-                  }))(),
+                data: monthsWithoutData,
+                color: '#2C3236',
               },
             ]}
             width={width}
