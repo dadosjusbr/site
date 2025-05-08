@@ -129,11 +129,10 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               openParam={null}
               openOmbudsman={false}
             >
-              O DadosJusBr encontrou inconsistências nos contracheques de{' '}
-              {MONTHS[month]}/{year} no arquivo originalmente disponibilizado
-              por este órgão, como erros no preenchimento dos campos de
-              informação. Entre em contato para saber mais:
-              contato@dadosjusbr.org.
+              O DadosJusBr encontrou inconsistências nos contracheques deste mês
+              no arquivo originalmente disponibilizado por este órgão, como
+              erros no preenchimento dos campos de informação. Entre em contato
+              para saber mais: contato@dadosjusbr.org.
             </AlertModal>
           </Box>
         )}
