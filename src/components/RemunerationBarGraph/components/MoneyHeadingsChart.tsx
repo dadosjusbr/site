@@ -81,11 +81,13 @@ const MoneyHeadingsChart = ({
   width?: number | string;
   height?: number | string;
 }) => {
-  // data has to be fixed to ensure all months are present before passing to rub()
+  // `data` has to be fixed to ensure all months are present before passing to rub()
   // This is important to ensure that the chart is always filled with 12 months
   const fixedData = fixData(data);
   const rubs = rub(fixedData);
   const colors = useUniqueColors(rubs.length);
+  // Add a color for 'Sem Dados' series
+  colors.push('#2C3236');
 
   const MaxMonthPlaceholder = Math.max(
     ...rubs.map(r => r.data).reduce((a, b) => a.concat(b), []),
@@ -305,7 +307,6 @@ const MoneyHeadingsChart = ({
                 type: 'bar',
                 name: 'Sem Dados',
                 data: monthsWithoutData,
-                color: '#2C3236',
               },
             ]}
             width={width}
