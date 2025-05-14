@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from '@mui/material';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 import light from '../../../styles/theme-light';
 import { formatCurrencyValue } from '../../../functions/format';
 import { yearList, noData, fillNoDataIndexes } from '../functions';
@@ -30,37 +30,37 @@ const rub = (data: AnnualSummaryData[]) => {
   // Single pass through the data
   sortedData.forEach((yearData, yearIndex) => {
     for (const [name, value] of Object.entries(yearData.resumo_rubricas)) {
-      if (!seriesMap.has(name)) {
+      if (!seriesMap.has(name) && value > 0) {
         seriesMap.set(name, {
           name: capitalize(name).replace(/_/g, ' '),
           data: new Array(data.length).fill(0),
           ...(name === 'outras' && { color: '#D1D1D17D' }),
         });
       }
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-      seriesMap.get(name)!.data[yearIndex] = value;
+
+      if (seriesMap.has(name)) {
+        const entry = seriesMap.get(name);
+        entry.data[yearIndex] = value;
+      }
     }
   });
 
   // Optimize array conversion and sorting in single pass
-  const series: GraphSeries[] = [];
-  let outrasEntry: GraphSeries | null = null;
+  const series: GraphSeries[] = Array.from(seriesMap.entries())
+    .sort(([nameA], [nameB]) => {
+      // Put "outras" at the end
+      if (nameA.toLowerCase() === 'outras') return 1;
+      if (nameB.toLowerCase() === 'outras') return -1;
+      // Sort alphabetically otherwise
+      return nameA.localeCompare(nameB);
+    })
+    .map(([, entry]) => {
+      // Handle the case where there is no data for a year
+      entry.data = fillNoDataIndexes(sortedData, entry.data);
+      return entry;
+    });
 
-  Array.from(seriesMap.values()).forEach(entry => {
-    entry.data = fillNoDataIndexes(sortedData, entry.data);
-    if (entry.name.toLocaleLowerCase() === 'outras') {
-      outrasEntry = entry;
-    } else {
-      series.push(entry);
-    }
-  });
-
-  // Add 'outras' to beginning if it exists
-  if (outrasEntry) {
-    series.unshift(outrasEntry);
-  }
-
-  return series;
+  return series.reverse();
 };
 
 const AnnualMoneyHeadingsChart = ({
@@ -78,6 +78,21 @@ const AnnualMoneyHeadingsChart = ({
 }) => {
   const rubs = rub(data);
   const colors = useUniqueColors(rubs.length);
+  const noDataArray = noData({ data });
+
+  const MaxYearPlaceholder = useMemo(() => {
+    if (!rubs.length) return 0;
+
+    const maxRubrica = rubs.reduce(
+      (max, current) => {
+        const total = current.data.reduce((sum, val) => sum + val, 0);
+        return total > max.total ? { total, data: current.data } : max;
+      },
+      { total: 0, data: [] },
+    );
+
+    return maxRubrica.total;
+  }, [rubs]);
 
   return (
     <ThemeProvider theme={light}>
@@ -263,11 +278,9 @@ const AnnualMoneyHeadingsChart = ({
               ...rubs,
               {
                 name: 'Sem Dados',
-                data: (() =>
-                  noData({
-                    data,
-                    type: 'rubrica',
-                  }))(),
+                data: noDataArray.map(d =>
+                  d === null ? MaxYearPlaceholder : d,
+                ),
                 color: '#2C3236',
               },
             ]}
