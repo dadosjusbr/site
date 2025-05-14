@@ -5,7 +5,7 @@ import {
   ThemeProvider,
 } from '@mui/material';
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import { Suspense, useMemo } from 'react';
 import light from '../../../styles/theme-light';
 import { formatCurrencyValue } from '../../../functions/format';
 import { getCurrentYear } from '../../../functions/currentYear';
@@ -17,7 +17,6 @@ import { useUniqueColors } from '../../../hooks/useUniqueColors';
 const Chart = dynamic(() => import('react-apexcharts'), { ssr: false });
 
 const currentYear = getCurrentYear();
-const fixData = (data: v2MonthTotals[]) => fixYearDataArray(data);
 const MONTHLY_ARRAY_FILLED_WITH_ZERO = createArrayFilledWithValue({
   size: 12,
   value: 0,
@@ -36,7 +35,7 @@ const rub = (data: v2MonthTotals[]) => {
   data.forEach((monthData, monthIndex) => {
     if (monthData) {
       Object.entries(monthData.resumo_rubricas).forEach(([key, value]) => {
-        if (!seriesMap.has(key)) {
+        if (!seriesMap.has(key) && value > 0) {
           // Initialize new series when we find a new heading
           seriesMap.set(key, {
             name: capitalize(key).replace(/_/g, ' '),
@@ -44,30 +43,27 @@ const rub = (data: v2MonthTotals[]) => {
             ...(key === 'outras' && { color: '#D1D1D17D' }),
           });
         }
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        seriesMap.get(key)!.data[monthIndex] = value;
+
+        if (seriesMap.has(key)) {
+          const entry = seriesMap.get(key);
+          entry.data[monthIndex] = value;
+        }
       });
     }
   });
 
   // Convert to array and ensure 'outras' comes first
-  const series: GraphSeries[] = [];
-  let outrasEntry: GraphSeries | null = null;
+  const series: GraphSeries[] = Array.from(seriesMap.entries())
+    .sort(([nameA], [nameB]) => {
+      // Put "outras" at the end
+      if (nameA.toLowerCase() === 'outras') return 1;
+      if (nameB.toLowerCase() === 'outras') return -1;
+      // Sort alphabetically otherwise
+      return nameA.localeCompare(nameB);
+    })
+    .map(([, entry]) => entry);
 
-  Array.from(seriesMap.values()).forEach(entry => {
-    if (entry.name.toLowerCase() === 'outras') {
-      outrasEntry = entry;
-    } else {
-      series.push(entry);
-    }
-  });
-
-  // Add 'outras' to beginning if it exists
-  if (outrasEntry) {
-    series.unshift(outrasEntry);
-  }
-
-  return series;
+  return series.reverse();
 };
 
 const MoneyHeadingsChart = ({
@@ -83,15 +79,22 @@ const MoneyHeadingsChart = ({
 }) => {
   // `data` has to be fixed to ensure all months are present before passing to rub()
   // This is important to ensure that the chart is always filled with 12 months
-  const fixedData = fixData(data);
+  const fixedData = fixYearDataArray(data);
   const rubs = rub(fixedData);
   const colors = useUniqueColors(rubs.length);
   // Add a color for 'Sem Dados' series
   colors.push('#2C3236');
 
-  const MaxMonthPlaceholder = Math.max(
-    ...rubs.map(r => r.data).reduce((a, b) => a.concat(b), []),
-  );
+  const MaxMonthPlaceholder = useMemo(() => {
+    if (!rubs.length) return 0;
+
+    const maxRubrica = rubs.reduce((acc, rubrica) => {
+      const maxValue = Math.max(...rubrica.data);
+      return Math.max(acc, maxValue);
+    }, 0);
+
+    return maxRubrica;
+  }, [rubs]);
 
   const monthsWithoutData = MONTHLY_ARRAY_FILLED_WITH_ZERO.map(
     (_, monthIndex) => {

@@ -93,46 +93,25 @@ export const noData = ({
   data,
   baseRemunerationDataTypes,
   otherRemunerationsDataTypes,
-  type,
 }: {
   data: AnnualSummaryData[];
   baseRemunerationDataTypes?: string;
   otherRemunerationsDataTypes?: string;
-  type?: 'rubrica';
 }): number[] => {
   const noDataArr: number[] = [];
   const currentYear = getCurrentYear();
 
-  if (type === 'rubrica') {
-    for (let i = 2018; i <= currentYear; i += 1) {
-      if (yearsWithData(data)?.includes(i)) {
-        noDataArr.push(0);
-      } else if (!yearsWithData(data)?.includes(i)) {
-        noDataArr.push(
-          data
-            .map(d => d.resumo_rubricas.outras)
-            .reduce((a, b) => {
-              if (a > b) {
-                return a;
-              }
-              return b;
-            }, 0),
-        );
-      }
-    }
-  } else {
-    for (let i = 2018; i <= currentYear; i += 1) {
-      if (yearsWithData(data)?.includes(i)) {
-        noDataArr.push(0);
-      } else if (!yearsWithData(data)?.includes(i)) {
-        noDataArr.push(
-          MaxMonthPlaceholder({
-            data,
-            baseRemunerationDataTypes,
-            otherRemunerationsDataTypes,
-          }),
-        );
-      }
+  for (let i = 2018; i <= currentYear; i += 1) {
+    if (yearsWithData(data)?.includes(i)) {
+      noDataArr.push(0);
+    } else if (!yearsWithData(data)?.includes(i)) {
+      noDataArr.push(
+        MaxMonthPlaceholder({
+          data,
+          baseRemunerationDataTypes,
+          otherRemunerationsDataTypes,
+        }) || null,
+      );
     }
   }
 
@@ -193,27 +172,15 @@ export const fillNoDataIndexes = (
 export const createDataArray = ({
   tipoRemuneracao,
   data,
-  type,
 }: {
   tipoRemuneracao: keyof ItemSummary;
   data: AnnualSummaryData[];
-  type?: 'rubrica';
 }): number[] => {
   let incomingData = [];
 
-  if (type === 'rubrica') {
-    incomingData = data
-      ?.sort((a, b) => a.ano - b.ano)
-      .map(d =>
-        d.resumo_rubricas[tipoRemuneracao] === undefined
-          ? 0
-          : d.resumo_rubricas[tipoRemuneracao],
-      );
-  } else {
-    incomingData = data
-      ?.sort((a, b) => a.ano - b.ano)
-      .map(d => (d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao]));
-  }
+  incomingData = data
+    ?.sort((a, b) => a.ano - b.ano)
+    .map(d => (d[tipoRemuneracao] === undefined ? 0 : d[tipoRemuneracao]));
 
   const dataArray = fillNoDataIndexes(data, incomingData);
 
