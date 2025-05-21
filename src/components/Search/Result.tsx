@@ -48,6 +48,16 @@ const columns: GridColDef[] = [
     width: 150,
   },
   { field: 'valor', headerName: 'Valor', width: 120 },
+  {
+    field: 'desambiguacao_macro',
+    headerName: 'Desambiguação macro',
+    width: 180,
+  },
+  {
+    field: 'desambiguacao_micro',
+    headerName: 'Desambiguação micro',
+    width: 180,
+  },
 ];
 
 const Result = ({
