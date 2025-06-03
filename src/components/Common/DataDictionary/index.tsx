@@ -96,16 +96,16 @@ const rows = [
   ),
   createData('valor', 'float', 'Valor da remuneração', '-10516,40'),
   createData(
-    'desambiguacao_macro',
-    'string',
-    'Categorização abrangente do benefício em rubricas do Judiciário',
-    'aux-diversos',
-  ),
-  createData(
     'desambiguacao_micro',
     'string',
     'Categorização específica do benefício em rubricas do Judiciário',
     'aux-transporte',
+  ),
+  createData(
+    'desambiguacao_macro',
+    'string',
+    'Categorização abrangente do benefício em rubricas do Judiciário',
+    'aux-diversos',
   ),
 ];
 

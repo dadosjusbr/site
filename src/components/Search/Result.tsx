@@ -49,13 +49,13 @@ const columns: GridColDef[] = [
   },
   { field: 'valor', headerName: 'Valor', width: 120 },
   {
-    field: 'desambiguacao_macro',
-    headerName: 'Desambiguação macro',
+    field: 'desambiguacao_micro',
+    headerName: 'Desambiguação micro',
     width: 180,
   },
   {
-    field: 'desambiguacao_micro',
-    headerName: 'Desambiguação micro',
+    field: 'desambiguacao_macro',
+    headerName: 'Desambiguação macro',
     width: 180,
   },
 ];
