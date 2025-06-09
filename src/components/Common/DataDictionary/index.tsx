@@ -28,7 +28,7 @@ const columns: readonly Column[] = [
   {
     id: 'descricao',
     label: 'Descrição',
-    minWidth: 80,
+    minWidth: 200,
     format: (value: number) => value.toLocaleString('pt-BR'),
   },
   {
@@ -98,13 +98,13 @@ const rows = [
   createData(
     'desambiguacao_micro',
     'string',
-    'Categorização específica do benefício em rubricas do Judiciário',
+    'Categorização específica, feita pela Transparência Brasil, do benefício em rubricas do Judiciário',
     'aux-transporte',
   ),
   createData(
     'desambiguacao_macro',
     'string',
-    'Categorização abrangente do benefício em rubricas do Judiciário',
+    'Categorização abrangente feita, pela Transparência Brasil, do benefício em rubricas do Judiciário',
     'aux-diversos',
   ),
 ];
@@ -117,7 +117,7 @@ export default function DataDictionary() {
           sx={{
             border: '1px solid #9b9b9b',
             borderRadius: '4px',
-            maxHeight: 300,
+            maxHeight: 500,
             '&::-webkit-scrollbar': {
               width: '5px',
             },

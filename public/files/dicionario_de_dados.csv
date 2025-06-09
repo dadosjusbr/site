@@ -9,5 +9,5 @@ lotacao,string,Local de lotação do membro,Auditoria da Justiça Militar Estadu
 categoria_remuneracao,string,Categoria da remuneração,Descontos
 detalhamento_remuneracao,string,Rubrica associada a remuneração,Imposto de renda
 valor,float,Valor da remuneração,"-10516,4"
-desambiguacao_micro,string,Categorização específica do benefício em rubricas do Judiciário,aux-transporte
-desambiguacao_macro,string,Categorização abrangente do benefício em rubricas do Judiciário,aux-diversos
+desambiguacao_micro,string,"Categorização específica, feita pela Transparência Brasil, do benefício em rubricas do Judiciário",aux-transporte
+desambiguacao_macro,string,"Categorização abrangente feita, pela Transparência Brasil, do benefício em rubricas do Judiciário",aux-diversos
