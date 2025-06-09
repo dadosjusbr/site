@@ -104,7 +104,7 @@ const rows = [
   createData(
     'desambiguacao_macro',
     'string',
-    'Categorização abrangente feita, pela Transparência Brasil, do benefício em rubricas do Judiciário',
+    'Categorização abrangente, feita pela Transparência Brasil, do benefício em rubricas do Judiciário',
     'aux-diversos',
   ),
 ];
