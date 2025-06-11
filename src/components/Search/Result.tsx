@@ -12,6 +12,7 @@ import {
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 import { ThemeProvider } from '@mui/material/styles';
 import IosShareIcon from '@mui/icons-material/IosShare';
+import { MenuBook } from '@mui/icons-material';
 import light from '../../styles/theme-light';
 import Video from '../Video';
 import DataDictionary from '../Common/DataDictionary';
@@ -163,41 +164,44 @@ const Result = ({
                   </Typography>
                 </Grid>
               </Grid>
-              <Box
-                display="flex"
-                justifyContent="space-between"
-                alignItems="center"
-                mt={4}
-                mb={2}
-              >
+
+              <Grid container mt={4} mb={2} gap={2} justifyContent="flex-end">
+                <Button
+                  color={buttonColorScheme}
+                  variant="outlined"
+                  endIcon={<IosShareIcon />}
+                  onClick={() => setModalIsOpen(true)}
+                >
+                  COMPARTILHAR
+                </Button>
+
+                {downloadButton}
+
                 <Button
                   onMouseEnter={handleOpen}
                   onMouseLeave={handleClose}
+                  onTouchStart={handleOpen}
+                  onTouchEnd={handleClose}
+                  color={buttonColorScheme}
                   href="/files/dicionario_de_dados.csv"
+                  variant="outlined"
                   download
+                  endIcon={<MenuBook />}
                 >
-                  Dicionário de Dados
+                  DICIONÁRIO DE DADOS
                   {open && (
-                    <Box position="absolute" zIndex={1} top="100%" left={1}>
+                    <Box
+                      position="absolute"
+                      zIndex={1}
+                      pt={1.5}
+                      top="100%"
+                      left="-120%"
+                    >
                       <DataDictionary />
                     </Box>
                   )}
                 </Button>
-
-                <Box>
-                  <Button
-                    color={buttonColorScheme}
-                    sx={{ mr: 0.7 }}
-                    variant="outlined"
-                    endIcon={<IosShareIcon />}
-                    onClick={() => setModalIsOpen(true)}
-                  >
-                    COMPARTILHAR
-                  </Button>
-
-                  {downloadButton}
-                </Box>
-              </Box>
+              </Grid>
             </Box>
           </Box>
           {numRowsIfAvailable > 0 && (
