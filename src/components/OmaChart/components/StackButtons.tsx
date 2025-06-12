@@ -3,7 +3,6 @@ import { Box, Button, Stack, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import CloudDownloadIcon from '@mui/icons-material/CloudDownload';
-import ReactGA from 'react-ga4';
 import { NextRouter } from 'next/router';
 import { formatBytes } from '../../../functions/format';
 import * as url from '../../../url';
@@ -11,6 +10,7 @@ import * as url from '../../../url';
 export default function index({
   router,
   setModalIsOpen,
+  handleDownloadReadme,
   fileLink,
   mi,
 }: {
@@ -18,6 +18,7 @@ export default function index({
   setModalIsOpen: Dispatch<SetStateAction<boolean>>;
   fileLink: string;
   mi: SummaryzedMI;
+  handleDownloadReadme: () => void;
 }) {
   return (
     <Box display="flex" justifyContent="space-between">
@@ -58,13 +59,9 @@ export default function index({
           variant="outlined"
           color="info"
           endIcon={<CloudDownloadIcon />}
-          onClick={() => {
-            ReactGA.event('file_download', {
-              category: 'download',
-              action: `From: ${window.location.pathname}`,
-            });
-          }}
+          onClick={handleDownloadReadme}
           href={url.downloadURL(fileLink)}
+          target="_blank"
         >
           <Typography variant="button" mr={1}>
             BAIXAR

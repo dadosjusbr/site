@@ -74,12 +74,27 @@ const OMASummary: React.FC<OMASummaryProps> = ({
       `mailto:contato@dadosjusbr.org?subject=Inconsistências nos contracheques de ${MONTHS[month]}/${year}`,
     );
 
+  const handleDownloadReadme = () => {
+    const readmeUrl = `${process.env.API_BASE_URL}/v2/readme?orgao=${agency}&ano=${year}&mes=${month}`;
+    const linkEl = document.createElement('a');
+    linkEl.href = readmeUrl;
+    document.body.appendChild(linkEl);
+    linkEl.click();
+    document.body.removeChild(linkEl);
+
+    ReactGA.event('file_download', {
+      category: 'download',
+      action: `From: ${window.location.pathname}`,
+    });
+  };
+
   return (
     <>
       {!matches ? (
         <StackButtons
           router={router}
           setModalIsOpen={setModalIsOpen}
+          handleDownloadReadme={handleDownloadReadme}
           fileLink={fileLink}
           mi={mi}
         />
@@ -98,13 +113,9 @@ const OMASummary: React.FC<OMASummaryProps> = ({
               variant="outlined"
               color="info"
               endIcon={<CloudDownloadIcon />}
-              onClick={() => {
-                ReactGA.event('file_download', {
-                  category: 'download',
-                  action: `From: ${window.location.pathname}`,
-                });
-              }}
+              onClick={handleDownloadReadme}
               href={url.downloadURL(fileLink)}
+              target="_blank"
             >
               <Typography variant="button" mr={1}>
                 BAIXAR
@@ -162,6 +173,7 @@ const OMASummary: React.FC<OMASummaryProps> = ({
           <StackButtons
             router={router}
             setModalIsOpen={setModalIsOpen}
+            handleDownloadReadme={handleDownloadReadme}
             fileLink={fileLink}
             mi={mi}
           />
