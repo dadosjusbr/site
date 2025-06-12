@@ -93,6 +93,20 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
     }
   }
 
+  const handleDownloadReadme = () => {
+    const readmeUrl = `${process.env.API_BASE_URL}/v2/readme?orgao=${id}&ano=${year}`;
+    const linkEl = document.createElement('a');
+    linkEl.href = readmeUrl;
+    document.body.appendChild(linkEl);
+    linkEl.click();
+    document.body.removeChild(linkEl);
+
+    ReactGA.event('file_download', {
+      category: 'download',
+      action: `From: ${window.location.pathname}`,
+    });
+  };
+
   useEffect(() => {
     setPlotData([]);
     setExpanded(false);
@@ -186,13 +200,9 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       variant="outlined"
                       color="info"
                       endIcon={<CloudDownloadIcon />}
-                      onClick={() => {
-                        ReactGA.event('file_download', {
-                          category: 'download',
-                          action: `From: ${window.location.pathname}`,
-                        });
-                      }}
+                      onClick={handleDownloadReadme}
                       href={url.downloadURL(fileLink)}
+                      target="_blank"
                       id="download-button"
                     >
                       <Typography variant="button" mr={1}>
@@ -227,13 +237,9 @@ const AgencyPageWithNavigation: React.FC<AgencyPageWithNavigationProps> = ({
                       variant="outlined"
                       color="info"
                       endIcon={<CloudDownloadIcon />}
-                      onClick={() => {
-                        ReactGA.event('file_download', {
-                          category: 'download',
-                          action: `From: ${window.location.pathname}`,
-                        });
-                      }}
+                      onClick={handleDownloadReadme}
                       href={url.downloadURL(fileLink)}
+                      target="_blank"
                       id="download-button"
                     >
                       <Typography variant="button" mr={1}>
