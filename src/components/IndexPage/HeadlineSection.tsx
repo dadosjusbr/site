@@ -163,8 +163,15 @@ export default function HeadlineSection({
                 alignItems="center"
                 justifyContent="space-between"
               >
-                <Typography color="#C666D8" variant="h2" p={0}>
+                <Typography color="#c05dd1" variant="h2" p={0}>
                   {Number(recordAmount).toLocaleString('pt-BR')}
+                  <span
+                    style={{
+                      fontSize: '1.4rem',
+                    }}
+                  >
+                    mil
+                  </span>
                 </Typography>
                 <ReceiptLongOutlined
                   fontSize="large"

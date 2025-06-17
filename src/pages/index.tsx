@@ -113,7 +113,7 @@ export default function Index({
           />
         </Headline>
       </Container>
-      {/* <ThemeProvider theme={light}>
+      <ThemeProvider theme={light}>
         <Paper elevation={0} square>
           <Container>
             <IndexPage.TransparencySection
@@ -148,7 +148,7 @@ export default function Index({
             fileLink={fileLink}
           />
         </Container>
-      </ThemeProvider> */}
+      </ThemeProvider>
       <Footer />
     </Page>
   );
