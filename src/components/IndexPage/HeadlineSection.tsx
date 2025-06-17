@@ -168,6 +168,7 @@ export default function HeadlineSection({
                     style: 'decimal',
                     maximumFractionDigits: 1,
                     minimumFractionDigits: 1,
+                    compactDisplay: 'short',
                   })}
                   <span
                     style={{
@@ -175,7 +176,7 @@ export default function HeadlineSection({
                       fontSize: '1.4rem',
                     }}
                   >
-                    mil
+                    milhões
                   </span>
                 </Typography>
                 <ReceiptLongOutlined
