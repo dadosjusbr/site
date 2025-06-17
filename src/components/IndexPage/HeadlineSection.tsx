@@ -1,10 +1,15 @@
 import { useState } from 'react';
-import ReactGA from 'react-ga4';
 import styled from 'styled-components';
-import { Typography, Grid, Link } from '@mui/material';
+import { Typography, Grid, Link, Button, Box } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import {
+  Apartment,
+  PaymentsOutlined,
+  ReceiptLongOutlined,
+} from '@mui/icons-material';
 import DropDownGroupSelector from '../Common/DropDownGroupSelector';
 import Video from '../Video';
+import DJBRGPTCard from '../Common/DJBRGPTCard';
 
 type HeadlineSectionProps = {
   collecting: Agency[];
@@ -24,115 +29,240 @@ export default function HeadlineSection({
   setOpenDialog,
 }: HeadlineSectionProps) {
   const [videoURL, setVideoURL] = useState('fFyDINfubbc');
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
   return (
     <>
-      <Typography variant="h1" p={0} lineHeight={1} textAlign="center">
-        Acesse as remunerações do sistema de Justiça
-      </Typography>
-      <br />
       <Grid container justifyContent="space-between">
-        <Grid item xs={12} md={7.2}>
-          <Typography component="p">
-            Os dados vão de <Lowercase>{formatedStartDate}</Lowercase> a{' '}
-            <Lowercase>{formatedEndDate}</Lowercase> e são provenientes de{' '}
-            <Link href="/status">
-              <Typography
-                variant="inherit"
-                component="span"
-                color="success.main"
-              >
-                {collecting.length}
-              </Typography>{' '}
-              órgãos
-            </Link>{' '}
-            que compreendem{' '}
-            <Typography variant="inherit" component="span" color="success.main">
-              {recordAmount}
-            </Typography>{' '}
-            registros de pagamentos de salários, indenizações, gratificações e
-            diárias, totalizando{' '}
-            <Typography variant="inherit" component="span" color="success.main">
-              {(finalValue / 1000000000).toLocaleString('pt-BR', {
-                style: 'currency',
-                currency: 'BRL',
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2,
-              })}{' '}
-              bilhões
-            </Typography>{' '}
-            em recursos públicos.
+        <Grid
+          item
+          xs={12}
+          md={7.5}
+          gap={2}
+          display="flex"
+          flexDirection="column"
+        >
+          <Typography variant="h1" p={0} lineHeight={1.2}>
+            Acesse as remunerações do sistema de Justiça
           </Typography>
+          <Box>
+            <Typography component="p">
+              O DadosJusBr visa aumentar a transparência nas remunerações do
+              sistema de Justiça brasileiro.
+              <br />
+              Coletamos dados de remunerações de{' '}
+              <span style={{ textTransform: 'lowercase' }}>
+                {formatedStartDate}
+              </span>{' '}
+              até{' '}
+              <span style={{ textTransform: 'lowercase' }}>
+                {formatedEndDate}
+              </span>{' '}
+              diretamente dos respectivos portais de transparência e as
+              disponibilizamos de maneira organizada e acessível.
+            </Typography>
+            <Typography component="p">
+              Você pode fazer o{' '}
+              {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+              <Link
+                underline="always"
+                onClick={() => setOpenDialog(true)}
+                target="_blank"
+                rel="noopener"
+                sx={{ cursor: 'pointer' }}
+              >
+                <Typography
+                  variant="inherit"
+                  component="span"
+                  color="success.main"
+                >
+                  download
+                </Typography>
+              </Link>{' '}
+              de todas as informações de remunerações da nossa base de dados!
+            </Typography>
+          </Box>
           <Grid
             container
             display="flex"
             alignItems="flex-start"
-            justifyContent="space-evenly"
-            my={4}
+            justifyContent={{ xs: 'center', md: 'space-evenly' }}
+            mb={4}
+            gap={2}
+            pr={{ xs: 0, lg: 10 }}
           >
             <Grid item>
-              <DropDownGroupSelector minWidth={125} />
-            </Grid>
-            <Grid item borderBottom="2px solid #2fbb96" mt={0.7}>
-              <Link
-                href="/pesquisar"
-                color="inherit"
+              <LandingButton
+                variant="contained"
                 sx={{
-                  textDecoration: 'none',
-                  cursor: 'pointer',
-                  display: 'flex',
+                  paddingY: 0.4,
+                  bgcolor: '#31CBA3',
+                  '&:hover': {
+                    bgcolor: '#1f9c7a',
+                  },
                 }}
-                onClick={() => {
-                  ReactGA.event('file_download', {
-                    category: 'download',
-                    action: `From: ${window.location.pathname}`,
-                  });
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+              >
+                <DropDownGroupSelector
+                  isOpen={dropdownOpen}
+                  setIsOpen={setDropdownOpen}
+                  minWidth={125}
+                  noStyle
+                  faceText={
+                    <ButtonTypography>Navegar pelos dados</ButtonTypography>
+                  }
+                />
+              </LandingButton>
+            </Grid>
+            <Grid item>
+              <LandingButton
+                href="/pesquisar"
+                variant="contained"
+                sx={{
+                  paddingX: '18px',
+                  bgcolor: '#9e4a9c',
+                  '&:hover': {
+                    bgcolor: '#7a3f7d',
+                  },
                 }}
               >
-                <Typography ml={1} mr={2}>
-                  PESQUISAR
-                </Typography>
+                <ButtonTypography>Pesquisar</ButtonTypography>
                 <SearchIcon />
-              </Link>
+              </LandingButton>
             </Grid>
           </Grid>
+
+          <Box
+            display="flex"
+            overflow={{ xs: 'auto', md: 'hidden' }}
+            justifyContent={{ xs: 'inherit', md: 'space-between' }}
+            gap={2}
+            mb={4}
+          >
+            <StatsCard bgcolor="#445B6C">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography color="#31CBA3" variant="h2" p={0}>
+                  {collecting.length}
+                </Typography>
+                <Apartment fontSize="large" />
+              </Box>
+
+              <Box>
+                <Typography variant="h3" p={0}>
+                  Órgãos monitorados
+                </Typography>
+              </Box>
+            </StatsCard>
+            <StatsCard bgcolor="#F2F2F2">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography color="#C666D8" variant="h2" p={0}>
+                  {Number(recordAmount).toLocaleString('pt-BR')}
+                </Typography>
+                <ReceiptLongOutlined
+                  fontSize="large"
+                  sx={{
+                    color: '#545454',
+                  }}
+                />
+              </Box>
+
+              <Box>
+                <Typography variant="h3" color="#545454" p={0}>
+                  Contracheques coletados
+                </Typography>
+              </Box>
+            </StatsCard>
+            <StatsCard bgcolor="#445B6C">
+              <Box
+                display="flex"
+                alignItems="center"
+                justifyContent="space-between"
+              >
+                <Typography color="#FFDF7A" variant="h2" p={0}>
+                  {Number(finalValue / 1000000000).toLocaleString('pt-BR', {
+                    style: 'currency',
+                    currency: 'BRL',
+                  })}
+                </Typography>
+                <PaymentsOutlined fontSize="large" />
+              </Box>
+
+              <Box>
+                <Typography variant="h3" p={0}>
+                  Bilhões em recursos públicos
+                </Typography>
+              </Box>
+            </StatsCard>
+          </Box>
         </Grid>
-        <Grid item xs={12} md={4} position="relative">
-          <Video.Player
-            src={`https://www.youtube-nocookie.com/embed/${videoURL}`}
-            loading="lazy"
-            allowFullScreen
-            aria-label="Vídeo sobre o Portal de Remunerações"
-          />
-          <Video.Related
-            buttonProps={{
-              sx: { position: 'absolute', left: 0, top: '95%' },
-            }}
-            setVideoURL={setVideoURL}
-            relatedVideos={['TaQN-gLEV0Y', 'zDCiDV-IUR0']}
-          />
+        <Grid
+          item
+          xs={12}
+          md={4}
+          display="flex"
+          flexDirection={{ xs: 'column-reverse', md: 'column' }}
+          alignItems={{ xs: 'center', md: 'inherit' }}
+          justifyContent="space-between"
+          gap={2}
+        >
+          <Box
+            display="flex"
+            flexDirection="column"
+            justifyContent="flex-start"
+            alignItems="flex-start"
+          >
+            <Video.Player
+              src={`https://www.youtube-nocookie.com/embed/${videoURL}`}
+              loading="lazy"
+              allowFullScreen
+              aria-label="Vídeo sobre o Portal de Remunerações"
+            />
+            <Video.Related
+              buttonProps={{
+                sx: {
+                  borderRadius: '12px',
+                  padding: 0,
+                  paddingX: 1,
+                },
+              }}
+              setVideoURL={setVideoURL}
+              relatedVideos={['TaQN-gLEV0Y', 'zDCiDV-IUR0']}
+            />
+          </Box>
+
+          <DJBRGPTCard />
         </Grid>
       </Grid>
-      <Typography component="p" mt={3}>
-        Você pode fazer o{' '}
-        {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
-        <Link
-          underline="always"
-          onClick={() => setOpenDialog(true)}
-          target="_blank"
-          rel="noopener"
-          sx={{ cursor: 'pointer' }}
-        >
-          <Typography variant="inherit" component="span" color="success.main">
-            download
-          </Typography>
-        </Link>{' '}
-        de todas as informações de remunerações da nossa base de dados!
-      </Typography>
     </>
   );
 }
 
-const Lowercase = styled.span`
-  text-transform: lowercase;
+const StatsCard = styled(Box)`
+  border-radius: 18px;
+  width: 215px;
+  min-width: 215px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+`;
+
+const LandingButton = styled(Button)`
+  border-radius: 12px;
+  color: #ffffff;
+`;
+
+const ButtonTypography = styled(Typography)`
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 0 8px;
+  padding: 4px 0;
 `;

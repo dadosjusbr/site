@@ -17,8 +17,11 @@ import { formatToAgency } from '../../../functions/format';
 export interface DropDownGroupSelectorProps
   extends Omit<HTMLAttributes<HTMLSelectElement>, 'onChange'> {
   value?: string;
+  isOpen?: boolean;
+  setIsOpen?: (isOpen: boolean) => void;
   noStyle?: boolean;
   inputType?: 'outlined' | 'standard' | 'filled';
+  faceText?: React.ReactNode;
   minWidth?: number;
   maxWidth?: number;
 }
@@ -26,20 +29,30 @@ export interface DropDownGroupSelectorProps
 const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
   value,
   noStyle = false,
+  isOpen,
+  setIsOpen,
   inputType = 'standard',
+  faceText = 'Navegar pelos dados',
   minWidth = 240,
   maxWidth = 250,
 }) => {
   const router = useRouter();
   const [agencyName, setAgencyName] = React.useState(value || '');
   const [open, setOpen] = React.useState(false);
+  const opened = setIsOpen ? isOpen : open;
 
   const handleClose = () => {
-    setOpen(false);
+    if (setIsOpen) {
+      return setIsOpen(false);
+    }
+    return setOpen(false);
   };
 
   const handleOpen = () => {
-    setOpen(true);
+    if (setIsOpen) {
+      return setIsOpen(true);
+    }
+    return setOpen(true);
   };
 
   const handleChange = (event: SelectChangeEvent) => {
@@ -61,7 +74,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         defaultValue=""
         value={agencyName}
         label="Estados"
-        open={open}
+        open={opened}
         onClose={handleClose}
         onOpen={handleOpen}
         onChange={handleChange}
@@ -69,7 +82,7 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         inputProps={{ 'aria-label': 'Dados por órgão' }}
         input={inputType === 'outlined' ? <OutlinedInput /> : <InputBase />}
         IconComponent={() => {
-          if (open) {
+          if (opened) {
             return (
               <ArrowDropUpIcon
                 onClick={() => setOpen(prev => !prev)}
@@ -86,14 +99,10 @@ const DropDownGroupSelector: React.FC<DropDownGroupSelectorProps> = ({
         }}
         renderValue={selected => {
           if (selected.length === 0) {
-            return (
-              <Typography
-                pb={0}
-                {...(!noStyle && { textTransform: 'uppercase' })}
-              >
-                Navegar Pelos Dados
-              </Typography>
-            );
+            if (faceText) {
+              return faceText;
+            }
+            return <Typography pb={0}>Navegar pelos dados</Typography>;
           }
           return formatToAgency(selected);
         }}
