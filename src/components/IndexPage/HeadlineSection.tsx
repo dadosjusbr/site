@@ -164,9 +164,14 @@ export default function HeadlineSection({
                 justifyContent="space-between"
               >
                 <Typography color="#c05dd1" variant="h2" p={0}>
-                  {Number(recordAmount).toLocaleString('pt-BR')}
+                  {Number(recordAmount / 1000).toLocaleString('pt-BR', {
+                    style: 'decimal',
+                    maximumFractionDigits: 1,
+                    minimumFractionDigits: 1,
+                  })}
                   <span
                     style={{
+                      marginLeft: '2px',
                       fontSize: '1.4rem',
                     }}
                   >
