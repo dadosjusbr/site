@@ -14,6 +14,7 @@ import DJBRGPTCard from '../Common/DJBRGPTCard';
 type HeadlineSectionProps = {
   collecting: Agency[];
   recordAmount: number;
+  paychecksAmount: number;
   finalValue: number;
   formatedStartDate: string;
   formatedEndDate: string;
@@ -23,6 +24,7 @@ type HeadlineSectionProps = {
 export default function HeadlineSection({
   collecting,
   recordAmount,
+  paychecksAmount,
   finalValue,
   formatedStartDate,
   formatedEndDate,
@@ -46,7 +48,7 @@ export default function HeadlineSection({
             Acesse as remunerações do sistema de Justiça
           </Typography>
           <Box>
-            <Typography component="p">
+            <Typography component="p" fontSize={18}>
               O DadosJusBr visa aumentar a transparência nas remunerações do
               sistema de Justiça brasileiro.
               <br />
@@ -61,7 +63,7 @@ export default function HeadlineSection({
               diretamente dos respectivos portais de transparência e as
               disponibilizamos de maneira organizada e acessível.
             </Typography>
-            <Typography component="p">
+            <Typography component="p" fontSize={18}>
               Você pode fazer o{' '}
               {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
               <Link
@@ -134,6 +136,7 @@ export default function HeadlineSection({
 
           <Box
             display="flex"
+            flexWrap={{ xs: 'nowrap', md: 'wrap' }}
             overflow={{ xs: 'auto', md: 'hidden' }}
             justifyContent={{ xs: 'inherit', md: 'space-between' }}
             gap={2}
@@ -164,7 +167,7 @@ export default function HeadlineSection({
                 justifyContent="space-between"
               >
                 <Typography color="#c05dd1" variant="h2" p={0}>
-                  {Number(recordAmount / 1000).toLocaleString('pt-BR', {
+                  {Number(paychecksAmount / 1000000).toLocaleString('pt-BR', {
                     style: 'decimal',
                     maximumFractionDigits: 1,
                     minimumFractionDigits: 1,
@@ -173,7 +176,7 @@ export default function HeadlineSection({
                   <span
                     style={{
                       marginLeft: '2px',
-                      fontSize: '1.4rem',
+                      fontSize: '1.3rem',
                     }}
                   >
                     milhões

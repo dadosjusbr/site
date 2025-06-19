@@ -28,6 +28,7 @@ type GeneralTotals = {
 type GeneralSummary = {
   num_orgaos: number;
   num_meses_coletados: number;
+  num_contracheques: number;
   data_inicio: string;
   data_fim: string;
   remuneracao_total: number;
