@@ -94,11 +94,13 @@ export default function HeadlineSection({
             pr={{ xs: 0, lg: 10 }}
           >
             <Grid item>
-              <LandingButton
+              <Button
                 variant="contained"
                 sx={{
                   paddingY: 0.4,
                   bgcolor: '#31CBA3',
+                  borderRadius: '12px',
+                  color: '#ffffff',
                   '&:hover': {
                     bgcolor: '#1f9c7a',
                   },
@@ -111,26 +113,46 @@ export default function HeadlineSection({
                   minWidth={125}
                   noStyle
                   faceText={
-                    <ButtonTypography>Navegar pelos dados</ButtonTypography>
+                    <Typography
+                      sx={{
+                        fontWeight: 'bold',
+                        fontSize: '1.1rem',
+                        margin: '0 8px',
+                        padding: '4px 0',
+                      }}
+                    >
+                      Navegar pelos dados
+                    </Typography>
                   }
                 />
-              </LandingButton>
+              </Button>
             </Grid>
             <Grid item>
-              <LandingButton
+              <Button
                 href="/pesquisar"
                 variant="contained"
                 sx={{
                   paddingX: '18px',
                   bgcolor: '#9e4a9c',
+                  borderRadius: '12px',
+                  color: '#ffffff',
                   '&:hover': {
                     bgcolor: '#7a3f7d',
                   },
                 }}
               >
-                <ButtonTypography>Pesquisar</ButtonTypography>
+                <Typography
+                  sx={{
+                    fontWeight: 'bold',
+                    fontSize: '1.1rem',
+                    margin: '0 8px',
+                    padding: '4px 0',
+                  }}
+                >
+                  Pesquisar
+                </Typography>
                 <SearchIcon />
-              </LandingButton>
+              </Button>
             </Grid>
           </Grid>
 
@@ -142,81 +164,92 @@ export default function HeadlineSection({
             gap={2}
             mb={4}
           >
-            <StatsCard bgcolor="#445B6C">
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography color="#31CBA3" variant="h2" p={0}>
-                  {collecting.length}
-                </Typography>
-                <Apartment fontSize="large" />
-              </Box>
+            <Link href="/status" style={{ textDecoration: 'none' }}>
+              <StatsCard bgcolor="#445B6C">
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography color="#31CBA3" variant="h2" p={0}>
+                    {collecting.length}
+                  </Typography>
+                  <Apartment fontSize="large" />
+                </Box>
 
-              <Box>
-                <Typography variant="h3" p={0}>
-                  Órgãos monitorados
-                </Typography>
-              </Box>
-            </StatsCard>
-            <StatsCard bgcolor="#F2F2F2">
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography color="#c05dd1" variant="h2" p={0}>
-                  {Number(paycheckAmount / 1000000).toLocaleString('pt-BR', {
-                    style: 'decimal',
-                    maximumFractionDigits: 1,
-                    minimumFractionDigits: 1,
-                    compactDisplay: 'short',
-                  })}
-                  <span
-                    style={{
-                      marginLeft: '2px',
-                      fontSize: '1.3rem',
+                <Box>
+                  <Typography variant="h3" p={0}>
+                    Órgãos monitorados
+                  </Typography>
+                </Box>
+              </StatsCard>
+            </Link>
+
+            <Link href="/pesquisar" style={{ textDecoration: 'none' }}>
+              <StatsCard bgcolor="#F2F2F2">
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography color="#c05dd1" variant="h2" p={0}>
+                    {Number(paycheckAmount / 1000000).toLocaleString('pt-BR', {
+                      style: 'decimal',
+                      maximumFractionDigits: 1,
+                      minimumFractionDigits: 1,
+                      compactDisplay: 'short',
+                    })}
+                    <span
+                      style={{
+                        marginLeft: '2px',
+                        fontSize: '1.3rem',
+                      }}
+                    >
+                      milhões
+                    </span>
+                  </Typography>
+                  <ReceiptLongOutlined
+                    fontSize="large"
+                    sx={{
+                      color: '#545454',
                     }}
-                  >
-                    milhões
-                  </span>
-                </Typography>
-                <ReceiptLongOutlined
-                  fontSize="large"
-                  sx={{
-                    color: '#545454',
-                  }}
-                />
-              </Box>
+                  />
+                </Box>
 
-              <Box>
-                <Typography variant="h3" color="#545454" p={0}>
-                  Contracheques coletados
-                </Typography>
-              </Box>
-            </StatsCard>
-            <StatsCard bgcolor="#445B6C">
-              <Box
-                display="flex"
-                alignItems="center"
-                justifyContent="space-between"
-              >
-                <Typography color="#FFDF7A" variant="h2" p={0}>
-                  {Number(finalValue / 1000000000).toLocaleString('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  })}
-                </Typography>
-                <PaymentsOutlined fontSize="large" />
-              </Box>
+                <Box>
+                  <Typography variant="h3" color="#545454" p={0}>
+                    Contracheques coletados
+                  </Typography>
+                </Box>
+              </StatsCard>
+            </Link>
 
-              <Box>
-                <Typography variant="h3" p={0}>
-                  Bilhões em recursos públicos
-                </Typography>
-              </Box>
-            </StatsCard>
+            <Link
+              href="#general-remuneration-section"
+              style={{ textDecoration: 'none' }}
+            >
+              <StatsCard bgcolor="#445B6C">
+                <Box
+                  display="flex"
+                  alignItems="center"
+                  justifyContent="space-between"
+                >
+                  <Typography color="#FFDF7A" variant="h2" p={0}>
+                    {Number(finalValue / 1000000000).toLocaleString('pt-BR', {
+                      style: 'currency',
+                      currency: 'BRL',
+                    })}
+                  </Typography>
+                  <PaymentsOutlined fontSize="large" />
+                </Box>
+
+                <Box>
+                  <Typography variant="h3" p={0}>
+                    Bilhões em recursos públicos
+                  </Typography>
+                </Box>
+              </StatsCard>
+            </Link>
           </Box>
         </Grid>
         <Grid
@@ -269,16 +302,5 @@ const StatsCard = styled(Box)`
   display: flex;
   flex-direction: column;
   gap: 18px;
-`;
-
-const LandingButton = styled(Button)`
-  border-radius: 12px;
-  color: #ffffff;
-`;
-
-const ButtonTypography = styled(Typography)`
-  font-weight: bold;
-  font-size: 1.1rem;
-  margin: 0 8px;
-  padding: 4px 0;
+  cursor: pointer;
 `;

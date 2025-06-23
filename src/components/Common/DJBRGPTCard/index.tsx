@@ -2,30 +2,38 @@ import { Box, BoxProps, Typography } from '@mui/material';
 
 const rows = [
   {
+    id: 1,
     width: '20%',
   },
   {
+    id: 2,
     width: '45%',
   },
   {
+    id: 3,
     width: '50%',
   },
   {
+    id: 4,
     width: '35%',
   },
   {
+    id: 5,
     width: '45%',
   },
   {
+    id: 6,
     width: '45%',
   },
   {
+    id: 7,
     width: '50%',
   },
   {
+    id: 8,
     width: '45%',
   },
-];
+] as const;
 
 function DJBRGPTCard() {
   return (
@@ -51,8 +59,9 @@ function DJBRGPTCard() {
           display="grid"
         >
           <Box my={1} display="flex" flexDirection="column" gap={1}>
-            {Array.from({ length: 4 }).map(() => (
+            {Array.from(rows.slice(0, 4)).map(el => (
               <ChatRow
+                key={el.id}
                 width="90%"
                 height={12}
                 borderRadius={1}
@@ -69,7 +78,7 @@ function DJBRGPTCard() {
           />
           <Box display="flex" flexDirection="column" gap={0.3} ml={2}>
             {rows.map((c, index) => (
-              <Box>
+              <Box key={c.id}>
                 <ChatRow
                   width={c.width}
                   justifyContent={index % 2 === 0 ? 'flex-end' : 'flex-start'}

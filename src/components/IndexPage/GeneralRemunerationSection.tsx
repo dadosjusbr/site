@@ -42,7 +42,7 @@ export default function GeneralRemunerationSection({
   setOpenDialog,
 }: GeneralRemunerationSectionProps) {
   return (
-    <Box my={12}>
+    <Box my={12} id="general-remuneration-section">
       <Typography variant="h2" textAlign="center">
         Total das remunerações dos membros dos Tribunais de Justiça e
         Ministérios Públicos
