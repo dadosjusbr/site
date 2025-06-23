@@ -14,7 +14,7 @@ import DJBRGPTCard from '../Common/DJBRGPTCard';
 type HeadlineSectionProps = {
   collecting: Agency[];
   recordAmount: number;
-  paychecksAmount: number;
+  paycheckAmount: number;
   finalValue: number;
   formatedStartDate: string;
   formatedEndDate: string;
@@ -24,7 +24,7 @@ type HeadlineSectionProps = {
 export default function HeadlineSection({
   collecting,
   recordAmount,
-  paychecksAmount,
+  paycheckAmount,
   finalValue,
   formatedStartDate,
   formatedEndDate,
@@ -167,7 +167,7 @@ export default function HeadlineSection({
                 justifyContent="space-between"
               >
                 <Typography color="#c05dd1" variant="h2" p={0}>
-                  {Number(paychecksAmount / 1000000).toLocaleString('pt-BR', {
+                  {Number(paycheckAmount / 1000000).toLocaleString('pt-BR', {
                     style: 'decimal',
                     maximumFractionDigits: 1,
                     minimumFractionDigits: 1,
