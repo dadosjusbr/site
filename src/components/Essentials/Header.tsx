@@ -48,11 +48,11 @@ function Header() {
       title: 'Tutoriais',
       anchor: '/tutoriais',
     },
-    {
-      key: 'namidia',
-      title: 'Na Mídia',
-      anchor: '/namidia',
-    },
+    // {
+    //   key: 'namidia',
+    //   title: 'Na Mídia',
+    //   anchor: '/namidia',
+    // },
     {
       key: 'quemsomos',
       title: 'Quem Somos',
