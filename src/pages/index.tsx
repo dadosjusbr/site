@@ -23,6 +23,7 @@ export default function Index({
   startDate,
   endDate,
   recordAmount,
+  paycheckAmount,
   finalValue,
   ais,
   transparencyData,
@@ -30,6 +31,7 @@ export default function Index({
   startDate: string;
   endDate: string;
   recordAmount: number;
+  paycheckAmount: number;
   finalValue: number;
   ais: Agency[];
   /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -101,7 +103,7 @@ export default function Index({
         />
       </Head>
       <Header />
-      <Container fixed>
+      <Container>
         <Headline>
           <IndexPage.HeadlineSection
             collecting={collecting}
@@ -109,6 +111,7 @@ export default function Index({
             formatedEndDate={formatedEndDate}
             formatedStartDate={formatedStartDate}
             recordAmount={recordAmount}
+            paycheckAmount={paycheckAmount}
             setOpenDialog={setOpenDialog}
           />
         </Headline>
@@ -167,6 +170,7 @@ export const getStaticProps: GetStaticProps = async () => {
         startDate: data.data_inicio,
         endDate: data.data_fim,
         recordAmount: `${data.num_meses_coletados}`,
+        paycheckAmount: `${data.num_contracheques}`,
         finalValue: `${data.remuneracao_total}`,
         ais: res.data,
         transparencyData,
