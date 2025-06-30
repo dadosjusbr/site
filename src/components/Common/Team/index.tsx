@@ -38,7 +38,7 @@ export default function Team() {
     {
       id: 5,
       name: 'Juliana Sakai',
-      role: 'Lider',
+      role: 'Líder',
       profileURL: 'https://www.linkedin.com/in/julianasakai/',
       photoURL: '/img/team/ju_sakai.jpg',
     },
@@ -52,7 +52,7 @@ export default function Team() {
     {
       id: 7,
       name: 'Nazareno Andrade',
-      role: 'Professor',
+      role: 'Consultor',
       profileURL: 'https://github.com/nazareno',
       photoURL: 'https://github.com/nazareno.png',
     },
@@ -71,16 +71,16 @@ export default function Team() {
       name: 'TB',
       img: '/img/team/logo_transparencia_brasil.svg',
     },
-    {
-      id: 2,
-      name: 'UFCG',
-      img: '/img/team/logo_ufcg.svg',
-    },
-    {
-      id: 3,
-      name: 'IFAL',
-      img: '/img/partners/IFAL.svg',
-    },
+    // {
+    //   id: 2,
+    //   name: 'UFCG',
+    //   img: '/img/team/logo_ufcg.svg',
+    // },
+    // {
+    //   id: 3,
+    //   name: 'IFAL',
+    //   img: '/img/partners/IFAL.svg',
+    // },
   ]);
   return (
     <Page>
@@ -145,34 +145,64 @@ export default function Team() {
       </Box>
       <Box py={4}>
         <Container fixed>
-          <Typography variant="h2" textAlign="center" gutterBottom>
-            Financiador
-          </Typography>
-          <Grid container spacing={2} display="flex" justifyContent="center">
-            <Grid item xs={6} sm={4} md={3}>
-              <img src="/img/partners/IBEJL.svg" alt="IBEJL" width="100%" />
-            </Grid>
-          </Grid>
-          <Box mt={4}>
-            <Typography variant="h2" textAlign="center" gutterBottom>
-              Realização
-            </Typography>
-            <Grid container spacing={2} display="flex" justifyContent="center">
-              {contribuitors.map(c => (
+          <Grid
+            container
+            spacing={2}
+            display="flex"
+            flexDirection={{ xs: 'column', sm: 'row' }}
+            justifyContent="center"
+            alignItems="center"
+          >
+            <Grid item xs={6}>
+              <Box>
+                <Typography variant="h2" textAlign="center" gutterBottom>
+                  Financiador
+                </Typography>
                 <Grid
-                  key={c.id}
-                  item
-                  xs={4}
-                  md={3}
+                  container
+                  spacing={2}
                   display="flex"
                   justifyContent="center"
-                  alignItems="center"
                 >
-                  <Partner src={c.img} alt={c.name} width="100%" />
+                  <Grid item xs={12} sm={6} md={5}>
+                    <img
+                      src="/img/partners/IBEJL.svg"
+                      alt="IBEJL"
+                      width="100%"
+                    />
+                  </Grid>
                 </Grid>
-              ))}
+              </Box>
             </Grid>
-          </Box>
+            <Grid item xs={6}>
+              <Box>
+                <Typography variant="h2" textAlign="center" gutterBottom>
+                  Realização
+                </Typography>
+                <Grid
+                  container
+                  spacing={2}
+                  display="flex"
+                  justifyContent="center"
+                >
+                  {contribuitors.map(c => (
+                    <Grid
+                      key={c.id}
+                      item
+                      xs={12}
+                      sm={12}
+                      md={7}
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                    >
+                      <Partner src={c.img} alt={c.name} width="100%" />
+                    </Grid>
+                  ))}
+                </Grid>
+              </Box>
+            </Grid>
+          </Grid>
         </Container>
       </Box>
     </Page>
