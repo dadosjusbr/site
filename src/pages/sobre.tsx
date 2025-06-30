@@ -4,12 +4,6 @@ import { Container, Box, Grid, Typography } from '@mui/material';
 
 import Footer from '../components/Essentials/Footer';
 import Nav from '../components/Essentials/Header';
-import {
-  Animation1,
-  Animation2,
-  Animation3,
-  Animation4,
-} from '../components/Animations/index-animations';
 import Team from '../components/Common/Team';
 
 export default function Index() {
@@ -28,108 +22,103 @@ export default function Index() {
       <Container fixed>
         <Grid
           container
-          spacing={4}
+          spacing={1}
           my={4}
           alignItems="center"
           justifyContent="center"
         >
-          <Grid item sm={6}>
+          <Grid item sm={12}>
             <Typography variant="h3">
-              Você já tentou acessar dados em sites de órgãos públicos?
+              Fortalecemos o accountability do sistema de Justiça
             </Typography>
             <Typography variant="body1">
-              A Lei Federal 12.527/2011, mais conhecida como Lei de Acesso à
-              Informação (LAI), impõe a obrigatoriedade da divulgação dos dados
-              de gastos públicos.
+              O DadosJusBr é um projeto da Transparência Brasil que coleta,
+              padroniza, divulga e analisa contracheques do Judiciário e do
+              Ministério Público.
+              <br />
+              Fortalecemos o controle social sobre os salários recebidos por
+              magistrados, promotores e procuradores, e atuamos para coibir
+              irregularidades e ampliar a transparência.
             </Typography>
-            <Typography variant="body1">
-              Porém, a LAI não detalha a forma como esses dados devem ser
-              disponibilizados, o que resulta em uma falta de padronização e
-              organização das informações, prejudicando a transparência pública.
-            </Typography>
-            <Typography variant="body1">
-              Nessas condições, a fiscalização dos gastos públicos torna-se uma
-              tarefa complexa.
-            </Typography>
-          </Grid>
-          <Grid item sm={6} py={12}>
-            <Animation1 />
           </Grid>
         </Grid>
       </Container>
       <Banner pt={12} pb={8}>
         <Container fixed>
-          <Typography variant="h3" textAlign="center">
-            O DadosJusBr existe para libertar estes dados e facilitar o controle
-            social da remuneração da elite do sistema de Justiça.
+          <Typography variant="h3">
+            Os contracheques do sistema de Justiça não têm formato padronizado,
+            estão dispersos em diferentes portais e muitas vezes com restrição
+            de obtenção. O DadosJusBr utiliza tecnologia para superar esses
+            obstáculos e promover o fácil acesso a esses pagamentos.
           </Typography>
         </Container>
       </Banner>
       <Container fixed>
         <Grid
           container
-          spacing={4}
+          spacing={1}
+          mt={4}
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Grid item sm={12}>
+            <Typography variant="h3">Como fazemos isso?</Typography>
+            <Typography variant="body1">
+              Desenvolvemos robôs, que obtêm mensalmente os contracheques do
+              Judiciário (a partir do painel de remuneração do Conselho Nacional
+              de Justiça) e do Ministério Público (no portal de transparência de
+              cada órgão). Alguns MPs estaduais não permitem a atuação
+              automatizada, e são submetidos à coleta manual periódica.
+            </Typography>
+          </Grid>
+          <Grid item sm={12}>
+            <Typography variant="body1">
+              O <b>DadosJusBr</b> utiliza inteligência de dados para a atuação
+              cidadã, se espelhando em projetos como Serenata de Amor e
+              Brasil.io. Todos os contracheques passam por processos de
+              padronização e verificação de integridade. Depois, são inseridos
+              nas nossas bases de dados, e podem ser analisados por qualquer
+              usuário por meio dos gráficos do portal, acesso à API ou download
+              de arquivos.
+            </Typography>
+          </Grid>
+
+          <Grid item sm={12}>
+            <Typography variant="body1">
+              Nossa equipe produz estudos sobre o comportamento dos diversos
+              benefícios pagos nos contracheques dos membros do sistema de
+              Justiça, que resultam em ampla divulgação midiática e incidência
+              junto a atores e instituições estratégicas.
+            </Typography>
+          </Grid>
+        </Grid>
+
+        <Grid
+          container
+          spacing={1}
           my={4}
           alignItems="center"
           justifyContent="center"
         >
-          <Grid item sm={6}>
-            <Typography variant="h3">Como fazemos isso?</Typography>
+          <Grid item sm={12}>
+            <Typography variant="h3">Nossa história</Typography>
             <Typography variant="body1">
-              Os agentes públicos do sistema de justiça brasileiro recebem
-              outras verbas, além de seus salários, para exercerem seus cargos.
-              Dentre elas encontramos auxílio moradia, despesas com saúde,
-              auxílio transporte, gratificações, diárias, entre outros
-              benefícios.
+              A semente do DadosJusBr é plantada em 2018, quando a equipe “Lupa
+              na Toga” participou de um hackfest do Conselho Nacional do
+              Ministério Público (CNMP), desenvolvendo com um projeto de
+              obtenção automatizada de dados de remuneração do Judiciário. O
+              professor universitário da IFAL (Instituto Federal de Alagoas)
+              Daniel Fireman, integrante da equipe, continuou aprimorando o
+              projeto, que resultou em um TCC de um aluno. Depois, o Ministério
+              Público da Paraíba viabilizou o custeio de dois estagiários,
+              estudantes da UFCG (Universidade Federal de Campina Grande), para
+              ampliarem o potencial de coleta, que teve um reforço de um grant
+              da Open Knowledge. Em 2021, a Transparência Brasil assume a
+              coordenação do projeto, inicialmente, em parceria com a IFAL e a
+              UFCG, depois apenas com equipe própria. Nesse período, recebeu
+              quatro anos de financiamento do Instituto Betty & Jacob Lafer e
+              firmou duas parcerias com o Instituto República.org.
             </Typography>
-          </Grid>
-          <Grid item sm={6} py={24}>
-            <Animation2 />
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          spacing={4}
-          my={12}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Grid item sm={6}>
-            <Typography variant="body1">
-              Inspirados em projetos como o <b>Serenata de amor</b> e{' '}
-              <b>Brasil.io</b>, o <b>DadosJusBr</b> surge com o objetivo de
-              apresentar de forma detalhada, organizada e unificada os dados de
-              gastos com remuneração dos órgãos que constituem o sistema de
-              justiça brasileiro, assim facilitando o acesso e promovendo o
-              controle social sobre esses gastos do poder judiciário, ministério
-              público, defensoria pública e procuradorias.
-            </Typography>
-          </Grid>
-          <Grid item sm={6} py={12}>
-            <Animation3 />
-          </Grid>
-        </Grid>
-        <Grid
-          container
-          spacing={4}
-          my={12}
-          alignItems="center"
-          justifyContent="center"
-        >
-          <Grid item sm={6}>
-            <Typography variant="body1">
-              O <b>DadosJusBr</b> utiliza a inteligência de dados para a ação
-              cidadã, promovendo um acesso mais democrático e fácil aos dados de
-              remuneração do sistema de justiça brasileiro. No DadosJusBr
-              podemos entender como cada juiz, promotor e desembargador são
-              remunerados. Quais auxílios recebem? Quais os valores destes
-              auxílios? Quanto além do salário um funcionário recebeu em
-              determinado mês? Quanto um órgão gastou em determinado mês? Todas
-              essas perguntas podem ser respondidas através do DadosJusBr.
-            </Typography>
-          </Grid>
-          <Grid item sm={6} py={12}>
-            <Animation4 />
           </Grid>
         </Grid>
         <Team />
