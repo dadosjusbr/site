@@ -16,7 +16,12 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
         borderTop: '2px solid',
       }}
     >
-      <Grid container columnSpacing={4} display="flex" justifyContent="center">
+      <Grid
+        container
+        columnSpacing={{ xs: 0, sm: 2, md: 4 }}
+        display="flex"
+        justifyContent={{ xs: 'center', sm: 'center', md: 'space-between' }}
+      >
         <Grid item xs={5} sm={4} md={2}>
           <img
             src={
@@ -29,7 +34,7 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
             alt="DadosjusBR"
           />
         </Grid>
-        <Grid item xs={12} sm={8} md={10}>
+        <Grid item xs={12} sm={8} md={7} textAlign="center">
           <p>
             Para dúvidas e sugestões, envie uma mensagem para{' '}
             <Link
@@ -51,6 +56,17 @@ const Footer: React.FC<FooterPropos> = ({ theme = 'DEFAULT' }) => (
             </Link>
             .
           </p>
+        </Grid>
+        <Grid item xs={9} sm={6.5} md={2.5}>
+          <img
+            src="/img/team/logo_transparencia_brasil.svg"
+            width="200"
+            // height="108"
+            alt="DadosjusBR"
+            style={{
+              filter: 'brightness(0) invert(1)',
+            }}
+          />
         </Grid>
       </Grid>
     </Box>
